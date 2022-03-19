@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - PlayerField
+  - EnemyField
+  - EnemyProwler
   layers:
   - Default
   - TransparentFX
@@ -11,7 +15,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
