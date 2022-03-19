@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
 
     private ControlState mState = new IdleState();
 
-    private Player mProperty;
+    public GameObject mOwner;
+    public List<GameObject> mHeroes = new List<GameObject>();
 
     public LayerMask mGroundMask;
     private Vector3 mVelocity = Vector3.zero;
@@ -23,13 +24,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform mCamera;
     private float mGravity = -9.8f;
+
+    private bool onBattle = false;
     // Start is called before the first frame update
     void Start()
     {
         GameObject groundCheck = new GameObject("GroundCheck");
         groundCheck.transform.position = new Vector3(0.0f, -1.0f, 0.0f);
         groundCheck.transform.parent = transform;
-        mProperty = GetComponent<Player>();
+        GameManager.Instance.mPlayer = this;
         mCharacterController = GetComponent<CharacterController>();
         GameManager.Instance.onPlayerBattleStart += OnBattleStart;
         GameManager.Instance.onPlayerBattleEnd += OnBattleEnd;
@@ -38,6 +41,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mOwner.activeInHierarchy == false)
+            return;
         mState = mState.Handle();
         isGrounded = Physics.CheckSphere(mGroundPos, mGroundDistance, mGroundMask);
         if(mState.ToString() != "BattleState")
@@ -63,14 +68,58 @@ public class PlayerController : MonoBehaviour
         mCharacterController.Move(mVelocity * Time.deltaTime);
     }
 
+    private GameObject[] fields;
+    private GameObject[] enemyFields;
+    private Vector3 mPos;
     public void OnBattleStart()
     {
+        onBattle = true;
         mState = new BattleState();
+        mOwner.SetActive(false);
+        fields = GameObject.FindGameObjectsWithTag("PlayerField");
+        enemyFields = GameObject.FindGameObjectsWithTag("EnemyField");
+        for (int i = 0; i < mHeroes.Count; ++i)
+        {
+            mHeroes[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z);
+            mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+            mHeroes[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, enemyFields[i].transform.position);
+            mHeroes[i].gameObject.SetActive(true);
+            mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+
+        mPos = fields[0].transform.position;
+        //TODO: Spawn them
     }
 
     public void OnBattleEnd()
     {
         mState = new IdleState();
+        onBattle = false;
+        GameManager.Instance.mEnemyProwler = null;
+        transform.position = mPos;
+        transform.rotation = mHeroes[0].transform.rotation;
+        mOwner.SetActive(true);
+        for (int i = 0; i < mHeroes.Count; ++i)
+        {
+            mHeroes[i].transform.position = transform.position;
+            mHeroes[i].gameObject.SetActive(false);
+        }
+        //TODO: Make them hide
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (onBattle)
+            return;
+        if (other.GetComponent<EnemyProwler>() != null && !other.GetComponent<EnemyProwler>().onBattle)
+        {
+            other.GetComponent<EnemyProwler>().onBattle = onBattle = true;
+            GameManager.Instance.mEnemyProwler = other.GetComponent<EnemyProwler>();
+            BattleManager.Instance.SetBattleField();
+            GameManager.Instance.OnBattleStart(other.GetComponent<EnemyProwler>().id);
+            //TODO call game manager to start the battle
+        }
     }
 
     private void OnDisable()

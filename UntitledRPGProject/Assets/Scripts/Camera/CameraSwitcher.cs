@@ -25,11 +25,12 @@ public class CameraSwitcher : MonoBehaviour
     public static void SwitchCamera()
     {
         if (Instance.isGameWorld)
+        {
             Instance.mAnimator.Play("BattleWorld");
+        }
         else
         {
             Instance.mAnimator.Play("GameWorld");
-            
         }
         Instance.isGameWorld = !Instance.isGameWorld;
     }
