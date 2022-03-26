@@ -18,6 +18,8 @@ public class BattleUI : MonoBehaviour
             mAttackButton.onClick.AddListener(BattleManager.Instance.Attack);
         if(mDefendButton != null)
             mDefendButton.onClick.AddListener(BattleManager.Instance.Defend);
+        if (mMagicButton != null)
+            mMagicButton.onClick.AddListener(BattleManager.Instance.Magic);
     }
 
     private void OnDisable()
@@ -26,5 +28,7 @@ public class BattleUI : MonoBehaviour
             mAttackButton.onClick.RemoveListener(BattleManager.Instance.Attack);
         if (mDefendButton != null)
             mDefendButton.onClick.RemoveListener(BattleManager.Instance.Defend);
+        if (mMagicButton != null)
+            mDefendButton.onClick.RemoveListener(BattleManager.Instance.Magic);
     }
 }

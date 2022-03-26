@@ -146,9 +146,9 @@ public class BattleManager : MonoBehaviour
         if (!isActed && mCurrentUnit.isPicked)
         {
             Debug.Log("Attack");
-            StartCoroutine(mCurrentUnit.AttackAction(mCurrentUnit.Unit_Setting.mTarget, DamageType.Physical));
+            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical));
             isActed = true;
-            StartCoroutine(TrunFinished());
+            StartCoroutine(TurnFinished());
         }
     }
 
@@ -156,15 +156,34 @@ public class BattleManager : MonoBehaviour
     {
         if(!isActed && mCurrentUnit.isPicked)
         {
+            Debug.Log("Defend");
             mCurrentUnit.isDefend = true;
             isActed = true;
-            StartCoroutine(TrunFinished());
+            StartCoroutine(TurnFinished());
         }
     }
 
-    private IEnumerator TrunFinished()
+    public void Magic()
     {
-        yield return new WaitForSeconds(0.5f);
+        if(!isActed && mCurrentUnit.isPicked)
+        {
+            Debug.Log("Magic");
+            StartCoroutine(mCurrentUnit.MagicAction());
+            isActed = true;
+            StartCoroutine(TurnFinished());
+        }
+    }
+
+    private IEnumerator TurnFinished()
+    {
+        yield return mCurrentUnit.mWaitingTime;
+        mCurrentUnit.TurnEnded();
+        isActed = false;
+    }
+
+    private IEnumerator MagicTurnFinished()
+    {
+        yield return new WaitUntil(() => mCurrentUnit.mSkillDataBase.isComplete == true);
         mCurrentUnit.TurnEnded();
         isActed = false;
     }

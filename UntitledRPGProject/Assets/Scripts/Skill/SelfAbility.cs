@@ -1,0 +1,94 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "Abilities/SelfAbility")]
+public class SelfAbility : Skill_Setting
+{
+    public GameObject mEffect;
+    public override void Activate()
+    {
+        if(mOwner.mMana >= mManaCost)
+        {
+            switch(mSkillType)
+            {
+                case SkillType.Attack: break;
+                case SkillType.AttackBuff:
+                    {
+                        mOwner.TakeDamage(mValue, DamageType.Magical);
+                        
+                    }
+                    break;
+                case SkillType.AttackNerf:
+                    {
+                        mOwner.TakeDamage(mValue, DamageType.Magical);
+                    }
+                    break;
+                case SkillType.Buff:
+                    {
+                        foreach(GameObject buff in mBuffs)
+                        {
+                            mOwner.SetBuff(buff.GetComponent<TimedBuff>());
+                        }
+                    }
+                    break;
+                case SkillType.BuffNerf:
+                    {
+                        foreach (GameObject buff in mBuffs)
+                        {
+                            mOwner.SetBuff(buff.GetComponent<TimedBuff>());
+                        }
+                        foreach (GameObject nerf in mNerfs)
+                        {
+                            mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
+                        }
+                    }
+                    break;
+                case SkillType.Nerf:
+                    {
+                        foreach (GameObject nerf in mNerfs)
+                        {
+                            mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
+                        }
+                    }
+                    break;
+                case SkillType.Heal:
+                    {
+                        mOwner.TakeRecover(mValue);
+                        break;
+                    }
+                case SkillType.HealBuff:
+                    {
+                        mOwner.TakeRecover(mValue);
+                        foreach (GameObject buff in mBuffs)
+                        {
+                            mOwner.SetBuff(buff.GetComponent<TimedBuff>());
+                        }
+                        break;
+                    }
+
+                case SkillType.HealNerf:
+                    {
+                        mOwner.TakeRecover(mValue);
+                        foreach (GameObject nerf in mNerfs)
+                        {
+                            mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
+                        }
+                        break;
+                    }
+                case SkillType.Summon:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public override void Initialize(Unit owner)
+    {
+        mOwner = owner;
+        if(mValue <= 0.0f)
+            mValue = owner.mMagicPower;
+    }
+}

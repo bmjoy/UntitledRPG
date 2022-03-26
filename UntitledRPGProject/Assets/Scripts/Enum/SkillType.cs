@@ -5,7 +5,13 @@ using UnityEngine;
 public enum SkillType
 {
     Attack,
+    AttackBuff,
+    AttackNerf,
     Heal,
+    HealBuff,
+    HealNerf,
     Buff,
-    Nerf
+    BuffNerf,
+    Nerf,
+    Summon
 }
