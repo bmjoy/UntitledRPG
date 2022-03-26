@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour, IUnit
     public float mMagic_Resistance = 0.0f;
     public float mDefend = 0.0f;
     public float mAgility = 0.0f;
+    public float mMagicPower = 0.0f;
 
     public bool isPicked = false;
     public bool isDied = false;
@@ -26,7 +27,11 @@ public class Unit : MonoBehaviour, IUnit
     public Animator mAnimator;
     public Rigidbody mRigidbody;
     public Unit_Setting mSetting;
+    public WaitForSeconds mWaitingTime = new WaitForSeconds(1.0f);
     public Unit_Setting Unit_Setting => mSetting;
+    public Skill_DataBase mSkillDataBase;
+
+    private BuffAndNerfEntity mBuffNerfController;
 
     private float currentTime = 0.0f;
     private float mReadyTime = 2.5f;
@@ -40,11 +45,13 @@ public class Unit : MonoBehaviour, IUnit
         mMagic_Resistance = mSetting.Magic_Resistance;
         mDefend = mSetting.Defend;
         mAgility = mSetting.Agility;
+        mMagicPower = mSetting.MagicPower;
         isDied = false;
         isPicked = false;
         isDefend = false;
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
+        mBuffNerfController = GetComponent<BuffAndNerfEntity>();
     }
 
     protected virtual void Update()
@@ -72,10 +79,17 @@ public class Unit : MonoBehaviour, IUnit
         }
     }
 
-    virtual public IEnumerator AttackAction(Unit opponent, DamageType type)
+    virtual public IEnumerator AttackAction(DamageType type)
     {
-        yield return new WaitForSeconds(1.0f);
-        opponent.TakeDamage(mDamage, type);
+        yield return mWaitingTime;
+        if(mTarget)
+            mTarget.TakeDamage(mDamage, type);
+    }
+
+    virtual public IEnumerator MagicAction()
+    {
+        yield return mWaitingTime;
+        mSkillDataBase.Use();
     }
 
     virtual public void PlayAnimation(string name, bool active)
@@ -125,5 +139,15 @@ public class Unit : MonoBehaviour, IUnit
         mPos = pos;
         mTargetPos = targetPos;
         isMove = true;
+    }
+
+    virtual public void SetBuff(TimedBuff buff)
+    {
+        mBuffNerfController.AddBuff(buff);
+    }
+
+    virtual public void SetNerf(TimedNerf nerf)
+    {
+        mBuffNerfController.AddNerf(nerf);
     }
 }

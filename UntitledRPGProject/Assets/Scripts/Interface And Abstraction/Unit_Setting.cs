@@ -11,6 +11,7 @@ public class Unit_Setting : ScriptableObject
     public float Magic_Resistance;
     public float Attack;
     public float Defend;
+    public float MagicPower;
     public float Armor;
     public float Agility;
     public Unit mTarget;
