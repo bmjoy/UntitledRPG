@@ -115,6 +115,7 @@ public class Unit : MonoBehaviour, IUnit
         if (isCancel == false)
         {
             Debug.Log(this.Unit_Setting.Name + " Attacks");
+            PlayAnimation("Attack");
             yield return mWaitingTime;
             if (mTarget)
             {
@@ -140,7 +141,9 @@ public class Unit : MonoBehaviour, IUnit
 
     virtual public IEnumerator MagicAction(Action onComplete)
     {
+
         mSkillDataBase.Use();
+        PlayAnimation("Attack");
         yield return new WaitUntil(() => mSkillDataBase.mSkill.isComplete == true);
         if(mSkillDataBase.mSkill.isActive == false)
             BattleManager.Instance.Cancel();
@@ -153,9 +156,10 @@ public class Unit : MonoBehaviour, IUnit
 
     }
 
-    virtual public void PlayAnimation(string name, bool active)
+    virtual public void PlayAnimation(string name)
     {
-        mAnimator.SetBool(name, active);
+        //mAnimator.SetBool(name, active);
+        mAnimator.Play(name);
     }
 
     virtual public void TakeDamage(float dmg, DamageType type)

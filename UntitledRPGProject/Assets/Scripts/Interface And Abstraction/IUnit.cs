@@ -12,5 +12,5 @@ public interface IUnit
     IEnumerator AttackAction(DamageType type, Action onComplete);
     IEnumerator DefendAction(Action onComplete);
     IEnumerator MagicAction(Action onComplete);
-    void PlayAnimation(string name, bool active);
+    void PlayAnimation(string name);
 }
