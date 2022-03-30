@@ -20,12 +20,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 mVelocity = Vector3.zero;
     private Vector3 mGroundPos = Vector3.zero;
     private CharacterController mCharacterController;
+    private SpriteRenderer mSpriteRenderer;
 
     [SerializeField]
     private Transform mCamera;
     private float mGravity = -9.8f;
 
+    private bool isLeft = false;
     private bool onBattle = false;
+    private Animator mAnimator;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +39,8 @@ public class PlayerController : MonoBehaviour
         mCharacterController = GetComponent<CharacterController>();
         GameManager.Instance.onPlayerBattleStart += OnBattleStart;
         GameManager.Instance.onPlayerBattleEnd += OnBattleEnd;
+        mAnimator = transform.GetComponentInChildren<Animator>();
+        mSpriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -44,6 +49,8 @@ public class PlayerController : MonoBehaviour
         if (mOwner.activeInHierarchy == false)
             return;
         mState = mState.Handle();
+        StateControl();
+
         isGrounded = Physics.CheckSphere(mGroundPos, mGroundDistance, mGroundMask);
         if(mState.ToString() != "BattleState")
         {
@@ -66,6 +73,31 @@ public class PlayerController : MonoBehaviour
         mVelocity.y += mGravity * Time.deltaTime;
 
         mCharacterController.Move(mVelocity * Time.deltaTime);
+    }
+
+    private void StateControl()
+    {
+        switch(mState.ToString())
+        {
+            case "IdleState":
+                mAnimator.SetFloat("Speed", 0.0f);
+                break;
+            case "RunState":
+                {
+                    if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !isLeft)
+                    {
+                        isLeft = true;
+                        mSpriteRenderer.flipX = false;
+                    }
+                    if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && isLeft)
+                    {
+                        isLeft = false;
+                        mSpriteRenderer.flipX = true;
+                    }
+                    mAnimator.SetFloat("Speed", mSpeed);
+                }
+                break;
+        }
     }
 
     private GameObject[] fields;
