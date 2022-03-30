@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Unit : MonoBehaviour, IUnit
@@ -17,10 +19,12 @@ public class Unit : MonoBehaviour, IUnit
     public bool isDied = false;
     public bool isDefend = false;
     public bool isMove = false;
+    public bool isCancel = false;
 
     public Unit mTarget = null;
     public Order mOrder = Order.Standby;
     public Flag mFlag;
+    public LayerMask mTargetMask;
     public Vector3 mPos = Vector3.zero;
     public Vector3 mTargetPos = Vector3.zero;
 
@@ -52,6 +56,8 @@ public class Unit : MonoBehaviour, IUnit
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
         mBuffNerfController = GetComponent<BuffAndNerfEntity>();
+        if(GetComponent<Skill_DataBase>())
+            mSkillDataBase = GetComponent<Skill_DataBase>();
     }
 
     protected virtual void Update()
@@ -79,17 +85,72 @@ public class Unit : MonoBehaviour, IUnit
         }
     }
 
-    virtual public IEnumerator AttackAction(DamageType type)
+    virtual public IEnumerator AttackAction(DamageType type, Action onComplete)
     {
-        yield return mWaitingTime;
-        if(mTarget)
-            mTarget.TakeDamage(mDamage, type);
+        isCancel = false;
+        UIManager.Instance.ChangeText_Target("Choose the Target");
+        UIManager.Instance.DisplayAskingSkill(true);
+        while (mTarget == null)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100, mTargetMask))
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    mTarget = hit.transform.GetComponent<Unit>();
+                    Debug.Log(hit.transform.name);
+                }
+                if(Input.GetMouseButtonDown(1))
+                {
+                    isCancel = true;
+                    BattleManager.Instance.Cancel();
+                    break;
+                }
+            }
+            yield return null;
+        }
+        UIManager.Instance.DisplayAskingSkill(false);
+        UIManager.Instance.ChangeText_Target("OK? (Y/N)");
+        if (isCancel == false)
+        {
+            Debug.Log(this.Unit_Setting.Name + " Attacks");
+            yield return mWaitingTime;
+            if (mTarget)
+            {
+                Debug.Log(this.Unit_Setting.Name + " Attacks to " + mTarget.Unit_Setting.Name);
+                mTarget.TakeDamage(mDamage, type);
+            }
+            else
+                Debug.Log("No Target");
+            onComplete?.Invoke();
+            TurnEnded();
+        }
+
     }
 
-    virtual public IEnumerator MagicAction()
+    virtual public IEnumerator DefendAction(Action onComplete)
     {
+        isDefend = true;
+        //TODO: Effect?
         yield return mWaitingTime;
+        onComplete?.Invoke();
+        TurnEnded();
+    }
+
+    virtual public IEnumerator MagicAction(Action onComplete)
+    {
         mSkillDataBase.Use();
+        yield return new WaitUntil(() => mSkillDataBase.mSkill.isComplete == true);
+        if(mSkillDataBase.mSkill.isActive == false)
+            BattleManager.Instance.Cancel();
+        else
+        {
+            yield return mWaitingTime;
+            onComplete?.Invoke();
+            TurnEnded();
+        }
+
     }
 
     virtual public void PlayAnimation(string name, bool active)
@@ -101,24 +162,20 @@ public class Unit : MonoBehaviour, IUnit
     {
         if (isDied)
             return;
-        float value = 0.0f;
+        float value = dmg;
         if (type == DamageType.Physical)
         {
             if(isDefend)
                 value = dmg - (dmg * mDefend * 100.0f);
-            else
-                value = dmg;
-
-            mHealth = mHealth - (value - mArmor);
-            if (mHealth <= 0)
-                isDied = true;
         }
-        else
+        mHealth = (type == DamageType.Physical) ? mHealth = mHealth - (value - mArmor) : mHealth - (value - mMagic_Resistance);
+        Debug.Log("Takes " + value + " Damages");
+        if (mHealth <= 0)
         {
-            mHealth = mHealth - (dmg - mMagic_Resistance);
-            if (mHealth <= 0)
-                isDied = true;
+            isDied = true;
+            Debug.Log(name + " Dead!");
         }
+
     }
 
     virtual public void TakeRecover(float val)
@@ -126,6 +183,7 @@ public class Unit : MonoBehaviour, IUnit
         mHealth += val;
         if (mHealth >= mSetting.MaxHealth)
             mHealth = mSetting.MaxHealth;
+        Debug.Log(name + " Healed!");
     }
     virtual public void TurnEnded()
     {

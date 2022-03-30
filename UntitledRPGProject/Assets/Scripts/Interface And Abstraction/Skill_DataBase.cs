@@ -6,8 +6,6 @@ public class Skill_DataBase : MonoBehaviour
 {
     //public List<Skill_Setting> mSkills = new List<Skill_Setting>();
     public Skill_Setting mSkill;
-    public bool isDisplay = false;
-    public bool isComplete = false;
     private void Start()
     {
         mSkill.Initialize(GetComponent<Unit>());
@@ -15,20 +13,8 @@ public class Skill_DataBase : MonoBehaviour
 
     public void Use()
     {
-        mSkill.Activate();
-        StartCoroutine(Wait());
-    }
-
-    private IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(0.5f);
-        isComplete = true;
-        yield return new WaitForSeconds(0.2f);
-        isComplete = false;
-    }
-
-    public void Display()
-    {
-        isDisplay = !isDisplay;
+        Debug.Log(mSkill.mName);
+        mSkill.isComplete = false;
+        mSkill.Activate(this);
     }
 }

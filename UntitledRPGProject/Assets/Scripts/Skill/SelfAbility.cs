@@ -7,17 +7,47 @@ using UnityEngine;
 public class SelfAbility : Skill_Setting
 {
     public GameObject mEffect;
-    public override void Activate()
+    public override void Activate(MonoBehaviour parent)
     {
-        if(mOwner.mMana >= mManaCost)
+        isActive = false;
+        parent.StopAllCoroutines();
+        parent.StartCoroutine(WaitforDecision());
+    }
+
+    public override void Initialize(Unit owner)
+    {
+        mOwner = owner;
+        if(mValue <= 0.0f)
+            mValue = owner.mMagicPower;
+    }
+
+    public override IEnumerator WaitforDecision()
+    {
+        UIManager.Instance.DisplayAskingSkill(true);
+        while (true)
         {
-            switch(mSkillType)
+            if(Input.GetMouseButtonDown(0))
+            {
+                isActive = true;
+                break;
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                isActive = false;
+                break;
+            }
+            yield return null;
+        }
+        UIManager.Instance.DisplayAskingSkill(false);
+        if (mOwner.mMana >= mManaCost && isActive)
+        {
+            switch (mSkillType)
             {
                 case SkillType.Attack: break;
                 case SkillType.AttackBuff:
                     {
                         mOwner.TakeDamage(mValue, DamageType.Magical);
-                        
+
                     }
                     break;
                 case SkillType.AttackNerf:
@@ -27,7 +57,7 @@ public class SelfAbility : Skill_Setting
                     break;
                 case SkillType.Buff:
                     {
-                        foreach(GameObject buff in mBuffs)
+                        foreach (GameObject buff in mBuffs)
                         {
                             mOwner.SetBuff(buff.GetComponent<TimedBuff>());
                         }
@@ -83,12 +113,7 @@ public class SelfAbility : Skill_Setting
                     break;
             }
         }
-    }
-
-    public override void Initialize(Unit owner)
-    {
-        mOwner = owner;
-        if(mValue <= 0.0f)
-            mValue = owner.mMagicPower;
+        isComplete = true;
+        yield return null;
     }
 }

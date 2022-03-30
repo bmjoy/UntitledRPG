@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,8 @@ public interface IUnit
     void SetNerf(TimedNerf nerf);
     void TakeDamage(float dmg, DamageType type);
     void TakeRecover(float val);
-    IEnumerator AttackAction(DamageType type);
-    IEnumerator MagicAction();
+    IEnumerator AttackAction(DamageType type, Action onComplete);
+    IEnumerator DefendAction(Action onComplete);
+    IEnumerator MagicAction(Action onComplete);
     void PlayAnimation(string name, bool active);
 }
