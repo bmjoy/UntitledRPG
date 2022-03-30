@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Healing
   m_EditorClassIdentifier: 
   mSprite: {fileID: 0}
-  mName: 
-  mDescription: 
-  mManaCost: 0
-  mValue: 0
+  mName: Healing
+  mDescription: This is the healing magic, and it can heal 50 costs.
+  mManaCost: 10
+  mValue: 50
   mSkillProperty: 0
   mSkillType: 3
   mOwner: {fileID: 0}

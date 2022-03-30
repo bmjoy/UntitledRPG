@@ -15,3 +15,9 @@ public enum SkillType
     Nerf,
     Summon
 }
+
+public enum SkillProperty
+{
+    Friendly,
+    Hostile
+}

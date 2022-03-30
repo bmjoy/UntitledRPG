@@ -14,7 +14,6 @@ public class Unit_Setting : ScriptableObject
     public float MagicPower;
     public float Armor;
     public float Agility;
-    public Unit mTarget;
 
     public List<AudioClip> SFXClips;
 }

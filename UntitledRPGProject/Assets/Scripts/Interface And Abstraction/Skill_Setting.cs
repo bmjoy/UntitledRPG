@@ -16,14 +16,15 @@ public abstract class Skill_Setting : ScriptableObject
     public float mManaCost;
     [Range(0.0f, 1000.0f)]
     public float mValue;
-    public SkillProperty mSkillProperty = SkillProperty.Self;
-    public SkillType mSkillType = SkillType.Attack;
     public Unit mOwner;
     public bool isActive = false;
-    
+    public bool isComplete = false;
+    public SkillType mSkillType;
+    public SkillProperty mProperty;
+
     public List<GameObject> mBuffs;
     public List<GameObject> mNerfs;
     public abstract void Initialize(Unit owner);
-    public abstract void Activate();
-
+    public abstract void Activate(MonoBehaviour parent);
+    public abstract IEnumerator WaitforDecision();
 }
