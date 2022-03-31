@@ -26,6 +26,12 @@ TextureImporter:
   - first:
       213: -357171303387870130
     second: fury fist_7
+  - first:
+      213: -4298727589345009642
+    second: fury fist_9
+  - first:
+      213: -3980964321086843985
+    second: fury fist_10
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -70,7 +76,7 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -118,12 +124,12 @@ TextureImporter:
       name: fury fist_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 231
-        width: 94
-        height: 33
+        x: 18
+        y: 232
+        width: 28
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -139,12 +145,12 @@ TextureImporter:
       name: fury fist_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 198
-        width: 94
-        height: 33
+        x: 19
+        y: 199
+        width: 33
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -160,12 +166,12 @@ TextureImporter:
       name: fury fist_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 165
-        width: 94
-        height: 33
+        x: 18
+        y: 166
+        width: 36
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -178,36 +184,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fury fist_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 132
-        width: 94
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6710b2b4b8a1ed200800000000000000
-      internalID: 206631818469507446
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: fury fist_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 99
-        width: 94
-        height: 33
+        x: 19
+        y: 133
+        width: 35
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -220,36 +205,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fury fist_5
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 66
-        width: 94
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 37af96005eef2dab0800000000000000
-      internalID: -4984641578037806477
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: fury fist_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 33
-        width: 94
-        height: 33
+        x: 18
+        y: 100
+        width: 32
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -265,12 +229,12 @@ TextureImporter:
       name: fury fist_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 94
-        height: 33
+        x: 19
+        y: 67
+        width: 31
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -278,6 +242,48 @@ TextureImporter:
       bones: []
       spriteID: e4c4a9987921b0bf0800000000000000
       internalID: -357171303387870130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fury fist_9
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 34
+        width: 33
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6106bea780ad754c0800000000000000
+      internalID: -4298727589345009642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fury fist_10
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 1
+        width: 27
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa35d12ca06c0c8c0800000000000000
+      internalID: -3980964321086843985
       vertices: []
       indices: 
       edges: []
