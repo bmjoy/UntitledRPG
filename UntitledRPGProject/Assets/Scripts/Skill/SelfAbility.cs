@@ -18,7 +18,7 @@ public class SelfAbility : Skill_Setting
     {
         mOwner = owner;
         if(mValue <= 0.0f)
-            mValue = owner.mMagicPower;
+            mValue = owner.mStatus.mMagicPower;
     }
 
     public override IEnumerator WaitforDecision()
@@ -39,7 +39,8 @@ public class SelfAbility : Skill_Setting
             yield return null;
         }
         UIManager.Instance.DisplayAskingSkill(false);
-        if (mOwner.mMana >= mManaCost && isActive)
+        mOwner.PlayAnimation("Attack");
+        if (mOwner.mStatus.mMana >= mManaCost && isActive)
         {
             switch (mSkillType)
             {

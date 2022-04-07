@@ -111,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mEffect: {fileID: 8503439070749100693}
   isCollide: 0
-  mSpeed: 7
+  mSpeed: 25
 --- !u!1001 &6861748806110887133
 PrefabInstance:
   m_ObjectHideFlags: 0

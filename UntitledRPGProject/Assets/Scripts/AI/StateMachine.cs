@@ -7,11 +7,11 @@ public class StateMachine : MonoBehaviour
     // Start is called before the first frame update
     public State mCurrentState;
     public Dictionary<string, object> mStates = new Dictionary<string, object>();
-    public GameObject mAgent;
+    public Unit mAgent;
 
     private void Awake()
     {
-        mAgent = this.gameObject;
+        mAgent = this.transform.GetComponent<Unit>();
     }
 
     public void AddState<T>(T newState, string stateName) where T : class

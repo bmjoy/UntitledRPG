@@ -7,6 +7,7 @@ public class EnemyProwler : MonoBehaviour
 {
     public GameObject mModel;
     public NavMeshAgent mAgent;
+    private BoxCollider mCollider;
     public int id = 0;
     public bool onBattle = false;
 
@@ -21,6 +22,15 @@ public class EnemyProwler : MonoBehaviour
     {
         GameManager.Instance.onBattle += EnemySpawn;
         GameManager.Instance.onEnemyDeath += DestoryEnemy;
+        mCollider = GetComponent<BoxCollider>();
+        GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
+        if (agent.Length > 1)
+        {
+            for (int i = 0; i < agent.Length; i++)
+            {
+                Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
+            }
+        }
     }
 
     void Update()
@@ -34,6 +44,8 @@ public class EnemyProwler : MonoBehaviour
     {
         if(val == this.id)
         {
+            mCollider.center = new Vector3(0.0f,5.0f,0.0f);
+            mCollider.enabled = false;
             mModel.SetActive(false);
             onBattle = true;
             GameObject[] fields = GameObject.FindGameObjectsWithTag("EnemyField");
@@ -43,7 +55,9 @@ public class EnemyProwler : MonoBehaviour
             {
                 EnemySpawnGroup[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z - 2.0f);
                 EnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-                EnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position);
+                EnemySpawnGroup[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
+                EnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
+                EnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
                 EnemySpawnGroup[i].gameObject.SetActive(true);
                 EnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
