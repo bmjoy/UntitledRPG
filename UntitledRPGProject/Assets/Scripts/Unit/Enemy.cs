@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
-    public StateMachine mStateMachine;
-
     protected override void Start()
     {
         base.Start();
@@ -18,10 +16,8 @@ public class Enemy : Unit
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
             }
         }
+        mAiBuild.type = AIType.Auto;
         
-        mStateMachine = gameObject.AddComponent<StateMachine>();
-        mStateMachine.mAgent = this.gameObject;
-        //TODO Add behaviors
     }
 
     private void OnCollisionEnter(Collision collision)

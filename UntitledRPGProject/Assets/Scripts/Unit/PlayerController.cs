@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask mGroundMask;
     private Vector3 mVelocity = Vector3.zero;
     private Vector3 mGroundPos = Vector3.zero;
+    private BoxCollider mCollider;
     private CharacterController mCharacterController;
     private SpriteRenderer mSpriteRenderer;
 
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.onPlayerBattleEnd += OnBattleEnd;
         mAnimator = transform.GetComponentInChildren<Animator>();
         mSpriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
+        mCollider = GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
@@ -107,6 +109,7 @@ public class PlayerController : MonoBehaviour
     {
         onBattle = true;
         mState = new BattleState();
+        mCharacterController.enabled = false;
         mOwner.SetActive(false);
         fields = GameObject.FindGameObjectsWithTag("PlayerField");
         enemyFields = GameObject.FindGameObjectsWithTag("EnemyField");
@@ -114,7 +117,9 @@ public class PlayerController : MonoBehaviour
         {
             mHeroes[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z);
             mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-            mHeroes[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, enemyFields[i].transform.position);
+            mHeroes[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
+            mHeroes[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
+            mHeroes[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, enemyFields[i].transform.position, ActionEvent.IntroWalk);
             mHeroes[i].gameObject.SetActive(true);
             mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
@@ -125,11 +130,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnBattleEnd()
     {
+        mCharacterController.enabled = true;
+        mCollider.enabled = true;
         mState = new IdleState();
         onBattle = false;
         GameManager.Instance.mEnemyProwler = null;
-        transform.position = mPos;
-        transform.rotation = mHeroes[0].transform.rotation;
         mOwner.SetActive(true);
         for (int i = 0; i < mHeroes.Count; ++i)
         {
@@ -147,9 +152,11 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<EnemyProwler>() != null && !other.GetComponent<EnemyProwler>().onBattle)
         {
             other.GetComponent<EnemyProwler>().onBattle = onBattle = true;
+            mCollider.enabled = false;
             GameManager.Instance.mEnemyProwler = other.GetComponent<EnemyProwler>();
             BattleManager.Instance.SetBattleField();
             GameManager.Instance.OnBattleStart(other.GetComponent<EnemyProwler>().id);
+            
             //TODO call game manager to start the battle
         }
     }

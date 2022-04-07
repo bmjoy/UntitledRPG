@@ -24,6 +24,7 @@ public class TargetAbility : Skill_Setting
     {
         UIManager.Instance.ChangeText_Target("Choose the Target");
         UIManager.Instance.DisplayAskingSkill(true);
+        mTarget = null;
         while (mTarget == null)
         {
             Raycasting();
@@ -52,8 +53,8 @@ public class TargetAbility : Skill_Setting
             yield return null;
         }
         UIManager.Instance.DisplayAskingSkill(false);
-
-        if (mOwner.mMana >= mManaCost && isActive)
+        mOwner.PlayAnimation("Attack");
+        if (mOwner.mStatus.mMana >= mManaCost && isActive)
         {
             if (IsShootType && isActive)
             {
@@ -140,7 +141,7 @@ public class TargetAbility : Skill_Setting
     private void Shoot()
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 3.0f, Quaternion.identity) as GameObject;
+        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 1.5f, Quaternion.identity) as GameObject;
         mProjectile.transform.LookAt(dir);
         mProjectile.GetComponent<Projectile>().Initialize(mTarget, dir, DamageType.Magical, null);
     }
@@ -155,8 +156,11 @@ public class TargetAbility : Skill_Setting
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    mTarget = hit.transform.GetComponent<Unit>();
-                    Debug.Log(hit.transform.name);
+                    if(hit.transform.GetComponent<Unit>().mConditions.isDied == false)
+                    {
+                        mTarget = hit.transform.GetComponent<Unit>();
+                        Debug.Log(hit.transform.name);
+                    }
                 }
             }
         }
@@ -166,8 +170,11 @@ public class TargetAbility : Skill_Setting
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    mTarget = hit.transform.GetComponent<Unit>();
-                    Debug.Log(hit.transform.name);
+                    if (hit.transform.GetComponent<Unit>().mConditions.isDied == false)
+                    {
+                        mTarget = hit.transform.GetComponent<Unit>();
+                        Debug.Log(hit.transform.name);
+                    }
                 }
             }
         }
@@ -179,6 +186,6 @@ public class TargetAbility : Skill_Setting
     {
         mOwner = owner;
         if (mValue <= 0.0f)
-            mValue = owner.mMagicPower;
+            mValue = owner.mStatus.mMagicPower;
     }
 }
