@@ -23,8 +23,9 @@ public class Unit : MonoBehaviour, IUnit
 
     private BuffAndNerfEntity mBuffNerfController;
 
-    private float currentTime = 0.0f;
-    private float mReadyTime = 2.5f;
+    public GameObject mHealthBarPrefab;
+    private HealthBar mHealthBar;
+
     public float yAxis = 0.0f;
 
     public AIBuild mAiBuild;
@@ -43,6 +44,9 @@ public class Unit : MonoBehaviour, IUnit
         mBuffNerfController = GetComponent<BuffAndNerfEntity>();
         if(GetComponent<Skill_DataBase>())
             mSkillDataBase = GetComponent<Skill_DataBase>();
+
+        mHealthBar = mHealthBarPrefab.GetComponent<HealthBar>();
+        mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth);
 
         mAiBuild.actionEvent = ActionEvent.IntroWalk;
 
@@ -65,41 +69,40 @@ public class Unit : MonoBehaviour, IUnit
         {
             case ActionEvent.None:
                 {
-                    currentTime = 0.0f;
                     if(mAiBuild.type == AIType.Auto)
                         mAiBuild.stateMachine.ActivateState();
+                    mAnimator.SetFloat("Speed", 0.0f);
+                    mHealthBar.Active(true);
                 }
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 0.01f)) ? ActionEvent.IntroRotate : ActionEvent.IntroWalk;
-                    transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 5.0f);
-                }
-                break;
-            case ActionEvent.IntroRotate:
-                {
+                    mHealthBar.Active(false);
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 0.001f)) ? ActionEvent.None : ActionEvent.IntroWalk;
+                    transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 4.0f);
+
                     var q = Quaternion.LookRotation(Vector3.Normalize(mTargetPos - transform.position), Vector3.up);
                     q.x = q.z = 0.0f;
                     transform.rotation = q;
-                    currentTime += Time.deltaTime;
-                    mAiBuild.actionEvent = (currentTime > mReadyTime) ? ActionEvent.None : ActionEvent.IntroRotate;
+                    mAnimator.SetFloat("Speed", 1.0f);
                 }
                 break;
             case ActionEvent.AttackWalk:
                 {
                     mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 2.0f)) ? ActionEvent.Busy : ActionEvent.AttackWalk;
-                    transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 5.0f);
+                    transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 4.0f);
+                    mAnimator.SetFloat("Speed", 1.0f);
                 }
                 break;
             case ActionEvent.BackWalk:
                 {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 0.01f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
-                    transform.position = Vector3.MoveTowards(transform.position, mFieldPos, Time.deltaTime * mStatus.mAgility * 5.0f);
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 0.001f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
+                    transform.position = Vector3.MoveTowards(transform.position, mFieldPos, Time.deltaTime * mStatus.mAgility * 4.0f);
+                    mAnimator.SetFloat("Speed", 1.0f);
                 }
                 break;
             case ActionEvent.Busy:
-                {
-                }
+                mAnimator.SetFloat("Speed", 0.0f);
                 break;
         }
     }
@@ -199,15 +202,16 @@ public class Unit : MonoBehaviour, IUnit
             return;
         float value = dmg;
         if (type == DamageType.Physical)
-        {
             value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
-        }
+
         mStatus.mHealth = (type == DamageType.Physical) ? mStatus.mHealth = mStatus.mHealth - 
             (value - mStatus.mArmor) : mStatus.mHealth - (value - mStatus.mMagic_Resistance);
+        mHealthBar.mCurrentHealth = mStatus.mHealth;
         Debug.Log("Takes " + value + " Damages");
         if (mStatus.mHealth <= 0)
         {
             mConditions.isDied = true;
+            Destroy(mHealthBar.gameObject);
             Debug.Log(name + " Dead!");
         }
 

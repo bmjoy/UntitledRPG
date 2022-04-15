@@ -19,7 +19,6 @@ public enum ActionEvent
 {
     None,
     IntroWalk,
-    IntroRotate,
     AttackWalk,
     Busy,
     BackWalk

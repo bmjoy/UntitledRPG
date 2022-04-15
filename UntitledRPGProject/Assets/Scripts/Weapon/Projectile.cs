@@ -57,5 +57,6 @@ public class Projectile : MonoBehaviour
         yield return mTime;
         isEffect = false;
         transform.LookAt(mDirection);
+
     }
 }

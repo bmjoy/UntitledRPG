@@ -9,10 +9,12 @@ public class BattleManager : MonoBehaviour
     enum GameStatus
     {
         None,
+        Start,
         Queue,
         WaitForOrder,
         Busy,
         Result,
+        Reward,
         Finish
     }
 
@@ -43,8 +45,8 @@ public class BattleManager : MonoBehaviour
             {
                 if (GameManager.Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == GameManager.Instance.mEnemyProwler.id)
                     continue;
-
                 GameManager.Instance.EnemyProwlers[i].SetActive(false);
+                GameManager.Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = false;
             }
         }
         mUnits.Clear();
@@ -57,7 +59,7 @@ public class BattleManager : MonoBehaviour
             mUnits[i].GetComponent<Unit>().mOrder = Order.Standby;
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
-        status = GameStatus.Queue;
+        status = GameStatus.Start;
     }
 
     private void Update()
@@ -67,6 +69,11 @@ public class BattleManager : MonoBehaviour
             switch (status)
             {
                 case GameStatus.None:
+                    break;
+                case GameStatus.Start:
+                    {
+                        status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None)) ? GameStatus.Queue : GameStatus.Start;
+                    }
                     break;
                 case GameStatus.Queue:
                     {
@@ -120,6 +127,11 @@ public class BattleManager : MonoBehaviour
                         status = (BattleResult() == true) ? status = GameStatus.Finish : GameStatus.Queue;
                     }
                     break;
+                case GameStatus.Reward:
+                    {
+                        // TODO
+                    }
+                    break;
                 case GameStatus.Finish:
                     {
                         CameraSwitcher.SwitchCamera();
@@ -159,7 +171,7 @@ public class BattleManager : MonoBehaviour
 
         Vector3 point = mOffset + 0.5f * (mTargetOffset - mOffset);
 
-        GameManager.Instance.mCurrentField.transform.position = new Vector3(mOffset.x, mOffset.y, mOffset.z);
+        GameManager.Instance.mCurrentField.transform.position = point;
         CameraSwitcher.UpdateCamera(GameManager.Instance.mCurrentField.transform);
         GameManager.Instance.mCurrentField.SetActive(true);
     }
