@@ -8,8 +8,15 @@ public class EnemyProwler : MonoBehaviour
     public GameObject mModel;
     public NavMeshAgent mAgent;
     private BoxCollider mCollider;
+    private ProwlerStateMachine mStateMachine;
     public int id = 0;
     public bool onBattle = false;
+
+    public float mRadius = 100.0f;
+    public float mAngle = 60.0f;
+    public Vector3 mLastPos = Vector3.zero;
+
+    public float mOriginalSpeed = 0.0f;
 
     [SerializeField]
     private List<GameObject> mEnemySpawnGroup;
@@ -23,6 +30,9 @@ public class EnemyProwler : MonoBehaviour
         GameManager.Instance.onBattle += EnemySpawn;
         GameManager.Instance.onEnemyDeath += DestoryEnemy;
         mCollider = GetComponent<BoxCollider>();
+        mAgent = GetComponent<NavMeshAgent>();
+        mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
+        mOriginalSpeed = mAgent.speed;
         GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
         if (agent.Length > 1)
         {
@@ -31,13 +41,20 @@ public class EnemyProwler : MonoBehaviour
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
             }
         }
+        mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();
+        mStateMachine.mAgent = this;
+        mStateMachine.AddState<Idle>(new Idle(),"Idle");
+        mStateMachine.AddState<Find>(new Find(), "Find");
+        mStateMachine.AddState<Pursuit>(new Pursuit(), "Pursuit");
+        mStateMachine.ChangeState("Idle");
     }
 
     void Update()
     {
         if (BattleManager.Instance.isBattle)
             return;
-        // TODO: AI for Nav Mesh Agent
+        else
+            mStateMachine.ActivateState();
     }
 
     public void EnemySpawn(int val)
@@ -62,7 +79,6 @@ public class EnemyProwler : MonoBehaviour
                 EnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
         }
-        // TODO: Enemy spawn
     }
 
     public void DestoryEnemy(int id)
@@ -71,6 +87,10 @@ public class EnemyProwler : MonoBehaviour
             Destroy(gameObject);
     }
 
+    public void ChangeBehavior(string name)
+    {
+        mStateMachine.ChangeState(name);
+    }
     private void OnDestroy()
     {
         GameManager.Instance.onBattle -= EnemySpawn;

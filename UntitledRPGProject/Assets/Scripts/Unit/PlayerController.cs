@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
 
     private GameObject[] fields;
     private GameObject[] enemyFields;
+
     private Vector3 mPos;
     public void OnBattleStart()
     {
@@ -111,6 +112,7 @@ public class PlayerController : MonoBehaviour
         mState = new BattleState();
         mCharacterController.enabled = false;
         mOwner.SetActive(false);
+
         fields = GameObject.FindGameObjectsWithTag("PlayerField");
         enemyFields = GameObject.FindGameObjectsWithTag("EnemyField");
         for (int i = 0; i < mHeroes.Count; ++i)

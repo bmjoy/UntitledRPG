@@ -22,120 +22,131 @@ public class TargetAbility : Skill_Setting
 
     public override IEnumerator WaitforDecision()
     {
-        UIManager.Instance.ChangeText_Target("Choose the Target");
-        UIManager.Instance.DisplayAskingSkill(true);
-        mTarget = null;
-        while (mTarget == null)
+        if(mOwner.mStatus.mMana < mManaCost)
         {
-            Raycasting();
-            if (Input.GetMouseButtonDown(1))
-            {
-                mTarget = null;
-                isActive = false;
-                break;
-            }
-            yield return null;
+            BattleManager.Instance.Cancel();
         }
-        UIManager.Instance.ChangeText_Target("OK? (Y/N)");
-        while (true)
+        else
         {
-            if (Input.GetMouseButtonDown(0))
+            UIManager.Instance.ChangeText_Target("Choose the Target");
+            UIManager.Instance.DisplayAskingSkill(true);
+            mTarget = null;
+            while (mTarget == null)
             {
-                isActive = true;
-                break;
+                Raycasting();
+                if (Input.GetMouseButtonDown(1))
+                {
+                    mTarget = null;
+                    isActive = false;
+                    break;
+                }
+                yield return null;
             }
-            if (Input.GetMouseButtonDown(1))
+            UIManager.Instance.ChangeText_Target("OK? (Y/N)");
+            while (true)
             {
-                isActive = false;
-                mTarget = null;
-                break;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    isActive = true;
+                    break;
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    isActive = false;
+                    mTarget = null;
+                    break;
+                }
+                yield return null;
             }
-            yield return null;
-        }
-        UIManager.Instance.DisplayAskingSkill(false);
-        mOwner.PlayAnimation("Attack");
-        if (mOwner.mStatus.mMana >= mManaCost && isActive)
-        {
-            if (IsShootType && isActive)
-            {
-                Shoot();
-                yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
-            }
-            switch (mSkillType)
-            {
-                case SkillType.Attack:
-                    {
-                        mTarget.TakeDamage(mValue, DamageType.Magical);
-                    }
-                    break;
-                case SkillType.AttackBuff:
-                    {
-                        mTarget.TakeDamage(mValue, DamageType.Magical);
-                    }
-                    break;
-                case SkillType.AttackNerf:
-                    {
-                        mTarget.TakeDamage(mValue, DamageType.Magical);
-                    }
-                    break;
-                case SkillType.Buff:
-                    {
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                    }
-                    break;
-                case SkillType.BuffNerf:
-                    {
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                    }
-                    break;
-                case SkillType.Nerf:
-                    {
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                    }
-                    break;
-                case SkillType.Heal:
-                    {
-                        mTarget.TakeRecover(mValue);
-                        break;
-                    }
-                case SkillType.HealBuff:
-                    {
-                        mTarget.TakeRecover(mValue);
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                        break;
-                    }
+            UIManager.Instance.DisplayAskingSkill(false);
 
-                case SkillType.HealNerf:
-                    {
-                        mTarget.TakeRecover(mValue);
-                        foreach (GameObject nerf in mNerfs)
+            if (isActive)
+            {
+                mOwner.PlayAnimation("Attack");
+                mOwner.mStatus.mMana -= mManaCost;
+                if (IsShootType && isActive)
+                {
+                    Shoot();
+                    yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
+                }
+                switch (mSkillType)
+                {
+                    case SkillType.Attack:
                         {
-                            mTarget?.SetNerf(nerf.GetComponent<TimedNerf>());
+                            mTarget.TakeDamage(mValue, DamageType.Magical);
                         }
                         break;
-                    }
-                case SkillType.Summon:
-                    break;
-            }
-        }
+                    case SkillType.AttackBuff:
+                        {
+                            mTarget.TakeDamage(mValue, DamageType.Magical);
+                        }
+                        break;
+                    case SkillType.AttackNerf:
+                        {
+                            mTarget.TakeDamage(mValue, DamageType.Magical);
+                        }
+                        break;
+                    case SkillType.Buff:
+                        {
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                        }
+                        break;
+                    case SkillType.BuffNerf:
+                        {
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                        }
+                        break;
+                    case SkillType.Nerf:
+                        {
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                        }
+                        break;
+                    case SkillType.Heal:
+                        {
+                            mTarget.TakeRecover(mValue);
+                            break;
+                        }
+                    case SkillType.HealBuff:
+                        {
+                            mTarget.TakeRecover(mValue);
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                            break;
+                        }
 
+                    case SkillType.HealNerf:
+                        {
+                            mTarget.TakeRecover(mValue);
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mTarget?.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                            break;
+                        }
+                    case SkillType.Summon:
+                        break;
+                }
+            }
+            else
+                BattleManager.Instance.Cancel();
+        }
         isComplete = true;
+        yield return null;
     }
 
     private void Shoot()

@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
                 if (EnemyProwlers[i].GetComponent<EnemyProwler>().id == mEnemyProwler.id)
                     continue;
                 EnemyProwlers[i].SetActive(true);
+                EnemyProwlers[i].GetComponent<BoxCollider>().enabled = true;
             }
         }
         Instance.mCurrentField.SetActive(false);

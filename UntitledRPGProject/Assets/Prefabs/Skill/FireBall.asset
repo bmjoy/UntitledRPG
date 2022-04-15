@@ -18,7 +18,7 @@ MonoBehaviour:
   mManaCost: 10
   mValue: 100
   mOwner: {fileID: 0}
-  isActive: 1
+  isActive: 0
   isComplete: 1
   mSkillType: 0
   mProperty: 1
