@@ -17,48 +17,56 @@ public class TargetAbility : Skill_Setting
     {
         isActive = false;
         parent.StopAllCoroutines();
+        mOwner = parent.transform.GetComponent<Unit>();
         parent.StartCoroutine(WaitforDecision());
     }
 
     public override IEnumerator WaitforDecision()
     {
         if(mOwner.mStatus.mMana < mManaCost)
-        {
             BattleManager.Instance.Cancel();
-        }
         else
         {
-            UIManager.Instance.ChangeText_Target("Choose the Target");
-            UIManager.Instance.DisplayAskingSkill(true);
-            mTarget = null;
-            while (mTarget == null)
+            if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                Raycasting();
-                if (Input.GetMouseButtonDown(1))
+                UIManager.Instance.ChangeText_Target("Choose the Target");
+                UIManager.Instance.DisplayAskingSkill(true);
+                mTarget = null;
+                while (mTarget == null)
                 {
-                    mTarget = null;
-                    isActive = false;
-                    break;
+                    Raycasting();
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        mTarget = null;
+                        isActive = false;
+                        break;
+                    }
+                    yield return null;
                 }
-                yield return null;
+                UIManager.Instance.ChangeText_Target("OK? (Y/N)");
+                while (true)
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        isActive = true;
+                        break;
+                    }
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        isActive = false;
+                        mTarget = null;
+                        break;
+                    }
+                    yield return null;
+                }
+                UIManager.Instance.DisplayAskingSkill(false);
             }
-            UIManager.Instance.ChangeText_Target("OK? (Y/N)");
-            while (true)
+            else
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    isActive = true;
-                    break;
-                }
-                if (Input.GetMouseButtonDown(1))
-                {
-                    isActive = false;
-                    mTarget = null;
-                    break;
-                }
-                yield return null;
+                isActive = true;
+                mTarget = mOwner.mTarget;
             }
-            UIManager.Instance.DisplayAskingSkill(false);
+
 
             if (isActive)
             {

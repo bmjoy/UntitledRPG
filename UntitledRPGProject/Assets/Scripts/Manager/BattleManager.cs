@@ -51,7 +51,7 @@ public class BattleManager : MonoBehaviour
         }
         mUnits.Clear();
         mUnits.AddRange(GameManager.Instance.mPlayer.mHeroes);
-        mUnits.AddRange(GameManager.Instance.mEnemyProwler.EnemySpawnGroup);
+        mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup);
         mUnits.Sort((a, b) => (b.GetComponent<Unit>().mStatus.mAgility.CompareTo(
             a.GetComponent<Unit>().mStatus.mAgility)));
         for (int i = 0; i < mUnits.Count; i++)
@@ -150,7 +150,7 @@ public class BattleManager : MonoBehaviour
 
     private bool BattleResult()
     {
-        if (GameManager.Instance.mEnemyProwler.EnemySpawnGroup.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             isWin = true;
             return true;

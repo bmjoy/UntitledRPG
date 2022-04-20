@@ -20,6 +20,12 @@ public class Projectile : MonoBehaviour
     {
         if (mEffect)
         {
+            ParticleSystem ps = mEffect.GetComponent<ParticleSystem>();
+            var shape = ps.shape;
+            if (mTarget.mFlag == Flag.Enemy)
+                shape.rotation = new Vector3(90.0f, 0.0f, 0.0f);
+            else
+                shape.rotation = new Vector3(-90.0f, 0.0f, 0.0f);
             isEffect = true;
             StartCoroutine(WaitforSecond());
             mEffect.SetActive(true);
@@ -57,6 +63,5 @@ public class Projectile : MonoBehaviour
         yield return mTime;
         isEffect = false;
         transform.LookAt(mDirection);
-
     }
 }

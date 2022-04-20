@@ -17,20 +17,25 @@ public class EnemyProwler : MonoBehaviour
     public Vector3 mLastPos = Vector3.zero;
 
     public float mOriginalSpeed = 0.0f;
+    public List<GameObject> mEnemySpawnGroup;
 
-    [SerializeField]
-    private List<GameObject> mEnemySpawnGroup;
-    public List<GameObject> EnemySpawnGroup
+    public void Setup(float rad, float ang, int _id, GameObject model)
     {
-        get { return mEnemySpawnGroup; }
+        mRadius = rad;
+        mAngle = ang;
+        id = _id;
+        mModel = model;
+        mEnemySpawnGroup = new List<GameObject>();
     }
 
-    void Start()
+    public void Initialize()
     {
         GameManager.Instance.onBattle += EnemySpawn;
         GameManager.Instance.onEnemyDeath += DestoryEnemy;
         mCollider = GetComponent<BoxCollider>();
+        mCollider.isTrigger = true;
         mAgent = GetComponent<NavMeshAgent>();
+        mAgent.baseOffset = 1.0f;
         mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
         mOriginalSpeed = mAgent.speed;
         GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
@@ -43,7 +48,7 @@ public class EnemyProwler : MonoBehaviour
         }
         mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();
         mStateMachine.mAgent = this;
-        mStateMachine.AddState<Idle>(new Idle(),"Idle");
+        mStateMachine.AddState<Idle>(new Idle(), "Idle");
         mStateMachine.AddState<Find>(new Find(), "Find");
         mStateMachine.AddState<Pursuit>(new Pursuit(), "Pursuit");
         mStateMachine.ChangeState("Idle");
@@ -68,15 +73,15 @@ public class EnemyProwler : MonoBehaviour
             GameObject[] fields = GameObject.FindGameObjectsWithTag("EnemyField");
             Debug.Log(fields.Length);
             GameObject[] playerFields = GameObject.FindGameObjectsWithTag("PlayerField");
-            for (int i = 0; i < EnemySpawnGroup.Count; ++i)
+            for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
             {
-                EnemySpawnGroup[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z - 2.0f);
-                EnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-                EnemySpawnGroup[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
-                EnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
-                EnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
-                EnemySpawnGroup[i].gameObject.SetActive(true);
-                EnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+                mEnemySpawnGroup[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z - 2.0f);
+                mEnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+                mEnemySpawnGroup[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
+                mEnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
+                mEnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
+                mEnemySpawnGroup[i].gameObject.SetActive(true);
+                mEnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
         }
     }

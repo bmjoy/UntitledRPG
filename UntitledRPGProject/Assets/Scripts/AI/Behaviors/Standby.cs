@@ -10,7 +10,7 @@ public class Standby : State
     {
         List<GameObject> list = new List<GameObject>();
         list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
-            : GameManager.Instance.mEnemyProwler.EnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
+            : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
         agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
         randomNumber = -1;
     }
@@ -32,7 +32,7 @@ public class Standby : State
 
     private IEnumerator WaitforSecond(Unit agent)
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         int percent = (int)Mathf.RoundToInt((100 * agent.mStatus.mHealth) / agent.mStatus.mMaxHealth);
         randomNumber = (agent.mAiBuild.property == AIProperty.Offensive) ?
             UnityEngine.Random.Range(30, 50) : randomNumber = UnityEngine.Random.Range(50, 70);

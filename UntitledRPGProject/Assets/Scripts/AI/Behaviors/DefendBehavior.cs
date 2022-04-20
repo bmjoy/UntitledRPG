@@ -28,7 +28,7 @@ public class DefendBehavior : State
         }
         else
         {
-            list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mEnemyProwler.EnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
+            list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
     : GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
             int percentage = UnityEngine.Random.Range(0, 100);
             isMagic = (percentage >= 50) ? true : false;
