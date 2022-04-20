@@ -20,5 +20,5 @@ MonoBehaviour:
   Defend: 10
   MagicPower: 0
   Armor: 1
-  Agility: 3
+  Agility: 5
   SFXClips: []

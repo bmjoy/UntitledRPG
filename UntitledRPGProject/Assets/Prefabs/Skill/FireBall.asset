@@ -15,8 +15,8 @@ MonoBehaviour:
   mSprite: {fileID: 0}
   mName: FireBall
   mDescription: It is the acient skill
-  mManaCost: 10
-  mValue: 100
+  mManaCost: 5
+  mValue: 3
   mOwner: {fileID: 0}
   isActive: 0
   isComplete: 1

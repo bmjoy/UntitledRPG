@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     private GameObject mField;
     public GameObject mCurrentField;
     public GameObject[] EnemyProwlers;
+
+    public static int s_ID = 0;
+
     private void Start()
     {
         mCurrentField = GameObject.Instantiate(Instance.mField, Vector3.zero, Quaternion.identity);
