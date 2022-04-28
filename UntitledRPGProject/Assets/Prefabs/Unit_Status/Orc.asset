@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Orc
   m_EditorClassIdentifier: 
   Name: Orc
-  MaxHealth: 11
+  MaxHealth: 10
   MaxMana: 50
   Magic_Resistance: 0
-  Attack: 5
+  Attack: 15
   Defend: 1
   MagicPower: 0
   Armor: 1

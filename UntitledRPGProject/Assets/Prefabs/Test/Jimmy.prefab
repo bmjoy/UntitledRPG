@@ -22,7 +22,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7617708971306897897
 Transform:
   m_ObjectHideFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7617708971306897888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -2.7624667, y: 2.08, z: 20.710936}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8517494393950403259}
@@ -104,15 +104,15 @@ MonoBehaviour:
   mTargetMask:
     serializedVersion: 2
     m_Bits: 64
-  mFieldPos: {x: 0, y: 0, z: 0}
-  mPos: {x: 0, y: 0, z: 0}
-  mTargetPos: {x: 0, y: 0, z: 0}
+  mFieldPos: {x: -2.4365854, y: 1.1233332, z: 14.995434}
+  mPos: {x: -2.4365854, y: 2.2033331, z: 14.995434}
+  mTargetPos: {x: -2.4365854, y: 2.2033331, z: 26.995434}
   mAnimator: {fileID: 0}
   mRigidbody: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 7190519438ef42e40aca8bc2e020abc0, type: 2}
   mSkillDataBase: {fileID: 0}
   mHealthBarPrefab: {fileID: 8517494395037656348}
-  yAxis: 0
+  yAxis: 1.0799999
 --- !u!114 &7617708971306897896
 MonoBehaviour:
   m_ObjectHideFlags: 0
