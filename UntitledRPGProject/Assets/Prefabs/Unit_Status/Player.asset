@@ -16,9 +16,9 @@ MonoBehaviour:
   MaxHealth: 100
   MaxMana: 12
   Magic_Resistance: 1
-  Attack: 10
+  Attack: 11
   Defend: 10
-  MagicPower: 0
+  MagicPower: 5
   Armor: 1
   Agility: 5
   SFXClips: []
