@@ -39,6 +39,6 @@ public class HealthBar : MonoBehaviour
 
     private void OnDestroy()
     {
-        Destroy(mBorader.gameObject);
+        Destroy(mBorader?.gameObject);
     }
 }

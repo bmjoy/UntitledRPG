@@ -17,7 +17,7 @@ public class Unit : MonoBehaviour, IUnit
     public Animator mAnimator;
     public Rigidbody mRigidbody;
     public Unit_Setting mSetting;
-    public WaitForSeconds mWaitingTime = new WaitForSeconds(1.0f);
+    public WaitForSeconds mWaitingTime = new WaitForSeconds(0.5f);
     public Unit_Setting Unit_Setting => mSetting;
     public Skill_DataBase mSkillDataBase;
 
@@ -27,6 +27,7 @@ public class Unit : MonoBehaviour, IUnit
     private HealthBar mHealthBar;
 
     public float yAxis = 0.0f;
+    public int EXP = 0;
 
     public AIBuild mAiBuild;
     public Status mStatus;
@@ -78,7 +79,7 @@ public class Unit : MonoBehaviour, IUnit
             case ActionEvent.IntroWalk:
                 {
                     mHealthBar.Active(false);
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 0.001f)) ? ActionEvent.None : ActionEvent.IntroWalk;
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 0.01f)) ? ActionEvent.None : ActionEvent.IntroWalk;
                     transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 4.0f);
 
                     var q = Quaternion.LookRotation(Vector3.Normalize(mTargetPos - transform.position), Vector3.up);
@@ -96,9 +97,9 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.BackWalk:
                 {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 0.001f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 0.01f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
                     transform.position = Vector3.MoveTowards(transform.position, mFieldPos, Time.deltaTime * mStatus.mAgility * 4.0f);
-                    mAnimator.SetFloat("Speed", 1.0f);
+                    mAnimator.SetFloat("Speed", (mAiBuild.actionEvent == ActionEvent.BackWalk) ? 1.0f : 0.0f);
                 }
                 break;
             case ActionEvent.Busy:
@@ -128,13 +129,12 @@ public class Unit : MonoBehaviour, IUnit
                             Debug.Log(hit.transform.name);
                         }
                     }
-
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        mConditions.isCancel = true;
-                        BattleManager.Instance.Cancel();
-                        break;
-                    }
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    mConditions.isCancel = true;
+                    BattleManager.Instance.Cancel();
+                    break;
                 }
                 yield return null;
             }
@@ -207,14 +207,16 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mHealth = (type == DamageType.Physical) ? mStatus.mHealth = mStatus.mHealth - 
             (value - mStatus.mArmor) : mStatus.mHealth - (value - mStatus.mMagic_Resistance);
         mHealthBar.mCurrentHealth = mStatus.mHealth;
+
+        mAnimator.SetTrigger("Hit");
         Debug.Log("Takes " + value + " Damages");
         if (mStatus.mHealth <= 0)
         {
             mConditions.isDied = true;
             Destroy(mHealthBar.gameObject);
             Debug.Log(name + " Dead!");
+            mAnimator.SetBool("Death",true);
         }
-
     }
 
     virtual public void TakeRecover(float val)

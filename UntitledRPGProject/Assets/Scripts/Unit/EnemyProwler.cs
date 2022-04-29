@@ -7,8 +7,10 @@ public class EnemyProwler : MonoBehaviour
 {
     public GameObject mModel;
     public NavMeshAgent mAgent;
+    public Animator mAnimator;
     private BoxCollider mCollider;
     private ProwlerStateMachine mStateMachine;
+    private SpriteRenderer mSpriteRenderer;
     public int id = 0;
     public bool onBattle = false;
 
@@ -32,11 +34,16 @@ public class EnemyProwler : MonoBehaviour
     {
         GameManager.Instance.onBattle += EnemySpawn;
         GameManager.Instance.onEnemyDeath += DestoryEnemy;
-        mCollider = GetComponent<BoxCollider>();
+        mCollider = gameObject.AddComponent<BoxCollider>();
+        mAgent = gameObject.AddComponent<NavMeshAgent>();
         mCollider.isTrigger = true;
-        mAgent = GetComponent<NavMeshAgent>();
         mAgent.baseOffset = 1.0f;
         mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
+        mAnimator = mModel.GetComponent<Animator>();
+        mSpriteRenderer = mModel.GetComponent<SpriteRenderer>();
+        //mAnimator.runtimeAnimatorController = Resources.Load("Assets/Animations/Animator/" + mModel.name) as RuntimeAnimatorController;
+
+        mAnimator.SetFloat("Speed", 0.0f);
         mOriginalSpeed = mAgent.speed;
         GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
         if (agent.Length > 1)
@@ -60,6 +67,10 @@ public class EnemyProwler : MonoBehaviour
             return;
         else
             mStateMachine.ActivateState();
+        if((transform.eulerAngles.y) > 0 && (transform.eulerAngles.y) < 180)
+            mSpriteRenderer.flipX = false;
+        else
+            mSpriteRenderer.flipX  = true;
     }
 
     public void EnemySpawn(int val)
@@ -96,6 +107,7 @@ public class EnemyProwler : MonoBehaviour
     {
         mStateMachine.ChangeState(name);
     }
+
     private void OnDestroy()
     {
         GameManager.Instance.onBattle -= EnemySpawn;

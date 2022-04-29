@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     {
         mCurrentField = GameObject.Instantiate(Instance.mField, Vector3.zero, Quaternion.identity);
         mCurrentField.SetActive(false);
-
+        s_ID = 0;
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
     }
     private void Update()
