@@ -1,0 +1,732 @@
+fileFormatVersion: 2
+guid: d778ab0e767618649ac1d85389f9fca5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5864957587003929485
+    second: flame_continously_66x47_0
+  - first:
+      213: 952718954474123163
+    second: flame_continously_66x47_1
+  - first:
+      213: -2462120226591403004
+    second: flame_continously_66x47_2
+  - first:
+      213: -4898447165279363687
+    second: flame_continously_66x47_3
+  - first:
+      213: 5188178383759021251
+    second: flame_continously_66x47_4
+  - first:
+      213: -7852764949814764212
+    second: flame_continously_66x47_5
+  - first:
+      213: -6379480920402519183
+    second: flame_continously_66x47_6
+  - first:
+      213: 1699984643579364995
+    second: flame_continously_66x47_7
+  - first:
+      213: -5001487228058646500
+    second: flame_continously_66x47_8
+  - first:
+      213: -7314657633794470800
+    second: flame_continously_66x47_9
+  - first:
+      213: -8796624646926583036
+    second: flame_continously_66x47_10
+  - first:
+      213: -5498833336939210145
+    second: flame_continously_66x47_11
+  - first:
+      213: -3397951969834455303
+    second: flame_continously_66x47_12
+  - first:
+      213: 648151621819160476
+    second: flame_continously_66x47_13
+  - first:
+      213: -74384923618222828
+    second: flame_continously_66x47_14
+  - first:
+      213: -3189882086486265109
+    second: flame_continously_66x47_15
+  - first:
+      213: 5816227452458812502
+    second: flame_continously_66x47_16
+  - first:
+      213: -7842685776958319996
+    second: flame_continously_66x47_17
+  - first:
+      213: -1398989042307612377
+    second: flame_continously_66x47_18
+  - first:
+      213: -3814072014237307991
+    second: flame_continously_66x47_19
+  - first:
+      213: 1369119089358774491
+    second: flame_continously_66x47_20
+  - first:
+      213: 7377197415003333295
+    second: flame_continously_66x47_21
+  - first:
+      213: -1987632576602175948
+    second: flame_continously_66x47_22
+  - first:
+      213: 5306831229486266419
+    second: flame_continously_66x47_23
+  - first:
+      213: 4434820295169265437
+    second: flame_continously_66x47_24
+  - first:
+      213: 8683954841229325156
+    second: flame_continously_66x47_25
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 8
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: flame_continously_66x47_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d83f91cf9d3846150800000000000000
+      internalID: 5864957587003929485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_1
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9f263467dcb83d00800000000000000
+      internalID: 952718954474123163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_2
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40417b3e2bac4ddd0800000000000000
+      internalID: -2462120226591403004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_3
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99d118a9148350cb0800000000000000
+      internalID: -4898447165279363687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_4
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c4115b70cc100840800000000000000
+      internalID: 5188178383759021251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_5
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4d17a542ef550390800000000000000
+      internalID: -7852764949814764212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_6
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 209
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17b960027e78777a0800000000000000
+      internalID: -6379480920402519183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 386ca24c60f879710800000000000000
+      internalID: 1699984643579364995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_8
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1849e67dd5279ab0800000000000000
+      internalID: -5001487228058646500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_9
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07cc41403ad1d7a90800000000000000
+      internalID: -7314657633794470800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_10
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40bbe797d7c1ce580800000000000000
+      internalID: -8796624646926583036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_11
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5a99a0d63830b3b0800000000000000
+      internalID: -5498833336939210145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_12
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fead22cfac08d0d0800000000000000
+      internalID: -3397951969834455303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_13
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 162
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c97df1b4772bef800800000000000000
+      internalID: 648151621819160476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41d571b5e4bb7fef0800000000000000
+      internalID: -74384923618222828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_15
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be2ba9f94234bb3d0800000000000000
+      internalID: -3189882086486265109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_16
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 654cea46d0467b050800000000000000
+      internalID: 5816227452458812502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_17
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 482146396de292390800000000000000
+      internalID: -7842685776958319996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_18
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7214790d0eac59ce0800000000000000
+      internalID: -1398989042307612377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_19
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ab60abf5b1b11bc0800000000000000
+      internalID: -3814072014237307991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_20
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 115
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd0af60de86100310800000000000000
+      internalID: 1369119089358774491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 68
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa2243f76f1116660800000000000000
+      internalID: 7377197415003333295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_22
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 68
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43602a7d3b28a64e0800000000000000
+      internalID: -1987632576602175948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_23
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 68
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3387a7ce2e6a5a940800000000000000
+      internalID: 5306831229486266419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_24
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 68
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1fc140df85ab8d30800000000000000
+      internalID: 4434820295169265437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flame_continously_66x47_25
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 68
+        width: 65
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 463f1052bea938870800000000000000
+      internalID: 8683954841229325156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 6d3ba44412a74e4418c46db9f6534afa
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
