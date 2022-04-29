@@ -21,6 +21,8 @@ public class EnemySpawner : MonoBehaviour
     private float mAngle = 60.0f;
     public void StartSpawn()
     {
+        if (isInitialized)
+            return;
         ID = GameManager.s_ID++;
         StartCoroutine(EnemySpawn());
     }
@@ -37,10 +39,7 @@ public class EnemySpawner : MonoBehaviour
             newModel.transform.parent = newEnemyProwler.transform;
             newEnemyProwler.tag = "EnemyProwler";
             newEnemyProwler.layer = 6;
-            newEnemyProwler.AddComponent<BoxCollider>();
-            newEnemyProwler.AddComponent<NavMeshAgent>();
-            newEnemyProwler.AddComponent<EnemyProwler>();
-            newEnemyProwler.GetComponent<EnemyProwler>().Setup(mRadius, mAngle, ID, newModel.gameObject);
+            newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, ID, newModel.gameObject);
 
             for (int i = 0; i < mEnemyList.Count; i++)
             {
@@ -68,6 +67,12 @@ public class EnemySpawner : MonoBehaviour
         }
         else
             isInitialized = true;
+    }
+
+    public void ResetSpawn()
+    {
+        isInitialized = false;
+        StartSpawn();
     }
 
     private void OnDrawGizmos()

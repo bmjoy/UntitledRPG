@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
         {
             ParticleSystem ps = mEffect.GetComponent<ParticleSystem>();
             var shape = ps.shape;
-            if (mTarget.mFlag == Flag.Enemy)
+            if (mTarget.mFlag == Flag.Player)
                 shape.rotation = new Vector3(90.0f, 0.0f, 0.0f);
             else
                 shape.rotation = new Vector3(-90.0f, 0.0f, 0.0f);
