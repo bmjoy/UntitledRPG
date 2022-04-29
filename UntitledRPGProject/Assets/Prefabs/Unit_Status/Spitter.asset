@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
-  m_Name: Orc
+  m_Name: Spitter
   m_EditorClassIdentifier: 
-  Name: Orc
-  MaxHealth: 1
-  MaxMana: 0
-  Magic_Resistance: 0
-  Attack: 1
+  Name: Spitter
+  MaxHealth: 8
+  MaxMana: 50
+  Magic_Resistance: 1
+  Attack: 10
   Defend: 1
-  Armor: 1
-  Agility: 2
-  mTarget: {fileID: 0}
+  MagicPower: 0
+  Armor: 5
+  Agility: 7
   SFXClips: []

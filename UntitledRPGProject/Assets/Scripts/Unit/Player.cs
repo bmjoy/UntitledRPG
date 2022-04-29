@@ -16,6 +16,8 @@ public class Player : Unit
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
             }
         }
+        mAiBuild.type = AIType.Manual;
+        mTarget = null;
     }
 
     protected override void Update()

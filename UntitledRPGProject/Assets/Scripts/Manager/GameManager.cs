@@ -23,11 +23,14 @@ public class GameManager : MonoBehaviour
     private GameObject mField;
     public GameObject mCurrentField;
     public GameObject[] EnemyProwlers;
+
+    public static int s_ID = 0;
+
     private void Start()
     {
         mCurrentField = GameObject.Instantiate(Instance.mField, Vector3.zero, Quaternion.identity);
         mCurrentField.SetActive(false);
-
+        s_ID = 0;
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
     }
     private void Update()
@@ -97,6 +100,7 @@ public class GameManager : MonoBehaviour
                 if (EnemyProwlers[i].GetComponent<EnemyProwler>().id == mEnemyProwler.id)
                     continue;
                 EnemyProwlers[i].SetActive(true);
+                EnemyProwlers[i].GetComponent<BoxCollider>().enabled = true;
             }
         }
         Instance.mCurrentField.SetActive(false);

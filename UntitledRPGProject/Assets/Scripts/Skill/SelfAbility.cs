@@ -18,101 +18,113 @@ public class SelfAbility : Skill_Setting
     {
         mOwner = owner;
         if(mValue <= 0.0f)
-            mValue = owner.mMagicPower;
+            mValue = owner.mStatus.mMagicPower;
     }
 
     public override IEnumerator WaitforDecision()
     {
-        UIManager.Instance.DisplayAskingSkill(true);
-        while (true)
+        if(mOwner.mStatus.mMana < mManaCost)
         {
-            if(Input.GetMouseButtonDown(0))
-            {
-                isActive = true;
-                break;
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                isActive = false;
-                break;
-            }
-            yield return null;
+            BattleManager.Instance.Cancel();
         }
-        UIManager.Instance.DisplayAskingSkill(false);
-        if (mOwner.mMana >= mManaCost && isActive)
+        else
         {
-            switch (mSkillType)
+            UIManager.Instance.DisplayAskingSkill(true);
+            while (true)
             {
-                case SkillType.Attack: break;
-                case SkillType.AttackBuff:
-                    {
-                        mOwner.TakeDamage(mValue, DamageType.Magical);
-
-                    }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    isActive = true;
                     break;
-                case SkillType.AttackNerf:
-                    {
-                        mOwner.TakeDamage(mValue, DamageType.Magical);
-                    }
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    isActive = false;
                     break;
-                case SkillType.Buff:
-                    {
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mOwner.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                    }
-                    break;
-                case SkillType.BuffNerf:
-                    {
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mOwner.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                    }
-                    break;
-                case SkillType.Nerf:
-                    {
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                    }
-                    break;
-                case SkillType.Heal:
-                    {
-                        mOwner.TakeRecover(mValue);
-                        break;
-                    }
-                case SkillType.HealBuff:
-                    {
-                        mOwner.TakeRecover(mValue);
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mOwner.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                        break;
-                    }
-
-                case SkillType.HealNerf:
-                    {
-                        mOwner.TakeRecover(mValue);
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                        break;
-                    }
-                case SkillType.Summon:
-                    break;
-                default:
-                    break;
+                }
+                yield return null;
             }
+            UIManager.Instance.DisplayAskingSkill(false);
+            if (isActive)
+            {
+                mOwner.PlayAnimation("Attack");
+                mOwner.mStatus.mMana -= mManaCost;
+                switch (mSkillType)
+                {
+                    case SkillType.Attack: break;
+                    case SkillType.AttackBuff:
+                        {
+                            mOwner.TakeDamage(mValue, DamageType.Magical);
+
+                        }
+                        break;
+                    case SkillType.AttackNerf:
+                        {
+                            mOwner.TakeDamage(mValue, DamageType.Magical);
+                        }
+                        break;
+                    case SkillType.Buff:
+                        {
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mOwner.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                        }
+                        break;
+                    case SkillType.BuffNerf:
+                        {
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mOwner.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                        }
+                        break;
+                    case SkillType.Nerf:
+                        {
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                        }
+                        break;
+                    case SkillType.Heal:
+                        {
+                            mOwner.TakeRecover(mValue);
+                            break;
+                        }
+                    case SkillType.HealBuff:
+                        {
+                            mOwner.TakeRecover(mValue);
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mOwner.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                            break;
+                        }
+
+                    case SkillType.HealNerf:
+                        {
+                            mOwner.TakeRecover(mValue);
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                            break;
+                        }
+                    case SkillType.Summon:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+                BattleManager.Instance.Cancel();
         }
+ 
         isComplete = true;
         yield return null;
     }

@@ -17,130 +17,150 @@ public class TargetAbility : Skill_Setting
     {
         isActive = false;
         parent.StopAllCoroutines();
+        mOwner = parent.transform.GetComponent<Unit>();
         parent.StartCoroutine(WaitforDecision());
     }
 
     public override IEnumerator WaitforDecision()
     {
-        UIManager.Instance.ChangeText_Target("Choose the Target");
-        UIManager.Instance.DisplayAskingSkill(true);
-        while (mTarget == null)
+        if(mOwner.mStatus.mMana < mManaCost)
+            BattleManager.Instance.Cancel();
+        else
         {
-            Raycasting();
-            if (Input.GetMouseButtonDown(1))
+            if (mOwner.mAiBuild.type == AIType.Manual)
             {
+                UIManager.Instance.ChangeText_Target("Choose the Target");
+                UIManager.Instance.DisplayAskingSkill(true);
                 mTarget = null;
-                isActive = false;
-                break;
+                while (mTarget == null)
+                {
+                    Raycasting();
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        mTarget = null;
+                        isActive = false;
+                        break;
+                    }
+                    yield return null;
+                }
+                UIManager.Instance.ChangeText_Target("OK? (Y/N)");
+                while (true)
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        isActive = true;
+                        break;
+                    }
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        isActive = false;
+                        mTarget = null;
+                        break;
+                    }
+                    yield return null;
+                }
+                UIManager.Instance.DisplayAskingSkill(false);
             }
-            yield return null;
-        }
-        UIManager.Instance.ChangeText_Target("OK? (Y/N)");
-        while (true)
-        {
-            if (Input.GetMouseButtonDown(0))
+            else
             {
                 isActive = true;
-                break;
+                mTarget = mOwner.mTarget;
             }
-            if (Input.GetMouseButtonDown(1))
+
+
+            if (isActive)
             {
-                isActive = false;
-                mTarget = null;
-                break;
+                mOwner.PlayAnimation("Attack");
+                mOwner.mStatus.mMana -= mManaCost;
+                if (IsShootType && isActive)
+                {
+                    Shoot();
+                    yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
+                }
+                switch (mSkillType)
+                {
+                    case SkillType.Attack:
+                        {
+                            mTarget.TakeDamage(mValue, DamageType.Magical);
+                        }
+                        break;
+                    case SkillType.AttackBuff:
+                        {
+                            mTarget.TakeDamage(mValue, DamageType.Magical);
+                        }
+                        break;
+                    case SkillType.AttackNerf:
+                        {
+                            mTarget.TakeDamage(mValue, DamageType.Magical);
+                        }
+                        break;
+                    case SkillType.Buff:
+                        {
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                        }
+                        break;
+                    case SkillType.BuffNerf:
+                        {
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                        }
+                        break;
+                    case SkillType.Nerf:
+                        {
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                        }
+                        break;
+                    case SkillType.Heal:
+                        {
+                            mTarget.TakeRecover(mValue);
+                            break;
+                        }
+                    case SkillType.HealBuff:
+                        {
+                            mTarget.TakeRecover(mValue);
+                            foreach (GameObject buff in mBuffs)
+                            {
+                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
+                            }
+                            break;
+                        }
+
+                    case SkillType.HealNerf:
+                        {
+                            mTarget.TakeRecover(mValue);
+                            foreach (GameObject nerf in mNerfs)
+                            {
+                                mTarget?.SetNerf(nerf.GetComponent<TimedNerf>());
+                            }
+                            break;
+                        }
+                    case SkillType.Summon:
+                        break;
+                }
             }
-            yield return null;
+            else
+                BattleManager.Instance.Cancel();
         }
-        UIManager.Instance.DisplayAskingSkill(false);
-
-        if (mOwner.mMana >= mManaCost && isActive)
-        {
-            if (IsShootType && isActive)
-            {
-                Shoot();
-                yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
-            }
-            switch (mSkillType)
-            {
-                case SkillType.Attack:
-                    {
-                        mTarget.TakeDamage(mValue, DamageType.Magical);
-                    }
-                    break;
-                case SkillType.AttackBuff:
-                    {
-                        mTarget.TakeDamage(mValue, DamageType.Magical);
-                    }
-                    break;
-                case SkillType.AttackNerf:
-                    {
-                        mTarget.TakeDamage(mValue, DamageType.Magical);
-                    }
-                    break;
-                case SkillType.Buff:
-                    {
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                    }
-                    break;
-                case SkillType.BuffNerf:
-                    {
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                    }
-                    break;
-                case SkillType.Nerf:
-                    {
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                    }
-                    break;
-                case SkillType.Heal:
-                    {
-                        mTarget.TakeRecover(mValue);
-                        break;
-                    }
-                case SkillType.HealBuff:
-                    {
-                        mTarget.TakeRecover(mValue);
-                        foreach (GameObject buff in mBuffs)
-                        {
-                            mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                        }
-                        break;
-                    }
-
-                case SkillType.HealNerf:
-                    {
-                        mTarget.TakeRecover(mValue);
-                        foreach (GameObject nerf in mNerfs)
-                        {
-                            mTarget?.SetNerf(nerf.GetComponent<TimedNerf>());
-                        }
-                        break;
-                    }
-                case SkillType.Summon:
-                    break;
-            }
-        }
-
         isComplete = true;
+        yield return null;
     }
 
     private void Shoot()
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 3.0f, Quaternion.identity) as GameObject;
+        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 1.5f, Quaternion.identity) as GameObject;
         mProjectile.transform.LookAt(dir);
         mProjectile.GetComponent<Projectile>().Initialize(mTarget, dir, DamageType.Magical, null);
     }
@@ -155,8 +175,11 @@ public class TargetAbility : Skill_Setting
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    mTarget = hit.transform.GetComponent<Unit>();
-                    Debug.Log(hit.transform.name);
+                    if(hit.transform.GetComponent<Unit>().mConditions.isDied == false)
+                    {
+                        mTarget = hit.transform.GetComponent<Unit>();
+                        Debug.Log(hit.transform.name);
+                    }
                 }
             }
         }
@@ -166,8 +189,11 @@ public class TargetAbility : Skill_Setting
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    mTarget = hit.transform.GetComponent<Unit>();
-                    Debug.Log(hit.transform.name);
+                    if (hit.transform.GetComponent<Unit>().mConditions.isDied == false)
+                    {
+                        mTarget = hit.transform.GetComponent<Unit>();
+                        Debug.Log(hit.transform.name);
+                    }
                 }
             }
         }
@@ -179,6 +205,6 @@ public class TargetAbility : Skill_Setting
     {
         mOwner = owner;
         if (mValue <= 0.0f)
-            mValue = owner.mMagicPower;
+            mValue = owner.mStatus.mMagicPower;
     }
 }

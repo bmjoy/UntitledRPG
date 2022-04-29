@@ -6,133 +6,168 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour, IUnit
 {
-    public float mHealth = 0.0f;
-    public float mMana = 0.0f;
-    public float mDamage = 0.0f;
-    public float mArmor = 0.0f;
-    public float mMagic_Resistance = 0.0f;
-    public float mDefend = 0.0f;
-    public float mAgility = 0.0f;
-    public float mMagicPower = 0.0f;
-
-    public bool isPicked = false;
-    public bool isDied = false;
-    public bool isDefend = false;
-    public bool isMove = false;
-    public bool isCancel = false;
-
     public Unit mTarget = null;
     public Order mOrder = Order.Standby;
     public Flag mFlag;
     public LayerMask mTargetMask;
+    public Vector3 mFieldPos = Vector3.zero;
     public Vector3 mPos = Vector3.zero;
     public Vector3 mTargetPos = Vector3.zero;
 
     public Animator mAnimator;
     public Rigidbody mRigidbody;
     public Unit_Setting mSetting;
-    public WaitForSeconds mWaitingTime = new WaitForSeconds(1.0f);
+    public WaitForSeconds mWaitingTime = new WaitForSeconds(0.5f);
     public Unit_Setting Unit_Setting => mSetting;
     public Skill_DataBase mSkillDataBase;
 
     private BuffAndNerfEntity mBuffNerfController;
 
-    private float currentTime = 0.0f;
-    private float mReadyTime = 2.5f;
+    public GameObject mHealthBarPrefab;
+    private HealthBar mHealthBar;
+
+    public float yAxis = 0.0f;
+    public int EXP = 0;
+
+    public AIBuild mAiBuild;
+    public Status mStatus;
+    public Conditions mConditions;
 
     protected virtual void Start()
     {
-        mHealth = mSetting.MaxHealth;
-        mMana = mSetting.MaxMana;
-        mDamage = mSetting.Attack;
-        mArmor = mSetting.Armor;
-        mMagic_Resistance = mSetting.Magic_Resistance;
-        mDefend = mSetting.Defend;
-        mAgility = mSetting.Agility;
-        mMagicPower = mSetting.MagicPower;
-        isDied = false;
-        isPicked = false;
-        isDefend = false;
+        mStatus = new Status(mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
+            mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
+        mConditions = new Conditions(false, false, false, false, false);
+
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
+        mRigidbody.velocity = Vector3.zero;
         mBuffNerfController = GetComponent<BuffAndNerfEntity>();
         if(GetComponent<Skill_DataBase>())
             mSkillDataBase = GetComponent<Skill_DataBase>();
+
+        mHealthBar = mHealthBarPrefab.GetComponent<HealthBar>();
+        mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth);
+
+        mAiBuild.actionEvent = ActionEvent.IntroWalk;
+
+        mAiBuild.property = (AIProperty)UnityEngine.Random.Range(0,2);
+        mAiBuild.type = AIType.None;
+
+        mAiBuild.stateMachine = gameObject.AddComponent<StateMachine>();
+        mAiBuild.stateMachine.mAgent = this;
+        mAiBuild.stateMachine.AddState<Standby>(new Standby(), "Standby");
+        mAiBuild.stateMachine.AddState<AttackBehavior>(new AttackBehavior(), "Attack");
+        mAiBuild.stateMachine.AddState<DefendBehavior>(new DefendBehavior(), "Defend");
+        mAiBuild.stateMachine.ChangeState("Standby");
     }
 
     protected virtual void Update()
     {
-        if (isMove)
+        if (mConditions.isDied)
+            return;
+        switch (mAiBuild.actionEvent)
         {
-            if (Vector3.Distance(transform.position, mPos) < 0.01f)
-            {
-                var q = Quaternion.LookRotation(Vector3.Normalize(mTargetPos - transform.position), Vector3.up);
-                q.x = 0.0f;
-                q.z = 0.0f;
-                transform.rotation = q;
-            }
-            else
-            {
-                transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mAgility * 5.5f);
-            }
-            currentTime += Time.deltaTime;
-            if (currentTime >= mReadyTime)
-            {
-                mRigidbody.velocity = Vector3.zero;
-                currentTime = 0.0f;
-                isMove = false;
-            }
+            case ActionEvent.None:
+                {
+                    if(mAiBuild.type == AIType.Auto)
+                        mAiBuild.stateMachine.ActivateState();
+                    mAnimator.SetFloat("Speed", 0.0f);
+                    mHealthBar.Active(true);
+                }
+                break;
+            case ActionEvent.IntroWalk:
+                {
+                    mHealthBar.Active(false);
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 0.01f)) ? ActionEvent.None : ActionEvent.IntroWalk;
+                    transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 4.0f);
+
+                    var q = Quaternion.LookRotation(Vector3.Normalize(mTargetPos - transform.position), Vector3.up);
+                    q.x = q.z = 0.0f;
+                    transform.rotation = q;
+                    mAnimator.SetFloat("Speed", 1.0f);
+                }
+                break;
+            case ActionEvent.AttackWalk:
+                {
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 2.0f)) ? ActionEvent.Busy : ActionEvent.AttackWalk;
+                    transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * mStatus.mAgility * 4.0f);
+                    mAnimator.SetFloat("Speed", 1.0f);
+                }
+                break;
+            case ActionEvent.BackWalk:
+                {
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 0.01f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
+                    transform.position = Vector3.MoveTowards(transform.position, mFieldPos, Time.deltaTime * mStatus.mAgility * 4.0f);
+                    mAnimator.SetFloat("Speed", (mAiBuild.actionEvent == ActionEvent.BackWalk) ? 1.0f : 0.0f);
+                }
+                break;
+            case ActionEvent.Busy:
+                mAnimator.SetFloat("Speed", 0.0f);
+                break;
         }
     }
 
     virtual public IEnumerator AttackAction(DamageType type, Action onComplete)
     {
-        isCancel = false;
-        UIManager.Instance.ChangeText_Target("Choose the Target");
-        UIManager.Instance.DisplayAskingSkill(true);
-        while (mTarget == null)
+        mConditions.isCancel = false;
+        if(mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100, mTargetMask))
+            UIManager.Instance.ChangeText_Target("Choose the Target");
+            UIManager.Instance.DisplayAskingSkill(true);
+            while (mTarget == null)
             {
-                if (Input.GetMouseButtonDown(0))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100, mTargetMask))
                 {
-                    mTarget = hit.transform.GetComponent<Unit>();
-                    Debug.Log(hit.transform.name);
+                    if(hit.transform.GetComponent<Unit>().mConditions.isDied ==false)
+                    {
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            mTarget = hit.transform.GetComponent<Unit>();
+                            Debug.Log(hit.transform.name);
+                        }
+                    }
                 }
-                if(Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(1))
                 {
-                    isCancel = true;
+                    mConditions.isCancel = true;
                     BattleManager.Instance.Cancel();
                     break;
                 }
+                yield return null;
             }
-            yield return null;
+            UIManager.Instance.DisplayAskingSkill(false);
+            UIManager.Instance.ChangeText_Target("OK? (Y/N)");
         }
-        UIManager.Instance.DisplayAskingSkill(false);
-        UIManager.Instance.ChangeText_Target("OK? (Y/N)");
-        if (isCancel == false)
+
+        if (mConditions.isCancel == false)
         {
             Debug.Log(this.Unit_Setting.Name + " Attacks");
+            SetPosition(mTarget.transform.position, mTargetPos, ActionEvent.AttackWalk);
+            yield return new WaitUntil(()=> mAiBuild.actionEvent == ActionEvent.Busy);
             PlayAnimation("Attack");
-            yield return mWaitingTime;
             if (mTarget)
             {
                 Debug.Log(this.Unit_Setting.Name + " Attacks to " + mTarget.Unit_Setting.Name);
-                mTarget.TakeDamage(mDamage, type);
+                mTarget.TakeDamage(mStatus.mDamage, type);
             }
             else
                 Debug.Log("No Target");
+            yield return mWaitingTime;
+            SetPosition(mFieldPos, mTargetPos, ActionEvent.BackWalk);
+            yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
             onComplete?.Invoke();
             TurnEnded();
+            mAiBuild.actionEvent = ActionEvent.None;
         }
 
     }
 
     virtual public IEnumerator DefendAction(Action onComplete)
     {
-        isDefend = true;
+        mConditions.isDefend = true;
         //TODO: Effect?
         yield return mWaitingTime;
         onComplete?.Invoke();
@@ -143,7 +178,6 @@ public class Unit : MonoBehaviour, IUnit
     {
 
         mSkillDataBase.Use();
-        PlayAnimation("Attack");
         yield return new WaitUntil(() => mSkillDataBase.mSkill.isComplete == true);
         if(mSkillDataBase.mSkill.isActive == false)
             BattleManager.Instance.Cancel();
@@ -164,43 +198,46 @@ public class Unit : MonoBehaviour, IUnit
 
     virtual public void TakeDamage(float dmg, DamageType type)
     {
-        if (isDied)
+        if (mConditions.isDied)
             return;
         float value = dmg;
         if (type == DamageType.Physical)
-        {
-            if(isDefend)
-                value = dmg - (dmg * mDefend * 100.0f);
-        }
-        mHealth = (type == DamageType.Physical) ? mHealth = mHealth - (value - mArmor) : mHealth - (value - mMagic_Resistance);
-        Debug.Log("Takes " + value + " Damages");
-        if (mHealth <= 0)
-        {
-            isDied = true;
-            Debug.Log(name + " Dead!");
-        }
+            value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
 
+        mStatus.mHealth = (type == DamageType.Physical) ? mStatus.mHealth = mStatus.mHealth - 
+            (value - mStatus.mArmor) : mStatus.mHealth - (value - mStatus.mMagic_Resistance);
+        mHealthBar.mCurrentHealth = mStatus.mHealth;
+
+        mAnimator.SetTrigger("Hit");
+        Debug.Log("Takes " + value + " Damages");
+        if (mStatus.mHealth <= 0)
+        {
+            mConditions.isDied = true;
+            Destroy(mHealthBar.gameObject);
+            Debug.Log(name + " Dead!");
+            mAnimator.SetBool("Death",true);
+        }
     }
 
     virtual public void TakeRecover(float val)
     {
-        mHealth += val;
-        if (mHealth >= mSetting.MaxHealth)
-            mHealth = mSetting.MaxHealth;
+        mStatus.mHealth += val;
+        if (mStatus.mHealth >= mStatus.mMaxHealth)
+            mStatus.mHealth = mStatus.mMaxHealth;
         Debug.Log(name + " Healed!");
     }
     virtual public void TurnEnded()
     {
-        isPicked = false;
+        mConditions.isPicked = false;
         mTarget = null;
         mOrder = Order.TurnEnd;
     }
 
-    virtual public void SetPosition(Vector3 pos, Vector3 targetPos)
+    virtual public void SetPosition(Vector3 pos, Vector3 targetPos, ActionEvent _actionEvent)
     {
-        mPos = pos;
-        mTargetPos = targetPos;
-        isMove = true;
+        mPos = pos + new Vector3(0.0f, yAxis, 0.0f);
+        mTargetPos = targetPos + new Vector3(0.0f, yAxis, 0.0f);
+        mAiBuild.actionEvent = _actionEvent;
     }
 
     virtual public void SetBuff(TimedBuff buff)

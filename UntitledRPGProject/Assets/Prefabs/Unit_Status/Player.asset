@@ -17,8 +17,8 @@ MonoBehaviour:
   MaxMana: 12
   Magic_Resistance: 1
   Attack: 10
-  Defend: 5
+  Defend: 10
+  MagicPower: 0
   Armor: 1
   Agility: 5
-  mTarget: {fileID: 0}
   SFXClips: []

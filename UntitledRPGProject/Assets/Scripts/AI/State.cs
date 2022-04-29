@@ -1,8 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class State
 {
-    public abstract void Enter(GameObject agent);
-    public abstract void Execute(GameObject agent);
-    public abstract void Exit(GameObject agent);
+    protected bool isAct = false;
+    public abstract void Enter(Unit agent);
+    public abstract void Execute(Unit agent);
+    public abstract void Exit(Unit agent);
+}
+
+public abstract class P_State
+{
+    protected bool isAct = false;
+    public abstract void Enter(EnemyProwler agent);
+    public abstract void Execute(EnemyProwler agent);
+    public abstract void Exit(EnemyProwler agent);
 }

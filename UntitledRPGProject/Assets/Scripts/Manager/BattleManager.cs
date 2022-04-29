@@ -9,10 +9,12 @@ public class BattleManager : MonoBehaviour
     enum GameStatus
     {
         None,
+        Start,
         Queue,
         WaitForOrder,
         Busy,
         Result,
+        Reward,
         Finish
     }
 
@@ -34,8 +36,6 @@ public class BattleManager : MonoBehaviour
     private bool isWin = false;
     private GameStatus status = GameStatus.None;
 
-
-
     public void Initialize()
     {
         isBattle = true;
@@ -45,21 +45,21 @@ public class BattleManager : MonoBehaviour
             {
                 if (GameManager.Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == GameManager.Instance.mEnemyProwler.id)
                     continue;
-
                 GameManager.Instance.EnemyProwlers[i].SetActive(false);
+                GameManager.Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = false;
             }
         }
         mUnits.Clear();
         mUnits.AddRange(GameManager.Instance.mPlayer.mHeroes);
-        mUnits.AddRange(GameManager.Instance.mEnemyProwler.EnemySpawnGroup);
-        mUnits.Sort((a, b) => (b.GetComponent<Unit>().mAgility.CompareTo(
-            a.GetComponent<Unit>().mAgility)));
+        mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup);
+        mUnits.Sort((a, b) => (b.GetComponent<Unit>().mStatus.mAgility.CompareTo(
+            a.GetComponent<Unit>().mStatus.mAgility)));
         for (int i = 0; i < mUnits.Count; i++)
         {
             mUnits[i].GetComponent<Unit>().mOrder = Order.Standby;
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
-        status = GameStatus.Queue;
+        status = GameStatus.Start;
     }
 
     private void Update()
@@ -70,6 +70,11 @@ public class BattleManager : MonoBehaviour
             {
                 case GameStatus.None:
                     break;
+                case GameStatus.Start:
+                    {
+                        status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None)) ? GameStatus.Queue : GameStatus.Start;
+                    }
+                    break;
                 case GameStatus.Queue:
                     {
                         mCurrentUnit = null;
@@ -77,7 +82,7 @@ public class BattleManager : MonoBehaviour
                         {
                             for (int i = 0; i < mUnits.Count; i++)
                             {
-                                if (!mUnits[i].GetComponent<Unit>().isDied)
+                                if (!mUnits[i].GetComponent<Unit>().mConditions.isDied)
                                     mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
                             }
                         }
@@ -86,23 +91,23 @@ public class BattleManager : MonoBehaviour
                         {
                             UIManager.Instance.DisplayBattleInterface(false);
                             mCurrentUnit = mOrders.Dequeue();
-                            if (mCurrentUnit.isDied)
+                            if (mCurrentUnit.mConditions.isDied)
                             {
                                 mCurrentUnit = null;
                                 return;
                             }
                             else
                             {
-                                mCurrentUnit.isDefend = false;
-                                mCurrentUnit.isPicked = true;
+                                mCurrentUnit.mConditions.isDefend = false;
+                                mCurrentUnit.mConditions.isPicked = true;
                                 mCurrentUnit.mOrder = Order.Standby;
                                 if (mCurrentUnit.mFlag == Flag.Player)
                                 {
                                     UIManager.Instance.DisplayBattleInterface(true);
-                                    if(mCurrentUnit.mSkillDataBase.mSkill != null)
-                                    {
-                                        UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.mSkill.mName + ": \n" + mCurrentUnit.mSkillDataBase.mSkill.mDescription);
-                                    }
+                                    if(mCurrentUnit.mSkillDataBase != null)
+                                        if (mCurrentUnit.mSkillDataBase.mSkill != null)
+                                            UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.mSkill.mName + ": \n" + mCurrentUnit.mSkillDataBase.mSkill.mDescription);
+
                                 }
                                 status = GameStatus.WaitForOrder;
                                 Debug.Log(mCurrentUnit.name);
@@ -120,6 +125,11 @@ public class BattleManager : MonoBehaviour
                 case GameStatus.Result:
                     {
                         status = (BattleResult() == true) ? status = GameStatus.Finish : GameStatus.Queue;
+                    }
+                    break;
+                case GameStatus.Reward:
+                    {
+                        // TODO
                     }
                     break;
                 case GameStatus.Finish:
@@ -140,12 +150,12 @@ public class BattleManager : MonoBehaviour
 
     private bool BattleResult()
     {
-        if (GameManager.Instance.mEnemyProwler.EnemySpawnGroup.TrueForAll(t => t.GetComponent<Unit>().isDied))
+        if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             isWin = true;
             return true;
         }
-        else if (GameManager.Instance.mPlayer.mHeroes.TrueForAll(t => t.GetComponent<Unit>().isDied))
+        else if (GameManager.Instance.mPlayer.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             isWin = false;
             return true;
@@ -161,7 +171,7 @@ public class BattleManager : MonoBehaviour
 
         Vector3 point = mOffset + 0.5f * (mTargetOffset - mOffset);
 
-        GameManager.Instance.mCurrentField.transform.position = new Vector3(mOffset.x, mOffset.y, mOffset.z);
+        GameManager.Instance.mCurrentField.transform.position = point;
         CameraSwitcher.UpdateCamera(GameManager.Instance.mCurrentField.transform);
         GameManager.Instance.mCurrentField.SetActive(true);
     }

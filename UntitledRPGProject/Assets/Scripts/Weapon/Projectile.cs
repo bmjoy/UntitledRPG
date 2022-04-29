@@ -7,8 +7,11 @@ public class Projectile : MonoBehaviour
 {
     public GameObject mEffect;
     public bool isCollide = false;
+    private bool isEffect = false;
     [SerializeField]
     private float mSpeed = 10.0f;
+    [SerializeField]
+    private WaitForSeconds mTime = new WaitForSeconds(1.0f);
     private Unit mTarget;
     private DamageType mDamageType;
     private Action mActionEvent;
@@ -16,7 +19,17 @@ public class Projectile : MonoBehaviour
     private void Start()
     {
         if (mEffect)
+        {
+            ParticleSystem ps = mEffect.GetComponent<ParticleSystem>();
+            var shape = ps.shape;
+            if (mTarget.mFlag == Flag.Player)
+                shape.rotation = new Vector3(90.0f, 0.0f, 0.0f);
+            else
+                shape.rotation = new Vector3(-90.0f, 0.0f, 0.0f);
+            isEffect = true;
+            StartCoroutine(WaitforSecond());
             mEffect.SetActive(true);
+        }    
     }
     public void Initialize(Unit target, Vector3 dir, DamageType damageType, Action actionEvent)
     {
@@ -30,13 +43,25 @@ public class Projectile : MonoBehaviour
     {
         if(isCollide == false)
         {
-            transform.position += mDirection * mSpeed * Time.deltaTime;
-            if(Vector3.Distance(transform.position, mTarget.transform.position) < 0.75f)
+            if(isEffect == false)
             {
-                isCollide = true;
-                mActionEvent?.Invoke();
-                Destroy(this.gameObject, 1.0f);
+                transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
+                if (Vector3.Distance(transform.position, mTarget.transform.position) < 0.75f)
+                {
+                    isCollide = true;
+                    mActionEvent?.Invoke();
+                    Destroy(this.gameObject, 1.0f);
+                }
             }
+            else
+                transform.position = new Vector3(Mathf.Cos(Time.time * 0.5f * mSpeed), transform.position.y, transform.position.z);
         }
+    }
+
+    private IEnumerator WaitforSecond()
+    {
+        yield return mTime;
+        isEffect = false;
+        transform.LookAt(mDirection);
     }
 }
