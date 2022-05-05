@@ -23,9 +23,9 @@ public class Projectile : MonoBehaviour
             ParticleSystem ps = mEffect.GetComponent<ParticleSystem>();
             var shape = ps.shape;
             if (mTarget.mFlag == Flag.Player)
-                shape.rotation = new Vector3(90.0f, 0.0f, 0.0f);
-            else
                 shape.rotation = new Vector3(-90.0f, 0.0f, 0.0f);
+            else
+                shape.rotation = new Vector3(90.0f, 0.0f, 0.0f);
             isEffect = true;
             StartCoroutine(WaitforSecond());
             mEffect.SetActive(true);
@@ -43,18 +43,15 @@ public class Projectile : MonoBehaviour
     {
         if(isCollide == false)
         {
-            if(isEffect == false)
+            if (isEffect)
+                return;
+            transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, mTarget.transform.position) < 0.75f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
-                if (Vector3.Distance(transform.position, mTarget.transform.position) < 0.75f)
-                {
-                    isCollide = true;
-                    mActionEvent?.Invoke();
-                    Destroy(this.gameObject, 1.0f);
-                }
+                isCollide = true;
+                mActionEvent?.Invoke();
+                Destroy(this.gameObject, 1.0f);
             }
-            else
-                transform.position = new Vector3(Mathf.Cos(Time.time * 0.5f * mSpeed), transform.position.y, transform.position.z);
         }
     }
 
@@ -62,6 +59,5 @@ public class Projectile : MonoBehaviour
     {
         yield return mTime;
         isEffect = false;
-        transform.LookAt(mDirection);
     }
 }

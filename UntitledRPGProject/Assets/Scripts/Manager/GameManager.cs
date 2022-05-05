@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public EnemyProwler mEnemyProwler;
     [SerializeField]
     private GameObject mField;
+    private List<Vector3> mOriginalFieldPos;
     public GameObject mCurrentField;
     public GameObject[] EnemyProwlers;
 
@@ -28,10 +29,23 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        mOriginalFieldPos = new List<Vector3>()
+        {
+            new Vector3(0.0f,0.0f, -6.0f),
+            new Vector3(0.0f,0.0f,-13.0f),
+            new Vector3(-5.0f,0.0f,-10.0f),
+            new Vector3(5.0f,0.0f,-10.0f),
+
+            new Vector3(0.0f,0.0f, 6.0f),
+            new Vector3(0.0f,0.0f,13.0f),
+            new Vector3(-5.0f,0.0f,10.0f),
+            new Vector3(5.0f,1.0f,10.0f),
+        };
+
+
         mCurrentField = GameObject.Instantiate(Instance.mField, Vector3.zero, Quaternion.identity);
         mCurrentField.SetActive(false);
         s_ID = 0;
-        EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
     }
     private void Update()
     {
@@ -65,6 +79,7 @@ public class GameManager : MonoBehaviour
                 {
                     if(!BattleManager.Instance.isBattle)
                     {
+                        EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
                         CameraSwitcher.SwitchCamera();
                         BattleManager.Instance.Initialize();
                     }
@@ -102,6 +117,17 @@ public class GameManager : MonoBehaviour
                 EnemyProwlers[i].SetActive(true);
                 EnemyProwlers[i].GetComponent<BoxCollider>().enabled = true;
             }
+        }
+
+        for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
+        {
+            Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
+            Debug.Log(Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).name);
+        }
+
+        for (int i = 0; i < Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
+        {
+            Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
         }
         Instance.mCurrentField.SetActive(false);
         OnBattleEnd();

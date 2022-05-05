@@ -160,7 +160,7 @@ public class TargetAbility : Skill_Setting
     private void Shoot()
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 1.5f, Quaternion.identity) as GameObject;
+        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 1.5f, Quaternion.identity);
         mProjectile.transform.LookAt(dir);
         mProjectile.GetComponent<Projectile>().Initialize(mTarget, dir, DamageType.Magical, null);
     }

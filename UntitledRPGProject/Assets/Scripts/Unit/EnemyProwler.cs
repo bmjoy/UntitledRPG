@@ -80,22 +80,28 @@ public class EnemyProwler : MonoBehaviour
             mCollider.center = new Vector3(0.0f,5.0f,0.0f);
             mCollider.enabled = false;
             mModel.SetActive(false);
-            onBattle = true;
-            GameObject[] fields = GameObject.FindGameObjectsWithTag("EnemyField");
-            Debug.Log(fields.Length);
-            GameObject[] playerFields = GameObject.FindGameObjectsWithTag("PlayerField");
-            for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
-            {
-                mEnemySpawnGroup[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z - 2.0f);
-                mEnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-                mEnemySpawnGroup[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
-                mEnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
-                mEnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
-                mEnemySpawnGroup[i].gameObject.SetActive(true);
-                mEnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-            }
+            StartCoroutine(WaitForSpawn());
         }
     }
+
+    private IEnumerator WaitForSpawn()
+    {
+        GameObject[] fields = GameObject.FindGameObjectsWithTag("EnemyField");
+        GameObject[] playerFields = GameObject.FindGameObjectsWithTag("PlayerField");
+        Vector3 center = BattleManager.Instance.enemyCenter;
+        for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
+        {
+            yield return new WaitForSeconds(0.1f);
+            mEnemySpawnGroup[i].transform.position = new Vector3(center.x, center.y + mEnemySpawnGroup[i].GetComponent<BoxCollider>().size.y, center.z - 2.0f);
+            mEnemySpawnGroup[i].GetComponent<Unit>().yAxis = fields[i].transform.localPosition.y;
+            mEnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
+            mEnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
+            mEnemySpawnGroup[i].gameObject.SetActive(true);
+            mEnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+            mEnemySpawnGroup[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+        onBattle = true;
+    }    
 
     public void DestoryEnemy(int id)
     {
