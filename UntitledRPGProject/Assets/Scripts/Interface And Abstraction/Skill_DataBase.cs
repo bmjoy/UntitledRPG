@@ -13,7 +13,6 @@ public class Skill_DataBase : MonoBehaviour
 
     public void Use()
     {
-        Debug.Log(mSkill.mName);
         mSkill.isComplete = false;
         mSkill.Activate(this);
     }

@@ -18,24 +18,24 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask mGroundMask;
     private Vector3 mVelocity = Vector3.zero;
-    private Vector3 mGroundPos = Vector3.zero;
     private BoxCollider mCollider;
     private CharacterController mCharacterController;
     private SpriteRenderer mSpriteRenderer;
-
+    private GameObject mGroundCheck;
     [SerializeField]
     private Transform mCamera;
     private float mGravity = -9.8f;
 
     private bool isLeft = false;
-    private bool onBattle = false;
+    public bool onBattle = false;
     private Animator mAnimator;
     // Start is called before the first frame update
     void Start()
     {
         GameObject groundCheck = new GameObject("GroundCheck");
-        groundCheck.transform.position = new Vector3(0.0f, -1.0f, 0.0f);
+        groundCheck.transform.position = new Vector3(transform.position.x, transform.position.y - 1.0f, transform.position.z);
         groundCheck.transform.parent = transform;
+        mGroundCheck = groundCheck;
         GameManager.Instance.mPlayer = this;
         mCharacterController = GetComponent<CharacterController>();
         GameManager.Instance.onPlayerBattleStart += OnBattleStart;
@@ -53,11 +53,11 @@ public class PlayerController : MonoBehaviour
         mState = mState.Handle();
         StateControl();
 
-        isGrounded = Physics.CheckSphere(mGroundPos, mGroundDistance, mGroundMask);
+        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, mGroundMask);
         if(mState.ToString() != "BattleState")
         {
-            float x = Input.GetAxis("Horizontal");
-            float z = Input.GetAxis("Vertical");
+            float x = Input.GetAxisRaw("Horizontal");
+            float z = Input.GetAxisRaw("Vertical");
             Vector3 direction = new Vector3(x, 0.0f, z).normalized;
             if (direction.magnitude > 0.1f)
             {
@@ -108,26 +108,30 @@ public class PlayerController : MonoBehaviour
     private Vector3 mPos;
     public void OnBattleStart()
     {
-        onBattle = true;
         mState = new BattleState();
         mCharacterController.enabled = false;
         mOwner.SetActive(false);
-
+        StartCoroutine(WaitForSpawn());
+    }
+    private IEnumerator WaitForSpawn()
+    {
         fields = GameObject.FindGameObjectsWithTag("PlayerField");
         enemyFields = GameObject.FindGameObjectsWithTag("EnemyField");
+        Vector3 center = BattleManager.Instance.playerCenter;
         for (int i = 0; i < mHeroes.Count; ++i)
         {
-            mHeroes[i].transform.position = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z);
-            mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+            yield return new WaitForSeconds(0.1f);
+            mHeroes[i].transform.position = center;
             mHeroes[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
             mHeroes[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
             mHeroes[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, enemyFields[i].transform.position, ActionEvent.IntroWalk);
             mHeroes[i].gameObject.SetActive(true);
             mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+            mHeroes[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
 
+        onBattle = true;
         mPos = fields[0].transform.position;
-        //TODO: Spawn them
     }
 
     public void OnBattleEnd()
@@ -153,7 +157,6 @@ public class PlayerController : MonoBehaviour
             return;
         if (other.GetComponent<EnemyProwler>() != null && !other.GetComponent<EnemyProwler>().onBattle)
         {
-            other.GetComponent<EnemyProwler>().onBattle = onBattle = true;
             mCollider.enabled = false;
             GameManager.Instance.mEnemyProwler = other.GetComponent<EnemyProwler>();
             BattleManager.Instance.SetBattleField();

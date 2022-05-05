@@ -108,10 +108,11 @@ MonoBehaviour:
   mTargetPos: {x: 0, y: 0, z: 0}
   mAnimator: {fileID: 0}
   mRigidbody: {fileID: 0}
-  mSetting: {fileID: 11400000, guid: 9a39a7a66d5ad4844a357f8b32882217, type: 2}
+  mSetting: {fileID: 11400000, guid: 638faf5351fa40b44b86748b2db6fcc5, type: 2}
   mSkillDataBase: {fileID: 0}
   mHealthBarPrefab: {fileID: 8392769763917236361}
   yAxis: 0
+  EXP: 0
 --- !u!212 &2363663712266155629
 SpriteRenderer:
   m_ObjectHideFlags: 0
