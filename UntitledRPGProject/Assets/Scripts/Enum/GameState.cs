@@ -3,7 +3,7 @@ public enum GameState
     MainMenu,
     GamePlay,
     GamePause,
-    Battle,
+    Busy,
     Victory,
     GameOver
 }

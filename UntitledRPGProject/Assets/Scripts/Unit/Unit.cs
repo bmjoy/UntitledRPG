@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Unit : MonoBehaviour, IUnit
@@ -9,13 +10,13 @@ public class Unit : MonoBehaviour, IUnit
     public Unit mTarget = null;
     public Order mOrder = Order.Standby;
     public Flag mFlag;
-    public LayerMask mTargetMask;
-    public Vector3 mFieldPos = Vector3.zero;
-    public Vector3 mPos = Vector3.zero;
-    public Vector3 mTargetPos = Vector3.zero;
 
-    public Animator mAnimator;
-    public Rigidbody mRigidbody;
+    public Vector3 mFieldPos = Vector3.zero;
+    private Vector3 mPos = Vector3.zero;
+    private Vector3 mTargetPos = Vector3.zero;
+
+    private Animator mAnimator;
+    private Rigidbody mRigidbody;
     public Unit_Setting mSetting;
     public WaitForSeconds mWaitingTime = new WaitForSeconds(0.75f);
     public Unit_Setting Unit_Setting => mSetting;
@@ -23,13 +24,10 @@ public class Unit : MonoBehaviour, IUnit
 
     private BuffAndNerfEntity mBuffNerfController;
 
-    public GameObject mHealthBarPrefab;
+    private TextMeshProUGUI mLevelText;
     private HealthBar mHealthBar;
     private bool isGrounded = false;
-
-    public float yAxis = 0.0f;
-    public int EXP = 0;
-
+  
     public AIBuild mAiBuild;
     public Status mStatus;
     public Conditions mConditions;
@@ -46,7 +44,7 @@ public class Unit : MonoBehaviour, IUnit
         groundCheck.transform.parent = transform;
         mGroundCheck = groundCheck;
 
-        mStatus = new Status(mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
+        mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
             mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
         mConditions = new Conditions(false, false, false, false, false);
 
@@ -57,9 +55,15 @@ public class Unit : MonoBehaviour, IUnit
         if(GetComponent<Skill_DataBase>())
             mSkillDataBase = GetComponent<Skill_DataBase>();
 
-        mHealthBar = mHealthBarPrefab.GetComponent<HealthBar>();
+        GameObject source = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position,Quaternion.identity);
+        source.transform.SetParent(transform);
+
+        mHealthBar = source.transform.Find("Borader").Find("HealthBarPrefab").GetComponent<HealthBar>();
         mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth);
 
+        mLevelText = source.transform.Find("Borader").Find("Text").GetComponent<TextMeshProUGUI>();
+        mLevelText.text = mStatus.mLevel.ToString();
+        mHealthBar.Active(false);
         mAiBuild.actionEvent = ActionEvent.IntroWalk;
 
         mAiBuild.property = (AIProperty)UnityEngine.Random.Range(0,2);
@@ -75,10 +79,11 @@ public class Unit : MonoBehaviour, IUnit
 
     protected virtual void Update()
     {
-        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, 3);
-
         if (mConditions.isDied)
             return;
+        else
+            mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, 3);
         switch (mAiBuild.actionEvent)
         {
             case ActionEvent.None:
@@ -88,13 +93,13 @@ public class Unit : MonoBehaviour, IUnit
                     if(mAiBuild.type == AIType.Auto)
                         mAiBuild.stateMachine.ActivateState();
                     mAnimator.SetFloat("Speed", 0.0f);
-                    mHealthBar.Active(true);
                 }
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mHealthBar.Active(false);
                     mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mPos) < 2.0f)) ? ActionEvent.None : ActionEvent.IntroWalk;
+                    if(mAiBuild.actionEvent == ActionEvent.None)
+                        mHealthBar.Active(true);
                     transform.position = Vector3.MoveTowards(transform.position, mPos, Time.deltaTime * 7.0f);
 
                     var q = Quaternion.LookRotation(Vector3.Normalize(mTargetPos - transform.position), Vector3.up);
@@ -143,7 +148,7 @@ public class Unit : MonoBehaviour, IUnit
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, mTargetMask))
+                if (Physics.Raycast(ray, out hit, 100, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Player")))
                 {
                     if(hit.transform.GetComponent<Unit>().mConditions.isDied ==false)
                     {
@@ -172,6 +177,7 @@ public class Unit : MonoBehaviour, IUnit
             SetPosition(mTarget.transform.position, mTargetPos, ActionEvent.AttackWalk);
             yield return new WaitUntil(()=> mAiBuild.actionEvent == ActionEvent.Busy);
             PlayAnimation("Attack");
+            yield return new WaitForSeconds(0.35f);
             if (mTarget)
             {
                 Debug.Log(this.Unit_Setting.Name + " Attacks to " + mTarget.Unit_Setting.Name);
@@ -216,7 +222,6 @@ public class Unit : MonoBehaviour, IUnit
 
     virtual public void PlayAnimation(string name)
     {
-        //mAnimator.SetBool(name, active);
         mAnimator.Play(name);
     }
 
@@ -238,10 +243,21 @@ public class Unit : MonoBehaviour, IUnit
         if (mStatus.mHealth <= 0.0f)
         {
             mConditions.isDied = true;
+            Destroy(mLevelText.gameObject);
             Destroy(mHealthBar.gameObject);
+
+            if(mFlag == Flag.Enemy)
+            {
+                GameManager.Instance.s_TotalExp += mStatus.mEXP;
+                GameManager.Instance.s_TotalGold += mStatus.mGold;
+                // TODO: Item;
+            }
+
             Debug.Log(name + " Dead!");
             mAnimator.SetBool("Death",true);
+            UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
         }
+        mAnimator.SetTrigger("Hit");
     }
 
     virtual public void TakeRecover(float val)
@@ -260,8 +276,8 @@ public class Unit : MonoBehaviour, IUnit
 
     virtual public void SetPosition(Vector3 pos, Vector3 targetPos, ActionEvent _actionEvent)
     {
-        mPos = pos + new Vector3(0.0f, yAxis, 0.0f);
-        mTargetPos = targetPos + new Vector3(0.0f, yAxis, 0.0f);
+        mPos = pos;
+        mTargetPos = targetPos;
         mAiBuild.actionEvent = _actionEvent;
     }
 
@@ -273,5 +289,16 @@ public class Unit : MonoBehaviour, IUnit
     virtual public void SetNerf(TimedNerf nerf)
     {
         mBuffNerfController.AddNerf(nerf);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        mRigidbody.velocity = Vector3.zero;
+        mRigidbody.angularVelocity = Vector3.zero;
+    }
+
+    public void DisableUI()
+    {
+        mHealthBar.Active(false);
     }
 }

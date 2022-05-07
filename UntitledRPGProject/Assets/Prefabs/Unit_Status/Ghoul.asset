@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Ghoul
   m_EditorClassIdentifier: 
   Name: Ghoul
+  Level: 1
+  EXP: 10
   MaxHealth: 50
   MaxMana: 10
   Magic_Resistance: 5
@@ -21,4 +23,7 @@ MonoBehaviour:
   MagicPower: 10
   Armor: 4
   Agility: 1
+  Gold: 100
+  BasicSprite: {fileID: -7352877885823856095, guid: 31b91fa256b4f5640bc238634f5c7c62, type: 3}
   SFXClips: []
+  Item: []

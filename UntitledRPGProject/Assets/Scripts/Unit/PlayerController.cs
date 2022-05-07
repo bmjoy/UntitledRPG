@@ -16,18 +16,16 @@ public class PlayerController : MonoBehaviour
     public GameObject mOwner;
     public List<GameObject> mHeroes = new List<GameObject>();
 
-    public LayerMask mGroundMask;
     private Vector3 mVelocity = Vector3.zero;
     private BoxCollider mCollider;
     private CharacterController mCharacterController;
     private SpriteRenderer mSpriteRenderer;
     private GameObject mGroundCheck;
-    [SerializeField]
     private Transform mCamera;
-    private float mGravity = -9.8f;
 
     private bool isLeft = false;
     public bool onBattle = false;
+    public int mGold = 0;
     private Animator mAnimator;
     // Start is called before the first frame update
     void Start()
@@ -50,10 +48,14 @@ public class PlayerController : MonoBehaviour
     {
         if (mOwner.activeInHierarchy == false)
             return;
+
+        if (mCamera == null)
+            mCamera = GameObject.FindGameObjectWithTag("Camera").transform.Find("GameWorldCamera");
+
         mState = mState.Handle();
         StateControl();
-
-        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, mGroundMask);
+        
+        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
         if(mState.ToString() != "BattleState")
         {
             float x = Input.GetAxisRaw("Horizontal");
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && mVelocity.y <= 0.0f)
             mVelocity.y = -2.0f;
 
-        mVelocity.y += mGravity * Time.deltaTime;
+        mVelocity.y += -9.8f * Time.deltaTime;
 
         mCharacterController.Move(mVelocity * Time.deltaTime);
     }
@@ -122,7 +124,6 @@ public class PlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
             mHeroes[i].transform.position = center;
-            mHeroes[i].GetComponent<Unit>().yAxis = transform.localPosition.y;
             mHeroes[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
             mHeroes[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, enemyFields[i].transform.position, ActionEvent.IntroWalk);
             mHeroes[i].gameObject.SetActive(true);
@@ -145,6 +146,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < mHeroes.Count; ++i)
         {
             mHeroes[i].transform.position = transform.position;
+            mHeroes[i].GetComponent<Unit>().DisableUI();
             mHeroes[i].gameObject.SetActive(false);
         }
         //TODO: Make them hide
@@ -161,8 +163,6 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.mEnemyProwler = other.GetComponent<EnemyProwler>();
             BattleManager.Instance.SetBattleField();
             GameManager.Instance.OnBattleStart(other.GetComponent<EnemyProwler>().id);
-            
-            //TODO call game manager to start the battle
         }
     }
 

@@ -9,6 +9,7 @@ TagManager:
   - EnemyField
   - EnemyProwler
   - EnemySpawner
+  - Camera
   layers:
   - Default
   - TransparentFX

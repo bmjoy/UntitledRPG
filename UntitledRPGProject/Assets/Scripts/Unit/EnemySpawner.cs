@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     private float mRadius = 100.0f;
     [SerializeField]
     private float mAngle = 60.0f;
+
     public void StartSpawn()
     {
         if (isInitialized)

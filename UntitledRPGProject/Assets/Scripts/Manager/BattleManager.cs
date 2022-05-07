@@ -23,6 +23,7 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance { get { return mInstance; } }
     private void Awake()
     {
+        Debug.Log("Hi BattleManager");
         if (mInstance != null && mInstance != this)
             Destroy(gameObject);
         else
@@ -37,7 +38,16 @@ public class BattleManager : MonoBehaviour
     private Unit mCurrentUnit = null;
     public bool isBattle = false;
     private bool isWin = false;
+    private bool onReward = false;
     private GameStatus status = GameStatus.None;
+
+    [SerializeField]
+    private float mWaitTime;
+
+    public event Action onEnqueuingOrderEvent;
+    public event Action<Unit> onDequeuingOrderEvent;
+    public event Action onMovingOrderEvent;
+    public event Action onFinishOrderEvent;
 
     public void Initialize()
     {
@@ -60,6 +70,7 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(()=> GameManager.Instance.mPlayer.onBattle == true 
         && GameManager.Instance.mEnemyProwler.onBattle == true);
         mUnits.Clear();
+        mOrders.Clear();
         mUnits.AddRange(GameManager.Instance.mPlayer.mHeroes);
         mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup);
         mUnits.Sort((a, b) => (b.GetComponent<Unit>().mStatus.mAgility.CompareTo(
@@ -69,93 +80,125 @@ public class BattleManager : MonoBehaviour
             mUnits[i].GetComponent<Unit>().mOrder = Order.Standby;
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
+        onEnqueuingOrderEvent?.Invoke();
         status = GameStatus.Start;
     }
 
     private void Update()
     {
-        if(isBattle)
+        if (!isBattle)
+            return;
+        switch (status)
         {
-            switch (status)
-            {
-                case GameStatus.None:
-                    break;
-                case GameStatus.Start:
+            case GameStatus.None: break;
+            case GameStatus.Start:
+                {
+                    status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None)) ? GameStatus.Queue : GameStatus.Start;
+                }
+                break;
+            case GameStatus.Queue:
+                {
+                    if (mCurrentUnit)
+                        onDequeuingOrderEvent?.Invoke(mCurrentUnit);
+                    mCurrentUnit = null;
+                    if (mOrders.Count == 0 && mCurrentUnit == null)
                     {
-                        status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None)) ? GameStatus.Queue : GameStatus.Start;
-                    }
-                    break;
-                case GameStatus.Queue:
-                    {
-                        mCurrentUnit = null;
-                        if (mOrders.Count == 0 && mCurrentUnit == null)
+                        for (int i = 0; i < mUnits.Count; i++)
                         {
-                            for (int i = 0; i < mUnits.Count; i++)
-                            {
-                                if (!mUnits[i].GetComponent<Unit>().mConditions.isDied)
-                                    mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
-                            }
+                            if (!mUnits[i].GetComponent<Unit>().mConditions.isDied)
+                                mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
                         }
+                        onEnqueuingOrderEvent?.Invoke();
+                    }
 
-                        if (mCurrentUnit == null && mOrders.Count != 0)
+                    if (mCurrentUnit == null && mOrders.Count != 0)
+                    {
+                        UIManager.Instance.DisplayBattleInterface(false);
+                        mCurrentUnit = mOrders.Dequeue();
+
+                        if (mCurrentUnit.mConditions.isDied)
                         {
-                            UIManager.Instance.DisplayBattleInterface(false);
-                            mCurrentUnit = mOrders.Dequeue();
-                            if (mCurrentUnit.mConditions.isDied)
+                            mCurrentUnit = null;
+                            return;
+                        }
+                        else
+                        {
+                            mCurrentUnit.mConditions.isDefend = false;
+                            mCurrentUnit.mConditions.isPicked = true;
+                            onMovingOrderEvent?.Invoke();
+                            mCurrentUnit.mOrder = Order.Standby;
+                            if (mCurrentUnit.mFlag == Flag.Player)
                             {
-                                mCurrentUnit = null;
-                                return;
+                                UIManager.Instance.DisplayBattleInterface(true);
+                                if (mCurrentUnit.mSkillDataBase != null)
+                                    if (mCurrentUnit.mSkillDataBase.mSkill != null)
+                                        UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.mSkill.mName + ": \n" + mCurrentUnit.mSkillDataBase.mSkill.mDescription);
                             }
-                            else
-                            {
-                                mCurrentUnit.mConditions.isDefend = false;
-                                mCurrentUnit.mConditions.isPicked = true;
-                                mCurrentUnit.mOrder = Order.Standby;
-                                if (mCurrentUnit.mFlag == Flag.Player)
-                                {
-                                    UIManager.Instance.DisplayBattleInterface(true);
-                                    if(mCurrentUnit.mSkillDataBase != null)
-                                        if (mCurrentUnit.mSkillDataBase.mSkill != null)
-                                            UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.mSkill.mName + ": \n" + mCurrentUnit.mSkillDataBase.mSkill.mDescription);
-
-                                }
-                                status = GameStatus.WaitForOrder;
-                                Debug.Log(mCurrentUnit.name);
-                            }
+                            status = GameStatus.WaitForOrder;
                         }
                     }
+                }
+                break;
+            case GameStatus.WaitForOrder:
+                break;
+            case GameStatus.Busy:
+                status = (mCurrentUnit.mOrder == Order.TurnEnd) ? GameStatus.Result : GameStatus.Busy;
+                break;
+            case GameStatus.Result:
+                {
+                    status = (BattleResult() == true) ? status = GameStatus.Reward : GameStatus.Queue;
+                    if (status == GameStatus.Reward)
+                        UIManager.Instance.mFadeScreen.SetActive(true);
                     break;
-                case GameStatus.WaitForOrder:
-                    break;
-                case GameStatus.Busy:
+                }
+            case GameStatus.Reward:
+                {
+                    if(onReward == false)
                     {
-                        status = (mCurrentUnit.mOrder == Order.TurnEnd) ? GameStatus.Result : GameStatus.Busy;
+                        onFinishOrderEvent?.Invoke();
+                        StartCoroutine(RewardTime());
+                        onReward = true;
                     }
-                    break;
-                case GameStatus.Result:
-                    {
-                        status = (BattleResult() == true) ? status = GameStatus.Finish : GameStatus.Queue;
-                    }
-                    break;
-                case GameStatus.Reward:
-                    {
-                        // TODO
-                    }
-                    break;
-                case GameStatus.Finish:
-                    {
-                        CameraSwitcher.SwitchCamera();
-                        GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
-                        isBattle = false;
-                        mCurrentUnit = null;
-                        status = GameStatus.None;
-                    }
-                    break;
-                default:
-                    break;
-            }
+                }
+                break;
+            case GameStatus.Finish:
+                {
+                    CameraSwitcher.SwitchCamera();
+                    GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
+                    isBattle = false;
+                    onReward = false;
+                    mCurrentUnit = null;
+                    status = GameStatus.None;
+                }
+                break;
         }
+    }
 
+    private IEnumerator RewardTime()
+    {
+        UIManager.Instance.FadeInScreen();
+        yield return new WaitForSeconds(0.5f);
+        int exp = GameManager.Instance.s_TotalExp;
+        int gold = GameManager.Instance.s_TotalGold;
+        UIManager.Instance.DisplayAskingSkill(true);
+        UIManager.Instance.FadeInWord();
+        UIManager.Instance.ChangeText_Target("Victory! \n EXP: " + exp + "\n Gold: " + gold);
+        int shareExp = GameManager.Instance.s_TotalExp / GameManager.Instance.mPlayer.mHeroes.Count;
+        foreach (var unit in GameManager.Instance.mPlayer.mHeroes)
+        {
+            unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
+        }
+        GameManager.Instance.mPlayer.mGold += GameManager.Instance.s_TotalGold;
+
+        yield return new WaitForSeconds(mWaitTime);
+        UIManager.Instance.FadeOutScreen();
+        UIManager.Instance.FadeOutWord();
+        yield return new WaitForSeconds(1.0f);
+        UIManager.Instance.mSkillUseCheck.SetActive(false);
+        UIManager.Instance.mFadeScreen.SetActive(false);
+        GameManager.Instance.s_TotalExp = GameManager.Instance.s_TotalGold = 0;
+        status = GameStatus.Finish;
+        yield return null;
     }
 
     private bool BattleResult()

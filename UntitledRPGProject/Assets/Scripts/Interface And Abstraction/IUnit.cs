@@ -13,4 +13,5 @@ public interface IUnit
     IEnumerator DefendAction(Action onComplete);
     IEnumerator MagicAction(Action onComplete);
     void PlayAnimation(string name);
+    void DisableUI();
 }

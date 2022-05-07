@@ -6,6 +6,8 @@ using UnityEngine.Audio;
 public class Unit_Setting : ScriptableObject
 {
     public string Name;
+    public int Level;
+    public int EXP;
     public float MaxHealth;
     public float MaxMana;
     public float Magic_Resistance;
@@ -14,6 +16,9 @@ public class Unit_Setting : ScriptableObject
     public float MagicPower;
     public float Armor;
     public float Agility;
+    public int Gold;
 
+    public Sprite BasicSprite;
     public List<AudioClip> SFXClips;
+    public List<GameObject> Item;
 }

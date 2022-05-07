@@ -93,7 +93,6 @@ public class EnemyProwler : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
             mEnemySpawnGroup[i].transform.position = new Vector3(center.x, center.y + mEnemySpawnGroup[i].GetComponent<BoxCollider>().size.y, center.z - 2.0f);
-            mEnemySpawnGroup[i].GetComponent<Unit>().yAxis = fields[i].transform.localPosition.y;
             mEnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
             mEnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
             mEnemySpawnGroup[i].gameObject.SetActive(true);
