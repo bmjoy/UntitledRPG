@@ -34,6 +34,9 @@ public struct AIBuild
 
 public struct Status
 {
+    public int mLevel;
+    public int mEXP;
+    public int mGold;
     public float mMaxHealth;
     public float mHealth;
     public float mMana;
@@ -44,8 +47,11 @@ public struct Status
     public float mAgility;
     public float mMagicPower;
 
-    public Status(float maxHp, float hp, float mana, float dmg, float am, float mr, float de, float ag, float mp)
+    public Status(int level, int exp, int gold, float maxHp, float hp, float mana, float dmg, float am, float mr, float de, float ag, float mp)
     {
+        mLevel = level;
+        mEXP = exp;
+        mGold = gold;
         mMaxHealth = maxHp;
         mHealth = hp;
         mMana = mana;

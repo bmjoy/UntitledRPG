@@ -8,6 +8,10 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Awake()
     {
+        foreach(var spwaner in GameObject.FindObjectsOfType<EnemySpawner>())
+        {
+            spwaner.gameObject.transform.parent = transform;
+        }
         m_Spawns = new List<EnemySpawner>(FindObjectsOfType<EnemySpawner>());
     }
 

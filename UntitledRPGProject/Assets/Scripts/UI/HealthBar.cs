@@ -19,6 +19,7 @@ public class HealthBar : MonoBehaviour
         mBorader = transform.parent.GetComponent<Image>();
         mBar = GetComponent<Image>();
         isInitialized = true;
+        gameObject.SetActive(false);
     }
 
     void Update()

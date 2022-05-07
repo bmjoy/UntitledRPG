@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return mInstance; } }
     private void Awake()
     {
+        Debug.Log("Hi GameManager");
         if (mInstance != null && mInstance != this)
             Destroy(gameObject);
         else
@@ -19,13 +20,13 @@ public class GameManager : MonoBehaviour
     public GameState mGameState;
     public PlayerController mPlayer;
     public EnemyProwler mEnemyProwler;
-    [SerializeField]
-    private GameObject mField;
     private List<Vector3> mOriginalFieldPos;
     public GameObject mCurrentField;
     public GameObject[] EnemyProwlers;
 
     public static int s_ID = 0;
+    public int s_TotalExp = 0;
+    public int s_TotalGold = 0;
 
     private void Start()
     {
@@ -42,10 +43,18 @@ public class GameManager : MonoBehaviour
             new Vector3(5.0f,1.0f,10.0f),
         };
 
-
-        mCurrentField = GameObject.Instantiate(Instance.mField, Vector3.zero, Quaternion.identity);
+        mPlayer = GameObject.Find("Player").GetComponent<PlayerController>();
+        if (GameObject.Find("GameCamera") == null)
+        {
+            GameObject source = Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
+            source.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = mPlayer.transform;
+            source.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mPlayer.transform;
+        }
+        mCurrentField = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Field"));
+        mCurrentField.transform.parent = transform;
         mCurrentField.SetActive(false);
         s_ID = 0;
+        s_TotalExp = 0;
     }
     private void Update()
     {
@@ -59,6 +68,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GamePlay:
                 {
+
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
                         Time.timeScale = 0.0f;
@@ -75,14 +85,8 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
-            case GameState.Battle:
+            case GameState.Busy:
                 {
-                    if(!BattleManager.Instance.isBattle)
-                    {
-                        EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
-                        CameraSwitcher.SwitchCamera();
-                        BattleManager.Instance.Initialize();
-                    }
                 }
                 break;
             case GameState.Victory:
@@ -108,6 +112,7 @@ public class GameManager : MonoBehaviour
     {
         BattleManager.Instance.StopAllCoroutines();
         OnEnemyDeath(mEnemyProwler.id);
+
         for (int i = 0; i < EnemyProwlers.Length; i++)
         {
             if(EnemyProwlers[i] != null)
@@ -122,7 +127,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
         {
             Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
-            Debug.Log(Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).name);
         }
 
         for (int i = 0; i < Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
@@ -130,6 +134,7 @@ public class GameManager : MonoBehaviour
             Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
         }
         Instance.mCurrentField.SetActive(false);
+        mEnemyProwler = null;
         OnBattleEnd();
     }
 
@@ -140,7 +145,10 @@ public class GameManager : MonoBehaviour
     {
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch
         onBattle?.Invoke(id); // Enemy preparation
-        mGameState = GameState.Battle;
+        EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
+        CameraSwitcher.SwitchCamera();
+        BattleManager.Instance.Initialize();
+        mGameState = GameState.Busy;
     }
 
     public event Action<int> onEnemyDeath;

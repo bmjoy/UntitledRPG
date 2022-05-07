@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get { return mInstance; } }
     private void Awake()
     {
+        Debug.Log("Hi UIManager");
         if (mInstance != null && mInstance != this)
             Destroy(gameObject);
         else
@@ -21,12 +22,29 @@ public class UIManager : MonoBehaviour
     public GameObject mBattleUI;
     public GameObject mSkillDescription;
     public GameObject mSkillUseCheck;
+    public GameObject mFadeScreen;
+
+    public GameObject mOrderbar;
 
     // Start is called before the first frame update
     void Start()
     {
         mCanvas = GetComponent<Canvas>();
+        BattleManager.Instance.onEnqueuingOrderEvent += BattleStart;
+        BattleManager.Instance.onFinishOrderEvent += BattleEnd;
+        mFadeScreen.SetActive(false);
         DisplayBattleInterface(false);
+    }
+
+    public void BattleStart()
+    {
+        if(mOrderbar.gameObject.activeInHierarchy == false)
+            mOrderbar.gameObject.SetActive(true);
+    }
+
+    public void BattleEnd()
+    {
+        mOrderbar.gameObject.SetActive(false);
     }
 
     public void DisplayBattleInterface(bool display)
@@ -47,5 +65,29 @@ public class UIManager : MonoBehaviour
     public void ChangeText(string text)
     {
         mSkillDescription.GetComponent<HoverTip>().mTipToShow = text;
+    }
+
+    public void FadeInScreen()
+    {
+        mFadeScreen.GetComponent<Animator>().SetBool("FadeIn",true);
+        mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", false);
+    }
+
+    public void FadeInWord()
+    {
+        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeIn", true);
+        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeOut", false);
+    }
+
+    public void FadeOutScreen()
+    {
+        mFadeScreen.GetComponent<Animator>().SetBool("FadeIn", false);
+        mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", true);
+    }
+
+    public void FadeOutWord()
+    {
+        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeIn", false);
+        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeOut", true);
     }
 }
