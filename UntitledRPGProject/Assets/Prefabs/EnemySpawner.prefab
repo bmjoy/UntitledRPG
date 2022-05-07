@@ -44,10 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mDelaySpawnTime: 1
-  mEnemyList:
-  - {fileID: 7780718595994995608, guid: 3a4e93bbbbc7aec47b91ad76d86aa346, type: 3}
-  - {fileID: 7780718595994995608, guid: 3a4e93bbbbc7aec47b91ad76d86aa346, type: 3}
-  - {fileID: 7780718595994995608, guid: 3a4e93bbbbc7aec47b91ad76d86aa346, type: 3}
-  mModelPrefab: {fileID: 2224704230529896569, guid: aef69509a94667240b9227b5efc19ab1, type: 3}
+  mEnemyList: 01000000020000000200000002000000
+  mLeader: 2
   mRadius: 20
   mAngle: 60

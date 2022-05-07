@@ -5,9 +5,19 @@ using UnityEngine;
 public class Skill_DataBase : MonoBehaviour
 {
     //public List<Skill_Setting> mSkills = new List<Skill_Setting>();
-    public Skill_Setting mSkill;
+    [SerializeField]
+    private Skill_Setting mSkillData;
+    private Skill_Setting mSkill;
+
+    public Skill_Setting Skill { set { Skill = value; } get { return mSkill; } }
+    public string Name { get { return mSkill.mName; } }
+    public float Mana { get { return mSkill.mManaCost; } }
+    public string Description { get { return mSkill.mDescription; } }
+
     private void Start()
     {
+        mSkill = mSkillData;
+        mSkill.mOwner = transform.GetComponent<Unit>();
         mSkill.Initialize(GetComponent<Unit>());
     }
 

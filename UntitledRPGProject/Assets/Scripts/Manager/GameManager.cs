@@ -22,11 +22,11 @@ public class GameManager : MonoBehaviour
     public EnemyProwler mEnemyProwler;
     private List<Vector3> mOriginalFieldPos;
     public GameObject mCurrentField;
-    public GameObject[] EnemyProwlers;
+    private GameObject[] EnemyProwlers;
 
     public static int s_ID = 0;
-    public int s_TotalExp = 0;
-    public int s_TotalGold = 0;
+    public static int s_TotalExp = 0;
+    public static int s_TotalGold = 0;
 
     private void Start()
     {
@@ -113,17 +113,8 @@ public class GameManager : MonoBehaviour
         BattleManager.Instance.StopAllCoroutines();
         OnEnemyDeath(mEnemyProwler.id);
 
-        for (int i = 0; i < EnemyProwlers.Length; i++)
-        {
-            if(EnemyProwlers[i] != null)
-            {
-                if (EnemyProwlers[i].GetComponent<EnemyProwler>().id == mEnemyProwler.id)
-                    continue;
-                EnemyProwlers[i].SetActive(true);
-                EnemyProwlers[i].GetComponent<BoxCollider>().enabled = true;
-            }
-        }
-
+        ActiveEnemyProwlers(true);
+        EnemyProwlers = null;
         for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
         {
             Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
@@ -134,6 +125,7 @@ public class GameManager : MonoBehaviour
             Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
         }
         Instance.mCurrentField.SetActive(false);
+
         mEnemyProwler = null;
         OnBattleEnd();
     }
@@ -147,6 +139,7 @@ public class GameManager : MonoBehaviour
         onBattle?.Invoke(id); // Enemy preparation
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
         CameraSwitcher.SwitchCamera();
+        ActiveEnemyProwlers(false);
         BattleManager.Instance.Initialize();
         mGameState = GameState.Busy;
     }
@@ -161,5 +154,19 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.DisplayBattleInterface(false);
         onPlayerBattleEnd?.Invoke();
+    }
+
+    private void ActiveEnemyProwlers(bool active)
+    {
+        for (int i = 0; i < Instance.EnemyProwlers.Length; ++i)
+        {
+            if (Instance.EnemyProwlers[i] != null)
+            {
+                if (Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == Instance.mEnemyProwler.id)
+                    continue;
+                Instance.EnemyProwlers[i].SetActive(active);
+                Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
+            }
+        }
     }
 }

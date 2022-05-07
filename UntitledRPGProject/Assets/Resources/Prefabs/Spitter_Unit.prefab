@@ -98,20 +98,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTarget: {fileID: 0}
   mOrder: 0
+  mType: 1
   mFlag: 2
-  mTargetMask:
-    serializedVersion: 2
-    m_Bits: 128
   mFieldPos: {x: 0, y: 0, z: 0}
-  mPos: {x: 0, y: 0, z: 0}
-  mTargetPos: {x: 0, y: 0, z: 0}
-  mAnimator: {fileID: 0}
-  mRigidbody: {fileID: 0}
   mSetting: {fileID: 11400000, guid: d044718d399362a4f8d971cb899b25b6, type: 2}
   mSkillDataBase: {fileID: 0}
-  mLevelObject: {fileID: 0}
-  mHealthBarPrefab: {fileID: 0}
-  yAxis: 0
 --- !u!212 &2363663712266155629
 SpriteRenderer:
   m_ObjectHideFlags: 0

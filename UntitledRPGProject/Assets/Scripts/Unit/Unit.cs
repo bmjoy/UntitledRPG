@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour, IUnit
 {
     public Unit mTarget = null;
     public Order mOrder = Order.Standby;
+    public AttackType mType = AttackType.Melee;
     public Flag mFlag;
 
     public Vector3 mFieldPos = Vector3.zero;
@@ -43,6 +44,13 @@ public class Unit : MonoBehaviour, IUnit
             transform.position.y - (transform.GetComponent<BoxCollider>().size.y + 0.1f), transform.position.z);
         groundCheck.transform.parent = transform;
         mGroundCheck = groundCheck;
+
+        if(mType == AttackType.Range)
+        {
+            GameObject fire = new GameObject("Fire");
+            fire.transform.position = new Vector3(transform.position.x,transform.position.y + transform.GetComponent<BoxCollider>().size.y / 2.0f, transform.position.z);
+            fire.transform.parent = transform;
+        }
 
         mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
             mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
@@ -84,6 +92,10 @@ public class Unit : MonoBehaviour, IUnit
         else
             mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
         isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, 3);
+
+        if (transform.position.y <= -50.0f)
+            transform.position = new Vector3(mFieldPos.x,mFieldPos.y + 5.0f, mFieldPos.z);
+
         switch (mAiBuild.actionEvent)
         {
             case ActionEvent.None:
@@ -117,7 +129,7 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.BackWalk:
                 {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 1.0f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
+                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mFieldPos) < 2.0f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
                     transform.position = Vector3.MoveTowards(transform.position, mFieldPos, Time.deltaTime * 7.0f);
                     mAnimator.SetFloat("Speed", (mAiBuild.actionEvent == ActionEvent.BackWalk) ? 1.0f : 0.0f);
                 }
@@ -155,7 +167,6 @@ public class Unit : MonoBehaviour, IUnit
                         if (Input.GetMouseButtonDown(0))
                         {
                             mTarget = hit.transform.GetComponent<Unit>();
-                            Debug.Log(hit.transform.name);
                         }
                     }
                 }
@@ -173,21 +184,28 @@ public class Unit : MonoBehaviour, IUnit
 
         if (mConditions.isCancel == false)
         {
-            Debug.Log(this.Unit_Setting.Name + " Attacks");
-            SetPosition(mTarget.transform.position, mTargetPos, ActionEvent.AttackWalk);
-            yield return new WaitUntil(()=> mAiBuild.actionEvent == ActionEvent.Busy);
-            PlayAnimation("Attack");
-            yield return new WaitForSeconds(0.35f);
-            if (mTarget)
+            if(mType == AttackType.Melee)
             {
-                Debug.Log(this.Unit_Setting.Name + " Attacks to " + mTarget.Unit_Setting.Name);
-                mTarget.TakeDamage(mStatus.mDamage, type);
+                SetPosition(mTarget.transform.position, mTargetPos, ActionEvent.AttackWalk);
+                yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+                PlayAnimation("Attack");
+                yield return new WaitForSeconds(0.35f);
+                if (mTarget)
+                    mTarget.TakeDamage(mStatus.mDamage, type);
+                yield return mWaitingTime;
+                SetPosition(mFieldPos, mTargetPos, ActionEvent.BackWalk);
+                yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
             }
             else
-                Debug.Log("No Target");
-            yield return mWaitingTime;
-            SetPosition(mFieldPos, mTargetPos, ActionEvent.BackWalk);
-            yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+            {
+                mAiBuild.actionEvent = ActionEvent.Busy;
+                PlayAnimation("Attack");
+                yield return new WaitForSeconds(0.35f);
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
+                Bullet bullet = go.GetComponent<Bullet>();
+                bullet.Initialize(mTarget, mStatus.mDamage);
+                yield return new WaitUntil(() => bullet.isDamaged == true);
+            }
             onComplete?.Invoke();
             TurnEnded();
             mAiBuild.actionEvent = ActionEvent.None;
@@ -207,9 +225,9 @@ public class Unit : MonoBehaviour, IUnit
     virtual public IEnumerator MagicAction(Action onComplete)
     {
         mSkillDataBase.Use();
-        yield return new WaitUntil(() => mSkillDataBase.mSkill.isComplete == true);
+        yield return new WaitUntil(() => mSkillDataBase.Skill.isComplete == true);
 
-        if (mSkillDataBase.mSkill.isActive == false)
+        if (mSkillDataBase.Skill.isActive == false)
             BattleManager.Instance.Cancel();
         else
         {
@@ -240,6 +258,7 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mHealth -= value;
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         Debug.Log("Takes " + value + " Damages" + ", " + mStatus.mHealth + " lefts");
+        mRigidbody.velocity = mRigidbody.angularVelocity = Vector3.zero; 
         if (mStatus.mHealth <= 0.0f)
         {
             mConditions.isDied = true;
@@ -248,13 +267,14 @@ public class Unit : MonoBehaviour, IUnit
 
             if(mFlag == Flag.Enemy)
             {
-                GameManager.Instance.s_TotalExp += mStatus.mEXP;
-                GameManager.Instance.s_TotalGold += mStatus.mGold;
+                GameManager.s_TotalExp += mStatus.mEXP;
+                GameManager.s_TotalGold += mStatus.mGold;
                 // TODO: Item;
             }
 
             Debug.Log(name + " Dead!");
             mAnimator.SetBool("Death",true);
+            this.GetComponent<BoxCollider>().enabled = false;
             UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
         }
         mAnimator.SetTrigger("Hit");
