@@ -13,11 +13,25 @@ public class OrderBar : MonoBehaviour
 
     private Vector3 EndPosition = new Vector3(-80.0f, 0.0f);
     private GameObject key = null;
+    private float halfWidth = 0.0f;
+    private float partialWidth = 0.0f;
+
+    [SerializeField]
+    private float Ypos = 5.0f;
+    [SerializeField]
+    private float mSpriteLocalScale = 0.25f;
+    [SerializeField]
+    private float mSpeed = 50.0f;
+    [SerializeField]
+    private float mMaximumSpeed = 200.0f;
 
     void Start()
     {
         image = transform.GetComponent<Image>();
-        
+
+        halfWidth = image.rectTransform.rect.width / 2.0f;
+        partialWidth = image.rectTransform.rect.width / 8.0f;
+
         BattleManager.Instance.onEnqueuingOrderEvent += EnqueueOrder;
         BattleManager.Instance.onMovingOrderEvent += MoveOrder;
         BattleManager.Instance.onDequeuingOrderEvent += DequeueOrder;
@@ -29,13 +43,14 @@ public class OrderBar : MonoBehaviour
     {
         queueImages.Clear();
         Queue<Unit> unitList = BattleManager.Instance.mOrders;
+        Debug.Log(image.rectTransform.rect.width);
         int i = 0;
         foreach(Unit unit in unitList)
         {
             GameObject go = new GameObject("Sprite");
             go.transform.parent = transform;
-            go.transform.localPosition = new Vector3(0.0f + 40.0f * i, 5.0f);
-            go.transform.localScale = new Vector3(0.25f,0.25f,0.25f);
+            go.transform.localPosition = new Vector3(0.0f + partialWidth * i, Ypos);
+            go.transform.localScale = new Vector3(mSpriteLocalScale, mSpriteLocalScale, mSpriteLocalScale);
             go.transform.localRotation = Quaternion.Euler(0, 180, 0);
             Sprite sprite = go.AddComponent<Image>().sprite = unit.mSetting.BasicSprite;
             queueImages.Add(unit, go);
@@ -47,15 +62,17 @@ public class OrderBar : MonoBehaviour
     {
         if(key != null)
         {
-            key.transform.localPosition += new Vector3(-image.rectTransform.rect.width * Time.deltaTime, 0.0f, 0.0f);
             foreach(var unit in queueImages)
             {
                 if (unit.Value == key)
+                {
+                    key.transform.localPosition += new Vector3(-mMaximumSpeed * unit.Key.mStatus.mAgility * Time.deltaTime, 0.0f, 0.0f);
                     continue;
-                if(unit.Value.transform.localPosition.x > -260)
-                    unit.Value.transform.localPosition += new Vector3(-50.0f * unit.Key.mStatus.mAgility * Time.deltaTime, 0.0f, 0.0f);
+                }
+                if(unit.Value.transform.localPosition.x > -halfWidth + partialWidth)
+                    unit.Value.transform.localPosition += new Vector3(-mSpeed * unit.Key.mStatus.mAgility * Time.deltaTime, 0.0f, 0.0f);
             }
-            if (key.transform.localPosition.x <= -320)
+            if (key.transform.localPosition.x <= -halfWidth)
                 key = null;
         }
     }

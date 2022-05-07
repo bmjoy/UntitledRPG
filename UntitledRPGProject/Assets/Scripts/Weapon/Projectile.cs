@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public GameObject mEffect;
+    private GameObject mEffect;
     public bool isCollide = false;
     private bool isEffect = false;
     [SerializeField]
@@ -18,14 +18,10 @@ public class Projectile : MonoBehaviour
     private Vector3 mDirection;
     private void Start()
     {
+        mEffect = transform.GetChild(0).transform.gameObject;
         if (mEffect)
         {
-            ParticleSystem ps = mEffect.GetComponent<ParticleSystem>();
-            var shape = ps.shape;
-            if (mTarget.mFlag == Flag.Player)
-                shape.rotation = new Vector3(-90.0f, 0.0f, 0.0f);
-            else
-                shape.rotation = new Vector3(90.0f, 0.0f, 0.0f);
+            mEffect.transform.eulerAngles = (mTarget.mFlag == Flag.Player) ? new Vector3(-90.0f, 0.0f, 0.0f) : new Vector3(90.0f, 0.0f, 0.0f);
             isEffect = true;
             StartCoroutine(WaitforSecond());
             mEffect.SetActive(true);

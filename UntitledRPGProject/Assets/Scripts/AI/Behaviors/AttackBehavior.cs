@@ -14,13 +14,13 @@ public class AttackBehavior : State
             return;
         }
 
-        if(agent.mSkillDataBase.mSkill == null)
+        if(agent.mSkillDataBase.Skill == null)
         {
             isMagic = false;
             return;
         }
 
-        if(agent.mStatus.mMana < agent.mSkillDataBase.mSkill.mManaCost)
+        if(agent.mStatus.mMana < agent.mSkillDataBase.Mana)
         {
             isMagic = false;
             return;

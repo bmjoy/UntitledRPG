@@ -15,13 +15,13 @@ public class DefendBehavior : State
             return;
         }
 
-        if (agent.mSkillDataBase.mSkill == null)
+        if (agent.mSkillDataBase.Skill == null)
         {
             isMagic = false;
             return;
         }
 
-        if (agent.mStatus.mMana < agent.mSkillDataBase.mSkill.mManaCost)
+        if (agent.mStatus.mMana < agent.mSkillDataBase.Mana)
         {
             isMagic = false;
             return;
@@ -45,7 +45,7 @@ public class DefendBehavior : State
         }
         if (isMagic)
         {
-            var skill = agent.mSkillDataBase.mSkill;
+            var skill = agent.mSkillDataBase.Skill;
             if (skill.mProperty == SkillProperty.Friendly)
             {
                 switch (skill.mSkillType)

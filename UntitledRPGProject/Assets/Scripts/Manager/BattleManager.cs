@@ -52,16 +52,6 @@ public class BattleManager : MonoBehaviour
     public void Initialize()
     {
         isBattle = true;
-        for (int i = 0; i < GameManager.Instance.EnemyProwlers.Length; ++i)
-        {
-            if(GameManager.Instance.EnemyProwlers[i] != null)
-            {
-                if (GameManager.Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == GameManager.Instance.mEnemyProwler.id)
-                    continue;
-                GameManager.Instance.EnemyProwlers[i].SetActive(false);
-                GameManager.Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = false;
-            }
-        }
         StartCoroutine(Wait());
     }
 
@@ -115,7 +105,6 @@ public class BattleManager : MonoBehaviour
                     {
                         UIManager.Instance.DisplayBattleInterface(false);
                         mCurrentUnit = mOrders.Dequeue();
-
                         if (mCurrentUnit.mConditions.isDied)
                         {
                             mCurrentUnit = null;
@@ -131,8 +120,8 @@ public class BattleManager : MonoBehaviour
                             {
                                 UIManager.Instance.DisplayBattleInterface(true);
                                 if (mCurrentUnit.mSkillDataBase != null)
-                                    if (mCurrentUnit.mSkillDataBase.mSkill != null)
-                                        UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.mSkill.mName + ": \n" + mCurrentUnit.mSkillDataBase.mSkill.mDescription);
+                                    if (mCurrentUnit.mSkillDataBase.Skill != null)
+                                        UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.Name + ": \n" + mCurrentUnit.mSkillDataBase.Description);
                             }
                             status = GameStatus.WaitForOrder;
                         }
@@ -178,25 +167,23 @@ public class BattleManager : MonoBehaviour
     {
         UIManager.Instance.FadeInScreen();
         yield return new WaitForSeconds(0.5f);
-        int exp = GameManager.Instance.s_TotalExp;
-        int gold = GameManager.Instance.s_TotalGold;
         UIManager.Instance.DisplayAskingSkill(true);
         UIManager.Instance.FadeInWord();
-        UIManager.Instance.ChangeText_Target("Victory! \n EXP: " + exp + "\n Gold: " + gold);
-        int shareExp = GameManager.Instance.s_TotalExp / GameManager.Instance.mPlayer.mHeroes.Count;
+        UIManager.Instance.ChangeText_Target("Victory! \n\n EXP: " + GameManager.s_TotalExp + "\n\n Gold: " + GameManager.s_TotalGold);
+        int shareExp = GameManager.s_TotalExp / GameManager.Instance.mPlayer.mHeroes.Count;
         foreach (var unit in GameManager.Instance.mPlayer.mHeroes)
         {
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
         }
-        GameManager.Instance.mPlayer.mGold += GameManager.Instance.s_TotalGold;
+        GameManager.Instance.mPlayer.mGold += GameManager.s_TotalGold;
 
         yield return new WaitForSeconds(mWaitTime);
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.FadeOutWord();
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         UIManager.Instance.mSkillUseCheck.SetActive(false);
         UIManager.Instance.mFadeScreen.SetActive(false);
-        GameManager.Instance.s_TotalExp = GameManager.Instance.s_TotalGold = 0;
+        GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
         status = GameStatus.Finish;
         yield return null;
     }
@@ -221,18 +208,7 @@ public class BattleManager : MonoBehaviour
     {
         Vector3 mOffset = GameManager.Instance.mPlayer.transform.localPosition;
         Vector3 mTargetOffset = GameManager.Instance.mEnemyProwler.transform.localPosition;
-        NavMeshHit meshHit = new NavMeshHit();
         Vector3 point = mOffset + 0.5f * (mTargetOffset - mOffset);
-
-        if(!CheckFieldAvailable(point + new Vector3(0.0f, 0.0f, -13.0f), ref meshHit) &&
-            !CheckFieldAvailable(point + new Vector3(0.0f, 0.0f, 13.0f), ref meshHit))
-        {}
-        else if (!CheckFieldAvailable(point + new Vector3(0.0f, 0.0f, -13.0f), ref meshHit))
-            point += new Vector3(0.0f, 0.0f, 10.0f);
-        else if (!CheckFieldAvailable(point + new Vector3(0.0f, 0.0f, 13.0f), ref meshHit))
-            point += new Vector3(0.0f, 0.0f, -10.0f);
-        else
-        { }
 
         GameManager.Instance.mCurrentField.transform.localPosition = point;
         AdjustBattleField();
@@ -242,46 +218,25 @@ public class BattleManager : MonoBehaviour
 
     public void AdjustBattleField()
     {
-        NavMeshHit meshHit = new NavMeshHit();
         Transform playerFieldParent = GameManager.Instance.mCurrentField.transform.Find("PlayerFields");
         Transform enemyFieldParent = GameManager.Instance.mCurrentField.transform.Find("EnemyFields");
 
         playerCenter = playerFieldParent.position;
         enemyCenter = enemyFieldParent.position;
 
-        if (!CheckFieldAvailable(playerFieldParent.position, ref meshHit))
-        {
-            NavMesh.SamplePosition(playerFieldParent.position, out meshHit, 50.0f, 3);
-            playerFieldParent.position = meshHit.position;
-        }
-
-        if (!CheckFieldAvailable(enemyFieldParent.position, ref meshHit))
-        {
-            NavMesh.SamplePosition(enemyFieldParent.position, out meshHit, 50.0f, 3);
-            enemyFieldParent.position = meshHit.position;
-        }
-
         foreach (Transform playerField in playerFieldParent)
         {
-            if (!CheckFieldAvailable(playerField.position, ref meshHit))
-            {
-                NavMesh.SamplePosition(playerField.position, out meshHit, 50.0f, 3);
-                playerField.position = meshHit.position;
-            }
+            playerField.GetComponent<Field>().Initialize();
         }
         foreach (Transform enemyField in enemyFieldParent)
         {
-            if (!CheckFieldAvailable(enemyField.position, ref meshHit))
-            {
-                NavMesh.SamplePosition(enemyField.position, out meshHit, 50.0f, 3);
-                enemyField.position = meshHit.position;
-            }
+            enemyField.GetComponent<Field>().Initialize();
         }
     }
 
     private bool CheckFieldAvailable(Vector3 pos, ref NavMeshHit navMeshHit)
     {
-        return NavMesh.SamplePosition(pos, out navMeshHit, 1.0f, NavMesh.AllAreas);
+        return NavMesh.SamplePosition(pos, out navMeshHit, 1.0f, 3);
     }
 
     public void Attack()
