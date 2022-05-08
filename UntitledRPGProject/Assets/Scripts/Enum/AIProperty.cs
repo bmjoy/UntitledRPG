@@ -20,6 +20,7 @@ public enum ActionEvent
     None,
     IntroWalk,
     AttackWalk,
+    MagicWalk,
     Busy,
     BackWalk
 }

@@ -17,6 +17,7 @@ public class EnemyProwler : MonoBehaviour
     public float mRadius = 100.0f;
     public float mAngle = 60.0f;
     public Vector3 mLastPos = Vector3.zero;
+    public Vector3 mVelocity = Vector3.zero;
 
     public float mOriginalSpeed = 0.0f;
     public List<GameObject> mEnemySpawnGroup;
@@ -37,11 +38,10 @@ public class EnemyProwler : MonoBehaviour
         mCollider = gameObject.AddComponent<BoxCollider>();
         mAgent = gameObject.AddComponent<NavMeshAgent>();
         mCollider.isTrigger = true;
-        mAgent.baseOffset = 1.0f;
+        mAgent.baseOffset = 2.0f;
         mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
         mAnimator = mModel.GetComponent<Animator>();
         mSpriteRenderer = mModel.GetComponent<SpriteRenderer>();
-        //mAnimator.runtimeAnimatorController = Resources.Load("Assets/Animations/Animator/" + mModel.name) as RuntimeAnimatorController;
 
         mAnimator.SetFloat("Speed", 0.0f);
         mOriginalSpeed = mAgent.speed;
@@ -63,14 +63,11 @@ public class EnemyProwler : MonoBehaviour
 
     void Update()
     {
-        if (BattleManager.Instance.isBattle)
+        if (BattleManager.Instance.status != BattleManager.GameStatus.None)
             return;
         else
             mStateMachine.ActivateState();
-        if((transform.eulerAngles.y) > 0 && (transform.eulerAngles.y) < 180)
-            mSpriteRenderer.flipX = false;
-        else
-            mSpriteRenderer.flipX  = true;
+        mSpriteRenderer.flipX = (mVelocity.x < -0.1f) ? true : false;
     }
 
     public void EnemySpawn(int val)
@@ -87,17 +84,13 @@ public class EnemyProwler : MonoBehaviour
     private IEnumerator WaitForSpawn()
     {
         GameObject[] fields = GameObject.FindGameObjectsWithTag("EnemyField");
-        GameObject[] playerFields = GameObject.FindGameObjectsWithTag("PlayerField");
         Vector3 center = BattleManager.Instance.enemyCenter;
         for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
         {
             yield return new WaitForSeconds(0.1f);
-            mEnemySpawnGroup[i].transform.position = new Vector3(center.x, center.y + mEnemySpawnGroup[i].GetComponent<BoxCollider>().size.y, center.z - 2.0f);
-            mEnemySpawnGroup[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
-            mEnemySpawnGroup[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, playerFields[i].transform.position, ActionEvent.IntroWalk);
+            mEnemySpawnGroup[i].transform.position = new Vector3(center.x, center.y + mEnemySpawnGroup[i].GetComponent<BoxCollider>().size.y, center.z);
+            mEnemySpawnGroup[i].GetComponent<Unit>().mField = fields[i];
             mEnemySpawnGroup[i].gameObject.SetActive(true);
-            mEnemySpawnGroup[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-            mEnemySpawnGroup[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
         onBattle = true;
     }    

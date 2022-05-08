@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     public GameObject mBattleUI;
     public GameObject mSkillDescription;
     public GameObject mSkillUseCheck;
+    public GameObject mBasicText;
     public GameObject mFadeScreen;
 
     public GameObject mOrderbar;
@@ -29,11 +30,13 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mCanvas = GetComponent<Canvas>();
+        mCanvas = transform.Find("Canvas").GetComponent<Canvas>();
         BattleManager.Instance.onEnqueuingOrderEvent += BattleStart;
         BattleManager.Instance.onFinishOrderEvent += BattleEnd;
         mFadeScreen.SetActive(false);
         DisplayBattleInterface(false);
+        DisplayAskingSkill(false);
+        DisplayText(false);
     }
 
     public void BattleStart()
@@ -56,38 +59,58 @@ public class UIManager : MonoBehaviour
     {
         mSkillUseCheck.SetActive(display);
     }
+    public void DisplayText(bool display)
+    {
+        mBasicText.SetActive(display);
+    }
 
-    public void ChangeText_Target(string text)
+    public void ChangeText_Skill(string text)
     {
         mSkillUseCheck.GetComponent<TextMeshProUGUI>().text = text;
     }
 
-    public void ChangeText(string text)
+    public void ChangeHoverTip(string text)
     {
         mSkillDescription.GetComponent<HoverTip>().mTipToShow = text;
     }
 
+    public void ChangeText(string text)
+    {
+        mBasicText.GetComponent<TextMeshProUGUI>().text = text;
+    }
+
     public void FadeInScreen()
     {
+        mFadeScreen.SetActive(true);
         mFadeScreen.GetComponent<Animator>().SetBool("FadeIn",true);
         mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", false);
     }
 
     public void FadeInWord()
     {
-        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeIn", true);
-        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeOut", false);
+        DisplayText(true);
+        mBasicText.GetComponent<Animator>().SetBool("FadeIn", true);
+        mBasicText.GetComponent<Animator>().SetBool("FadeOut", false);
     }
 
     public void FadeOutScreen()
     {
         mFadeScreen.GetComponent<Animator>().SetBool("FadeIn", false);
         mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", true);
+        StartCoroutine(WaitScreen());
     }
 
     public void FadeOutWord()
     {
-        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeIn", false);
-        mSkillUseCheck.GetComponent<Animator>().SetBool("FadeOut", true);
+        mBasicText.GetComponent<Animator>().SetBool("FadeIn", false);
+        mBasicText.GetComponent<Animator>().SetBool("FadeOut", true);
     }
+
+    private IEnumerator WaitScreen()
+    {
+        yield return new WaitForSeconds(CameraSwitcher.Instance.mCamera.m_DefaultBlend.m_Time);
+        mFadeScreen.SetActive(false);
+        DisplayText(false);
+    }    
+
 }

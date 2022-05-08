@@ -18,7 +18,7 @@ public class Player : Unit
         }
         mAiBuild.type = AIType.Manual;
         mTarget = null;
-        transform.parent = GameObject.Find("Player").gameObject.transform;
+        transform.SetParent(GameObject.Find("Player").gameObject.transform);
     }
 
     protected override void Update()

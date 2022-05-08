@@ -10,6 +10,9 @@ public class TargetAbility : Skill_Setting
     private GameObject mProjectile;
     public bool IsShootType = false;
 
+    [SerializeField]
+    private Vector2 mStartPosition;
+
     public override void Activate(MonoBehaviour parent)
     {
         isActive = false;
@@ -26,7 +29,7 @@ public class TargetAbility : Skill_Setting
         {
             if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.ChangeText_Target("Choose the Target");
+                UIManager.Instance.ChangeText_Skill("Choose the Target");
                 UIManager.Instance.DisplayAskingSkill(true);
                 mTarget = null;
                 while (mTarget == null)
@@ -40,7 +43,7 @@ public class TargetAbility : Skill_Setting
                     }
                     yield return null;
                 }
-                UIManager.Instance.ChangeText_Target("OK? (Y/N)");
+                UIManager.Instance.ChangeText_Skill("OK? (Y/N)");
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -67,12 +70,21 @@ public class TargetAbility : Skill_Setting
 
             if (isActive)
             {
-                mOwner.PlayAnimation("Attack");
+                mOwner.mTarget = mTarget;
                 mOwner.mStatus.mMana -= mManaCost;
                 if (IsShootType && isActive)
                 {
                     Shoot();
                     yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
+                }
+                else if (!IsShootType && isActive)
+                {
+                    mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
+                    yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
+                    yield return new WaitForSeconds(0.5f);
+                    mOwner.PlayAnimation("Skill");
+                    Melee();
+                    yield return new WaitForSeconds(1.0f);
                 }
                 switch (mSkillType)
                 {
@@ -156,10 +168,20 @@ public class TargetAbility : Skill_Setting
 
     private void Shoot()
     {
+        mOwner.PlayAnimation("Skill");
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
         mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * 1.5f, Quaternion.identity);
         mProjectile.transform.LookAt(dir);
         mProjectile.GetComponent<Projectile>().Initialize(mTarget, dir, DamageType.Magical, null);
+    }
+
+    private void Melee()
+    {
+        Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
+        mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
+        mProjectile.transform.position += new Vector3(0.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
+        mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
+        Destroy(mProjectile.gameObject, 1.0f);
     }
 
     private void Raycasting()

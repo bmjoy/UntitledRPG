@@ -16,6 +16,8 @@ public class Skill_DataBase : MonoBehaviour
 
     private void Start()
     {
+        if (mSkillData == null)
+            return;
         mSkill = mSkillData;
         mSkill.mOwner = transform.GetComponent<Unit>();
         mSkill.Initialize(GetComponent<Unit>());
@@ -23,6 +25,8 @@ public class Skill_DataBase : MonoBehaviour
 
     public void Use()
     {
+        if (mSkill == null)
+            return;
         mSkill.isComplete = false;
         mSkill.Activate(this);
     }

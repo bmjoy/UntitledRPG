@@ -39,9 +39,19 @@ public class EnemySpawner : MonoBehaviour
         {
             GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
             newEnemyProwler.transform.position = new Vector3(transform.position.x, 
-                transform.position.y + 2.0f, 
+                transform.position.y + 2.5f, 
                 transform.position.z);
-            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/" + mEnemyList[0].ToString()), newEnemyProwler.transform.position, Quaternion.identity);
+
+            int LeaderCount = 0;
+            for (int i = 0; i < mEnemyList.Count; ++i)
+            {
+                if (mEnemyList[i] == EnemyUnit.None)
+                    LeaderCount++;
+                else
+                    break;
+            }
+
+            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity);
             newModel.transform.parent = newEnemyProwler.transform;
             newEnemyProwler.tag = "EnemyProwler";
             newEnemyProwler.layer = 6;

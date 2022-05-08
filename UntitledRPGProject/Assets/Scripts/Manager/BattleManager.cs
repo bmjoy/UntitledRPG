@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 public class BattleManager : MonoBehaviour
 {
-    enum GameStatus
+    public enum GameStatus
     {
         None,
         Start,
@@ -35,11 +35,11 @@ public class BattleManager : MonoBehaviour
     public Queue<Unit> mOrders = new Queue<Unit>();
     public Vector3 playerCenter = Vector3.zero;
     public Vector3 enemyCenter = Vector3.zero;
+
     private Unit mCurrentUnit = null;
-    public bool isBattle = false;
     private bool isWin = false;
     private bool onReward = false;
-    private GameStatus status = GameStatus.None;
+    public GameStatus status = GameStatus.None;
 
     [SerializeField]
     private float mWaitTime;
@@ -51,7 +51,6 @@ public class BattleManager : MonoBehaviour
 
     public void Initialize()
     {
-        isBattle = true;
         StartCoroutine(Wait());
     }
 
@@ -76,8 +75,6 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        if (!isBattle)
-            return;
         switch (status)
         {
             case GameStatus.None: break;
@@ -90,6 +87,7 @@ public class BattleManager : MonoBehaviour
                 {
                     if (mCurrentUnit)
                         onDequeuingOrderEvent?.Invoke(mCurrentUnit);
+                    mCurrentUnit?.mField.GetComponent<Field>().Picked(false);
                     mCurrentUnit = null;
                     if (mOrders.Count == 0 && mCurrentUnit == null)
                     {
@@ -107,6 +105,7 @@ public class BattleManager : MonoBehaviour
                         mCurrentUnit = mOrders.Dequeue();
                         if (mCurrentUnit.mConditions.isDied)
                         {
+                            mCurrentUnit.mField.GetComponent<Field>().Picked(false);
                             mCurrentUnit = null;
                             return;
                         }
@@ -114,6 +113,7 @@ public class BattleManager : MonoBehaviour
                         {
                             mCurrentUnit.mConditions.isDefend = false;
                             mCurrentUnit.mConditions.isPicked = true;
+                            mCurrentUnit.mField.GetComponent<Field>().Picked(true);
                             onMovingOrderEvent?.Invoke();
                             mCurrentUnit.mOrder = Order.Standby;
                             if (mCurrentUnit.mFlag == Flag.Player)
@@ -136,8 +136,6 @@ public class BattleManager : MonoBehaviour
             case GameStatus.Result:
                 {
                     status = (BattleResult() == true) ? status = GameStatus.Reward : GameStatus.Queue;
-                    if (status == GameStatus.Reward)
-                        UIManager.Instance.mFadeScreen.SetActive(true);
                     break;
                 }
             case GameStatus.Reward:
@@ -154,7 +152,6 @@ public class BattleManager : MonoBehaviour
                 {
                     CameraSwitcher.SwitchCamera();
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
-                    isBattle = false;
                     onReward = false;
                     mCurrentUnit = null;
                     status = GameStatus.None;
@@ -167,9 +164,8 @@ public class BattleManager : MonoBehaviour
     {
         UIManager.Instance.FadeInScreen();
         yield return new WaitForSeconds(0.5f);
-        UIManager.Instance.DisplayAskingSkill(true);
         UIManager.Instance.FadeInWord();
-        UIManager.Instance.ChangeText_Target("Victory! \n\n EXP: " + GameManager.s_TotalExp + "\n\n Gold: " + GameManager.s_TotalGold);
+        UIManager.Instance.ChangeText("Victory! \n\n EXP: " + GameManager.s_TotalExp + "\n\n Gold: " + GameManager.s_TotalGold);
         int shareExp = GameManager.s_TotalExp / GameManager.Instance.mPlayer.mHeroes.Count;
         foreach (var unit in GameManager.Instance.mPlayer.mHeroes)
         {
@@ -180,9 +176,6 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(mWaitTime);
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.FadeOutWord();
-        yield return new WaitForSeconds(0.5f);
-        UIManager.Instance.mSkillUseCheck.SetActive(false);
-        UIManager.Instance.mFadeScreen.SetActive(false);
         GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
         status = GameStatus.Finish;
         yield return null;
@@ -234,16 +227,15 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private bool CheckFieldAvailable(Vector3 pos, ref NavMeshHit navMeshHit)
-    {
-        return NavMesh.SamplePosition(pos, out navMeshHit, 1.0f, 3);
-    }
-
     public void Attack()
     {   
         if (status == GameStatus.WaitForOrder)
         {
-            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical, () => { status = GameStatus.Busy; }));
+            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical, () => 
+            { 
+                status = GameStatus.Busy;
+                mCurrentUnit.mField.GetComponent<Field>().Stop();
+            }));
             UIManager.Instance.DisplayBattleInterface(false);
         }
     }
@@ -253,7 +245,11 @@ public class BattleManager : MonoBehaviour
         if(status == GameStatus.WaitForOrder)
         {
             Debug.Log("Defend");
-            StartCoroutine(mCurrentUnit.DefendAction(() => { status = GameStatus.Busy; }));
+            StartCoroutine(mCurrentUnit.DefendAction(() => 
+            { 
+                status = GameStatus.Busy;
+                mCurrentUnit.mField.GetComponent<Field>().Stop();
+            }));
             UIManager.Instance.DisplayBattleInterface(false);
         }
     }
@@ -262,8 +258,17 @@ public class BattleManager : MonoBehaviour
     {
         if(status == GameStatus.WaitForOrder)
         {
+            if(mCurrentUnit.mSkillDataBase.Skill == null)
+            {
+                Cancel();
+                return;
+            }
             Debug.Log("Magic");
-            StartCoroutine(mCurrentUnit.MagicAction(() => { status = GameStatus.Busy; }));
+            StartCoroutine(mCurrentUnit.MagicAction(() => 
+            { 
+                status = GameStatus.Busy;
+                mCurrentUnit.mField.GetComponent<Field>().Stop();
+            }));
             UIManager.Instance.DisplayBattleInterface(false);
         }
     }
@@ -274,6 +279,7 @@ public class BattleManager : MonoBehaviour
         UIManager.Instance.DisplayBattleInterface(true);
         mCurrentUnit.StopAllCoroutines();
         mCurrentUnit.mTarget = null;
+        mCurrentUnit.mField.GetComponent<Field>().Picked(true);
         Debug.Log("Cancel");
     }
 }
