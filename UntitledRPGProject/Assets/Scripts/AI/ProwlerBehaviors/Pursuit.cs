@@ -17,6 +17,7 @@ public class Pursuit : P_State
     public override void Execute(EnemyProwler agent)
     {
         mTime += Time.deltaTime;
+        agent.mVelocity = agent.mAgent.velocity;
         if (mTime > mMaximumStandbyTime)
             agent.ChangeBehavior("Find");
     }

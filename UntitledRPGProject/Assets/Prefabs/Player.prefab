@@ -69,10 +69,8 @@ MonoBehaviour:
   mOwner: {fileID: 4784066881648165659}
   mHeroes:
   - {fileID: 0}
-  mGroundMask:
-    serializedVersion: 2
-    m_Bits: 8
-  mCamera: {fileID: 0}
+  onBattle: 0
+  mGold: 0
 --- !u!65 &4784066880903253926
 BoxCollider:
   m_ObjectHideFlags: 0

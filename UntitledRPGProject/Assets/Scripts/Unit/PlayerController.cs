@@ -105,7 +105,6 @@ public class PlayerController : MonoBehaviour
     }
 
     private GameObject[] fields;
-    private GameObject[] enemyFields;
 
     private Vector3 mPos;
     public void OnBattleStart()
@@ -118,21 +117,18 @@ public class PlayerController : MonoBehaviour
     private IEnumerator WaitForSpawn()
     {
         fields = GameObject.FindGameObjectsWithTag("PlayerField");
-        enemyFields = GameObject.FindGameObjectsWithTag("EnemyField");
         Vector3 center = BattleManager.Instance.playerCenter;
         for (int i = 0; i < mHeroes.Count; ++i)
         {
             yield return new WaitForSeconds(0.1f);
             mHeroes[i].transform.position = center;
-            mHeroes[i].GetComponent<Unit>().mFieldPos = fields[i].transform.position;
-            mHeroes[i].GetComponent<Unit>().SetPosition(fields[i].transform.position, enemyFields[i].transform.position, ActionEvent.IntroWalk);
+            mHeroes[i].GetComponent<Unit>().mField = fields[i];
+            mHeroes[i].GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.IntroWalk;
             mHeroes[i].gameObject.SetActive(true);
-            mHeroes[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
-            mHeroes[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
 
         onBattle = true;
-        mPos = fields[0].transform.position;
+        mPos = center;
     }
 
     public void OnBattleEnd()

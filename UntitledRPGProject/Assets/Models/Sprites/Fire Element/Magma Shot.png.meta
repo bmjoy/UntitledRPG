@@ -19,12 +19,18 @@ TextureImporter:
     second: Magma Shot_4
   - first:
       213: 4062093978751325065
-    second: Magma Shot_5
+    second: Magma Shot_4
   - first:
       213: -2412689016873878748
     second: Magma Shot_6
   - first:
       213: -7328242990270803165
+    second: Magma Shot_5
+  - first:
+      213: 2027151248422584229
+    second: Magma Shot_6
+  - first:
+      213: -252216095181091677
     second: Magma Shot_7
   externalObjects: {}
   serializedVersion: 11
@@ -70,7 +76,7 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -92,7 +98,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -104,7 +110,19 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -118,12 +136,12 @@ TextureImporter:
       name: Magma Shot_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 231
-        width: 94
-        height: 33
+        x: 15
+        y: 232
+        width: 13
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -139,12 +157,12 @@ TextureImporter:
       name: Magma Shot_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 198
-        width: 94
-        height: 33
+        x: 15
+        y: 199
+        width: 13
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -160,12 +178,12 @@ TextureImporter:
       name: Magma Shot_2
       rect:
         serializedVersion: 2
-        x: 0
+        x: 17
         y: 165
-        width: 94
-        height: 33
+        width: 25
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,12 +199,12 @@ TextureImporter:
       name: Magma Shot_3
       rect:
         serializedVersion: 2
-        x: 0
+        x: 17
         y: 132
-        width: 94
-        height: 33
+        width: 24
+        height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,33 +220,12 @@ TextureImporter:
       name: Magma Shot_4
       rect:
         serializedVersion: 2
-        x: 0
+        x: 23
         y: 99
-        width: 94
-        height: 33
+        width: 18
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cbcb9fe320605b6e0800000000000000
-      internalID: -1822543867485242180
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Magma Shot_5
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 66
-        width: 94
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -241,22 +238,43 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Magma Shot_6
+      name: Magma Shot_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 33
-        width: 94
-        height: 33
+        x: 19
+        y: 66
+        width: 23
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 42bfeb34f18648ed0800000000000000
-      internalID: -2412689016873878748
+      spriteID: 3239929b3d9dc4a90800000000000000
+      internalID: -7328242990270803165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magma Shot_6
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 33
+        width: 26
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5afb734f153e12c10800000000000000
+      internalID: 2027151248422584229
       vertices: []
       indices: 
       edges: []
@@ -265,19 +283,19 @@ TextureImporter:
       name: Magma Shot_7
       rect:
         serializedVersion: 2
-        x: 0
+        x: 15
         y: 0
-        width: 94
-        height: 33
+        width: 24
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3239929b3d9dc4a90800000000000000
-      internalID: -7328242990270803165
+      spriteID: 3ac48183cc2ff7cf0800000000000000
+      internalID: -252216095181091677
       vertices: []
       indices: 
       edges: []

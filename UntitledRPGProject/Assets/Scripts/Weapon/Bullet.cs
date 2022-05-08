@@ -38,15 +38,9 @@ public class Bullet : MonoBehaviour
         {
             mTarget.transform.GetComponent<Rigidbody>().velocity = mTarget.transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             mTarget.TakeDamage(mPower, DamageType.Physical);
-            Debug.Log(mCount);
-            if (mCount >= 3)
-            {
-                int random = Random.Range(1, 2);
-                mAnimator.Play("Burst" + random);
-            }
-            else
-                mAnimator.Play("Burst");
 
+            int random = Random.Range(1, 2);
+            mAnimator.Play((mCount >= 3) ? "Burst" + Random.Range(1, 2) : "Burst");
             isDamaged = true;
             Destroy(this.gameObject, 2.5f);
         }

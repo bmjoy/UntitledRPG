@@ -19,6 +19,12 @@ public class CameraSwitcher : MonoBehaviour
     [SerializeField]
     private CinemachineVirtualCamera mBattleWorldCam;
 
+
+    public CinemachineStateDrivenCamera mCamera;
+    private void Start()
+    {
+        mCamera = this.GetComponent<CinemachineStateDrivenCamera>();
+    }
     private Animator mAnimator;
     private bool isGameWorld = true;
 

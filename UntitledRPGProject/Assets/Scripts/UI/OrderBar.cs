@@ -43,7 +43,6 @@ public class OrderBar : MonoBehaviour
     {
         queueImages.Clear();
         Queue<Unit> unitList = BattleManager.Instance.mOrders;
-        Debug.Log(image.rectTransform.rect.width);
         int i = 0;
         foreach(Unit unit in unitList)
         {
@@ -93,12 +92,7 @@ public class OrderBar : MonoBehaviour
     {
         GameObject obj;
         queueImages.TryGetValue(unit, out obj);
-        if (queueImages.ContainsKey(unit) && unit.mConditions.isDied)
-        {
-            Destroy(obj);
-            queueImages.Remove(unit);
-        }
-        else if (queueImages.ContainsKey(unit))
+        if (queueImages.ContainsKey(unit))
         {
             Destroy(obj);
             queueImages.Remove(unit);
