@@ -35,6 +35,9 @@ public class EnemySpawner : MonoBehaviour
 
     private GameObject CreateNewEnemyProwler()
     {
+        if (mEnemyList.Count == 1 && mEnemyList[0] == EnemyUnit.None)
+            return null;
+
         if (mEnemyList.Count > 0)
         {
             GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
