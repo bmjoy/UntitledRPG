@@ -29,7 +29,7 @@ public class TargetAbility : Skill_Setting
         {
             if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.ChangeText_Skill("Choose the Target");
+                UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForTarget);
                 UIManager.Instance.DisplayAskingSkill(true);
                 mTarget = null;
                 while (mTarget == null)
@@ -43,7 +43,7 @@ public class TargetAbility : Skill_Setting
                     }
                     yield return null;
                 }
-                UIManager.Instance.ChangeText_Skill("OK? (Y/N)");
+                UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForAccpet);
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -85,6 +85,7 @@ public class TargetAbility : Skill_Setting
                     mOwner.PlayAnimation("Skill");
                     Melee();
                     yield return new WaitForSeconds(1.0f);
+                    mOwner.mAiBuild.actionEvent = ActionEvent.BackWalk;
                 }
                 switch (mSkillType)
                 {
@@ -161,6 +162,10 @@ public class TargetAbility : Skill_Setting
             }
             else
                 BattleManager.Instance.Cancel();
+        }
+        if(mOwner.mAiBuild.actionEvent == ActionEvent.BackWalk)
+        {
+            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
         }
         isComplete = true;
         yield return null;

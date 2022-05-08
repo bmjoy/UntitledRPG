@@ -17,6 +17,10 @@ public class UIManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
     }
+    [TextArea]
+    public string mTextForTarget;
+    [TextArea]
+    public string mTextForAccpet;
 
     public Canvas mCanvas;
     public GameObject mBattleUI;

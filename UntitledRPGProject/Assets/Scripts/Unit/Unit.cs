@@ -180,7 +180,7 @@ public class Unit : MonoBehaviour, IUnit
         mConditions.isCancel = false;
         if(mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
         {
-            UIManager.Instance.ChangeText("Choose the Target");
+            UIManager.Instance.ChangeText(UIManager.Instance.mTextForTarget);
             UIManager.Instance.DisplayText(true);
             while (mTarget == null)
             {
@@ -202,7 +202,7 @@ public class Unit : MonoBehaviour, IUnit
                 yield return null;
             }
             UIManager.Instance.DisplayText(false);
-            UIManager.Instance.ChangeText("OK? (Y/N)");
+            UIManager.Instance.ChangeText(UIManager.Instance.mTextForAccpet);
         }
         onComplete?.Invoke();
         if (mConditions.isCancel == false)
