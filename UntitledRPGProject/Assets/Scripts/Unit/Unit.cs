@@ -275,7 +275,7 @@ public class Unit : MonoBehaviour, IUnit
             value = (value - mStatus.mArmor <= 0.0f) ? 1.0f : value - mStatus.mArmor;
         }
         else
-            value = (value - mStatus.mMagic_Resistance <= 0.0f) ? 1.0f : value - mStatus.mMagic_Resistance;
+            value = (value + mStatus.mMagicPower - mStatus.mMagic_Resistance <= 0.0f) ? 1.0f : value + mStatus.mMagicPower - mStatus.mMagic_Resistance;
         mStatus.mHealth -= value;
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
@@ -284,6 +284,7 @@ public class Unit : MonoBehaviour, IUnit
         {
             mConditions.isDied = true;
             mHealthBar.mBorader.GetComponent<Animator>().Play("Death");
+            mLevelText.gameObject.SetActive(false);
             Destroy(mHealthBar.gameObject, 3.0f);
 
             if(mFlag == Flag.Enemy)
