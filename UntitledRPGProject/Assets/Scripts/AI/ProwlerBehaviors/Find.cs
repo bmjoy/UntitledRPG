@@ -20,12 +20,12 @@ public class Find : P_State
             out mNavHit, 3.0f, 3);
         agent.mAgent.SetDestination(mNavHit.position);
         dest = agent.mAgent.destination;
-
     }
 
     public override void Execute(EnemyProwler agent)
     {
         mTime += Time.deltaTime;
+        agent.mVelocity = agent.mAgent.velocity;
         Vector3 dir = (player.transform.position - agent.transform.position).normalized;
         if (Vector3.Dot(dir, agent.transform.position) > Mathf.Cos(agent.mAngle))
         {

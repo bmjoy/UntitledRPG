@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
         mCurrentField.SetActive(false);
         s_ID = 0;
         s_TotalExp = 0;
+        s_TotalGold = 0;
     }
     private void Update()
     {
