@@ -5,6 +5,12 @@ using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
+    enum EnemyUnit
+    {
+        None,
+        Ghoul,
+        Spitter
+    }
     private int ID = 0;
     private bool isInitialized = false;
 
@@ -12,8 +18,7 @@ public class EnemySpawner : MonoBehaviour
     private float mDelaySpawnTime = 1.0f;
 
     [SerializeField]
-    private List<GameObject> mEnemyList = new List<GameObject>();
-    public GameObject mModelPrefab;
+    private List<EnemyUnit> mEnemyList = new List<EnemyUnit>();
 
     [SerializeField]
     private float mRadius = 100.0f;
@@ -36,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
             newEnemyProwler.transform.position = new Vector3(transform.position.x, 
                 transform.position.y + 2.0f, 
                 transform.position.z);
-            GameObject newModel = Instantiate(mModelPrefab, newEnemyProwler.transform.position, Quaternion.identity);
+            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/" + mEnemyList[0].ToString()), newEnemyProwler.transform.position, Quaternion.identity);
             newModel.transform.parent = newEnemyProwler.transform;
             newEnemyProwler.tag = "EnemyProwler";
             newEnemyProwler.layer = 6;
@@ -44,7 +49,9 @@ public class EnemySpawner : MonoBehaviour
 
             for (int i = 0; i < mEnemyList.Count; i++)
             {
-                GameObject obj = Instantiate(mEnemyList[i].gameObject,transform.position, Quaternion.identity);
+                if (mEnemyList[i] == EnemyUnit.None)
+                    continue;
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/"+ mEnemyList[i].ToString() + "_Unit"),transform.position, Quaternion.identity);
                 newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
                 obj.transform.parent = newEnemyProwler.transform;
                 obj.SetActive(false);
@@ -80,6 +87,5 @@ public class EnemySpawner : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(transform.position, new Vector3(1.0f,1.0f,1.0f));
-
     }
 }

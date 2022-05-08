@@ -7,3 +7,9 @@ public enum DamageType
     Physical = 0,
     Magical
 }
+
+public enum AttackType
+{
+    Melee = 0,
+    Range
+}

@@ -24,6 +24,9 @@ public abstract class Skill_Setting : ScriptableObject
 
     public List<GameObject> mBuffs;
     public List<GameObject> mNerfs;
+
+    public UnityAction mAction;
+    
     public abstract void Initialize(Unit owner);
     public abstract void Activate(MonoBehaviour parent);
     public abstract IEnumerator WaitforDecision();

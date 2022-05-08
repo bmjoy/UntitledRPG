@@ -8,10 +8,7 @@ public class TargetAbility : Skill_Setting
 {
     private Unit mTarget;
     private GameObject mProjectile;
-    public GameObject mProjectilePrefab;
     public bool IsShootType = false;
-    public LayerMask mAllyMask;
-    public LayerMask mTargetMask;
 
     public override void Activate(MonoBehaviour parent)
     {
@@ -160,7 +157,7 @@ public class TargetAbility : Skill_Setting
     private void Shoot()
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        mProjectile = Instantiate(mProjectilePrefab, mOwner.transform.position + dir * 1.5f, Quaternion.identity);
+        mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * 1.5f, Quaternion.identity);
         mProjectile.transform.LookAt(dir);
         mProjectile.GetComponent<Projectile>().Initialize(mTarget, dir, DamageType.Magical, null);
     }
@@ -171,30 +168,20 @@ public class TargetAbility : Skill_Setting
         RaycastHit hit;
         if (mProperty == SkillProperty.Friendly)
         {
-            if (Physics.Raycast(ray, out hit, 100, mAllyMask))
+            if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
+                : LayerMask.GetMask("Enemy")))
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    if(hit.transform.GetComponent<Unit>().mConditions.isDied == false)
-                    {
-                        mTarget = hit.transform.GetComponent<Unit>();
-                        Debug.Log(hit.transform.name);
-                    }
-                }
+                if (Input.GetMouseButtonDown(0) && hit.transform.GetComponent<Unit>().mConditions.isDied == false)
+                    mTarget = hit.transform.GetComponent<Unit>();
             }
         }
         else
         {
-            if (Physics.Raycast(ray, out hit, 100, mTargetMask))
+            if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Enemy")
+                : LayerMask.GetMask("Ally")))
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    if (hit.transform.GetComponent<Unit>().mConditions.isDied == false)
-                    {
-                        mTarget = hit.transform.GetComponent<Unit>();
-                        Debug.Log(hit.transform.name);
-                    }
-                }
+                if (Input.GetMouseButtonDown(0) && hit.transform.GetComponent<Unit>().mConditions.isDied == false)
+                    mTarget = hit.transform.GetComponent<Unit>();
             }
         }
         if (mTarget)

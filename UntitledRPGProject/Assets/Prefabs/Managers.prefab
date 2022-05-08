@@ -306,9 +306,6 @@ MonoBehaviour:
   mPlayer: {fileID: 0}
   mEnemyProwler: {fileID: 0}
   mCurrentField: {fileID: 0}
-  EnemyProwlers: []
-  s_TotalExp: 0
-  s_TotalGold: 0
 --- !u!114 &577231422354854071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,6 +991,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac15567639440034d8d2f47eb9945225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ypos: 5
+  mSpriteLocalScale: 0.25
+  mSpeed: 50
+  mMaximumSpeed: 200
 --- !u!1 &577231423257529662
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,10 +1363,10 @@ RectTransform:
   m_Father: {fileID: 577231422753933618}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 500}
+  m_SizeDelta: {x: 152, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2681252530573594060
 CanvasRenderer:
