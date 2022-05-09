@@ -15,14 +15,14 @@ MonoBehaviour:
   Name: Spitter
   Level: 2
   EXP: 20
-  MaxHealth: 8
+  MaxHealth: 15
   MaxMana: 50
   Magic_Resistance: 1
   Attack: 10
   Defend: 1
   MagicPower: 0
   Armor: 5
-  Agility: 7
+  Agility: 4
   Gold: 200
   BasicSprite: {fileID: 8793639957104055765, guid: 0c1c0a0eefdc7bb40b45c3af73616e40, type: 3}
   SFXClips: []
