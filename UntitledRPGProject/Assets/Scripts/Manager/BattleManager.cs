@@ -46,6 +46,7 @@ public class BattleManager : MonoBehaviour
 
     public event Action onEnqueuingOrderEvent;
     public event Action<Unit> onDequeuingOrderEvent;
+    public event Action<Unit> onEnqueuingSingleOrderEvent;
     public event Action onMovingOrderEvent;
     public event Action onFinishOrderEvent;
 
@@ -85,27 +86,18 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameStatus.Queue:
                 {
-                    if (mCurrentUnit)
-                        onDequeuingOrderEvent?.Invoke(mCurrentUnit);
                     mCurrentUnit?.mField.GetComponent<Field>().Picked(false);
                     mCurrentUnit = null;
-                    if (mOrders.Count == 0 && mCurrentUnit == null)
-                    {
-                        for (int i = 0; i < mUnits.Count; i++)
-                        {
-                            if (!mUnits[i].GetComponent<Unit>().mConditions.isDied)
-                                mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
-                        }
-                        onEnqueuingOrderEvent?.Invoke();
-                    }
 
-                    if (mCurrentUnit == null && mOrders.Count != 0)
+                    if (mCurrentUnit == null)
                     {
                         UIManager.Instance.DisplayBattleInterface(false);
                         mCurrentUnit = mOrders.Dequeue();
+
                         if (mCurrentUnit.mConditions.isDied)
                         {
                             mCurrentUnit.mField.GetComponent<Field>().Picked(false);
+                            onDequeuingOrderEvent?.Invoke(mCurrentUnit);
                             mCurrentUnit = null;
                             return;
                         }
@@ -117,12 +109,7 @@ public class BattleManager : MonoBehaviour
                             onMovingOrderEvent?.Invoke();
                             mCurrentUnit.mOrder = Order.Standby;
                             if (mCurrentUnit.mFlag == Flag.Player)
-                            {
                                 UIManager.Instance.DisplayBattleInterface(true);
-                                if (mCurrentUnit.mSkillDataBase != null)
-                                    if (mCurrentUnit.mSkillDataBase.Skill != null)
-                                        UIManager.Instance.ChangeText(mCurrentUnit.mSkillDataBase.Name + ": \n" + mCurrentUnit.mSkillDataBase.Description);
-                            }
                             status = GameStatus.WaitForOrder;
                         }
                     }
@@ -131,7 +118,14 @@ public class BattleManager : MonoBehaviour
             case GameStatus.WaitForOrder:
                 break;
             case GameStatus.Busy:
-                status = (mCurrentUnit.mOrder == Order.TurnEnd) ? GameStatus.Result : GameStatus.Busy;
+                if(mCurrentUnit.mOrder == Order.TurnEnd)
+                {
+                    status = GameStatus.Result;
+                    if (!mCurrentUnit.mConditions.isDied)
+                        mOrders.Enqueue(mCurrentUnit);
+                    onDequeuingOrderEvent?.Invoke(mCurrentUnit);
+                    onEnqueuingSingleOrderEvent?.Invoke(mCurrentUnit);
+                }
                 break;
             case GameStatus.Result:
                 {

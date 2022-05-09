@@ -11,8 +11,7 @@ public class OrderBar : MonoBehaviour
     private Dictionary<Unit, GameObject> queueImages = new Dictionary<Unit, GameObject>();
     private Image image;
 
-    private Vector3 EndPosition = new Vector3(-80.0f, 0.0f);
-    private GameObject key = null;
+    public GameObject key = null;
     private float halfWidth = 0.0f;
     private float partialWidth = 0.0f;
 
@@ -31,7 +30,7 @@ public class OrderBar : MonoBehaviour
 
         halfWidth = image.rectTransform.rect.width / 2.0f;
         partialWidth = image.rectTransform.rect.width / 8.0f;
-
+        BattleManager.Instance.onEnqueuingSingleOrderEvent += EnqueueSignleOrder;
         BattleManager.Instance.onEnqueuingOrderEvent += EnqueueOrder;
         BattleManager.Instance.onMovingOrderEvent += MoveOrder;
         BattleManager.Instance.onDequeuingOrderEvent += DequeueOrder;
@@ -43,17 +42,11 @@ public class OrderBar : MonoBehaviour
     {
         queueImages.Clear();
         Queue<Unit> unitList = BattleManager.Instance.mOrders;
-        int i = 0;
         foreach(Unit unit in unitList)
         {
-            GameObject go = new GameObject("Sprite");
-            go.transform.parent = transform;
-            go.transform.localPosition = new Vector3(0.0f + partialWidth * i, Ypos);
-            go.transform.localScale = new Vector3(mSpriteLocalScale, mSpriteLocalScale, mSpriteLocalScale);
-            go.transform.localRotation = Quaternion.Euler(0, 180, 0);
-            Sprite sprite = go.AddComponent<Image>().sprite = unit.mSetting.BasicSprite;
+            GameObject go = CreateObject();
+            go.AddComponent<Image>().sprite = unit.mSetting.BasicSprite;
             queueImages.Add(unit, go);
-            i++;
         }
     }
 
@@ -65,11 +58,11 @@ public class OrderBar : MonoBehaviour
             {
                 if (unit.Value == key)
                 {
-                    key.transform.localPosition += new Vector3(-mMaximumSpeed * unit.Key.mStatus.mAgility * Time.deltaTime, 0.0f, 0.0f);
+                    key.transform.localPosition += new Vector3(-mMaximumSpeed * Time.deltaTime, 0.0f, 0.0f);
                     continue;
                 }
                 if(unit.Value.transform.localPosition.x > -halfWidth + partialWidth)
-                    unit.Value.transform.localPosition += new Vector3(-mSpeed * unit.Key.mStatus.mAgility * Time.deltaTime, 0.0f, 0.0f);
+                    unit.Value.transform.localPosition += new Vector3(-mSpeed * Time.deltaTime, 0.0f, 0.0f);
             }
             if (key.transform.localPosition.x <= -halfWidth)
                 key = null;
@@ -86,6 +79,27 @@ public class OrderBar : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void EnqueueSignleOrder(Unit unit)
+    {
+        if(queueImages.ContainsKey(unit))
+            return;
+
+        GameObject go = CreateObject();
+        go.AddComponent<Image>().sprite = unit.mSetting.BasicSprite;
+        queueImages.Add(unit, go);
+        key = null;
+    }
+
+    private GameObject CreateObject()
+    {
+        GameObject go = new GameObject("Sprite");
+        go.transform.parent = transform;
+        go.transform.localPosition = new Vector3(halfWidth, Ypos);
+        go.transform.localScale = new Vector3(mSpriteLocalScale, mSpriteLocalScale, mSpriteLocalScale);
+        go.transform.localRotation = Quaternion.Euler(0, 180, 0);
+        return go;
     }
 
     public void DequeueOrder(Unit unit)
