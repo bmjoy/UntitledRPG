@@ -16,7 +16,7 @@ MonoBehaviour:
   mName: HellFire
   mDescription: Fire
   mManaCost: 5
-  mValue: 100
+  mValue: 5
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
