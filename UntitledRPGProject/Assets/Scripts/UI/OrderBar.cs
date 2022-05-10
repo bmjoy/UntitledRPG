@@ -24,7 +24,7 @@ public class OrderBar : MonoBehaviour
     [SerializeField]
     private float mMaximumSpeed = 200.0f;
 
-    void Start()
+    public void Initialize()
     {
         image = transform.GetComponent<Image>();
 
@@ -85,7 +85,6 @@ public class OrderBar : MonoBehaviour
     {
         if(queueImages.ContainsKey(unit))
             return;
-
         GameObject go = CreateObject();
         go.AddComponent<Image>().sprite = unit.mSetting.BasicSprite;
         queueImages.Add(unit, go);
@@ -95,7 +94,7 @@ public class OrderBar : MonoBehaviour
     private GameObject CreateObject()
     {
         GameObject go = new GameObject("Sprite");
-        go.transform.parent = transform;
+        go.transform.parent = UIManager.Instance.mOrderbar.transform;
         go.transform.localPosition = new Vector3(halfWidth, Ypos);
         go.transform.localScale = new Vector3(mSpriteLocalScale, mSpriteLocalScale, mSpriteLocalScale);
         go.transform.localRotation = Quaternion.Euler(0, 180, 0);

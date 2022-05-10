@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour
     }
     private int ID = 0;
     private bool isInitialized = false;
+    private EnemyProwler prowler;
 
     [SerializeField]
     private float mDelaySpawnTime = 1.0f;
@@ -71,6 +72,7 @@ public class EnemySpawner : MonoBehaviour
             }
 
             newEnemyProwler.GetComponent<EnemyProwler>().Initialize();
+            prowler = newEnemyProwler.GetComponent<EnemyProwler>();
             return newEnemyProwler;
         }
         else
@@ -93,6 +95,9 @@ public class EnemySpawner : MonoBehaviour
     public void ResetSpawn()
     {
         isInitialized = false;
+
+        if(prowler != null)
+            Destroy(prowler.gameObject);
         StartSpawn();
     }
 

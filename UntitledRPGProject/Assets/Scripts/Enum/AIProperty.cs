@@ -41,6 +41,7 @@ public struct Status
     public float mMaxHealth;
     public float mHealth;
     public float mMana;
+    public float mMaxMana;
     public float mDamage;
     public float mArmor;
     public float mMagic_Resistance;
@@ -48,7 +49,7 @@ public struct Status
     public float mAgility;
     public float mMagicPower;
 
-    public Status(int level, int exp, int gold, float maxHp, float hp, float mana, float dmg, float am, float mr, float de, float ag, float mp)
+    public Status(int level, int exp, int gold, float maxHp, float hp, float mana, float maxMp, float dmg, float am, float mr, float de, float ag, float mp)
     {
         mLevel = level;
         mEXP = exp;
@@ -56,6 +57,7 @@ public struct Status
         mMaxHealth = maxHp;
         mHealth = hp;
         mMana = mana;
+        mMaxMana = maxMp;
         mDamage = dmg;
         mArmor = am;
         mMagic_Resistance = mr;
