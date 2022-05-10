@@ -23,6 +23,7 @@ public class Unit : MonoBehaviour, IUnit
     public float mWaitingTimeForBattle = 0.75f;
     public Unit_Setting Unit_Setting => mSetting;
     public Skill_DataBase mSkillDataBase;
+    public SpriteRenderer mSpriteRenderer;
 
     private BuffAndNerfEntity mBuffNerfController;
 
@@ -52,12 +53,16 @@ public class Unit : MonoBehaviour, IUnit
 
     public void Componenet_Initialize()
     {
-        mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
-    mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
-        mConditions = new Conditions(false, false, false, false, false);
+        if(!GameManager.Instance.mUnitData.ContainsKey(mSetting.Name))
+        {
+            mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
+mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
+            mConditions = new Conditions(false, false, false, false, false);
+        }
 
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
+        mSpriteRenderer = GetComponent<SpriteRenderer>();
         mRigidbody.velocity = Vector3.zero;
         mBuffNerfController = GetComponent<BuffAndNerfEntity>();
         if (GetComponent<Skill_DataBase>())
@@ -83,10 +88,11 @@ public class Unit : MonoBehaviour, IUnit
         source.transform.SetParent(transform);
 
         mHealthBar = source.transform.Find("Borader").Find("HealthBarPrefab").GetComponent<HealthBar>();
-        mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth, mStatus.mMana, mStatus.mMana);
+        mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth, mStatus.mMana, mStatus.mMaxMana);
 
         mLevelText = source.transform.Find("Borader").Find("Text").GetComponent<TextMeshProUGUI>();
         mLevelText.text = mStatus.mLevel.ToString();
+        mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.Active(false);
     }
 
@@ -110,75 +116,78 @@ public class Unit : MonoBehaviour, IUnit
             return;
         else
             mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
+
         mHealthBar.mCurrentMana = mStatus.mMana;
-        if (transform.position.y <= -50.0f)
-            transform.position = new Vector3(mField.transform.position.x, mField.transform.position.y + 5.0f, mField.transform.position.z);
-        
+
         switch (mAiBuild.actionEvent)
         {
             case ActionEvent.None:
                 {
-                    mRigidbody.velocity = Vector3.zero;
-                    mRigidbody.angularVelocity = Vector3.zero;
-                    if(mAiBuild.type == AIType.Auto)
+                    ZeroVelocity();
+                    if (mAiBuild.type == AIType.Auto)
                         mAiBuild.stateMachine.ActivateState();
+                    if(Vector3.Distance(transform.position, mField.transform.position) > 0.2f)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, mField.transform.position, Time.deltaTime * 7.0f);
+                        mAnimator.SetFloat("Speed", 1.0f);
+                    }
                     mAnimator.SetFloat("Speed", 0.0f);
                 }
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mField.transform.position) < 0.1f)) ? ActionEvent.None : ActionEvent.IntroWalk;
-                    if(mAiBuild.actionEvent == ActionEvent.None)
+                    mAiBuild.actionEvent = Run(mField.transform.position, 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
+                    if (mAiBuild.actionEvent == ActionEvent.None)
                         mHealthBar.Active(true);
-                    transform.position = Vector3.MoveTowards(transform.position, mField.transform.position, Time.deltaTime * 7.0f);
 
                     var q = Quaternion.LookRotation(Vector3.Normalize(mTargetPos - transform.position), Vector3.up);
                     q.x = q.z = 0.0f;
                     transform.rotation = q;
-                    mAnimator.SetFloat("Speed", 1.0f);
                 }
                 break;
             case ActionEvent.AttackWalk:
-                {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mTarget.transform.position) < mAttackDistance)) ? ActionEvent.Busy : ActionEvent.AttackWalk;
-                    transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, Time.deltaTime * 7.0f);
-                    mAnimator.SetFloat("Speed", 1.0f);
-                }
+                mAiBuild.actionEvent = Run(mTarget.transform.position, mAttackDistance, ActionEvent.Busy, ActionEvent.AttackWalk);
                 break;
             case ActionEvent.MagicWalk:
-                {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mTarget.transform.position) < mMagicDistance)) ? ActionEvent.Busy : ActionEvent.MagicWalk;
-                    transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, Time.deltaTime * 7.0f);
-                    mAnimator.SetFloat("Speed", 1.0f);
-                }
+                mAiBuild.actionEvent = Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk);
                 break;
             case ActionEvent.BackWalk:
-                {
-                    mAiBuild.actionEvent = ((Vector3.Distance(transform.position, mField.transform.position) < 0.1f)) ? ActionEvent.Busy : ActionEvent.BackWalk;
-                    transform.position = Vector3.MoveTowards(transform.position, mField.transform.position, Time.deltaTime * 7.0f);
-                    mAnimator.SetFloat("Speed", (mAiBuild.actionEvent == ActionEvent.BackWalk) ? 1.0f : 0.0f);
-                }
+                mAiBuild.actionEvent = Run(mField.transform.position, 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
                 break;
             case ActionEvent.Busy:
                 {
-                    mRigidbody.velocity = Vector3.zero;
-                    mRigidbody.angularVelocity = Vector3.zero;
+                    ZeroVelocity();
                     mAnimator.SetFloat("Speed", 0.0f);
                 }
                 break;
         }
+        CheckGround();
+    }
+
+    private ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * 7.0f);
+        mAnimator.SetFloat("Speed", 1.0f);
+        return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
+    }
+
+    private void CheckGround()
+    {
+        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
         if (isGrounded && mVelocity.y <= 0.0f)
             mVelocity.y = -GetComponent<BoxCollider>().size.y + 0.2f;
 
         mVelocity.y += -9.8f * Time.deltaTime;
         mRigidbody.AddForce(mVelocity * Time.deltaTime);
+        if (transform.position.y <= -50.0f)
+            transform.position = new Vector3(mField.transform.position.x, mField.transform.position.y + 5.0f, mField.transform.position.z);
     }
 
     virtual public IEnumerator AttackAction(DamageType type, Action onComplete)
     {
         mConditions.isCancel = false;
-        if(mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
+        
+        if (mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
         {
             UIManager.Instance.ChangeText(UIManager.Instance.mTextForTarget);
             UIManager.Instance.DisplayText(true);
@@ -204,10 +213,15 @@ public class Unit : MonoBehaviour, IUnit
             UIManager.Instance.DisplayText(false);
             UIManager.Instance.ChangeText(UIManager.Instance.mTextForAccpet);
         }
-        onComplete?.Invoke();
+
         if (mConditions.isCancel == false)
         {
-            if(mType == AttackType.Melee)
+            if (transform.position.z < mTarget.transform.position.z)
+                mSpriteRenderer.sortingOrder = 3;
+            else
+                mTarget.mSpriteRenderer.sortingOrder = 3;
+            onComplete?.Invoke();
+            if (mType == AttackType.Melee)
             {
                 mAiBuild.actionEvent = ActionEvent.AttackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
@@ -254,7 +268,6 @@ public class Unit : MonoBehaviour, IUnit
         {
             yield return new WaitForSeconds(mWaitingTimeForBattle);
             TurnEnded();
-            Debug.Log("Turn End!");
         }
 
     }
@@ -285,10 +298,10 @@ public class Unit : MonoBehaviour, IUnit
             mConditions.isDied = true;
             mHealthBar.mBorader.GetComponent<Animator>().Play("Death");
             mLevelText.gameObject.SetActive(false);
-            Destroy(mHealthBar.gameObject, 3.0f);
 
             if(mFlag == Flag.Enemy)
             {
+                Destroy(mHealthBar.gameObject, 3.0f);
                 GameManager.s_TotalExp += mStatus.mEXP;
                 GameManager.s_TotalGold += mStatus.mGold;
                 // TODO: Item;
@@ -310,6 +323,8 @@ public class Unit : MonoBehaviour, IUnit
     {
         mConditions.isPicked = false;
         mAiBuild.actionEvent = ActionEvent.None;
+        if(mTarget != null)
+            mSpriteRenderer.sortingOrder = mTarget.mSpriteRenderer.sortingOrder = 4;
         mTarget = null;
         mOrder = Order.TurnEnd;
     }
@@ -328,11 +343,21 @@ public class Unit : MonoBehaviour, IUnit
         mBuffNerfController.AddNerf(nerf);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void ZeroVelocity()
     {
         mRigidbody.velocity = Vector3.zero;
         mRigidbody.angularVelocity = Vector3.zero;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        ZeroVelocity();
+    }
 
+    virtual public void ResetUnit()
+    {
+        mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana,mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
+mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
+        mConditions = new Conditions(false, false, false, false, false);
+    }
 }

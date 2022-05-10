@@ -53,9 +53,9 @@ public class HealthBar : MonoBehaviour
 
     public void Active(bool active)
     {
-        mBorader.gameObject.SetActive(active);
-        mBar.gameObject.SetActive(active);
-        mManaBar.gameObject.SetActive(active);
+        mBorader.gameObject?.SetActive(active);
+        mBar.gameObject?.SetActive(active);
+        mManaBar.gameObject?.SetActive(active);
     }
 
     private void OnDestroy()

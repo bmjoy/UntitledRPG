@@ -185,6 +185,7 @@ public class TargetAbility : Skill_Setting
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
         mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
         mProjectile.transform.position += new Vector3(0.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
+        mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.mSpriteRenderer.sortingOrder;
         mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
         Destroy(mProjectile.gameObject, 1.0f);
     }

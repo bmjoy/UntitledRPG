@@ -5,18 +5,27 @@ using System.Linq;
 
 public class Standby : State
 {
+    private bool isFinished = false;
     private int randomNumber;
     public override void Enter(Unit agent)
     {
         List<GameObject> list = new List<GameObject>();
         list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
             : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
+        if (list.Count == 0)
+        {
+            isFinished = true;
+            return;
+        }
         agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
         randomNumber = -1;
     }
 
     public override void Execute(Unit agent)
     {
+        if (isFinished)
+            return;
+
         if(agent.mConditions.isPicked && !isAct)
         {
             isAct = true;

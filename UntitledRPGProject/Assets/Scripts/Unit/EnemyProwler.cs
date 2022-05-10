@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class EnemyProwler : MonoBehaviour
     public float mOriginalSpeed = 0.0f;
     public List<GameObject> mEnemySpawnGroup;
 
+    public bool isWin = false;
+
     public void Setup(float rad, float ang, int _id, GameObject model)
     {
         mRadius = rad;
@@ -35,6 +38,7 @@ public class EnemyProwler : MonoBehaviour
     {
         GameManager.Instance.onBattle += EnemySpawn;
         GameManager.Instance.onEnemyDeath += DestoryEnemy;
+        GameManager.Instance.onEnemyWin += Win;
         mCollider = gameObject.AddComponent<BoxCollider>();
         mAgent = gameObject.AddComponent<NavMeshAgent>();
         mCollider.isTrigger = true;
@@ -81,15 +85,45 @@ public class EnemyProwler : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitForSpawn()
+    public void Win(int id, Action onAction = null)
     {
-        GameObject[] fields = GameObject.FindGameObjectsWithTag("EnemyField");
-        Vector3 center = BattleManager.Instance.enemyCenter;
+        if(id == this.id)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
+            {
+                if (mEnemySpawnGroup[i].GetComponent<Enemy>().mConditions.isDied)
+                {
+                    Destroy(mEnemySpawnGroup[i], 3.0f);
+                    continue;
+                }    
+                list.Add(mEnemySpawnGroup[i]);
+            }
+
+            mEnemySpawnGroup.Clear();
+            mEnemySpawnGroup = new List<GameObject>(list);
+
+            for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
+            {
+                mEnemySpawnGroup[i].transform.position = transform.position;
+                mEnemySpawnGroup[i].GetComponent<Unit>().DisableUI();
+                mEnemySpawnGroup[i].gameObject.SetActive(false);
+            }
+        }
+        onBattle = false;
+        mModel.SetActive(true);
+        ChangeBehavior("Idle");
+        onAction?.Invoke();
+    }
+
+    private IEnumerator WaitForSpawn()
+    { 
         for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
         {
             yield return new WaitForSeconds(0.1f);
-            mEnemySpawnGroup[i].transform.position = new Vector3(center.x, center.y + mEnemySpawnGroup[i].GetComponent<BoxCollider>().size.y, center.z);
-            mEnemySpawnGroup[i].GetComponent<Unit>().mField = fields[i];
+            mEnemySpawnGroup[i].transform.position = BattleManager.Instance.enemyCenter;
+            mEnemySpawnGroup[i].GetComponent<Unit>().mField = BattleManager.enemyFieldParent.GetChild(i).gameObject;
             mEnemySpawnGroup[i].gameObject.SetActive(true);
         }
         onBattle = true;
@@ -110,5 +144,6 @@ public class EnemyProwler : MonoBehaviour
     {
         GameManager.Instance.onBattle -= EnemySpawn;
         GameManager.Instance.onEnemyDeath -= DestoryEnemy;
+        GameManager.Instance.onEnemyWin -= Win;
     }
 }

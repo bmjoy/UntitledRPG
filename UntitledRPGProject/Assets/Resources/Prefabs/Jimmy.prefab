@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7617708971306897899}
   m_Layer: 7
   m_Name: Jimmy
-  m_TagString: Player
+  m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,6 +110,7 @@ MonoBehaviour:
   mSetting: {fileID: 11400000, guid: 7190519438ef42e40aca8bc2e020abc0, type: 2}
   mWaitingTimeForBattle: 0.75
   mSkillDataBase: {fileID: 0}
+  mSpriteRenderer: {fileID: 0}
   mAttackDistance: 2
   mMagicDistance: 4.5
 --- !u!114 &7617708971306897896
@@ -124,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683a73d42a0e517499238e0bd2754fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mSkillData: {fileID: 0}
+  mSkillData: {fileID: 11400000, guid: a76a7254945fe8742a40908d46c89a90, type: 2}
 --- !u!114 &7617708971306897898
 MonoBehaviour:
   m_ObjectHideFlags: 0

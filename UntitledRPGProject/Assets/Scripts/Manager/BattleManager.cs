@@ -23,7 +23,6 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance { get { return mInstance; } }
     private void Awake()
     {
-        Debug.Log("Hi BattleManager");
         if (mInstance != null && mInstance != this)
             Destroy(gameObject);
         else
@@ -36,7 +35,7 @@ public class BattleManager : MonoBehaviour
     public Vector3 playerCenter = Vector3.zero;
     public Vector3 enemyCenter = Vector3.zero;
 
-    private Unit mCurrentUnit = null;
+    public Unit mCurrentUnit = null;
     private bool isWin = false;
     private bool onReward = false;
     public GameStatus status = GameStatus.None;
@@ -110,6 +109,12 @@ public class BattleManager : MonoBehaviour
                             mCurrentUnit.mOrder = Order.Standby;
                             if (mCurrentUnit.mFlag == Flag.Player)
                                 UIManager.Instance.DisplayBattleInterface(true);
+                            if (mCurrentUnit.mSkillDataBase != null)
+                            {
+                                var data = mCurrentUnit.mSkillDataBase;
+                                UIManager.Instance.ChangeHoverTip((data.Skill) ?  "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty");
+                            }
+
                             status = GameStatus.WaitForOrder;
                         }
                     }
@@ -134,11 +139,16 @@ public class BattleManager : MonoBehaviour
                 }
             case GameStatus.Reward:
                 {
-                    if(onReward == false)
+                    if(onReward == false && isWin)
                     {
                         onFinishOrderEvent?.Invoke();
                         StartCoroutine(RewardTime());
                         onReward = true;
+                    }
+                    if (!isWin)
+                    {
+                        status = GameStatus.Finish;
+                        UIManager.Instance.BattleEnd();
                     }
                 }
                 break;
@@ -161,12 +171,11 @@ public class BattleManager : MonoBehaviour
         UIManager.Instance.FadeInWord();
         UIManager.Instance.ChangeText("Victory! \n\n EXP: " + GameManager.s_TotalExp + "\n\n Gold: " + GameManager.s_TotalGold);
         int shareExp = GameManager.s_TotalExp / GameManager.Instance.mPlayer.mHeroes.Count;
+        
         foreach (var unit in GameManager.Instance.mPlayer.mHeroes)
-        {
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
-        }
-        GameManager.Instance.mPlayer.mGold += GameManager.s_TotalGold;
 
+        GameManager.Instance.mPlayer.mGold += GameManager.s_TotalGold;
         yield return new WaitForSeconds(mWaitTime);
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.FadeOutWord();
@@ -199,14 +208,15 @@ public class BattleManager : MonoBehaviour
 
         GameManager.Instance.mCurrentField.transform.localPosition = point;
         AdjustBattleField();
-        CameraSwitcher.UpdateCamera(GameManager.Instance.mCurrentField.transform);
-        GameManager.Instance.mCurrentField.SetActive(true);
     }
+
+    public static Transform playerFieldParent;
+    public static Transform enemyFieldParent;
 
     public void AdjustBattleField()
     {
-        Transform playerFieldParent = GameManager.Instance.mCurrentField.transform.Find("PlayerFields");
-        Transform enemyFieldParent = GameManager.Instance.mCurrentField.transform.Find("EnemyFields");
+        playerFieldParent = GameManager.Instance.mCurrentField.transform.Find("PlayerFields");
+        enemyFieldParent = GameManager.Instance.mCurrentField.transform.Find("EnemyFields");
 
         playerCenter = playerFieldParent.position;
         enemyCenter = enemyFieldParent.position;
@@ -219,18 +229,17 @@ public class BattleManager : MonoBehaviour
         {
             enemyField.GetComponent<Field>().Initialize();
         }
+
+        CameraSwitcher.UpdateCamera(GameManager.Instance.mCurrentField.transform);
+        GameManager.Instance.mCurrentField.SetActive(true);
     }
 
     public void Attack()
-    {   
+    {
         if (status == GameStatus.WaitForOrder)
         {
-            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical, () => 
-            { 
-                status = GameStatus.Busy;
-                mCurrentUnit.mField.GetComponent<Field>().Stop();
-            }));
             UIManager.Instance.DisplayBattleInterface(false);
+            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical, () => EndAction()));
         }
     }
 
@@ -238,13 +247,8 @@ public class BattleManager : MonoBehaviour
     {
         if(status == GameStatus.WaitForOrder)
         {
-            Debug.Log("Defend");
-            StartCoroutine(mCurrentUnit.DefendAction(() => 
-            { 
-                status = GameStatus.Busy;
-                mCurrentUnit.mField.GetComponent<Field>().Stop();
-            }));
             UIManager.Instance.DisplayBattleInterface(false);
+            StartCoroutine(mCurrentUnit.DefendAction(() => EndAction()));
         }
     }
 
@@ -257,14 +261,15 @@ public class BattleManager : MonoBehaviour
                 Cancel();
                 return;
             }
-            Debug.Log("Magic");
-            StartCoroutine(mCurrentUnit.MagicAction(() => 
-            { 
-                status = GameStatus.Busy;
-                mCurrentUnit.mField.GetComponent<Field>().Stop();
-            }));
             UIManager.Instance.DisplayBattleInterface(false);
+            StartCoroutine(mCurrentUnit.MagicAction(() => EndAction()));
         }
+    }
+
+    private void EndAction()
+    {
+        status = GameStatus.Busy;
+        mCurrentUnit.mField.GetComponent<Field>().Stop();
     }
 
     public void Cancel()
@@ -274,6 +279,5 @@ public class BattleManager : MonoBehaviour
         mCurrentUnit.StopAllCoroutines();
         mCurrentUnit.mTarget = null;
         mCurrentUnit.mField.GetComponent<Field>().Picked(true);
-        Debug.Log("Cancel");
     }
 }

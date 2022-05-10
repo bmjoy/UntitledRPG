@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get { return mInstance; } }
     private void Awake()
     {
-        Debug.Log("Hi UIManager");
         if (mInstance != null && mInstance != this)
             Destroy(gameObject);
         else
@@ -21,6 +20,8 @@ public class UIManager : MonoBehaviour
     public string mTextForTarget;
     [TextArea]
     public string mTextForAccpet;
+    [TextArea]
+    public string mTextForGameOver = "Wasted!";
 
     public Canvas mCanvas;
     public GameObject mBattleUI;
@@ -35,6 +36,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         mCanvas = transform.Find("Canvas").GetComponent<Canvas>();
+        mOrderbar.GetComponent<OrderBar>().Initialize();
         BattleManager.Instance.onEnqueuingOrderEvent += BattleStart;
         BattleManager.Instance.onFinishOrderEvent += BattleEnd;
         mFadeScreen.SetActive(false);
@@ -45,12 +47,12 @@ public class UIManager : MonoBehaviour
 
     public void BattleStart()
     {
-        if(mOrderbar.gameObject.activeInHierarchy == false)
-            mOrderbar.gameObject.SetActive(true);
+        mOrderbar.gameObject.SetActive(true);
     }
 
     public void BattleEnd()
     {
+        mOrderbar.GetComponent<OrderBar>().Clear();
         mOrderbar.gameObject.SetActive(false);
     }
 

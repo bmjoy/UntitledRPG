@@ -10,6 +10,8 @@ TagManager:
   - EnemyProwler
   - EnemySpawner
   - Camera
+  - PlayerUnit
+  - PlayerSpawner
   layers:
   - Default
   - TransparentFX
