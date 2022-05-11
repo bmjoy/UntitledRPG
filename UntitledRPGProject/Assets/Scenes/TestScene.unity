@@ -5209,5 +5209,25 @@ PrefabInstance:
       propertyPath: mTextForTarget
       value: Choose the Target
       objectReference: {fileID: 0}
+    - target: {fileID: 6929830116237585296, guid: 7151dec9da6d13e46aa346dfb520b2f7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 7.6723
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929830116237585296, guid: 7151dec9da6d13e46aa346dfb520b2f7, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929830116237585303, guid: 7151dec9da6d13e46aa346dfb520b2f7, type: 3}
+      propertyPath: Ypos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929830116237585303, guid: 7151dec9da6d13e46aa346dfb520b2f7, type: 3}
+      propertyPath: mSpeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929830116237585303, guid: 7151dec9da6d13e46aa346dfb520b2f7, type: 3}
+      propertyPath: mMaximumSpeed
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7151dec9da6d13e46aa346dfb520b2f7, type: 3}
