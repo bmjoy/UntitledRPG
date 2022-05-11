@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class TimedBuff
 {
-    protected float mTurn;
+    protected int mTurn;
+    protected int mStack;
     public bool isActive = false;
     public Buff Buff { get; }
     protected readonly Unit mOwner;
@@ -29,6 +30,7 @@ public abstract class TimedBuff
         if (Buff.IsEffectFinished || mTurn <= 0)
         {
             Apply();
+            mStack++;
         }
 
         if (Buff.IsTurnFinished || mTurn <= 0)

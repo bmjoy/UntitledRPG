@@ -97,39 +97,29 @@ public class TargetAbility : Skill_Setting
                     case SkillType.AttackBuff:
                         {
                             mTarget.TakeDamage(mValue, DamageType.Magical);
+                            mTarget.SetBuff(mBuff.Initialize(mOwner));
                         }
                         break;
                     case SkillType.AttackNerf:
                         {
                             mTarget.TakeDamage(mValue, DamageType.Magical);
+                            mTarget.SetNerf(mNerf.Initialize(mTarget));
                         }
                         break;
                     case SkillType.Buff:
                         {
-                            foreach (GameObject buff in mBuffs)
-                            {
-                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                            }
+                            mOwner.SetBuff(mBuff.Initialize(mTarget));
                         }
                         break;
                     case SkillType.BuffNerf:
                         {
-                            foreach (GameObject buff in mBuffs)
-                            {
-                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                            }
-                            foreach (GameObject nerf in mNerfs)
-                            {
-                                mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
-                            }
+                            mOwner.SetBuff(mBuff.Initialize(mTarget));
+                            mOwner.SetNerf(mNerf.Initialize(mTarget));
                         }
                         break;
                     case SkillType.Nerf:
                         {
-                            foreach (GameObject nerf in mNerfs)
-                            {
-                                mTarget.SetNerf(nerf.GetComponent<TimedNerf>());
-                            }
+                            mOwner.SetNerf(mNerf.Initialize(mTarget));
                         }
                         break;
                     case SkillType.Heal:
@@ -140,20 +130,14 @@ public class TargetAbility : Skill_Setting
                     case SkillType.HealBuff:
                         {
                             mTarget.TakeRecover(mValue);
-                            foreach (GameObject buff in mBuffs)
-                            {
-                                mTarget.SetBuff(buff.GetComponent<TimedBuff>());
-                            }
+                            mTarget.SetBuff(mBuff.Initialize(mTarget));
                             break;
                         }
 
                     case SkillType.HealNerf:
                         {
                             mTarget.TakeRecover(mValue);
-                            foreach (GameObject nerf in mNerfs)
-                            {
-                                mTarget?.SetNerf(nerf.GetComponent<TimedNerf>());
-                            }
+                            mTarget.SetNerf(mNerf.Initialize(mTarget));
                             break;
                         }
                     case SkillType.Summon:

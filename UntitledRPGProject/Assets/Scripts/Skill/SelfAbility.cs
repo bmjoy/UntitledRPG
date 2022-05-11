@@ -55,40 +55,29 @@ public class SelfAbility : Skill_Setting
                     case SkillType.AttackBuff:
                         {
                             mOwner.TakeDamage(mValue, DamageType.Magical);
-
+                            mOwner.SetBuff(mBuff.Initialize(mOwner));
                         }
                         break;
                     case SkillType.AttackNerf:
                         {
                             mOwner.TakeDamage(mValue, DamageType.Magical);
+                            mOwner.SetNerf(mNerf.Initialize(mOwner));
                         }
                         break;
                     case SkillType.Buff:
                         {
-                            foreach (GameObject buff in mBuffs)
-                            {
-                                mOwner.SetBuff(buff.GetComponent<TimedBuff>());
-                            }
+                            mOwner.SetBuff(mBuff.Initialize(mOwner));
                         }
                         break;
                     case SkillType.BuffNerf:
                         {
-                            foreach (GameObject buff in mBuffs)
-                            {
-                                mOwner.SetBuff(buff.GetComponent<TimedBuff>());
-                            }
-                            foreach (GameObject nerf in mNerfs)
-                            {
-                                mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
-                            }
+                            mOwner.SetBuff(mBuff.Initialize(mOwner));
+                            mOwner.SetNerf(mNerf.Initialize(mOwner));
                         }
                         break;
                     case SkillType.Nerf:
                         {
-                            foreach (GameObject nerf in mNerfs)
-                            {
-                                mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
-                            }
+                            mOwner.SetNerf(mNerf.Initialize(mOwner));
                         }
                         break;
                     case SkillType.Heal:
@@ -99,20 +88,14 @@ public class SelfAbility : Skill_Setting
                     case SkillType.HealBuff:
                         {
                             mOwner.TakeRecover(mValue);
-                            foreach (GameObject buff in mBuffs)
-                            {
-                                mOwner.SetBuff(buff.GetComponent<TimedBuff>());
-                            }
+                            mOwner.SetBuff(mBuff.Initialize(mOwner));
                             break;
                         }
 
                     case SkillType.HealNerf:
                         {
                             mOwner.TakeRecover(mValue);
-                            foreach (GameObject nerf in mNerfs)
-                            {
-                                mOwner.SetNerf(nerf.GetComponent<TimedNerf>());
-                            }
+                            mOwner.SetNerf(mNerf.Initialize(mOwner));
                             break;
                         }
                     case SkillType.Summon:

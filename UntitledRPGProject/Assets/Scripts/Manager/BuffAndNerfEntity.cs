@@ -33,6 +33,33 @@ public class BuffAndNerfEntity : MonoBehaviour
         }
     }
 
+    public void Stop()
+    {
+        if (mBuff.Count > 0)
+        {
+            foreach (var buff in mBuff.Values.ToList())
+            {
+                buff.End();
+                if (buff.isActive == false)
+                {
+                    mBuff.Remove(buff.Buff);
+                }
+            }
+        }
+
+        if (mNerf.Count > 0)
+        {
+            foreach (var nerf in mNerf.Values.ToList())
+            {
+                nerf.End();
+                if (nerf.isActive == false)
+                {
+                    mNerf.Remove(nerf.Nerf);
+                }
+            }
+        }
+    }
+
     public void AddBuff(TimedBuff buff)
     {
         if(mBuff.ContainsKey(buff.Buff))
@@ -55,7 +82,9 @@ public class BuffAndNerfEntity : MonoBehaviour
         else
         {
             mNerf.Add(nerf.Nerf, nerf);
+            nerf.isActive = true;
             nerf.Activate();
         }
+
     }
 }

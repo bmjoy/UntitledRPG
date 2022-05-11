@@ -64,7 +64,11 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
         mRigidbody = GetComponent<Rigidbody>();
         mSpriteRenderer = GetComponent<SpriteRenderer>();
         mRigidbody.velocity = Vector3.zero;
-        mBuffNerfController = GetComponent<BuffAndNerfEntity>();
+        if(GetComponent<BuffAndNerfEntity>() != null)
+           mBuffNerfController = GetComponent<BuffAndNerfEntity>();
+        else
+            mBuffNerfController = gameObject.AddComponent<BuffAndNerfEntity>();
+
         if (GetComponent<Skill_DataBase>())
             mSkillDataBase = GetComponent<Skill_DataBase>();
     }
@@ -309,6 +313,8 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
             mAnimator.SetBool("Death",true);
             GetComponent<BoxCollider>().enabled = false;
             UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
+            mBuffNerfController.Stop();
+            mField.GetComponent<Field>().Picked(false);
         }
         mAnimator.SetTrigger("Hit");
     }
@@ -341,6 +347,11 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
     virtual public void SetNerf(TimedNerf nerf)
     {
         mBuffNerfController.AddNerf(nerf);
+    }
+
+    public void BuffAndNerfTick()
+    {
+        mBuffNerfController?.Tick();
     }
 
     private void ZeroVelocity()

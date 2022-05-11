@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class TimedNerf
 {
-    protected float mTurn;
+    protected int mTurn;
     public bool isActive = false;
     public Nerf Nerf { get; }
     protected readonly Unit mOwner;
@@ -14,31 +14,34 @@ public abstract class TimedNerf
         Nerf = nerf;
         mOwner = unit;
     }
-
+    
     public void Tick()
     {
         if (isActive)
         {
-            mTurn--;
             if (mTurn <= 0)
             {
                 isActive = false;
                 End();
             }
+            else
+                Apply();
+            mTurn--;
         }
     }
 
     public void Activate()
     {
-        if(Nerf.IsEffectFinished || mTurn <= 0)
-        {
-            Apply();
-        }
-
-        if(Nerf.IsTurnFinished || mTurn <= 0)
-        {
+        if (!Nerf.IsTurnFinished || mTurn <= 0)
             mTurn += Nerf.mTurn;
-        }
+        else if (!Nerf.IsTurnFinished)
+            mTurn = Nerf.mTurn;
+    }
+
+    public void Inactivate()
+    {
+        isActive = false;
+        End();
     }
 
     protected abstract void Apply();
