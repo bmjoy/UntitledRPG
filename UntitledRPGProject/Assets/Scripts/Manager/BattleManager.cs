@@ -102,11 +102,13 @@ public class BattleManager : MonoBehaviour
                         }
                         else
                         {
+
                             mCurrentUnit.mConditions.isDefend = false;
                             mCurrentUnit.mConditions.isPicked = true;
                             mCurrentUnit.mField.GetComponent<Field>().Picked(true);
                             onMovingOrderEvent?.Invoke();
                             mCurrentUnit.mOrder = Order.Standby;
+                            mCurrentUnit?.BuffAndNerfTick();
                             if (mCurrentUnit.mFlag == Flag.Player)
                                 UIManager.Instance.DisplayBattleInterface(true);
                             if (mCurrentUnit.mSkillDataBase != null)
@@ -115,7 +117,7 @@ public class BattleManager : MonoBehaviour
                                 UIManager.Instance.ChangeHoverTip((data.Skill) ?  "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty");
                             }
 
-                            status = GameStatus.WaitForOrder;
+                            status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
                         }
                     }
                 }
@@ -139,7 +141,8 @@ public class BattleManager : MonoBehaviour
                 }
             case GameStatus.Reward:
                 {
-                    if(onReward == false && isWin)
+                    UIManager.Instance.DisplayBattleInterface(false);
+                    if (onReward == false && isWin)
                     {
                         onFinishOrderEvent?.Invoke();
                         StartCoroutine(RewardTime());

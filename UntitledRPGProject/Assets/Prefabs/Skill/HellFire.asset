@@ -16,13 +16,17 @@ MonoBehaviour:
   mName: HellFire
   mDescription: Fire
   mManaCost: 5
+<<<<<<< HEAD
+  mValue: 10
+=======
   mValue: 5
+>>>>>>> 16a71636d343fe807ece6263c77c759a41d72b28
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
-  mSkillType: 0
+  mSkillType: 2
   mProperty: 1
-  mBuffs: []
-  mNerfs: []
+  mBuff: {fileID: 0}
+  mNerf: {fileID: 11400000, guid: 61afe5be2cf25114ab0396c4d71c19a8, type: 2}
   IsShootType: 0
   mStartPosition: {x: 6, y: 1}

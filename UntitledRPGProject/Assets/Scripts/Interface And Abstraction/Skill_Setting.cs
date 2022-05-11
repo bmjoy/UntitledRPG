@@ -22,8 +22,8 @@ public abstract class Skill_Setting : ScriptableObject
     public SkillType mSkillType;
     public SkillProperty mProperty;
 
-    public List<GameObject> mBuffs;
-    public List<GameObject> mNerfs;
+    public Buff mBuff;
+    public Nerf mNerf;
 
     public UnityAction mAction;
     
