@@ -36,6 +36,7 @@ public class BattleManager : MonoBehaviour
     public Vector3 enemyCenter = Vector3.zero;
 
     public Unit mCurrentUnit = null;
+    public float mPercentageHP = 30.0f;
     private bool isWin = false;
     private bool onReward = false;
     public GameStatus status = GameStatus.None;

@@ -42,10 +42,12 @@ public class Standby : State
     private IEnumerator WaitforSecond(Unit agent)
     {
         yield return new WaitForSeconds(1.0f);
-        int percent = (int)Mathf.RoundToInt((100 * agent.mStatus.mHealth) / agent.mStatus.mMaxHealth);
+        int percent = Mathf.RoundToInt((100 * agent.mStatus.mHealth) / agent.mStatus.mMaxHealth);
+        int targetPercent = Mathf.RoundToInt((100 * agent.mTarget.mStatus.mHealth) / agent.mTarget.mStatus.mMaxHealth);
         randomNumber = (agent.mAiBuild.property == AIProperty.Offensive) ?
             UnityEngine.Random.Range(30, 50) : randomNumber = UnityEngine.Random.Range(50, 70);
-        if (percent > randomNumber)
+
+        if (percent > randomNumber || targetPercent <= BattleManager.Instance.mPercentageHP)
             agent.mAiBuild.stateMachine.ChangeState("Attack");
         else
             agent.mAiBuild.stateMachine.ChangeState("Defend");

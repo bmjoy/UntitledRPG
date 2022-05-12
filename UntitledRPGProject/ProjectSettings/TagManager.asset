@@ -12,6 +12,7 @@ TagManager:
   - Camera
   - PlayerUnit
   - PlayerSpawner
+  - Effect
   layers:
   - Default
   - TransparentFX

@@ -38,7 +38,7 @@ public class Unit : MonoBehaviour, IUnit
     private Vector3 mVelocity = Vector3.zero;
     private GameObject mGroundCheck;
     private float mGroundDistance = 2.0f;
-
+    
     [SerializeField]
     private float mAttackDistance= 0.0f;
     [SerializeField]
@@ -57,7 +57,7 @@ public class Unit : MonoBehaviour, IUnit
         {
             mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
 mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
-            mConditions = new Conditions(false, false, false, false, false);
+            mConditions = new Conditions(false, false, false, false);
         }
 
         mAnimator = GetComponent<Animator>();
@@ -257,6 +257,11 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
     {
         mConditions.isDefend = true;
         onComplete?.Invoke();
+        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Defend"),
+            new Vector3(transform.position.x,
+            transform.position.y + GetComponent<BoxCollider>().size.y / 2.0f,
+            transform.position.z), Quaternion.identity);
+        Destroy(go, 1.5f);
         yield return new WaitForSeconds(mWaitingTimeForBattle);
         TurnEnded();
     }
@@ -273,7 +278,6 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
             yield return new WaitForSeconds(mWaitingTimeForBattle);
             TurnEnded();
         }
-
     }
 
     virtual public void PlayAnimation(string name)
@@ -308,7 +312,6 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
                 Destroy(mHealthBar.gameObject, 3.0f);
                 GameManager.s_TotalExp += mStatus.mEXP;
                 GameManager.s_TotalGold += mStatus.mGold;
-                // TODO: Item;
             }
             mAnimator.SetBool("Death",true);
             GetComponent<BoxCollider>().enabled = false;
@@ -369,6 +372,6 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
     {
         mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana,mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
 mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
-        mConditions = new Conditions(false, false, false, false, false);
+        mConditions = new Conditions(false, false, false, false);
     }
 }

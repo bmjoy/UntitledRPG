@@ -25,8 +25,12 @@ public class PlayerSpawner : MonoBehaviour
 
         GameManager.Instance.mPlayer = mPlayer.GetComponent<PlayerController>();
         GameManager.Instance.mPlayer.ResetPlayerUnit();
-        GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
-            GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mPlayer.transform;
+        if(GameManager.Instance.mCamera)
+        {
+            GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
+    GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mPlayer.transform;
+        }
+
     }
 
     public void Spawn()

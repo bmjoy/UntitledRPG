@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Jimmy
   Level: 1
   EXP: 0
-  MaxHealth: 100
+  MaxHealth: 5
   MaxMana: 12
   Magic_Resistance: 1
   Attack: 5

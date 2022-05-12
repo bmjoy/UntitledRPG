@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
 public class CameraSwitcher : MonoBehaviour
 {
     private static CameraSwitcher mInstance;
@@ -21,9 +24,22 @@ public class CameraSwitcher : MonoBehaviour
 
 
     public CinemachineStateDrivenCamera mCamera;
+    public VolumeProfile mPostProcessing;
+
+    public Bloom mBloom;
     private void Start()
     {
         mCamera = this.GetComponent<CinemachineStateDrivenCamera>();
+        if (GameObject.Find("PostProcessing") == null)
+        {
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/PostProcessing"));
+            mPostProcessing = go.GetComponent<Volume>().profile;
+            go.transform.SetParent(transform);
+        }
+        else
+            mPostProcessing = GameObject.Find("PostProcessing").GetComponent<Volume>().profile;
+        mPostProcessing.TryGet(out mBloom);
+        
     }
     private Animator mAnimator;
     private bool isGameWorld = true;

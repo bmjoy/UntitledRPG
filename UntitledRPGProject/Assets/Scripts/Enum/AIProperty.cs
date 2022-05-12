@@ -72,15 +72,13 @@ public struct Conditions
     public bool isPicked;
     public bool isDied;
     public bool isDefend;
-    public bool isMove;
     public bool isCancel;
 
-    public Conditions(bool pick, bool die, bool de, bool mov, bool can)
+    public Conditions(bool pick, bool die, bool de, bool can)
     {
         isPicked = pick;
         isDied = die;
         isDefend = de;
-        isMove = mov;
         isCancel = can;
     }
 }

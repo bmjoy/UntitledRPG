@@ -11,27 +11,36 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private float mSpeed = 10.0f;
     [SerializeField]
-    private WaitForSeconds mTime = new WaitForSeconds(1.0f);
+    private float mChannelingTime = 1.0f;
+    [SerializeField]
+    private float mMaximumDistance = 2.5f;
     private Unit mTarget;
     private DamageType mDamageType;
     private Action mActionEvent;
-    private Vector3 mDirection;
     private void Start()
     {
         mEffect = transform.GetChild(0).transform.gameObject;
         if (mEffect)
         {
-            mEffect.transform.eulerAngles = (mTarget.mFlag == Flag.Player) ? new Vector3(-90.0f, 0.0f, 0.0f) : new Vector3(90.0f, 0.0f, 0.0f);
+            mEffect.transform.position = transform.position;
+            if (mTarget.mFlag == Flag.Player)
+            {
+                mEffect.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
+                transform.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                mEffect.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+                transform.GetComponent<SpriteRenderer>().flipX = false;
+            }
             isEffect = true;
             StartCoroutine(WaitforSecond());
             mEffect.SetActive(true);
         }    
     }
-    public void Initialize(Unit target, Vector3 dir, DamageType damageType, Action actionEvent)
+    public void Initialize(Unit target, Action actionEvent)
     {
         mTarget = target;
-        mDirection = dir;
-        mDamageType = damageType;
         mActionEvent += actionEvent;
     }
 
@@ -42,18 +51,18 @@ public class Projectile : MonoBehaviour
             if (isEffect)
                 return;
             transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
-            if (Vector3.Distance(transform.position, mTarget.transform.position) < 0.75f)
+            if (Vector3.Distance(transform.position, mTarget.transform.position) < mMaximumDistance)
             {
                 isCollide = true;
                 mActionEvent?.Invoke();
-                Destroy(this.gameObject, 1.0f);
+                Destroy(this.gameObject,0.1f);
             }
         }
     }
 
     private IEnumerator WaitforSecond()
     {
-        yield return mTime;
+        yield return new WaitForSeconds(mChannelingTime);
         isEffect = false;
     }
 }

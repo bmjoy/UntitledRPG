@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         mCanvas = transform.Find("Canvas").GetComponent<Canvas>();
+        mCanvas.overrideSorting = true;
         mOrderbar.GetComponent<OrderBar>().Initialize();
         BattleManager.Instance.onEnqueuingOrderEvent += BattleStart;
         BattleManager.Instance.onFinishOrderEvent += BattleEnd;
