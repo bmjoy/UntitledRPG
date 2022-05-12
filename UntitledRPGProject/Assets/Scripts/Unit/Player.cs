@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class Player : Unit
 {
@@ -14,9 +17,7 @@ public class Player : Unit
         if (agent.Length > 1)
         {
             for (int i = 0; i < agent.Length; i++)
-            {
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
-            }
         }
         mAiBuild.type = AIType.Manual;
         mTarget = null;
@@ -35,7 +36,6 @@ public class Player : Unit
             mStorage = GameManager.Instance.mUnitData[mSetting.Name];
             mStorage.LoadData(ref mStatus);
         }
-
     }
 
     protected override void Update()
@@ -48,7 +48,6 @@ public class Player : Unit
         base.TakeDamage(dmg, type);
         if (mConditions.isDied)
         {
-            Debug.Log("Delete");
             GameManager.Instance.mUnitData.Remove(mSetting.Name);
             mStorage = null;
         }
@@ -59,6 +58,5 @@ public class Player : Unit
         if(mStorage != null)
             GameManager.Instance.mUnitData[mSetting.Name] = mStorage;
         mStorage?.SaveData(ref mStatus);
-
     }
 }

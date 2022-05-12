@@ -29,5 +29,6 @@ public abstract class Skill_Setting : ScriptableObject
     
     public abstract void Initialize(Unit owner);
     public abstract void Activate(MonoBehaviour parent);
+    public abstract IEnumerator Effect();
     public abstract IEnumerator WaitforDecision();
 }

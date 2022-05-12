@@ -18,17 +18,12 @@ MonoBehaviour:
   mManaCost: 5
   mValue: 3
   mOwner: {fileID: 0}
-  isActive: 0
+  isActive: 1
   isComplete: 1
   mSkillType: 0
   mProperty: 1
-  mBuffs: []
-  mNerfs: []
-  mProjectilePrefab: {fileID: 4707257233504925323, guid: bd6ea33093e76514aaf44744f6986464, type: 3}
-  IsShootType: 1
-  mAllyMask:
-    serializedVersion: 2
-    m_Bits: 0
-  mTargetMask:
-    serializedVersion: 2
-    m_Bits: 64
+  mBuff: {fileID: 0}
+  mNerf: {fileID: 0}
+  IsRangeType: 1
+  IsInstantType: 0
+  mStartPosition: {x: 0, y: 0}

@@ -85,6 +85,8 @@ public class DefendBehavior : State
                 }
 
             }
+            else
+                BattleManager.Instance.Defend();
         }
         else
             BattleManager.Instance.Defend();

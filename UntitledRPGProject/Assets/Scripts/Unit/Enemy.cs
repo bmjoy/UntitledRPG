@@ -32,6 +32,5 @@ public class Enemy : Unit
             }
         }
         mAiBuild.type = AIType.Auto;
-        
     }
 }

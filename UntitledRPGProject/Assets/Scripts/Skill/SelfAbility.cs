@@ -14,6 +14,11 @@ public class SelfAbility : Skill_Setting
         parent.StartCoroutine(WaitforDecision());
     }
 
+    public override IEnumerator Effect()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void Initialize(Unit owner)
     {
         mOwner = owner;

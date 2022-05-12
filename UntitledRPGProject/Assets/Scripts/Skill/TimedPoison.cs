@@ -12,7 +12,7 @@ public class TimedPoison : TimedNerf
     {
         target = unit;
         poison = (Poison)Nerf;
-        if (GameObject.Find(Nerf.name+"(Clone)") == null)
+        if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > nerf.mDamage)
         {
             GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(unit.transform.position.x, unit.transform.position.y + 0.5f, unit.transform.position.z), Quaternion.identity);
             go.transform.parent = unit.transform;

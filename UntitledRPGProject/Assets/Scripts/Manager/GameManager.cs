@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (mInstance != null && mInstance != this)
-            Destroy(gameObject);
+            Destroy(gameObject);    
         else
             mInstance = this;
         DontDestroyOnLoad(gameObject);
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public static int s_TotalExp = 0;
     public static int s_TotalGold = 0;
     public int TotalSoul = 0;
-    //private int mCurrentLevel = 0;
+    public int mCurrentLevel = 0;
 
     [SerializeField]
     private int mAmountofSoul = 20;
@@ -133,6 +133,7 @@ public class GameManager : MonoBehaviour
             mGameState = GameState.GamePlay;
         });
         UIManager.Instance.mOrderbar.GetComponent<OrderBar>().Clear();
+        CameraSwitcher.Instance.mBloom.intensity.value = 0.0f;
         ResetObjects();
         // TODO: Gameover screen
         StartCoroutine(Restart());
@@ -147,7 +148,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.ChangeText("<color=red>" + UIManager.Instance.mTextForGameOver + "</color>");
 
         yield return new WaitForSeconds(mWaitForRestart);
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        SceneLoader.Instance.RestartGame();
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.FadeOutWord();
 
