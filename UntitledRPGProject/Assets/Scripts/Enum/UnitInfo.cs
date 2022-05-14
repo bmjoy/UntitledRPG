@@ -82,3 +82,16 @@ public struct Conditions
         isCancel = can;
     }
 }
+
+public enum Order
+{
+    Standby,
+    TurnEnd
+}
+
+public enum Flag
+{
+    Player,
+    Neutral,
+    Enemy
+}

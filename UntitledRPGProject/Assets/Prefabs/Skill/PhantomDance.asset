@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddd368156ee88a94cbe4906bf25e3d0f, type: 3}
+  m_Name: PhantomDance
+  m_EditorClassIdentifier: 
+  mSprite: {fileID: 0}
+  mName: PhantomDance
+  mDescription: Phantom dance!
+  mManaCost: 5
+  mValue: 8
+  mOwner: {fileID: 0}
+  isActive: 1
+  isComplete: 0
+  mSkillType: 0
+  mProperty: 1
+  mElement: 2
+  mBuffList:
+  - {fileID: 11400000, guid: 504f9e0068f2e8e4fab6fea7038fd8f0, type: 2}
+  mNerfList: []
+  IsRangeType: 1
+  IsInstantType: 0
+  mRange: 11
+  mStartPosition: {x: -4, y: 0}

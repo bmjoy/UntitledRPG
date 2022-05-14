@@ -4,37 +4,27 @@ using UnityEngine;
 
 public class UnitSpawnManager : MonoBehaviour
 {
-    List<EnemySpawner> m_EnemySpawns;
-    PlayerSpawner mPlayerSpawner;
+    List<Spawner> m_AllSpawner;
 
     private void Start()
     {
-        mPlayerSpawner = GameObject.FindObjectOfType<PlayerSpawner>();
-        m_EnemySpawns = new List<EnemySpawner>(FindObjectsOfType<EnemySpawner>());
+        m_AllSpawner = new List<Spawner>(FindObjectsOfType<Spawner>());
         SpawnAll();
     }
 
     public void SpawnAll()
     {
-        mPlayerSpawner.Respawn();
-
-        for (int i = 0; i < m_EnemySpawns.Count; i++)
+        for (int i = 0; i < m_AllSpawner.Count; i++)
         {
-            m_EnemySpawns[i].StartSpawn();
+            m_AllSpawner[i].Spawn();
         }
-    }
-
-    public void SpawnPlayer()
-    {
-        mPlayerSpawner.Spawn();
     }
 
     public void ResetSpawnAll()
     {
-        mPlayerSpawner.Respawn();
-        for (int i = 0; i < m_EnemySpawns.Count; i++)
+        for (int i = 0; i < m_AllSpawner.Count; i++)
         {
-            m_EnemySpawns[i].ResetSpawn();
+            m_AllSpawner[i].ResetSpawn();
         }
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private float mGroundDistance = 2.0f;
     private float mTrunSmoothVelocity = 0.0f;
     private bool isGrounded = true;
+    public bool IsDied = false;
 
     private ControlState mState = new IdleState();
 
@@ -115,15 +118,23 @@ public class PlayerController : MonoBehaviour
     public void ResetPlayerUnit()
     {
         mHeroes.Clear();
+        if(transform.Find("Eleven(Clone)"))
+        {
+            GameObject go = new GameObject("J");
+            transform.Find("Eleven(Clone)").transform.SetParent(go.transform);
+            Destroy(go);
+        }
+
+
         for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).tag == "PlayerUnit")
                 mHeroes.Add(transform.GetChild(i).gameObject);
         }
-
         for (int i = 0; i < mHeroes.Count; ++i)
         {
             mHeroes[i].GetComponent<Unit>().ResetUnit();
+            mHeroes[i].GetComponent<Billboard>().Initialize();
             mHeroes[i].SetActive(false);
         }
     }
@@ -151,6 +162,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnBattleEnd()
     {
+        IsDied = false;
         mCharacterController.enabled = mCollider.enabled = true;
         mState = new IdleState();
         onBattle = false;
@@ -159,6 +171,7 @@ public class PlayerController : MonoBehaviour
         {
             mHeroes[i].transform.position = transform.position;
             mHeroes[i].GetComponent<Unit>().DisableUI();
+            mHeroes[i].GetComponent<Unit>().ClearBuffAndNerf();
             mHeroes[i].gameObject.SetActive(false);
         }
     }
@@ -168,7 +181,10 @@ public class PlayerController : MonoBehaviour
     {
         if (onBattle)
             return;
-
+        if (other.gameObject.name == "NextLevel")
+        {
+            Debug.Log("Hi");
+        }
         var unit = other.GetComponent<EnemyProwler>();
 
         if (unit != null && !unit.onBattle)

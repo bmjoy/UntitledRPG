@@ -13,3 +13,9 @@ public enum AttackType
     Melee = 0,
     Range
 }
+
+public enum BuffType
+{
+    Melee,
+    Magic
+}

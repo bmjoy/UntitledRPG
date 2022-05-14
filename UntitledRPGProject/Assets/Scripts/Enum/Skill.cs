@@ -5,11 +5,7 @@ using UnityEngine;
 public enum SkillType
 {
     Attack,
-    AttackBuff,
-    AttackNerf,
     Heal,
-    HealBuff,
-    HealNerf,
     Buff,
     BuffNerf,
     Nerf,
@@ -20,4 +16,14 @@ public enum SkillProperty
 {
     Friendly,
     Hostile
+}
+
+public enum SkillElement
+{
+    Fire,
+    Water,
+    Shadow,
+    Holy,
+    Undead,
+    Normal
 }

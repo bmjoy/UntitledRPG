@@ -56,51 +56,59 @@ public class SelfAbility : Skill_Setting
                 mOwner.mStatus.mMana -= mManaCost;
                 switch (mSkillType)
                 {
-                    case SkillType.Attack: break;
-                    case SkillType.AttackBuff:
+                    case SkillType.Attack:
                         {
                             mOwner.TakeDamage(mValue, DamageType.Magical);
-                            mOwner.SetBuff(mBuff.Initialize(mOwner));
-                        }
-                        break;
-                    case SkillType.AttackNerf:
-                        {
-                            mOwner.TakeDamage(mValue, DamageType.Magical);
-                            mOwner.SetNerf(mNerf.Initialize(mOwner));
+                            foreach(var buff in mBuffList)
+                            {
+                                mOwner.SetBuff(buff.Initialize(mOwner,mOwner));
+                            }
+                            foreach(var nerf in mNerfList)
+                            {
+                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            }
+
                         }
                         break;
                     case SkillType.Buff:
                         {
-                            mOwner.SetBuff(mBuff.Initialize(mOwner));
+                            foreach (var buff in mBuffList)
+                            {
+                                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+                            }
                         }
                         break;
                     case SkillType.BuffNerf:
                         {
-                            mOwner.SetBuff(mBuff.Initialize(mOwner));
-                            mOwner.SetNerf(mNerf.Initialize(mOwner));
+                            foreach (var buff in mBuffList)
+                            {
+                                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+                            }
+                            foreach (var nerf in mNerfList)
+                            {
+                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            }
                         }
                         break;
                     case SkillType.Nerf:
                         {
-                            mOwner.SetNerf(mNerf.Initialize(mOwner));
+                            foreach (var nerf in mNerfList)
+                            {
+                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            }
                         }
                         break;
                     case SkillType.Heal:
                         {
                             mOwner.TakeRecover(mValue);
-                            break;
-                        }
-                    case SkillType.HealBuff:
-                        {
-                            mOwner.TakeRecover(mValue);
-                            mOwner.SetBuff(mBuff.Initialize(mOwner));
-                            break;
-                        }
-
-                    case SkillType.HealNerf:
-                        {
-                            mOwner.TakeRecover(mValue);
-                            mOwner.SetNerf(mNerf.Initialize(mOwner));
+                            foreach (var buff in mBuffList)
+                            {
+                                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+                            }
+                            foreach (var nerf in mNerfList)
+                            {
+                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            }
                             break;
                         }
                     case SkillType.Summon:
