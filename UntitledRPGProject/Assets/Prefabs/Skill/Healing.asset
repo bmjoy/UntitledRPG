@@ -17,10 +17,13 @@ MonoBehaviour:
   mDescription: This is the healing magic, and it can heal 50 costs.
   mManaCost: 10
   mValue: 50
-  mSkillProperty: 0
-  mSkillType: 3
   mOwner: {fileID: 0}
   isActive: 0
-  mBuffs: []
-  mNerfs: []
+  isComplete: 0
+  mSkillType: 1
+  mProperty: 0
+  mElement: 3
+  mBuffList:
+  - {fileID: 0}
+  mNerfList: []
   mEffect: {fileID: 0}

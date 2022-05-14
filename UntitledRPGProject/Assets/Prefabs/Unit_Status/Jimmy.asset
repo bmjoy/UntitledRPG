@@ -15,12 +15,12 @@ MonoBehaviour:
   Name: Jimmy
   Level: 1
   EXP: 0
-  MaxHealth: 5
+  MaxHealth: 100
   MaxMana: 12
   Magic_Resistance: 1
   Attack: 5
   Defend: 10
-  MagicPower: 1
+  MagicPower: 10
   Armor: 1
   Agility: 5
   Gold: 0

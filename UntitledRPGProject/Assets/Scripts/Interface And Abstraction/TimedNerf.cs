@@ -8,11 +8,12 @@ public abstract class TimedNerf
     public bool isActive = false;
     public Nerf Nerf { get; }
     protected readonly Unit mOwner;
-
-    public TimedNerf(Nerf nerf, Unit unit)
+    protected readonly Unit mTarget;
+    public TimedNerf(Nerf nerf, Unit owner, Unit target)
     {
         Nerf = nerf;
-        mOwner = unit;
+        mOwner = owner;
+        mTarget = target;
     }
     
     public void Tick()

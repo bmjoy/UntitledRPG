@@ -7,18 +7,22 @@ public class Projectile : MonoBehaviour
 {
     private GameObject mEffect;
     public bool isCollide = false;
-    private bool isEffect = false;
+    protected bool isEffect = false;
     [SerializeField]
-    private float mSpeed = 10.0f;
+    protected float mSpeed = 10.0f;
     [SerializeField]
-    private float mChannelingTime = 1.0f;
+    protected float mChannelingTime = 1.0f;
     [SerializeField]
-    private float mMaximumDistance = 2.5f;
-    private Unit mTarget;
-    private DamageType mDamageType;
-    private Action mActionEvent;
-    private void Start()
+    protected float mMaximumDistance = 2.5f;
+    protected Unit mTarget;
+    protected Action mActionEvent;
+    protected int mAnimationCount;
+    [HideInInspector]
+    public float mDamage;
+
+    protected virtual void Start()
     {
+        mAnimationCount = GetComponent<Animator>().runtimeAnimatorController.animationClips.Length;
         mEffect = transform.GetChild(0).transform.gameObject;
         if (mEffect)
         {
@@ -38,29 +42,31 @@ public class Projectile : MonoBehaviour
             mEffect.SetActive(true);
         }    
     }
-    public void Initialize(Unit target, Action actionEvent)
+    public virtual void Initialize(Unit target, Action actionEvent)
     {
         mTarget = target;
         mActionEvent += actionEvent;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if(isCollide == false)
         {
             if (isEffect)
                 return;
             transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
-            if (Vector3.Distance(transform.position, mTarget.transform.position) < mMaximumDistance)
+            if (Vector3.Distance(transform.position, mTarget.transform.position) < mMaximumDistance && !isCollide)
             {
                 isCollide = true;
+                int random = UnityEngine.Random.Range(1, 2);
+                GetComponent<Animator>().Play((mAnimationCount >= 3) ? "Burst" + UnityEngine.Random.Range(1, 2) : "Burst");
                 mActionEvent?.Invoke();
-                Destroy(this.gameObject,0.1f);
+                Destroy(this.gameObject,1.0f);
             }
         }
     }
 
-    private IEnumerator WaitforSecond()
+    protected virtual IEnumerator WaitforSecond()
     {
         yield return new WaitForSeconds(mChannelingTime);
         isEffect = false;

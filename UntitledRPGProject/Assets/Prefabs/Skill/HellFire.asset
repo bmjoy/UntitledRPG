@@ -20,9 +20,13 @@ MonoBehaviour:
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
-  mSkillType: 2
+  mSkillType: 0
   mProperty: 1
-  mBuff: {fileID: 0}
-  mNerf: {fileID: 11400000, guid: 61afe5be2cf25114ab0396c4d71c19a8, type: 2}
-  IsShootType: 0
+  mElement: 0
+  mBuffList: []
+  mNerfList:
+  - {fileID: 11400000, guid: 61afe5be2cf25114ab0396c4d71c19a8, type: 2}
+  IsRangeType: 0
+  IsInstantType: 0
+  mRange: 4
   mStartPosition: {x: 6, y: 1}

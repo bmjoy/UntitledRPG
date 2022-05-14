@@ -25,6 +25,7 @@ public class HealthBar : MonoBehaviour
         mMaxMana = maxMP;
         mBorader = transform.parent.GetComponent<Image>();
         mBorader.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+        mBorader.transform.GetComponent<Animator>().SetBool("Death", false);
         mBar = GetComponent<Image>();
         mManaBar = transform.Find("ManaBorader").Find("Mana").GetComponent<Image>();
         isInitialized = true;
@@ -43,12 +44,10 @@ public class HealthBar : MonoBehaviour
 
     public IEnumerator PlayBleed()
     {
-        mBorader.transform.GetComponent<Animator>().Play("Wiggle");
+        mBorader.transform.GetComponent<Animator>().SetTrigger("Wiggle");
         transform.Find("Bleed").GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(0.51f);
         transform.Find("Bleed").transform.localPosition = new Vector3(mBar.fillAmount * 100.0f - 50.0f, 0.0f, 0.0f);
-        if (mBar.fillAmount > 0.0f)
-            mBorader.transform.GetComponent<Animator>().Play("Idle");
     }
 
     public void Active(bool active)

@@ -36,7 +36,6 @@ public class SceneLoader : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(GameManager.Instance.mCurrentLevel);
             GameManager.Instance.mCurrentLevel++;
             _sceneIndex = GameManager.Instance.mCurrentLevel;
             StartGame();
@@ -60,11 +59,14 @@ public class SceneLoader : MonoBehaviour
     {
         mLoadingScreen.SetActive(true);
         yield return StartCoroutine(FadeLoadingScreen(1, 2));
-        AsyncOperation operation = SceneManager.LoadSceneAsync(_sceneIndex);
+        AsyncOperation operation = null;
+        operation = SceneManager.LoadSceneAsync(_sceneIndex);
+
         while(!operation.isDone)
         {
             yield return null;
         }
+
         yield return StartCoroutine(FadeLoadingScreen(0, 3));
         mLoadingScreen.SetActive(false);
     }

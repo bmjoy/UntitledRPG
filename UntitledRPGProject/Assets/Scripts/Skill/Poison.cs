@@ -7,8 +7,8 @@ public class Poison : Nerf
 {
     public float mDamage;
 
-    public override TimedNerf Initialize(Unit unit)
+    public override TimedNerf Initialize(Unit owner, Unit target)
     {
-        return new TimedPoison(this, unit);
+        return new TimedPoison(this,owner,target);
     }
 }

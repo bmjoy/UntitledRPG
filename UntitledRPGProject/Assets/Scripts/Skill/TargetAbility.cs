@@ -12,6 +12,8 @@ public class TargetAbility : Skill_Setting
     public bool IsInstantType = false;
 
     [SerializeField]
+    private float mRange = 4.0f;
+    [SerializeField]
     private Vector2 mStartPosition;
 
     public override void Activate(MonoBehaviour parent)
@@ -74,37 +76,35 @@ public class TargetAbility : Skill_Setting
                 mOwner.mStatus.mMana -= mManaCost;
 
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
+                mOwner.mMagicDistance = mRange;
+                mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
+                mOwner.StartCoroutine(Effect());
+                yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
 
                 if (IsRangeType && isActive)
                 {
-                    mOwner.StartCoroutine(Effect());
-                    mOwner.mAiBuild.actionEvent = ActionEvent.Busy;
                     mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
-                    yield return new WaitForSeconds(0.25f);
+                    yield return new WaitForSeconds(0.3f);
                     Shoot();
                     if(IsInstantType == false)
                         yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
-                    mOwner.mAiBuild.actionEvent = ActionEvent.None;
                 }
                 else if (!IsRangeType && isActive)
                 {
-                    
-                    
-                    mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
-                    mOwner.StartCoroutine(Effect());
-                    yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
                     yield return new WaitForSeconds(0.5f);
                     mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
                     Melee();
                     yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
-                    mOwner.mAiBuild.actionEvent = ActionEvent.BackWalk;
-
                     CommonState();
                 }
+                    mOwner.mAiBuild.actionEvent = ActionEvent.BackWalk;
 
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
-                    , mTarget.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-                Destroy(go, go.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+                if(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                {
+                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+    , mTarget.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                    Destroy(go, go.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+                }
             }
             else
                 BattleManager.Instance.Cancel();
@@ -119,59 +119,46 @@ public class TargetAbility : Skill_Setting
 
     private void CommonState()
     {
+        float newValue = mValue + mOwner.mStatus.mMagicPower;
         switch (mSkillType)
         {
             case SkillType.Attack:
                 {
-                    mTarget.TakeDamage(mValue, DamageType.Magical);
-                }
-                break;
-            case SkillType.AttackBuff:
-                {
-                    mTarget.TakeDamage(mValue, DamageType.Magical);
-                    mTarget.SetBuff(mBuff.Initialize(mOwner));
-                }
-                break;
-            case SkillType.AttackNerf:
-                {
-                    mTarget.TakeDamage(mValue, DamageType.Magical);
-                    mTarget.SetNerf(mNerf.Initialize(mTarget));
+                    mTarget.TakeDamage(newValue, DamageType.Magical);
+
+                    foreach (var buff in mBuffList)
+                        mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+                    foreach (var nerf in mNerfList)
+                        mTarget.SetNerf(nerf.Initialize(mOwner, mTarget));
                 }
                 break;
             case SkillType.Buff:
-                {
-                    mOwner.SetBuff(mBuff.Initialize(mTarget));
-                }
+                foreach (var buff in mBuffList)
+                    mOwner.SetBuff(buff.Initialize(mOwner, mTarget));
                 break;
             case SkillType.BuffNerf:
                 {
-                    mOwner.SetBuff(mBuff.Initialize(mTarget));
-                    mOwner.SetNerf(mNerf.Initialize(mTarget));
+                    foreach (var buff in mBuffList)
+                        mTarget.SetBuff(buff.Initialize(mOwner, mTarget));
+                    foreach (var nerf in mNerfList)
+                        mTarget.SetNerf(nerf.Initialize(mOwner, mTarget));
                 }
                 break;
             case SkillType.Nerf:
+                foreach (var nerf in mNerfList)
                 {
-                    mOwner.SetNerf(mNerf.Initialize(mTarget));
+                    mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
                 }
                 break;
             case SkillType.Heal:
                 {
-                    mTarget.TakeRecover(mValue);
-                    break;
+                    mTarget.TakeRecover(newValue);
+                    foreach (var buff in mBuffList)
+                        mOwner.SetBuff(buff.Initialize(mOwner, mTarget));
+                    foreach (var nerf in mNerfList)
+                        mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
                 }
-            case SkillType.HealBuff:
-                {
-                    mTarget.TakeRecover(mValue);
-                    mTarget.SetBuff(mBuff.Initialize(mTarget));
                     break;
-                }
-
-            case SkillType.HealNerf:
-                {
-                    mTarget.TakeRecover(mValue);
-                    mTarget.SetNerf(mNerf.Initialize(mTarget));
-                    break;
-                }
             case SkillType.Summon:
                 break;
         }
@@ -181,43 +168,23 @@ public class TargetAbility : Skill_Setting
     {
         if (IsInstantType == false)
         {
+            float newValue = mValue + mOwner.mStatus.mMagicPower;
             Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-            mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * 0.25f, Quaternion.identity);
+            mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
+            mProjectile.GetComponent<Projectile>().mDamage = newValue;
             mProjectile.transform.LookAt(dir);
-            switch (mSkillType)
-            {
-                case SkillType.Attack:
-                    {
-                        mProjectile.GetComponent<Projectile>().Initialize(mTarget,
-                    () => { mTarget.TakeDamage(mValue, DamageType.Magical); });
-                    }
-                    break;
-                case SkillType.AttackBuff:
-                    {
-                        mProjectile.GetComponent<Projectile>().Initialize(mTarget, () =>
-                        {
-                            mTarget.TakeDamage(mValue, DamageType.Magical);
-                            mTarget.SetBuff(mBuff.Initialize(mOwner));
-                        });
-                    }
-                    break;
-                case SkillType.AttackNerf:
-                    {
-                        mProjectile.GetComponent<Projectile>().Initialize(mTarget, () =>
-                        {
-                            mTarget.TakeDamage(mValue, DamageType.Magical);
-                            mTarget.SetNerf(mNerf.Initialize(mTarget));
-                        });
-                    }
-                    break;
-                default:
-                    break;
-            }
+
+            mProjectile.GetComponent<Projectile>().Initialize(mTarget,
+        () => {
+            mTarget.TakeDamage(newValue, DamageType.Magical);
+            foreach (var buff in mBuffList)
+                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+            foreach (var nerf in mNerfList)
+                mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
+        });
         }
         else
-        {
             CommonState();
-        }
 
     }
 
@@ -264,12 +231,29 @@ public class TargetAbility : Skill_Setting
 
     public override IEnumerator Effect()
     {
-        if (this.mName.Contains("Fire"))
+        var colorParameter = new UnityEngine.Rendering.VolumeParameter<Color>();
+        switch (mElement)
         {
-            var colorParameter = new UnityEngine.Rendering.VolumeParameter<Color>();
-            colorParameter.value = Color.red;
-            CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
+            case SkillElement.Normal:
+                colorParameter.value = Color.yellow;
+                break;
+            case SkillElement.Holy:
+                colorParameter.value = Color.white;
+                break;
+            case SkillElement.Shadow:
+                colorParameter.value = Color.green;
+                break;
+            case SkillElement.Water:
+                colorParameter.value = Color.cyan;
+                break;
+            case SkillElement.Fire:
+                colorParameter.value = Color.red;
+                break;
+            case SkillElement.Undead:
+                colorParameter.value = Color.black;
+                break;
         }
+        CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
 
         yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
         while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)

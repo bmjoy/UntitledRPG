@@ -9,15 +9,7 @@ public class Standby : State
     private int randomNumber;
     public override void Enter(Unit agent)
     {
-        List<GameObject> list = new List<GameObject>();
-        list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
-            : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
-        if (list.Count == 0)
-        {
-            isFinished = true;
-            return;
-        }
-        agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
+        Find(agent);
         randomNumber = -1;
     }
 
@@ -29,6 +21,10 @@ public class Standby : State
         if(agent.mConditions.isPicked && !isAct)
         {
             isAct = true;
+
+            if(agent.mTarget.mConditions.isDied)
+                Find(agent);
+
             agent.StartCoroutine(WaitforSecond(agent));
         }
     }
@@ -51,5 +47,18 @@ public class Standby : State
             agent.mAiBuild.stateMachine.ChangeState("Attack");
         else
             agent.mAiBuild.stateMachine.ChangeState("Defend");
+    }
+
+    private void Find(Unit agent)
+    {
+        List<GameObject> list = new List<GameObject>();
+        list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
+            : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
+        if (list.Count == 0)
+        {
+            isFinished = true;
+            return;
+        }
+        agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
     }
 }

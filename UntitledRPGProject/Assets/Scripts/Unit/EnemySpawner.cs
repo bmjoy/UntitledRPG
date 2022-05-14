@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : Spawner
 {
     enum EnemyUnit
     {
@@ -11,13 +11,6 @@ public class EnemySpawner : MonoBehaviour
         Ghoul,
         Spitter
     }
-    private int ID = 0;
-    private bool isInitialized = false;
-    private EnemyProwler prowler;
-
-    [SerializeField]
-    private float mDelaySpawnTime = 1.0f;
-
     [SerializeField]
     private List<EnemyUnit> mEnemyList = new List<EnemyUnit>();
 
@@ -26,15 +19,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float mAngle = 60.0f;
 
-    public void StartSpawn()
-    {
-        if (isInitialized)
-            return;
-        ID = GameManager.s_ID++;
-        StartCoroutine(EnemySpawn());
-    }
-
-    private GameObject CreateNewEnemyProwler()
+    protected override GameObject CreateNewObject()
     {
         if (mEnemyList.Count == 1 && mEnemyList[0] == EnemyUnit.None)
             return null;
@@ -42,8 +27,8 @@ public class EnemySpawner : MonoBehaviour
         if (mEnemyList.Count > 0)
         {
             GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
-            newEnemyProwler.transform.position = new Vector3(transform.position.x, 
-                transform.position.y + 2.5f, 
+            newEnemyProwler.transform.position = new Vector3(transform.position.x,
+                transform.position.y + 2.5f,
                 transform.position.z);
 
             int LeaderCount = 0;
@@ -65,45 +50,37 @@ public class EnemySpawner : MonoBehaviour
             {
                 if (mEnemyList[i] == EnemyUnit.None)
                     continue;
-                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/"+ mEnemyList[i].ToString() + "_Unit"),transform.position, Quaternion.identity);
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity);
                 newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
                 obj.transform.parent = newEnemyProwler.transform;
                 obj.SetActive(false);
             }
 
             newEnemyProwler.GetComponent<EnemyProwler>().Initialize();
-            prowler = newEnemyProwler.GetComponent<EnemyProwler>();
             return newEnemyProwler;
         }
         else
             return null;
     }
 
-    private IEnumerator EnemySpawn()
+    public override void Spawn()
     {
-        yield return new WaitForSeconds(mDelaySpawnTime);
-        GameObject newEnemy = CreateNewEnemyProwler();
-        if(newEnemy == null)
+        if (mInitialized)
+            return;
+        ID = GameManager.s_ID++;
+        StartCoroutine(Wait());
+    }
+
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1.0f);
+        mObject = CreateNewObject();
+        if (mObject == null)
         {
             Debug.Log("Failed to create");
-            isInitialized = false;
+            mInitialized = false;
         }
         else
-            isInitialized = true;
-    }
-
-    public void ResetSpawn()
-    {
-        isInitialized = false;
-
-        if(prowler != null)
-            Destroy(prowler.gameObject);
-        StartSpawn();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(transform.position, new Vector3(1.0f,1.0f,1.0f));
+            mInitialized = true;
     }
 }

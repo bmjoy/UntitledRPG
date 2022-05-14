@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
+  m_Name: Eleven
+  m_EditorClassIdentifier: 
+  Name: Eleven
+  Level: 1
+  EXP: 0
+  MaxHealth: 75
+  MaxMana: 25
+  Magic_Resistance: 2
+  Attack: 12
+  Defend: 2
+  MagicPower: 1
+  Armor: 0
+  Agility: 10
+  Gold: 0
+  BasicSprite: {fileID: 8793639957104055765, guid: b19c3b4c0b2d0bc42869324b3569a2b3, type: 3}
+  SFXClips: []
+  Item: []
