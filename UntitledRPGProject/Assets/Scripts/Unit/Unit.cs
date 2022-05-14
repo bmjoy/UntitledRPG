@@ -13,6 +13,8 @@ public class Unit : MonoBehaviour, IUnit
     public Flag mFlag;
 
     public GameObject mField;
+    private GameObject mFirePos;
+    private GameObject mCanvas;
     private Vector3 mPos = Vector3.zero;
     private Vector3 mTargetPos = Vector3.zero;
 
@@ -20,7 +22,9 @@ public class Unit : MonoBehaviour, IUnit
     private Rigidbody mRigidbody;
     public Unit_Setting mSetting;
     [SerializeField]
-    public float mWaitingTimeForBattle = 0.75f;
+    private float mWaitingTimeForBattle = 0.75f;
+    [SerializeField]
+    private Vector2 mFireLocation;
     public Unit_Setting Unit_Setting => mSetting;
     public Skill_DataBase mSkillDataBase;
     public SpriteRenderer mSpriteRenderer;
@@ -41,24 +45,30 @@ public class Unit : MonoBehaviour, IUnit
     
     [SerializeField]
     private float mAttackDistance= 0.0f;
-    [SerializeField]
-    private float mMagicDistance= 0.0f;
+    [HideInInspector]
+    public float mMagicDistance= 0.0f;
 
     protected virtual void Start()
     {
-        Componenet_Initialize();
-        Prefab_Initialize();
-        AI_Initialize();
+
     }
 
     public void Componenet_Initialize()
     {
-        if(!GameManager.Instance.mUnitData.ContainsKey(mSetting.Name))
-        {
-            mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana, mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
-mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
-            mConditions = new Conditions(false, false, false, false);
-        }
+        mStatus = new Status(mSetting.Level,
+            mSetting.EXP,
+            mSetting.Gold,
+            mSetting.MaxHealth,
+            mSetting.MaxHealth,
+            mSetting.MaxMana,
+            mSetting.MaxMana,
+            mSetting.Attack,
+            mSetting.Armor,
+            mSetting.Magic_Resistance,
+            mSetting.Defend,
+            mSetting.Agility,
+            mSetting.MagicPower);
+        mConditions = new Conditions(false, false, false, false);
 
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
@@ -75,28 +85,44 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
 
     public void Prefab_Initialize()
     {
-        GameObject groundCheck = new GameObject("GroundCheck");
-        groundCheck.transform.position = new Vector3(transform.position.x,
-            transform.position.y - (transform.GetComponent<BoxCollider>().size.y), transform.position.z);
-        groundCheck.transform.parent = transform;
-        mGroundCheck = groundCheck;
-
-        if (mType == AttackType.Range)
+        if(mGroundCheck == null)
         {
-            GameObject fire = new GameObject("Fire");
-            fire.transform.position = new Vector3(transform.position.x, transform.position.y + transform.GetComponent<BoxCollider>().size.y / 2.0f, transform.position.z);
-            fire.transform.parent = transform;
+            GameObject groundCheck = new GameObject("GroundCheck");
+            groundCheck.transform.position = new Vector3(transform.position.x,
+                transform.position.y - (transform.GetComponent<BoxCollider>().size.y), transform.position.z);
+            groundCheck.transform.parent = transform;
+            mGroundCheck = groundCheck;
         }
 
-        GameObject source = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position, Quaternion.identity);
-        source.transform.SetParent(transform);
 
-        mHealthBar = source.transform.Find("Borader").Find("HealthBarPrefab").GetComponent<HealthBar>();
+        if (mType == AttackType.Range && mFirePos == null)
+        {
+            GameObject fire = new GameObject("Fire");
+            fire.transform.position = new Vector3(transform.position.x + mFireLocation.x, transform.position.y + mFireLocation.y, transform.position.z);
+            fire.transform.parent = transform;
+            mFirePos = fire;
+        }
+        if(mCanvas == null)
+        {
+            mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position, Quaternion.identity);
+            mCanvas.transform.SetParent(transform);
+        }
+        else
+        {
+            Destroy(mCanvas);
+            mCanvas = null;
+            mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position, Quaternion.identity);
+            mCanvas.transform.SetParent(transform);
+        }
+
+
+        mHealthBar = mCanvas.transform.Find("Borader").Find("HealthBarPrefab").GetComponent<HealthBar>();
         mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth, mStatus.mMana, mStatus.mMaxMana);
-
-        mLevelText = source.transform.Find("Borader").Find("Text").GetComponent<TextMeshProUGUI>();
+        mLevelText = mCanvas.transform.Find("Borader").Find("Text").GetComponent<TextMeshProUGUI>();
         mLevelText.text = mStatus.mLevel.ToString();
+        mLevelText.gameObject.SetActive(true);
         mHealthBar.mCurrentHealth = mStatus.mHealth;
+        mHealthBar.mBorader.GetComponent<Animator>().SetBool("Death", false);
         mHealthBar.Active(false);
     }
 
@@ -116,11 +142,8 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
 
     protected virtual void Update()
     {
-        if (mConditions.isDied)
-            return;
-        else
+        if(mConditions.isDied == false)
             mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-
         mHealthBar.mCurrentMana = mStatus.mMana;
 
         switch (mAiBuild.actionEvent)
@@ -128,9 +151,14 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
             case ActionEvent.None:
                 {
                     ZeroVelocity();
+                    if (mConditions.isDied)
+                        mAnimator.SetBool("Death", true);
+                    else
+                        mAnimator.SetBool("Death", false);
+
                     if (mAiBuild.type == AIType.Auto)
                         mAiBuild.stateMachine.ActivateState();
-                    if(Vector3.Distance(transform.position, mField.transform.position) > 0.2f)
+                    if(Vector3.Distance(transform.position, mField.transform.position) > 0.5f)
                     {
                         transform.position = Vector3.MoveTowards(transform.position, mField.transform.position, Time.deltaTime * 7.0f);
                         mAnimator.SetFloat("Speed", 1.0f);
@@ -296,7 +324,8 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
             value = (value - mStatus.mArmor <= 0.0f) ? 1.0f : value - mStatus.mArmor;
         }
         else
-            value = (value + mStatus.mMagicPower - mStatus.mMagic_Resistance <= 0.0f) ? 1.0f : value + mStatus.mMagicPower - mStatus.mMagic_Resistance;
+            value = (value - mStatus.mMagic_Resistance <= 0.0f) ? 1.0f : value - mStatus.mMagic_Resistance;
+        Debug.Log(value);
         mStatus.mHealth -= value;
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
@@ -304,7 +333,6 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
         if (mStatus.mHealth <= 0.0f)
         {
             mConditions.isDied = true;
-            mHealthBar.mBorader.GetComponent<Animator>().Play("Death");
             mLevelText.gameObject.SetActive(false);
 
             if(mFlag == Flag.Enemy)
@@ -314,6 +342,7 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
                 GameManager.s_TotalGold += mStatus.mGold;
             }
             mAnimator.SetBool("Death",true);
+            mHealthBar.mBorader.GetComponent<Animator>().SetBool("Death", true);
             GetComponent<BoxCollider>().enabled = false;
             UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
             mBuffNerfController.Stop();
@@ -357,6 +386,11 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
         mBuffNerfController?.Tick();
     }
 
+    public void ClearBuffAndNerf()
+    {
+        mBuffNerfController?.Stop();
+    }
+
     private void ZeroVelocity()
     {
         mRigidbody.velocity = Vector3.zero;
@@ -370,8 +404,8 @@ mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPowe
 
     virtual public void ResetUnit()
     {
-        mStatus = new Status(mSetting.Level, mSetting.EXP, mSetting.Gold, mSetting.MaxHealth, mSetting.MaxHealth, mSetting.MaxMana,mSetting.MaxMana, mSetting.Attack, mSetting.Armor,
-mSetting.Magic_Resistance, mSetting.Defend, mSetting.Agility, mSetting.MagicPower);
-        mConditions = new Conditions(false, false, false, false);
+        Componenet_Initialize();
+        Prefab_Initialize();
+        mAiBuild.actionEvent = ActionEvent.IntroWalk;
     }
 }

@@ -51,7 +51,6 @@ public class DefendBehavior : State
                 switch (skill.mSkillType)
                 {
                     case SkillType.Heal:
-                    case SkillType.HealBuff:
                         {
                             float minPercent = float.MaxValue;
                             for (int i = 0; i < list.Count; i++)

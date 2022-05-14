@@ -9,34 +9,41 @@ public abstract class TimedBuff
     public bool isActive = false;
     public Buff Buff { get; }
     protected readonly Unit mOwner;
+    protected readonly Unit mTarget;
 
-    public TimedBuff(Buff buff, Unit unit)
+    public TimedBuff(Buff buff, Unit owner, Unit target)
     {
         Buff = buff;
-        mOwner = unit;
+        mOwner = owner;
+        mTarget = target;
     }
 
     public void Tick()
     {
         if (isActive)
         {
-            mTurn--;
-            if (mTurn<= 0)
+            if (mTurn <= 0)
+            {
                 isActive = false;
+                End();
+            }
+            else
+                Apply();
+            mTurn--;
         }
     }
     public void Activate()
     {
-        if (Buff.IsEffectFinished || mTurn <= 0)
-        {
-            Apply();
-            mStack++;
-        }
-
-        if (Buff.IsTurnFinished || mTurn <= 0)
-        {
+        if (!Buff.IsTurnFinished || mTurn <= 0)
             mTurn += Buff.mTurn;
-        }
+        else if (!Buff.IsTurnFinished)
+            mTurn = Buff.mTurn;
+    }
+
+    public void Inactivate()
+    {
+        isActive = false;
+        End();
     }
 
     protected abstract void Apply();

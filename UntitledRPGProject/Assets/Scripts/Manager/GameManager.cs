@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
         else
             mInstance = this;
         DontDestroyOnLoad(gameObject);
+        mUnitData.Clear();
         mCamera = Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
     }
     public GameState mGameState;
@@ -66,7 +67,6 @@ public class GameManager : MonoBehaviour
         s_TotalExp = 0;
         s_TotalGold = 0;
         TotalSoul = 0;
-        //mCurrentLevel = 0;
     }
 
     private void Update()
@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.mOrderbar.GetComponent<OrderBar>().Clear();
         CameraSwitcher.Instance.mBloom.intensity.value = 0.0f;
         ResetObjects();
+        mPlayer.IsDied = true;
         // TODO: Gameover screen
         StartCoroutine(Restart());
     }
@@ -146,12 +147,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         UIManager.Instance.FadeInWord();
         UIManager.Instance.ChangeText("<color=red>" + UIManager.Instance.mTextForGameOver + "</color>");
-
         yield return new WaitForSeconds(mWaitForRestart);
         SceneLoader.Instance.RestartGame();
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.FadeOutWord();
-
         s_ID = 0;
 
         s_TotalExp = 0;

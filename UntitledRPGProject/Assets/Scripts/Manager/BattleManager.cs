@@ -61,8 +61,8 @@ public class BattleManager : MonoBehaviour
         && GameManager.Instance.mEnemyProwler.onBattle == true);
         mUnits.Clear();
         mOrders.Clear();
-        mUnits.AddRange(GameManager.Instance.mPlayer.mHeroes);
-        mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup);
+        mUnits.AddRange(GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
+        mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mUnits.Sort((a, b) => (b.GetComponent<Unit>().mStatus.mAgility.CompareTo(
             a.GetComponent<Unit>().mStatus.mAgility)));
         for (int i = 0; i < mUnits.Count; i++)
@@ -143,6 +143,7 @@ public class BattleManager : MonoBehaviour
             case GameStatus.Reward:
                 {
                     UIManager.Instance.DisplayBattleInterface(false);
+
                     if (onReward == false && isWin)
                     {
                         onFinishOrderEvent?.Invoke();
@@ -158,6 +159,10 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameStatus.Finish:
                 {
+                    foreach (GameObject unit in mUnits)
+                    {
+                        unit.GetComponent<Unit>().ClearBuffAndNerf();
+                    }
                     CameraSwitcher.SwitchCamera();
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     onReward = false;

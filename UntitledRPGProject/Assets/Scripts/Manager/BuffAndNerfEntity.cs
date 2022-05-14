@@ -39,7 +39,7 @@ public class BuffAndNerfEntity : MonoBehaviour
         {
             foreach (var buff in mBuff.Values.ToList())
             {
-                buff.End();
+                buff.Inactivate();
                 if (buff.isActive == false)
                 {
                     mBuff.Remove(buff.Buff);
@@ -51,7 +51,7 @@ public class BuffAndNerfEntity : MonoBehaviour
         {
             foreach (var nerf in mNerf.Values.ToList())
             {
-                nerf.End();
+                nerf.Inactivate();
                 if (nerf.isActive == false)
                 {
                     mNerf.Remove(nerf.Nerf);
@@ -69,6 +69,7 @@ public class BuffAndNerfEntity : MonoBehaviour
         else
         {
             mBuff.Add(buff.Buff, buff);
+            buff.isActive = true;
             buff.Activate();
         }
     }

@@ -1,40 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerSpawner : MonoBehaviour
+public class PlayerSpawner : Spawner
 {
-    GameObject mPlayer;
-    public string mUnitElement = "Jimmy";
-    public void Respawn()
+    public string mName;
+    public override void Spawn()
     {
-        if(mPlayer)
+        if (mInitialized)
+            return;
+
+        if (GameManager.Instance.mPlayer != null)
         {
-            Debug.Log("Destory" + mPlayer.name);
-            GameManager.Instance.mPlayer = null;
-            Destroy(mPlayer);
-            mPlayer = null;
+            if (GameManager.Instance.mPlayer.IsDied)
+            {
+                mInitialized = true;
+                GameManager.Instance.mPlayer.ResetPlayerUnit();
+                GameManager.Instance.mPlayer.OnBattleEnd();
+                mObject = GameManager.Instance.mPlayer.gameObject;
+                GameManager.Instance.mPlayer.transform.GetComponent<CharacterController>().enabled = false;
+                GameManager.Instance.mPlayer.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                GameManager.Instance.mPlayer.transform.GetComponent<CharacterController>().enabled = true;
+                mObject.GetComponent<PlayerController>().mModel.GetComponent<Billboard>().Initialize();
+            }
+            else
+            {
+                Debug.Log(transform.position.x + " " + transform.position.z);
+                GameManager.Instance.mPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+                GameManager.Instance.mPlayer.transform.GetComponent<CharacterController>().enabled = false;
+                GameManager.Instance.mPlayer.transform.localPosition = transform.localPosition;
+                GameManager.Instance.mPlayer.transform.GetComponent<CharacterController>().enabled = true;
+                GameManager.Instance.mPlayer.GetComponent<PlayerController>().mModel.GetComponent<Billboard>().Initialize();
+            }
+
         }
-        
-        mPlayer = Instantiate(Resources.Load<GameObject>("Prefabs/Player"), transform.position,Quaternion.identity);
+        else
+        {
+            mObject = CreateNewObject();
+            if (mObject == null)
+            {
+                Debug.Log("Failed to create");
+                mInitialized = false;
+            }
+            else
+                mInitialized = true;
+        }
+    }
+    protected override GameObject CreateNewObject()
+    {
+        if (mObject)
+        {
+            Debug.Log("Destory" + mObject.name);
+            GameManager.Instance.mPlayer = null;
+            Destroy(mObject);
+            mObject = null;
+        }
 
-        GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/" + mUnitElement), transform.position, Quaternion.identity);
-        unit.transform.SetParent(mPlayer.transform);
-        mPlayer.GetComponent<PlayerController>().mHeroes.Add(unit);
+        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player"), transform.position, Quaternion.identity);
+        mObject.GetComponent<InteractSystem>().Initialize();
+        GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/" + mName), transform.position, Quaternion.identity);
+        unit.transform.SetParent(mObject.transform);
+        mObject.GetComponent<PlayerController>().mHeroes.Add(unit);
         unit.SetActive(false);
-
-        GameManager.Instance.mPlayer = mPlayer.GetComponent<PlayerController>();
-        GameManager.Instance.mPlayer.ResetPlayerUnit();
-        if(GameManager.Instance.mCamera)
+        Debug.Log(mObject.GetComponent<PlayerController>().mHeroes.Count);
+        mObject.GetComponent<PlayerController>().ResetPlayerUnit();
+        if (GameManager.Instance.mCamera)
         {
             GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
-    GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mPlayer.transform;
+    GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mObject.transform;
         }
-
-    }
-
-    public void Spawn()
-    {
-        Instantiate(mPlayer, transform.position, Quaternion.identity);
+        DontDestroyOnLoad(mObject);
+        return mObject;
     }
 }

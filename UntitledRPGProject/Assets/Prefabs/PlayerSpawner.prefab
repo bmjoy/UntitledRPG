@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b674c2da26f174e94ed1ce18ae241d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mPlayerPrefab: {fileID: 4784066880903253931, guid: 6769ae0ce46a1c8468b4478e70fc2f0c, type: 3}
+  mGizmoColor: {r: 0, g: 0.07060099, b: 1, a: 0}
+  mName: 

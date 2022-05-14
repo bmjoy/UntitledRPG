@@ -22,8 +22,10 @@ MonoBehaviour:
   isComplete: 1
   mSkillType: 0
   mProperty: 1
-  mBuff: {fileID: 0}
-  mNerf: {fileID: 0}
+  mElement: 0
+  mBuffList: []
+  mNerfList: []
   IsRangeType: 1
   IsInstantType: 0
-  mStartPosition: {x: 0, y: 0}
+  mRange: 30
+  mStartPosition: {x: 2, y: 0}

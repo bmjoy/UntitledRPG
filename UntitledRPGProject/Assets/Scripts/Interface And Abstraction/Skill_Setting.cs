@@ -21,9 +21,22 @@ public abstract class Skill_Setting : ScriptableObject
     public bool isComplete = false;
     public SkillType mSkillType;
     public SkillProperty mProperty;
+    public SkillElement mElement = SkillElement.Normal;
 
-    public Buff mBuff;
-    public Nerf mNerf;
+    [Serializable]
+    public class BuffList
+    {
+        public Buff mBuff;
+    }
+
+    public List<Buff> mBuffList = new List<Buff>();
+    [Serializable]
+    public class NerfList
+    {
+        public Nerf mNerf;
+    }
+    
+    public List<Nerf> mNerfList = new List<Nerf>();
 
     public UnityAction mAction;
     

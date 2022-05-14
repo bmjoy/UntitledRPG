@@ -7,6 +7,11 @@ public class Enemy : Unit
     protected override void Start()
     {
         base.Start();
+
+        Componenet_Initialize();
+        Prefab_Initialize();
+        AI_Initialize();
+
         GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
         if (agent.Length > 1)
         {

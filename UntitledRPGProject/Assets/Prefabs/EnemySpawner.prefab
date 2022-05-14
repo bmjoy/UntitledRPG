@@ -43,8 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d711c93dff66e4a41a268d4e7a57f87c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mDelaySpawnTime: 1
+  mGizmoColor: {r: 1, g: 0, b: 0, a: 0}
   mEnemyList: 01000000020000000200000002000000
-  mLeader: 2
   mRadius: 20
   mAngle: 60

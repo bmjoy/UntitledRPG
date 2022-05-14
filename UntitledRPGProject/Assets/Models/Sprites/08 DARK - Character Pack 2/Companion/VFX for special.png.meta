@@ -1,7 +1,31 @@
 fileFormatVersion: 2
 guid: 70c7861d338c80f4887caa1aaa8cbcd2
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 739788646088069752
+    second: VFX for special_0
+  - first:
+      213: -6811589174490532855
+    second: VFX for special_1
+  - first:
+      213: -4912950003861711888
+    second: VFX for special_2
+  - first:
+      213: 5795382979362973392
+    second: VFX for special_3
+  - first:
+      213: 7847783571228738504
+    second: VFX for special_4
+  - first:
+      213: 6486623412569036654
+    second: VFX for special_5
+  - first:
+      213: -901014443173727425
+    second: VFX for special_6
+  - first:
+      213: 6516412105137668210
+    second: VFX for special_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +113,179 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: VFX for special_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 91
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87252f2aad1444a00800000000000000
+      internalID: 739788646088069752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 78
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90478923cbf5871a0800000000000000
+      internalID: -6811589174490532855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 65
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f3919c5002b1dbb0800000000000000
+      internalID: -4912950003861711888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 52
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d6664e4d165d6050800000000000000
+      internalID: 5795382979362973392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 39
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c34c35249de8ec60800000000000000
+      internalID: 7847783571228738504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 26
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e67d8e940ad150a50800000000000000
+      internalID: 6486623412569036654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 13
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3332214324fe73f0800000000000000
+      internalID: -901014443173727425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for special_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 97
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27049c0c842fe6a50800000000000000
+      internalID: 6516412105137668210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 19dfb864115e0e743973393f671a1746
     internalID: 0
     vertices: []
     indices: 
