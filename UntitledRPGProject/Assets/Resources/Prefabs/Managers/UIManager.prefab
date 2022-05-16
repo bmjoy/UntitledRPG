@@ -9482,8 +9482,8 @@ MonoBehaviour:
   key: {fileID: 0}
   Ypos: 5
   mSpriteLocalScale: 0.25
-  mSpeed: 50
-  mMaximumSpeed: 200
+  mSpeed: 800
+  mMaximumSpeed: 1000
 --- !u!1 &4006757060044667883
 GameObject:
   m_ObjectHideFlags: 0
