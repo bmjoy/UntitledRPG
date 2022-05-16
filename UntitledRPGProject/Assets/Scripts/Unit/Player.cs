@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Player : Unit
 {
     public UnitDataStorage mStorage;
-
+    public BigHealthBar mMyHealthBar;
     protected override void Start()
     {
         base.Start();
@@ -41,11 +41,15 @@ public class Player : Unit
     protected override void Update()
     {
         base.Update();
+        if(mMyHealthBar != null)
+            mMyHealthBar.mCurrentMana = mStatus.mMana;
     }
 
     public override void TakeDamage(float dmg, DamageType type)
     {
         base.TakeDamage(dmg, type);
+        mMyHealthBar.mCurrentHealth = (mStatus.mHealth > 0.0f) ? mStatus.mHealth : 0.0f;
+        mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
         if (mConditions.isDied)
         {
             GameManager.Instance.mUnitData.Remove(mSetting.Name);

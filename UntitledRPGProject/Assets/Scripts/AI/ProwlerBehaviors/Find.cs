@@ -8,8 +8,7 @@ public class Find : P_State
     GameObject player;
     Vector3 dest = Vector3.zero;
     float mTime = 0.0f;
-    float mMaximumStandbyTime = 3.0f;
-    public override void Enter(EnemyProwler agent)
+    public override void Enter(Prowler agent)
     {
         if(player == null)
             player = GameObject.FindGameObjectWithTag("Player").gameObject;
@@ -22,7 +21,7 @@ public class Find : P_State
         dest = agent.mAgent.destination;
     }
 
-    public override void Execute(EnemyProwler agent)
+    public override void Execute(Prowler agent)
     {
         mTime += Time.deltaTime;
         agent.mVelocity = agent.mAgent.velocity;
@@ -30,7 +29,7 @@ public class Find : P_State
         if (Vector3.Dot(dir, agent.transform.position) > Mathf.Cos(agent.mAngle))
         {
             float dist = Vector3.Distance(agent.transform.position, player.transform.position);
-            if (Physics.Raycast(agent.transform.position, dir, dist, -1))
+            if (dist <= agent.mRadius)
             {
                 agent.mLastPos = player.transform.position;
                 agent.ChangeBehavior("Pursuit");
@@ -38,11 +37,11 @@ public class Find : P_State
         }
 
 
-        if(mTime > mMaximumStandbyTime || Vector3.Distance(agent.transform.position, dest) < 1.1f)
+        if(mTime > agent.mStandbyTime || Vector3.Distance(agent.transform.position, dest) < 1.1f)
             agent.ChangeBehavior("Idle");
     }
 
-    public override void Exit(EnemyProwler agent)
+    public override void Exit(Prowler agent)
     {
         mTime = 0.0f;
         agent.mAnimator.SetFloat("Speed", 0.0f);

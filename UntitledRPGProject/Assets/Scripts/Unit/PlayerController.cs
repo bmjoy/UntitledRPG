@@ -6,6 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController mInstance;
+    public static PlayerController Instance { get { return mInstance; } }
+    private void Awake()
+    {
+        if (mInstance != null && mInstance != this)
+            Destroy(gameObject);
+        else
+            mInstance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+
     [SerializeField]
     private float mSpeed = 5.0f;
     [SerializeField]
@@ -14,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = true;
     public bool IsDied = false;
 
-    private ControlState mState = new IdleState();
+    public ControlState mState = new IdleState();
 
     public GameObject mModel;
     public List<GameObject> mHeroes = new List<GameObject>();
@@ -25,31 +37,42 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer mSpriteRenderer;
     private GameObject mGroundCheck;
     private Transform mCamera;
+    private InteractSystem mInteractSystem;
 
     private bool isLeft = false;
     public bool onBattle = false;
     public int mGold = 0;
     private Animator mAnimator;
+
+    public bool Interaction { get { return mInteractSystem.IsInteracting; } }
+
     // Start is called before the first frame update
     void Start()
     {
-        GameObject groundCheck = new GameObject("GroundCheck");
-        mModel = transform.Find("Model").gameObject;
-        groundCheck.transform.position = new Vector3(transform.position.x, transform.position.y - 1.0f, transform.position.z);
-        groundCheck.transform.parent = transform;
-        mGroundCheck = groundCheck;
-        GameManager.Instance.mPlayer = this;
+        if(transform.Find("GroundCheck") == null)
+        {
+            GameObject groundCheck = new GameObject("GroundCheck");
+            mModel = transform.Find("Model").gameObject;
+            groundCheck.transform.position = new Vector3(transform.position.x, transform.position.y - 1.0f, transform.position.z);
+            groundCheck.transform.parent = transform;
+            mGroundCheck = groundCheck;
+        }
+
         mCharacterController = GetComponent<CharacterController>();
         GameManager.Instance.onPlayerBattleStart += OnBattleStart;
         GameManager.Instance.onPlayerBattleEnd += OnBattleEnd;
         mAnimator = transform.GetComponentInChildren<Animator>();
         mSpriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
         mCollider = GetComponent<BoxCollider>();
-
+        mInteractSystem = GetComponent<InteractSystem>();
         for (int i = 0; i < mHeroes.Count; ++i)
         {
             mHeroes[i].GetComponent<Player>().Initialize();
         }
+
+
+        if (mCamera == null)
+            mCamera = CameraSwitcher.Instance.transform.Find("GameWorldCamera");
     }
 
     // Update is called once per frame
@@ -57,10 +80,8 @@ public class PlayerController : MonoBehaviour
     {
         if (mModel.activeInHierarchy == false)
             return;
-
-        if (mCamera == null)
-            mCamera = GameObject.FindGameObjectWithTag("Camera").transform.Find("GameWorldCamera");
-
+        if (Interaction)
+            return;
         mState = mState.Handle();
         StateControl();
         

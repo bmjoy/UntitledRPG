@@ -6,7 +6,7 @@ public class Pursuit : P_State
 {
     float mTime = 0.0f;
     float mMaximumStandbyTime = 4.0f;
-    public override void Enter(EnemyProwler agent)
+    public override void Enter(Prowler agent)
     {
         mTime = 0.0f;
         agent.mAgent.speed = 5.0f;
@@ -14,7 +14,7 @@ public class Pursuit : P_State
         agent.mAnimator.SetFloat("Speed", agent.mAgent.speed);
     }
 
-    public override void Execute(EnemyProwler agent)
+    public override void Execute(Prowler agent)
     {
         mTime += Time.deltaTime;
         agent.mVelocity = agent.mAgent.velocity;
@@ -22,7 +22,7 @@ public class Pursuit : P_State
             agent.ChangeBehavior("Find");
     }
 
-    public override void Exit(EnemyProwler agent)
+    public override void Exit(Prowler agent)
     {
         agent.mAgent.speed = agent.mOriginalSpeed;
         agent.mAnimator.SetFloat("Speed", 0.0f);

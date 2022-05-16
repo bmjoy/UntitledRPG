@@ -29,20 +29,13 @@ public class DefendBehavior : State
         else
         {
             list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
-    : GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
-            int percentage = UnityEngine.Random.Range(0, 100);
-            isMagic = (percentage >= 50) ? true : false;
+    : PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
+            isMagic = (UnityEngine.Random.Range(0, 100) >= 50) ? true : false;
         }
     }
 
     public override void Execute(Unit agent)
     {
-        if (isAct)
-        {
-            if (agent.mOrder == Order.TurnEnd)
-                agent.mAiBuild.stateMachine.ChangeState("Standby");
-            return;
-        }
         if (isMagic)
         {
             var skill = agent.mSkillDataBase.Skill;
@@ -82,18 +75,18 @@ public class DefendBehavior : State
                     default:
                         break;
                 }
-
             }
             else
                 BattleManager.Instance.Defend();
         }
         else
             BattleManager.Instance.Defend();
-        isAct = true;
+
+        agent.mAiBuild.stateMachine.ChangeState("Waiting");
     }
 
     public override void Exit(Unit agent)
     {
-        isAct = false;
+        agent.mConditions.isPicked = false;
     }
 }
