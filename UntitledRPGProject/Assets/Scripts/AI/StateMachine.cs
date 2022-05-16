@@ -71,11 +71,10 @@ public class ProwlerStateMachine : MonoBehaviour
     // Start is called before the first frame update
     public P_State mCurrentState;
     public Dictionary<string, object> mStates = new Dictionary<string, object>();
-    public EnemyProwler mAgent;
-
+    public Prowler mAgent;
     private void Awake()
     {
-        mAgent = this.transform.GetComponent<EnemyProwler>();
+        mAgent = this.transform.GetComponent<Prowler>();
     }
 
     public void AddState<T>(T newState, string stateName) where T : class

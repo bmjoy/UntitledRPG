@@ -5,34 +5,37 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    public Image mBorader;
-    public Image mBar;
-    public Image mManaBar;
+    protected Image mBorader;
+    protected Image mBar;
+    protected Image mManaBar;
 
-    private float mMaxHealth = 0.0f;
+    protected Animator mAnimator;
+
+    protected float mMaxHealth = 0.0f;
     public float mCurrentHealth = 0.0f;
 
-    private float mMaxMana = 0.0f;
+    protected float mMaxMana = 0.0f;
     public float mCurrentMana = 0.0f;
 
-    private bool isInitialized = false;
+    protected bool isInitialized = false;
 
-    public void Initialize(float currHP, float maxHP, float currMP, float maxMP)
+    public virtual void Initialize(float currHP, float maxHP, float currMP, float maxMP)
     {
         mCurrentHealth = currHP;
         mMaxHealth = maxHP;
         mCurrentMana = currMP;
         mMaxMana = maxMP;
+
         mBorader = transform.parent.GetComponent<Image>();
+        mAnimator = mBorader.GetComponent<Animator>();
         mBorader.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-        mBorader.transform.GetComponent<Animator>().SetBool("Death", false);
         mBar = GetComponent<Image>();
         mManaBar = transform.Find("ManaBorader").Find("Mana").GetComponent<Image>();
         isInitialized = true;
         gameObject.SetActive(false);
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if(isInitialized)
         {
@@ -42,7 +45,7 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    public IEnumerator PlayBleed()
+    public virtual IEnumerator PlayBleed()
     {
         mBorader.transform.GetComponent<Animator>().SetTrigger("Wiggle");
         transform.Find("Bleed").GetComponent<ParticleSystem>().Play();
@@ -50,7 +53,7 @@ public class HealthBar : MonoBehaviour
         transform.Find("Bleed").transform.localPosition = new Vector3(mBar.fillAmount * 100.0f - 50.0f, 0.0f, 0.0f);
     }
 
-    public void Active(bool active)
+    public virtual void Active(bool active)
     {
         mBorader.gameObject?.SetActive(active);
         mBar.gameObject?.SetActive(active);

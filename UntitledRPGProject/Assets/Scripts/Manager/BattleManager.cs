@@ -29,11 +29,23 @@ public class BattleManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
     }
-    
+    public GameObject mCurrentField;
     public List<GameObject> mUnits = new List<GameObject>();
     public Queue<Unit> mOrders = new Queue<Unit>();
     public Vector3 playerCenter = Vector3.zero;
     public Vector3 enemyCenter = Vector3.zero;
+
+    private List<Vector3> mOriginalFieldPos = new List<Vector3>(8)
+    {
+        new Vector3(0.0f,0.0f, -6.0f),
+        new Vector3(0.0f,0.0f,-13.0f),
+        new Vector3(-5.0f,0.0f,-10.0f),
+        new Vector3(5.0f,0.0f,-10.0f),
+        new Vector3(0.0f,0.0f, 6.0f),
+        new Vector3(0.0f,0.0f,13.0f),
+        new Vector3(-5.0f,0.0f,10.0f),
+        new Vector3(5.0f,1.0f,10.0f),
+    };
 
     public Unit mCurrentUnit = null;
     public float mPercentageHP = 30.0f;
@@ -50,6 +62,14 @@ public class BattleManager : MonoBehaviour
     public event Action onMovingOrderEvent;
     public event Action onFinishOrderEvent;
 
+    private void Start()
+    {
+        mCurrentField = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Field"));
+        mCurrentField.transform.parent = transform;
+        mCurrentField.SetActive(false);
+        GameManager.Instance.onPlayerBattleStart += Initialize;
+    }
+
     public void Initialize()
     {
         StartCoroutine(Wait());
@@ -57,11 +77,11 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator Wait()
     {
-        yield return new WaitUntil(()=> GameManager.Instance.mPlayer.onBattle == true 
+        yield return new WaitUntil(()=> PlayerController.Instance.onBattle == true 
         && GameManager.Instance.mEnemyProwler.onBattle == true);
         mUnits.Clear();
         mOrders.Clear();
-        mUnits.AddRange(GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
+        mUnits.AddRange(PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mUnits.Sort((a, b) => (b.GetComponent<Unit>().mStatus.mAgility.CompareTo(
             a.GetComponent<Unit>().mStatus.mAgility)));
@@ -71,6 +91,7 @@ public class BattleManager : MonoBehaviour
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
         onEnqueuingOrderEvent?.Invoke();
+        UIManager.Instance.DisplayHealthBar(true);
         status = GameStatus.Start;
     }
 
@@ -86,40 +107,26 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameStatus.Queue:
                 {
-                    mCurrentUnit?.mField.GetComponent<Field>().Picked(false);
-                    mCurrentUnit = null;
+                    UIManager.Instance.DisplayBattleInterface(false);
+                    mCurrentUnit = mOrders.Dequeue();
 
-                    if (mCurrentUnit == null)
+                    if (mCurrentUnit.mConditions.isDied)
                     {
-                        UIManager.Instance.DisplayBattleInterface(false);
-                        mCurrentUnit = mOrders.Dequeue();
-
-                        if (mCurrentUnit.mConditions.isDied)
-                        {
-                            mCurrentUnit.mField.GetComponent<Field>().Picked(false);
-                            onDequeuingOrderEvent?.Invoke(mCurrentUnit);
-                            mCurrentUnit = null;
-                            return;
-                        }
-                        else
-                        {
-
-                            mCurrentUnit.mConditions.isDefend = false;
-                            mCurrentUnit.mConditions.isPicked = true;
-                            mCurrentUnit.mField.GetComponent<Field>().Picked(true);
-                            onMovingOrderEvent?.Invoke();
-                            mCurrentUnit.mOrder = Order.Standby;
-                            mCurrentUnit?.BuffAndNerfTick();
-                            if (mCurrentUnit.mFlag == Flag.Player)
-                                UIManager.Instance.DisplayBattleInterface(true);
-                            if (mCurrentUnit.mSkillDataBase != null)
-                            {
-                                var data = mCurrentUnit.mSkillDataBase;
-                                UIManager.Instance.ChangeHoverTip((data.Skill) ?  "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty");
-                            }
-
-                            status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
-                        }
+                        mCurrentUnit.mAiBuild.stateMachine.ChangeState("Waiting");
+                        mCurrentUnit.mField.GetComponent<Field>().Picked(false);
+                        onDequeuingOrderEvent?.Invoke(mCurrentUnit);
+                        mCurrentUnit = null;
+                        return;
+                    }
+                    else
+                    {
+                        mCurrentUnit.mAiBuild.stateMachine.ChangeState("Standby");
+                        onMovingOrderEvent?.Invoke();
+                        UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
+                        var data = mCurrentUnit.mSkillDataBase;
+                        if (data != null)
+                            UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty");
+                        status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
                     }
                 }
                 break;
@@ -138,8 +145,8 @@ public class BattleManager : MonoBehaviour
             case GameStatus.Result:
                 {
                     status = (BattleResult() == true) ? status = GameStatus.Reward : GameStatus.Queue;
-                    break;
                 }
+                break;
             case GameStatus.Reward:
                 {
                     UIManager.Instance.DisplayBattleInterface(false);
@@ -160,10 +167,8 @@ public class BattleManager : MonoBehaviour
             case GameStatus.Finish:
                 {
                     foreach (GameObject unit in mUnits)
-                    {
                         unit.GetComponent<Unit>().ClearBuffAndNerf();
-                    }
-                    CameraSwitcher.SwitchCamera();
+                    UIManager.Instance.DisplayHealthBar(false);
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     onReward = false;
                     mCurrentUnit = null;
@@ -179,12 +184,12 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         UIManager.Instance.FadeInWord();
         UIManager.Instance.ChangeText("Victory! \n\n EXP: " + GameManager.s_TotalExp + "\n\n Gold: " + GameManager.s_TotalGold);
-        int shareExp = GameManager.s_TotalExp / GameManager.Instance.mPlayer.mHeroes.Count;
+        int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
         
-        foreach (var unit in GameManager.Instance.mPlayer.mHeroes)
+        foreach (var unit in PlayerController.Instance.mHeroes)
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
 
-        GameManager.Instance.mPlayer.mGold += GameManager.s_TotalGold;
+        PlayerController.Instance.mGold += GameManager.s_TotalGold;
         yield return new WaitForSeconds(mWaitTime);
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.FadeOutWord();
@@ -200,7 +205,7 @@ public class BattleManager : MonoBehaviour
             isWin = true;
             return true;
         }
-        else if (GameManager.Instance.mPlayer.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        else if (PlayerController.Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             isWin = false;
             return true;
@@ -211,11 +216,11 @@ public class BattleManager : MonoBehaviour
 
     public void SetBattleField()
     {
-        Vector3 mOffset = GameManager.Instance.mPlayer.transform.localPosition;
+        Vector3 mOffset = PlayerController.Instance.transform.localPosition;
         Vector3 mTargetOffset = GameManager.Instance.mEnemyProwler.transform.localPosition;
         Vector3 point = mOffset + 0.5f * (mTargetOffset - mOffset);
 
-        GameManager.Instance.mCurrentField.transform.localPosition = point;
+        Instance.mCurrentField.transform.localPosition = point;
         AdjustBattleField();
     }
 
@@ -224,8 +229,8 @@ public class BattleManager : MonoBehaviour
 
     public void AdjustBattleField()
     {
-        playerFieldParent = GameManager.Instance.mCurrentField.transform.Find("PlayerFields");
-        enemyFieldParent = GameManager.Instance.mCurrentField.transform.Find("EnemyFields");
+        playerFieldParent = Instance.mCurrentField.transform.Find("PlayerFields");
+        enemyFieldParent = Instance.mCurrentField.transform.Find("EnemyFields");
 
         playerCenter = playerFieldParent.position;
         enemyCenter = enemyFieldParent.position;
@@ -239,8 +244,18 @@ public class BattleManager : MonoBehaviour
             enemyField.GetComponent<Field>().Initialize();
         }
 
-        CameraSwitcher.UpdateCamera(GameManager.Instance.mCurrentField.transform);
-        GameManager.Instance.mCurrentField.SetActive(true);
+        CameraSwitcher.UpdateCamera(Instance.mCurrentField.transform);
+        Instance.mCurrentField.SetActive(true);
+    }
+
+    public void ResetField()
+    {
+        for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
+            Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
+
+        for (int i = 0; i < Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
+            Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
+        Instance.mCurrentField.SetActive(false);
     }
 
     public void Attack()
@@ -283,6 +298,7 @@ public class BattleManager : MonoBehaviour
 
     public void Cancel()
     {
+        mCurrentUnit.mConditions.isCancel = false;
         status = GameStatus.WaitForOrder;
         UIManager.Instance.DisplayBattleInterface(true);
         mCurrentUnit.StopAllCoroutines();

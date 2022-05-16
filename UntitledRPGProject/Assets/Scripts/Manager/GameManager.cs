@@ -19,50 +19,34 @@ public class GameManager : MonoBehaviour
         mUnitData.Clear();
         mCamera = Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
     }
-    public GameState mGameState;
-    public GameObject mCamera;
-    public PlayerController mPlayer;
-    public EnemyProwler mEnemyProwler;
-    private List<Vector3> mOriginalFieldPos;
-    public GameObject mCurrentField;
-    private GameObject[] EnemyProwlers;
 
+    public GameState mGameState;
+    private GameObject[] EnemyProwlers;
     public Dictionary<string, UnitDataStorage> mUnitData = new Dictionary<string, UnitDataStorage>();
 
     public static int s_ID = 0;
     public static int s_TotalExp = 0;
     public static int s_TotalGold = 0;
     public int TotalSoul = 0;
+    [HideInInspector]
+    public GameObject mCamera;
+    [HideInInspector]
+    public EnemyProwler mEnemyProwler;
+    [HideInInspector]
     public int mCurrentLevel = 0;
 
-    [SerializeField]
-    private int mAmountofSoul = 20;
+    public int mAmountofSoul = 20;
     [SerializeField]
     private float mWaitForRestart = 3.0f;
 
     private void Start()
     {
-        mOriginalFieldPos = new List<Vector3>()
-        {
-            new Vector3(0.0f,0.0f, -6.0f),
-            new Vector3(0.0f,0.0f,-13.0f),
-            new Vector3(-5.0f,0.0f,-10.0f),
-            new Vector3(5.0f,0.0f,-10.0f),
-
-            new Vector3(0.0f,0.0f, 6.0f),
-            new Vector3(0.0f,0.0f,13.0f),
-            new Vector3(-5.0f,0.0f,10.0f),
-            new Vector3(5.0f,1.0f,10.0f),
-        };
         mUnitData.Clear();
         Initialize();
     }
 
     private void Initialize()
     {
-        mCurrentField = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Field"));
-        mCurrentField.transform.parent = transform;
-        mCurrentField.SetActive(false);
         s_ID = 0;
         s_TotalExp = 0;
         s_TotalGold = 0;
@@ -77,56 +61,26 @@ public class GameManager : MonoBehaviour
     {
         switch (mGameState)
         {
-            case GameState.MainMenu:
-                break;
+            case GameState.MainMenu: break;
             case GameState.GamePlay:
-                {
-                    if (Input.GetKeyDown(KeyCode.Escape))
-                    {
-                        Time.timeScale = 0.0f;
-                        mGameState = GameState.GamePause;
-                    }
-                }
-                break;
-            case GameState.GamePause:
-                {
-                    if (Input.GetKeyDown(KeyCode.Escape))
-                    {
-                        Time.timeScale = 1.0f;
-                        mGameState = GameState.GamePlay;
-                    }
-                }
-                break;
-            case GameState.Busy:
-                {
-                }
-                break;
-            case GameState.Victory:
-                {
-                    OnBattleEnd();
-                    //TODO: Display victory screen
-                }
-                break;
-            case GameState.GameOver:
-                {
-                    GameOver();
-                    //TODO: Display defeat screen
-                }
-                break;
-            default:
-                break;
+            case GameState.GamePause:Pause(); break;
+            case GameState.Busy:break;
+            case GameState.Victory: OnBattleEnd(); break;
+            case GameState.GameOver: GameOver(); break;
         }
 
     }
 
-    private void FinalizeBattle()
+    private void Pause()
     {
-        OnEnemyDeath(mEnemyProwler.id);
-        ResetObjects();
+        if(Input.GetKeyDown(KeyCode.Escape))
+            mGameState = (mGameState == GameState.GamePlay) ? GameState.GamePause : GameState.GamePlay;
+        Time.timeScale = (mGameState == GameState.GamePause) ? 0.0f : 1.0f;
     }
 
     private void GameOver()
     {
+        CameraSwitcher.SwitchCamera();
         onEnemyWin(Instance.mEnemyProwler.id, () =>
         {
             Instance.mEnemyProwler.isWin = true;
@@ -135,24 +89,17 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.mOrderbar.GetComponent<OrderBar>().Clear();
         CameraSwitcher.Instance.mBloom.intensity.value = 0.0f;
         ResetObjects();
-        mPlayer.IsDied = true;
-        // TODO: Gameover screen
+        PlayerController.Instance.IsDied = true;
         StartCoroutine(Restart());
     }
 
     private IEnumerator Restart()
     {
-        TotalSoul += mAmountofSoul;
-        UIManager.Instance.FadeInScreen();
-        yield return new WaitForSeconds(0.5f);
-        UIManager.Instance.FadeInWord();
+        onFadeGameOverScreenEvent?.Invoke();
         UIManager.Instance.ChangeText("<color=red>" + UIManager.Instance.mTextForGameOver + "</color>");
         yield return new WaitForSeconds(mWaitForRestart);
-        SceneLoader.Instance.RestartGame();
-        UIManager.Instance.FadeOutScreen();
-        UIManager.Instance.FadeOutWord();
+        onGameOverToReset?.Invoke();
         s_ID = 0;
-
         s_TotalExp = 0;
         s_TotalGold = 0;
     }
@@ -161,16 +108,8 @@ public class GameManager : MonoBehaviour
     {
         ActiveEnemyProwlers(true);
         BattleManager.Instance.StopAllCoroutines();
-        for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
-        {
-            Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
-        }
-
-        for (int i = 0; i < Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
-        {
-            Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
-        }
-        Instance.mCurrentField.SetActive(false);
+        BattleManager.Instance.ResetField();
+        Destroy(mEnemyProwler.gameObject);
         EnemyProwlers = null;
         mEnemyProwler = null;
     }
@@ -178,21 +117,19 @@ public class GameManager : MonoBehaviour
     public event Action onPlayerBattleStart;
     public event Action onPlayerBattleEnd;
     public event Action<int> onBattle;
+    public event Action onFadeGameOverScreenEvent;
+    public event Action onGameOverToReset;
+    public event Action<int, Action> onEnemyWin;
     public void OnBattleStart(int id)
     {
         BattleManager.Instance.SetBattleField();
         onBattle?.Invoke(id); // Enemy preparation
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch
-
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
-        CameraSwitcher.SwitchCamera();
-        BattleManager.Instance.Initialize();
         ActiveEnemyProwlers(false);
         mGameState = GameState.Busy;
     }
 
-    public event Action<int> onEnemyDeath;
-    public event Action<int, Action> onEnemyWin;
 
     public void OnEnemyWin(int id, Action action)
     {
@@ -200,14 +137,10 @@ public class GameManager : MonoBehaviour
         mEnemyProwler = null;
     }
 
-    public void OnEnemyDeath(int id)
-    {
-        onEnemyDeath?.Invoke(id);
-    }
-
     public void OnBattleEnd()
     {
-        FinalizeBattle();
+        CameraSwitcher.SwitchCamera();
+        ResetObjects();
         UIManager.Instance.DisplayBattleInterface(false);
         onPlayerBattleEnd?.Invoke();
         mGameState = GameState.GamePlay;

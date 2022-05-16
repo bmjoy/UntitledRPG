@@ -30,6 +30,7 @@ public class SceneLoader : MonoBehaviour
         Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), Vector3.zero, Quaternion.identity);
 
         GameManager.Instance.mCurrentLevel = _sceneIndex;
+        GameManager.Instance.onGameOverToReset += RestartGame;
     }
 
     void Update()

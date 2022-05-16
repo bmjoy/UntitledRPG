@@ -19,3 +19,12 @@ public enum BuffType
     Melee,
     Magic
 }
+
+public enum NPCType
+{
+    None,
+    Villager,
+    Market,
+    Hero,
+    Trap
+}

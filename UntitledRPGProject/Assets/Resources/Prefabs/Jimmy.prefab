@@ -53,7 +53,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.4, y: 1.7, z: 1}
+  m_Size: {x: 1.4, y: 2, z: 1.7}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7617708971306897893
 Rigidbody:
@@ -109,6 +109,7 @@ MonoBehaviour:
   mField: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 7190519438ef42e40aca8bc2e020abc0, type: 2}
   mWaitingTimeForBattle: 0.75
+  mFireLocation: {x: 0, y: 0}
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
   mAttackDistance: 2

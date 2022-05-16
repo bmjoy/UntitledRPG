@@ -34,21 +34,15 @@ public class AttackBehavior : State
 
     public override void Execute(Unit agent)
     {
-        if (isAct)
-        {
-            if (agent.mOrder == Order.TurnEnd)
-                agent.mAiBuild.stateMachine.ChangeState("Standby");
-            return;
-        }
-        if(isMagic)
+        if (isMagic)
             BattleManager.Instance.Magic();
         else
             BattleManager.Instance.Attack();
-        isAct = true;
+        agent.mAiBuild.stateMachine.ChangeState("Waiting");
     }
 
     public override void Exit(Unit agent)
     {
-        isAct = false;
+        agent.mConditions.isPicked = false;
     }
 }

@@ -35,9 +35,13 @@ public class TargetAbility : Skill_Setting
                 UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForTarget);
                 UIManager.Instance.DisplayAskingSkill(true);
                 mTarget = null;
-                while (mTarget == null)
+                while (true)
                 {
                     Raycasting();
+                    if(Input.GetMouseButtonDown(0) && mTarget)
+                    {
+                        break;
+                    }
                     if (Input.GetMouseButtonDown(1))
                     {
                         mTarget = null;
@@ -207,19 +211,24 @@ public class TargetAbility : Skill_Setting
             if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
                 : LayerMask.GetMask("Enemy")))
             {
-                if (Input.GetMouseButtonDown(0) && hit.transform.GetComponent<Unit>().mConditions.isDied == false)
-                    mTarget = hit.transform.GetComponent<Unit>();
+                mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                mTarget?.mSelected.SetActive(true);
             }
+            else
+                mTarget?.mSelected.SetActive(false);
         }
         else
         {
             if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Enemy")
                 : LayerMask.GetMask("Ally")))
             {
-                if (Input.GetMouseButtonDown(0) && hit.transform.GetComponent<Unit>().mConditions.isDied == false)
-                    mTarget = hit.transform.GetComponent<Unit>();
+                mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                mTarget?.mSelected.SetActive(true);
             }
+            else
+                mTarget?.mSelected.SetActive(false);
         }
+
     }
 
     public override void Initialize(Unit owner)

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4784066880903253924}
   - component: {fileID: 4784066880903253926}
   - component: {fileID: -6970875723582916920}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -67,6 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSpeed: 10
   mGroundDistance: 2
+  IsDied: 0
   mModel: {fileID: 0}
   mHeroes:
   - {fileID: 0}
@@ -97,6 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a7872c73366664aaa0fc2b869cfab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mRadius: 10
+  IsInteracting: 0
 --- !u!1 &4784066881648165659
 GameObject:
   m_ObjectHideFlags: 0
