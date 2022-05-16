@@ -166,19 +166,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NPCType: 3
+  mComplete: 0
   m_DialogueList:
   - Text: Greetings. My name is Eleven.
     Trigger: 0
-  - Text: Do you need a help?
+  - Text: Do you need help?
     Trigger: 2
   m_DialogueYesCase:
-  - Text: Thank you!
+  - Text: My bow is yours.
     Trigger: 0
   m_DialogueNoCase:
-  - Text: Okay. Let me know if you are available.
+  - Text: Okay. Let me know if you need assistance.
     Trigger: 0
   m_DialogueFailToTradeCase:
-  - Text: That's too bad. You don't have enough souls.
+  - Text: That's too bad. You don't have enough Gold.
     Trigger: 0
   mProperty: {fileID: 11400000, guid: b7475621ea411414cad79864586e2885, type: 2}
   m_NeedsList:

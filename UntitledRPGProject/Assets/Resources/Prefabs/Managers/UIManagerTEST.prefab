@@ -708,8 +708,8 @@ MonoBehaviour:
   key: {fileID: 0}
   Ypos: 5
   mSpriteLocalScale: 0.25
-  mSpeed: 50
-  mMaximumSpeed: 200
+  mSpeed: 300
+  mMaximumSpeed: 500
 --- !u!1 &4006757060044667883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,4 +1549,5 @@ MonoBehaviour:
   mSkillUseCheck: {fileID: 4006757060064408299}
   mBasicText: {fileID: 4006757059391081581}
   mFadeScreen: {fileID: 4006757060521128081}
+  mDialogueBox: {fileID: 0}
   mOrderbar: {fileID: 4006757060035134397}
