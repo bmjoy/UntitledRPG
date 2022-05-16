@@ -4,41 +4,51 @@ using UnityEngine;
 
 public class InteractSystem : MonoBehaviour
 {
-    private PlayerController playerController;
-
-    private void Start()
-    {
-        Initialize(); 
-    }
-    public void Initialize()
-    {
-        playerController = GetComponent<PlayerController>();
-    }
+    [SerializeField]
+    private float mRadius = 10.0f;
+    [SerializeField]
+    private float mCoolTime = 3.0f;
+    private float mCurrentCoolTime = 0.0f;
+    private NPC mClosestNPC = null;
+    private float mDistance = float.MaxValue;
+    public bool IsInteracting = false;
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (playerController.onBattle)
-            return;
+        if (PlayerController.Instance.onBattle) return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        
-        if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("NeutralHero")))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, mRadius, LayerMask.GetMask("NPC"));
+        if (colliders.Length == 0)
         {
-            if(Vector3.Distance(playerController.transform.position, hit.transform.position) > 5.0f)
-                return;
+            IsInteracting = false;
+            return;
+        }
+        for (int i = 0; i < colliders.Length; ++i)
+        {
+            var hit = colliders[i];
+            mClosestNPC = (Vector3.Distance(hit.transform.position, transform.position) < mDistance ) 
+                ? hit.transform.GetComponent<NPC>() : mClosestNPC;
+        }
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                hit.transform.gameObject.layer = LayerMask.NameToLayer("Ally");
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/" + hit.transform.name.Substring(0,hit.transform.name.Length - 10)),transform.position,Quaternion.identity);
-                go.transform.SetParent(transform);
-                go.GetComponent<Unit>().ResetUnit();
-                go.SetActive(false);
-                playerController.mHeroes.Add(go);
-                Destroy(hit.transform.gameObject, 1.0f);
-            }
+    }
+
+    private void Update()
+    {
+        if (mCurrentCoolTime > 0.0f)
+        {
+            mCurrentCoolTime -= Time.deltaTime;
+            return;
+        }
+        if (mClosestNPC && !IsInteracting && Input.GetKeyDown(KeyCode.E))
+        {
+            if (mClosestNPC.mComplete)
+                return;
+            PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
+            PlayerController.Instance.mState = new IdleState();
+            IsInteracting = true;
+            mClosestNPC.StartCoroutine(
+                mClosestNPC.Interact(() => { IsInteracting = false; mCurrentCoolTime += mCoolTime; }));
         }
     }
 }

@@ -42,6 +42,7 @@ public class Bullet : MonoBehaviour
             int random = Random.Range(1, 2);
             mAnimator.Play((mCount >= 3) ? "Burst" + Random.Range(1, 2) : "Burst");
             isDamaged = true;
+            
             Destroy(this.gameObject, 2.5f);
         }
     }

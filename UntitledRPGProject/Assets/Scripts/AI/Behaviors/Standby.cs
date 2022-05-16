@@ -5,34 +5,38 @@ using System.Linq;
 
 public class Standby : State
 {
-    private bool isFinished = false;
     private int randomNumber;
+    private bool IsSucceeded = false;
+    private bool IsSearched = false;
     public override void Enter(Unit agent)
     {
-        Find(agent);
+        agent.mConditions.isDefend = false;
+        agent.mConditions.isPicked = true;
+        agent.mOrder = Order.Standby;
+        agent.BuffAndNerfTick();
+        agent.mField.GetComponent<Field>().Picked(true);
+        IsSucceeded = false;
+        IsSearched = false;
         randomNumber = -1;
     }
 
     public override void Execute(Unit agent)
     {
-        if (isFinished)
-            return;
-
-        if(agent.mConditions.isPicked && !isAct)
+        if (agent.mAiBuild.type == AIType.Auto)
         {
-            isAct = true;
-
-            if(agent.mTarget.mConditions.isDied)
-                Find(agent);
-
-            agent.StartCoroutine(WaitforSecond(agent));
+            IsSucceeded = (IsSucceeded == false) ? Find(agent) : true;
+            if(!IsSearched)
+            {
+                agent.StartCoroutine(WaitforSecond(agent));
+                IsSearched = true;
+            }
         }
+
     }
 
     public override void Exit(Unit agent)
     {
         randomNumber = -1;
-        isAct = false;
     }
 
     private IEnumerator WaitforSecond(Unit agent)
@@ -43,22 +47,21 @@ public class Standby : State
         randomNumber = (agent.mAiBuild.property == AIProperty.Offensive) ?
             UnityEngine.Random.Range(30, 50) : randomNumber = UnityEngine.Random.Range(50, 70);
 
-        if (percent > randomNumber || targetPercent <= BattleManager.Instance.mPercentageHP)
-            agent.mAiBuild.stateMachine.ChangeState("Attack");
-        else
-            agent.mAiBuild.stateMachine.ChangeState("Defend");
+        bool condition1 = percent > randomNumber;
+        bool condition2 = agent.mStatus.mHealth > agent.mTarget.mStatus.mHealth;
+        bool condition3 = targetPercent <= BattleManager.Instance.mPercentageHP;
+
+        agent.mTarget?.mSelected.SetActive(true);
+
+        agent.mAiBuild.stateMachine.ChangeState((condition1 || condition2 || condition3) ? "Attack" : "Defend");
     }
 
-    private void Find(Unit agent)
+    private bool Find(Unit agent)
     {
-        List<GameObject> list = new List<GameObject>();
-        list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mPlayer.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
-            : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
-        if (list.Count == 0)
-        {
-            isFinished = true;
-            return;
-        }
+        List<GameObject> list = new List<GameObject>((agent.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
+            : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()); 
+        if (list.Count == 0) return false;
         agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
+        return !agent.mTarget.mConditions.isDied;
     }
 }

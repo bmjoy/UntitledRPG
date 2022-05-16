@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
+
+
     protected override void Start()
     {
         base.Start();
-
+        
         Componenet_Initialize();
         Prefab_Initialize();
         AI_Initialize();

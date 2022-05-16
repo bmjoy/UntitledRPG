@@ -6,33 +6,21 @@ public class Idle : P_State
 {
     GameObject player;
     float mTime = 0.0f;
-    float mMaximumStandbyTime = 1.0f;
-    public override void Enter(EnemyProwler agent)
+    public override void Enter(Prowler agent)
     {
         mTime = 0.0f;
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
         agent.mAnimator.SetFloat("Speed", 0.0f);
     }
 
-    public override void Execute(EnemyProwler agent)
+    public override void Execute(Prowler agent)
     {
         mTime += Time.deltaTime;
-        if (mTime > mMaximumStandbyTime)
-            agent.ChangeBehavior("Find");
-
-        Vector3 dir = (player.transform.position - agent.transform.position).normalized;
-        if (Vector3.Dot(dir, agent.transform.position) > Mathf.Cos(agent.mAngle))
-        {
-            float dist = Vector3.Distance(agent.transform.position, player.transform.position);
-            if (Physics.Raycast(agent.transform.position, dir, dist, 8))
-            {
-                agent.mLastPos = player.transform.position;
-                agent.ChangeBehavior("Pursuit");
-            }
-        }
+        if (mTime > agent.mStandbyTime)
+            agent.ChangeBehavior((agent.GetType().Name == "EnemyProwler") ? "Find" : "Wander");
     }
 
-    public override void Exit(EnemyProwler agent)
+    public override void Exit(Prowler agent)
     {
     }
 }

@@ -15,9 +15,9 @@ public class EnemySpawner : Spawner
     private List<EnemyUnit> mEnemyList = new List<EnemyUnit>();
 
     [SerializeField]
-    private float mRadius = 100.0f;
+    private float mRadius = 5.0f;
     [SerializeField]
-    private float mAngle = 60.0f;
+    private float mAngle = 30.0f;
 
     protected override GameObject CreateNewObject()
     {
