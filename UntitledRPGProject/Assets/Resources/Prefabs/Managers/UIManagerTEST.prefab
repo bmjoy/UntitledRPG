@@ -148,8 +148,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4006757061055270482}
   - {fileID: 4006757060154860395}
+  - {fileID: 4006757061055270482}
   - {fileID: 4006757060059065041}
   m_Father: {fileID: 4006757058957952317}
   m_RootOrder: 1
@@ -825,7 +825,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 245, y: -104}
+  m_AnchoredPosition: {x: -380, y: -123}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4006757060059065068
@@ -1096,11 +1096,11 @@ RectTransform:
   m_Children:
   - {fileID: 4006757060020503891}
   m_Father: {fileID: 4006757059343610827}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -235, y: -104}
+  m_AnchoredPosition: {x: -380, y: -63}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4006757060154860390
@@ -1394,11 +1394,11 @@ RectTransform:
   m_Children:
   - {fileID: 4006757060044667876}
   m_Father: {fileID: 4006757059343610827}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 3, y: -104}
+  m_AnchoredPosition: {x: -380, y: -93}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4006757061055270510
@@ -1507,7 +1507,7 @@ GameObject:
   - component: {fileID: 5678382836158460694}
   - component: {fileID: 7990373720062459986}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: UIManagerTEST
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
