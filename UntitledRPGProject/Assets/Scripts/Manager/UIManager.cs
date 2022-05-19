@@ -42,6 +42,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject mOrderbar;
 
+    public InventoryUI mInventoryUI;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,9 +51,9 @@ public class UIManager : MonoBehaviour
         mCanvas.overrideSorting = true;
         mOrderbar.GetComponent<OrderBar>().Initialize();
 
-        foreach(Transform bar in mCanvas.transform.Find("HealthBarInBattleGroundGroup"))
+        foreach (Transform bar in mCanvas.transform.Find("HealthBarInBattleGroundGroup"))
         {
-            if(bar.name == "Borader")
+            if (bar.name == "Borader")
                 mHealthBarList.Add(bar.transform.Find("HealthBarInBattleGround").GetComponent<BigHealthBar>());
         }
 
@@ -65,17 +67,35 @@ public class UIManager : MonoBehaviour
         BattleManager.Instance.onEnqueuingOrderEvent += BattleStart;
         BattleManager.Instance.onFinishOrderEvent += BattleEnd;
         mFadeScreen.SetActive(false);
+        mInventoryUI = mCanvas.transform.Find("Inventory").GetComponent<InventoryUI>();
         mDialogueText = mDialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>();
         mYesButton = mDialogueBox.transform.Find("YesButton").GetComponent<Button>();
         mNoButton = mDialogueBox.transform.Find("NoButton").GetComponent<Button>();
+
+        mInventoryUI.Initialize();
+
         mYesButton.onClick.RemoveAllListeners();
         mNoButton.onClick.RemoveAllListeners();
         DisplayBattleInterface(false);
         DisplayAskingSkill(false);
         DisplayText(false);
         DisplayDialogueBox(false);
+        DisplayInventory(false);
     }
 
+    public void DisplayInventory(bool active)
+    {
+        mInventoryUI.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            mInventoryUI.Active(!mInventoryUI.gameObject.activeInHierarchy);
+        }
+
+    }
     public static void ResetUI()
     {
         Instance.mYesButton.onClick.RemoveAllListeners();
@@ -129,6 +149,7 @@ public class UIManager : MonoBehaviour
                     unit.mStatus.mMaxMana); 
                 unit.mMyHealthBar = mHealthBarList[i];
             }
+            mHealthBarList[i].gameObject.SetActive(display);
             mHealthBarList[i].Active(display);
         }
     }

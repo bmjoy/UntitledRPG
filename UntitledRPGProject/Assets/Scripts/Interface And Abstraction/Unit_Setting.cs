@@ -18,6 +18,8 @@ public class Unit_Setting : ScriptableObject
     public float Agility;
     public int Gold;
 
+    public WeaponType WeaponType;
+
     public Sprite BasicSprite;
     public List<AudioClip> SFXClips;
     public List<GameObject> Item;

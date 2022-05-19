@@ -11,6 +11,7 @@ public class NPC : MonoBehaviour
     [SerializeField]
     private NPCType m_NPCType;
     public bool mComplete = false;
+    public string mName = string.Empty;
     private bool isTraded = false;
     delegate IEnumerator TriggerEvent();
     TriggerEvent mTrigger;
@@ -65,7 +66,13 @@ public class NPC : MonoBehaviour
 
     private void Start()
     {
-        mProperty.transform = transform;
+        if(m_NPCType == NPCType.Hero)
+        {
+            mProperty = ((Companion)mProperty != null) ? (Companion)mProperty
+                : Resources.Load<Companion>("Prefabs/Items/Companions/" + mName);
+            Companion companion = (Companion)mProperty;
+            companion.mTransform = transform;
+        }
     }
 
     public IEnumerator Interact(Action Callback)
@@ -79,12 +86,12 @@ public class NPC : MonoBehaviour
         while(m_DialogueQueue.Count > 0)
         {
             var dialogue = m_DialogueQueue.Dequeue();
-            UIManager.Instance.ChangeDialogueText(name.Substring(0,name.Length -10) + ": " + dialogue.Text);
-
+            UIManager.Instance.ChangeDialogueText(mName + ": " + dialogue.Text);
             switch (dialogue.Trigger)
             {
                 case Dialogue.TriggerType.None:
-                    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     break;
                 case Dialogue.TriggerType.Trade:
                     break;
@@ -104,7 +111,9 @@ public class NPC : MonoBehaviour
         mComplete = false;
         mTrigger = null;
         if(m_NPCType == NPCType.Hero && isTraded)
-            mProperty.End();
+        {
+            Destroy(gameObject, 0.5f);
+        }
         StopAllCoroutines();
     }
 

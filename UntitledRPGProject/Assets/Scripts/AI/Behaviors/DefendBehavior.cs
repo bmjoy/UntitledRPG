@@ -9,19 +9,21 @@ public class DefendBehavior : State
     private bool isMagic = true;
     public override void Enter(Unit agent)
     {
-        if (agent.mSkillDataBase == null)
+        var skill = agent.GetComponent<Skill_DataBase>();
+
+        if (skill == null)
         {
             isMagic = false;
             return;
         }
 
-        if (agent.mSkillDataBase.Skill == null)
+        if (skill.Skill == null)
         {
             isMagic = false;
             return;
         }
 
-        if (agent.mStatus.mMana < agent.mSkillDataBase.Mana)
+        if (agent.mStatus.mMana < skill.Mana)
         {
             isMagic = false;
             return;
@@ -38,7 +40,7 @@ public class DefendBehavior : State
     {
         if (isMagic)
         {
-            var skill = agent.mSkillDataBase.Skill;
+            var skill = agent.GetComponent<Skill_DataBase>().Skill;
             if (skill.mProperty == SkillProperty.Friendly)
             {
                 switch (skill.mSkillType)

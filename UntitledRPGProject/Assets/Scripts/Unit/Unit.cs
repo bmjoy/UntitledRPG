@@ -7,16 +7,21 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour, IUnit
 {
+
+
+    [HideInInspector]
     public Unit mTarget = null;
+    [HideInInspector]
     public Order mOrder = Order.Standby;
+    [HideInInspector]
+    public GameObject mField;
+    [HideInInspector]
+    public GameObject mSelected = null;
+
     public AttackType mType = AttackType.Melee;
     public Flag mFlag;
-
-    public GameObject mField;
     private GameObject mFirePos;
     private GameObject mCanvas;
-    private Vector3 mPos = Vector3.zero;
-    private Vector3 mTargetPos = Vector3.zero;
 
     private Animator mAnimator;
     private Rigidbody mRigidbody;
@@ -26,10 +31,11 @@ public class Unit : MonoBehaviour, IUnit
     [SerializeField]
     private Vector2 mFireLocation;
     public Unit_Setting Unit_Setting => mSetting;
-    public Skill_DataBase mSkillDataBase;
-    public SpriteRenderer mSpriteRenderer;
+    private Skill_DataBase mSkillDataBase;
+    private SpriteRenderer mSpriteRenderer;
 
     private BuffAndNerfEntity mBuffNerfController;
+    protected InventroySystem mInventroySystem;
 
     private TextMeshProUGUI mLevelText;
     private MiniHealthBar mHealthBar;
@@ -38,6 +44,7 @@ public class Unit : MonoBehaviour, IUnit
   
     public AIBuild mAiBuild;
     public Status mStatus;
+    public BonusStatus mBonusStatus;
     public Conditions mConditions;
 
     private Vector3 mVelocity = Vector3.zero;
@@ -47,11 +54,10 @@ public class Unit : MonoBehaviour, IUnit
     [SerializeField]
     private float mAttackDistance= 0.0f;
     [HideInInspector]
-    public float mMagicDistance= 0.0f;
-    public GameObject mSelected = null;
+    public float mMagicDistance = 0.0f;
+
     protected virtual void Start()
     {
-
     }
 
     public void Componenet_Initialize()
@@ -68,8 +74,13 @@ public class Unit : MonoBehaviour, IUnit
             mSetting.Magic_Resistance,
             mSetting.Defend,
             mSetting.Agility,
-            mSetting.MagicPower);
+            mSetting.MagicPower,
+            mSetting.WeaponType);
         mConditions = new Conditions(false, false, false, false);
+
+        mBonusStatus = new BonusStatus();
+        mBonusStatus.mAgility = mBonusStatus.mArmor = mBonusStatus.mDefend = mBonusStatus.mDamage = mBonusStatus.mMana
+            = mBonusStatus.mMagic_Resistance = mBonusStatus.mHealth = mBonusStatus.mMagicPower = 0.0f;
 
         mAnimator = GetComponent<Animator>();
         mRigidbody = GetComponent<Rigidbody>();
@@ -77,6 +88,9 @@ public class Unit : MonoBehaviour, IUnit
         mRigidbody.velocity = Vector3.zero;
         mBuffNerfController = (GetComponent<BuffAndNerfEntity>() != null) ?
             GetComponent<BuffAndNerfEntity>() : gameObject.AddComponent<BuffAndNerfEntity>();
+        mInventroySystem = (GetComponent<InventroySystem>() != null) ?
+            gameObject.GetComponent<InventroySystem>() : gameObject.AddComponent<InventroySystem>();
+        mInventroySystem.Initialize();
         mSkillDataBase = GetComponent<Skill_DataBase>();
         GetComponent<BoxCollider>().enabled = true;
     }
@@ -205,7 +219,7 @@ public class Unit : MonoBehaviour, IUnit
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Player")))
+                if (Physics.Raycast(ray, out hit, 100, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
                 {
                     mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
                     mTarget?.mSelected.SetActive(true);
@@ -240,12 +254,12 @@ public class Unit : MonoBehaviour, IUnit
                 PlayAnimation("Attack");
                 yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f);
                 if (mTarget)
-                    mTarget.TakeDamage(mStatus.mDamage, type);
+                    mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                 yield return new WaitForSeconds(mWaitingTimeForBattle);
                 mAiBuild.actionEvent = ActionEvent.BackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
             }
-            else
+            else if(mType == AttackType.Range)
             {
                 mAiBuild.actionEvent = ActionEvent.Busy;
                 PlayAnimation("Attack");
@@ -255,7 +269,18 @@ public class Unit : MonoBehaviour, IUnit
                 bullet.Initialize(mTarget, mStatus.mDamage);
                 yield return new WaitUntil(() => bullet.isDamaged == true);
             }
-
+            else if(mType == AttackType.Instant)
+            {
+                mAiBuild.actionEvent = ActionEvent.Busy;
+                PlayAnimation("Attack");
+                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length);
+                Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
+                if (mTarget)
+                    mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                Destroy(go, 1.0f);
+                yield return new WaitUntil(() => go == null);
+            }
             TurnEnded();
         }
 
@@ -301,16 +326,14 @@ public class Unit : MonoBehaviour, IUnit
         if (type == DamageType.Physical)
         {
             value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
-            value = (value - mStatus.mArmor <= 0.0f) ? 1.0f : value - mStatus.mArmor;
+            value = (value - mStatus.mArmor + mBonusStatus.mArmor <= 0.0f) ? 1.0f : value - mStatus.mArmor + mBonusStatus.mArmor;
         }
         else
-            value = (value - mStatus.mMagic_Resistance <= 0.0f) ? 1.0f : value - mStatus.mMagic_Resistance;
-
+            value = (value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance) <= 0.0f) ? 1.0f : value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance);
         mStatus.mHealth -= value;
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
         
-
         if (mStatus.mHealth <= 0.0f)
         {
             mSelected.SetActive(false);
@@ -338,6 +361,7 @@ public class Unit : MonoBehaviour, IUnit
     virtual public void TakeRecover(float val)
     {
         mStatus.mHealth += val;
+        mHealthBar.mCurrentHealth = mStatus.mHealth;
         if (mStatus.mHealth >= mStatus.mMaxHealth)
             mStatus.mHealth = mStatus.mMaxHealth;
     }

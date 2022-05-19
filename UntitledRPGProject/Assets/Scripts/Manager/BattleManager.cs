@@ -72,6 +72,7 @@ public class BattleManager : MonoBehaviour
 
     public void Initialize()
     {
+        UIManager.Instance.DisplayInventory(false);
         StartCoroutine(Wait());
     }
 
@@ -83,8 +84,8 @@ public class BattleManager : MonoBehaviour
         mOrders.Clear();
         mUnits.AddRange(PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
-        mUnits.Sort((a, b) => (b.GetComponent<Unit>().mStatus.mAgility.CompareTo(
-            a.GetComponent<Unit>().mStatus.mAgility)));
+        mUnits.Sort((a, b) => ((b.GetComponent<Unit>().mStatus.mAgility + b.GetComponent<Unit>().mBonusStatus.mAgility).CompareTo(
+            a.GetComponent<Unit>().mStatus.mAgility + a.GetComponent<Unit>().mBonusStatus.mAgility)));
         for (int i = 0; i < mUnits.Count; i++)
         {
             mUnits[i].GetComponent<Unit>().mOrder = Order.Standby;
@@ -123,7 +124,7 @@ public class BattleManager : MonoBehaviour
                         mCurrentUnit.mAiBuild.stateMachine.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
                         UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
-                        var data = mCurrentUnit.mSkillDataBase;
+                        var data = mCurrentUnit.GetComponent<Skill_DataBase>();
                         if (data != null)
                             UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty");
                         status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
@@ -280,7 +281,7 @@ public class BattleManager : MonoBehaviour
     {
         if(status == GameStatus.WaitForOrder)
         {
-            if(mCurrentUnit.mSkillDataBase.Skill == null)
+            if(mCurrentUnit.GetComponent<Skill_DataBase>().Skill == null)
             {
                 Cancel();
                 return;

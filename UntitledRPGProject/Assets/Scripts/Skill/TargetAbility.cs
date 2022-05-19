@@ -89,9 +89,13 @@ public class TargetAbility : Skill_Setting
                 {
                     mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
                     yield return new WaitForSeconds(0.3f);
-                    Shoot();
                     if(IsInstantType == false)
+                    {
+                        Shoot();
                         yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
+                    }
+                    else
+                        CommonState();
                 }
                 else if (!IsRangeType && isActive)
                 {
@@ -123,7 +127,7 @@ public class TargetAbility : Skill_Setting
 
     private void CommonState()
     {
-        float newValue = mValue + mOwner.mStatus.mMagicPower;
+        float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
         switch (mSkillType)
         {
             case SkillType.Attack:
@@ -172,7 +176,7 @@ public class TargetAbility : Skill_Setting
     {
         if (IsInstantType == false)
         {
-            float newValue = mValue + mOwner.mStatus.mMagicPower;
+            float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
             Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
             mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
             mProjectile.GetComponent<Projectile>().mDamage = newValue;
@@ -197,7 +201,7 @@ public class TargetAbility : Skill_Setting
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
         mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
         mProjectile.transform.position += new Vector3(0.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
-        mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.mSpriteRenderer.sortingOrder;
+        mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.GetComponent<SpriteRenderer>().sortingOrder;
         mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
         Destroy(mProjectile.gameObject, mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
     }

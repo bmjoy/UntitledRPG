@@ -71,6 +71,7 @@ MonoBehaviour:
   mModel: {fileID: 0}
   mHeroes:
   - {fileID: 0}
+  weapon: {fileID: 4942790779909110465, guid: 82188a8d6da44ed46801ddcbaddee394, type: 3}
   onBattle: 0
   mGold: 0
 --- !u!65 &4784066880903253926
@@ -99,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mRadius: 10
+  mCoolTime: 3
   IsInteracting: 0
 --- !u!1 &4784066881648165659
 GameObject:

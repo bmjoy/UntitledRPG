@@ -48,8 +48,8 @@ public struct Status
     public float mDefend;
     public float mAgility;
     public float mMagicPower;
-
-    public Status(int level, int exp, int gold, float maxHp, float hp, float mana, float maxMp, float dmg, float am, float mr, float de, float ag, float mp)
+    public WeaponType mWeaponType;
+    public Status(int level, int exp, int gold, float maxHp, float hp, float mana, float maxMp, float dmg, float am, float mr, float de, float ag, float mp, WeaponType wp = WeaponType.None)
     {
         mLevel = level;
         mEXP = exp;
@@ -64,9 +64,20 @@ public struct Status
         mDefend = de;
         mAgility = ag;
         mMagicPower = mp;
+        mWeaponType = wp;
     }
 }
-
+public struct BonusStatus
+{
+    public float mHealth;
+    public float mMana;
+    public float mDamage;
+    public float mArmor;
+    public float mMagic_Resistance;
+    public float mDefend;
+    public float mAgility;
+    public float mMagicPower;
+}
 public struct Conditions
 {
     public bool isPicked;

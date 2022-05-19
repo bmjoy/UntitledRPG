@@ -7,7 +7,7 @@ public class InteractSystem : MonoBehaviour
     [SerializeField]
     private float mRadius = 10.0f;
     [SerializeField]
-    private float mCoolTime = 3.0f;
+    private float mCoolTime = 0.5f;
     private float mCurrentCoolTime = 0.0f;
     private NPC mClosestNPC = null;
     private float mDistance = float.MaxValue;

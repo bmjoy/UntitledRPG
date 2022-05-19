@@ -13,6 +13,8 @@ public class BigHealthBar : HealthBar
     private Image mDamagedHealthBar;
     private Image mDamagedManaBar;
 
+    public float mNextHealth = 0.0f;
+
     private void Start()
     {
         mBorader = transform.GetComponent<Image>();
@@ -48,7 +50,13 @@ public class BigHealthBar : HealthBar
     {
         if(isInitialized)
         {
-            mBar.fillAmount = mCurrentHealth / mMaxHealth;
+            mBar.fillAmount = (mNextHealth > mCurrentHealth) ? Mathf.Lerp(mBar.fillAmount, mNextHealth / mMaxHealth, Time.deltaTime * 1.5f)
+                : mCurrentHealth / mMaxHealth;
+            if ((mNextHealth > mCurrentHealth) && mBar.fillAmount >= (mNextHealth / mMaxHealth) - 0.01f)
+            {
+                mCurrentHealth = mNextHealth;
+                mNextHealth = 0.0f;
+            }
             mManaBar.fillAmount = mCurrentMana / mMaxMana;
             mDamagedHealthBar.fillAmount = Mathf.Lerp(mDamagedHealthBar.fillAmount, mCurrentHealth / mMaxHealth,Time.deltaTime * 1.5f);
             mDamagedManaBar.fillAmount = Mathf.Lerp(mDamagedManaBar.fillAmount, mCurrentMana / mMaxMana,Time.deltaTime * 1.5f);
