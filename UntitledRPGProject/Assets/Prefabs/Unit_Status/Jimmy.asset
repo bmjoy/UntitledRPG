@@ -18,12 +18,13 @@ MonoBehaviour:
   MaxHealth: 100
   MaxMana: 12
   Magic_Resistance: 1
-  Attack: 110
+  Attack: 10
   Defend: 10
   MagicPower: 10
   Armor: 1
   Agility: 5
   Gold: 0
+  WeaponType: 1
   BasicSprite: {fileID: 4723107735738678597, guid: afc849dbfd8c6754bb91ca57af662b9b, type: 3}
   SFXClips: []
   Item: []

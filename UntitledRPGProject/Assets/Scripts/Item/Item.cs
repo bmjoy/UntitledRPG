@@ -1,24 +1,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-[Serializable]
-[CreateAssetMenu(menuName = "Items/Item")]
-public abstract class Item : ScriptableObject
+public abstract class Item : MonoBehaviour
 {
-    public Transform transform;
+    [HideInInspector]
+    public int Value = 0;
+    [HideInInspector]
+    public string Name = string.Empty;
+    [HideInInspector]
+    public Unit mOwner;
 
-    public string mName;
-    public int mValue;
-    public int mAmount;
+    public ItemInfo Info;
 
-    public Item(string name, int val, int amount)
+    public virtual void Initialize()
     {
-        mName = name;
-        mValue = val;
-        mAmount = amount;
+        if (Info == null)
+        {
+            Debug.Log("Fail to initialize! " + name);
+            return;
+        }
+        Value = Info.mCost;
+        if (Info.mName == null)
+            Info.mName = Info.name;
+        Name = Info.mName;
+        mOwner = null;
     }
 
     public abstract void Apply();

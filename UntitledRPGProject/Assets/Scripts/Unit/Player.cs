@@ -8,8 +8,13 @@ using UnityEngine.UI;
 
 public class Player : Unit
 {
+    [HideInInspector]
     public UnitDataStorage mStorage;
+    [HideInInspector]
     public BigHealthBar mMyHealthBar;
+
+    public WeaponType mWeaponType;
+
     protected override void Start()
     {
         base.Start();
@@ -55,6 +60,12 @@ public class Player : Unit
             GameManager.Instance.mUnitData.Remove(mSetting.Name);
             mStorage = null;
         }
+    }
+
+    public override void TakeRecover(float val)
+    {
+        base.TakeRecover(val);
+        mMyHealthBar.mNextHealth = mStatus.mHealth;
     }
 
     private void OnDisable()

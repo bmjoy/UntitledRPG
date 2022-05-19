@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
     private Transform mCamera;
     private InteractSystem mInteractSystem;
 
+    public Inventory mInventory;
+    public Weapon weapon;
+
     private bool isLeft = false;
     public bool onBattle = false;
     public int mGold = 0;
@@ -49,7 +52,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(transform.Find("GroundCheck") == null)
+        Instance.mInventory = new Inventory();
+        if (transform.Find("GroundCheck") == null)
         {
             GameObject groundCheck = new GameObject("GroundCheck");
             mModel = transform.Find("Model").gameObject;
@@ -66,10 +70,7 @@ public class PlayerController : MonoBehaviour
         mCollider = GetComponent<BoxCollider>();
         mInteractSystem = GetComponent<InteractSystem>();
         for (int i = 0; i < mHeroes.Count; ++i)
-        {
             mHeroes[i].GetComponent<Player>().Initialize();
-        }
-
 
         if (mCamera == null)
             mCamera = CameraSwitcher.Instance.transform.Find("GameWorldCamera");
@@ -82,6 +83,17 @@ public class PlayerController : MonoBehaviour
             return;
         if (Interaction)
             return;
+
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            mInventory.Add(Resources.Load<Item>("Prefabs/Items/Cap"));
+            mInventory.Add(Resources.Load<Item>("Prefabs/Items/Inferno"));
+        }
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+
+        }
+
         mState = mState.Handle();
         StateControl();
         
@@ -134,6 +146,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool CheckItemExist(string name)
+    {
+        foreach(GameObject unit in mHeroes)
+        {
+            var system = unit.GetComponent<InventroySystem>();
+            if ((system.mInventoryInfo.mWeapon != null && system.mInventoryInfo.mWeapon.IsEquipped && system.mInventoryInfo.mWeapon.Name == name)
+                || (system.mInventoryInfo.Head != null && system.mInventoryInfo.Head.IsEquipped && system.mInventoryInfo.Head.Name == name)
+                || (system.mInventoryInfo.Arm != null && system.mInventoryInfo.Arm.IsEquipped && system.mInventoryInfo.Arm.Name == name)
+                || (system.mInventoryInfo.Leg != null && system.mInventoryInfo.Leg.IsEquipped && system.mInventoryInfo.Leg.Name == name)
+                || (system.mInventoryInfo.Body != null && system.mInventoryInfo.Body.IsEquipped && system.mInventoryInfo.Body.Name == name))
+                return true;
+        }
+
+        return false;
+    }
+
     private GameObject[] fields;
 
     public void ResetPlayerUnit()
@@ -145,7 +173,12 @@ public class PlayerController : MonoBehaviour
             transform.Find("Eleven(Clone)").transform.SetParent(go.transform);
             Destroy(go);
         }
-
+        //if (transform.Find("Victor(Clone)"))
+        //{
+        //    GameObject go = new GameObject("J");
+        //    transform.Find("Victor(Clone)").transform.SetParent(go.transform);
+        //    Destroy(go);
+        //}
 
         for (int i = 0; i < transform.childCount; i++)
         {

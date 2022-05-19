@@ -167,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NPCType: 3
   mComplete: 0
+  mName: Eleven
   m_DialogueList:
   - Text: Greetings. My name is Eleven.
     Trigger: 0
@@ -181,7 +182,7 @@ MonoBehaviour:
   m_DialogueFailToTradeCase:
   - Text: That's too bad. You don't have enough Gold.
     Trigger: 0
-  mProperty: {fileID: 11400000, guid: b7475621ea411414cad79864586e2885, type: 2}
+  mProperty: {fileID: 0}
   m_NeedsList:
   - Name: Money
     Value: 100

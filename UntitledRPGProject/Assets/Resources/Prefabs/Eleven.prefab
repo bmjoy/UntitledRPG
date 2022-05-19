@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4272213185635900015}
   - component: {fileID: 4272213185635900013}
   - component: {fileID: 4272213185635900012}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Eleven
   m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
@@ -104,16 +104,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTarget: {fileID: 0}
   mOrder: 0
+  mField: {fileID: 0}
+  mSelected: {fileID: 0}
   mType: 1
   mFlag: 0
-  mField: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 3107b4e455ab8454fba962d56a557c82, type: 2}
   mWaitingTimeForBattle: 0.75
   mFireLocation: {x: 2, y: 0.2}
-  mSkillDataBase: {fileID: 0}
-  mSpriteRenderer: {fileID: 0}
   mAttackDistance: 2
   mMagicDistance: 8
+  mMyHealthBar: {fileID: 0}
+  mWeaponType: 0
 --- !u!114 &4272213185635900015
 MonoBehaviour:
   m_ObjectHideFlags: 0

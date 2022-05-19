@@ -8,19 +8,20 @@ public class AttackBehavior : State
     private bool isMagic = true;
     public override void Enter(Unit agent)
     {
-        if (agent.mSkillDataBase == null)
+        Skill_DataBase skill = agent.GetComponent<Skill_DataBase>();
+        if (skill == null)
         {
             isMagic = false;
             return;
         }
 
-        if(agent.mSkillDataBase.Skill == null)
+        if(skill.Skill == null)
         {
             isMagic = false;
             return;
         }
 
-        if(agent.mStatus.mMana < agent.mSkillDataBase.Mana)
+        if(agent.mStatus.mMana < skill.Mana)
         {
             isMagic = false;
             return;
