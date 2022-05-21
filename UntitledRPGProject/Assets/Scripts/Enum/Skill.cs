@@ -27,3 +27,10 @@ public enum SkillElement
     Undead,
     Normal
 }
+
+public enum SKillShootType
+{
+    Melee,
+    Range,
+    Instant
+}

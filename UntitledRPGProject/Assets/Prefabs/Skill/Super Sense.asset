@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71f52365f67de6e479bee2bba029f16f, type: 3}
+  m_Name: Super Sense
+  m_EditorClassIdentifier: 
+  mSprite: {fileID: 0}
+  mName: Super Sense
+  mDescription: Super Sense
+  mManaCost: 10
+  mValue: 0
+  mOwner: {fileID: 0}
+  isActive: 0
+  isComplete: 0
+  mSkillType: 2
+  mProperty: 0
+  mElement: 5
+  mEffectTime: 0.3
+  mBuffList:
+  - {fileID: 11400000, guid: 0f8d10de288b6cc4b87a7b06c355db4c, type: 2}
+  mNerfList: []

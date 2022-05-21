@@ -23,6 +23,7 @@ MonoBehaviour:
   mSkillType: 0
   mProperty: 0
   mElement: 2
+  mEffectTime: 0
   mBuffList:
   - {fileID: 11400000, guid: 2c3ad03d5d970d54c8ee887526446965, type: 2}
   mNerfList: []

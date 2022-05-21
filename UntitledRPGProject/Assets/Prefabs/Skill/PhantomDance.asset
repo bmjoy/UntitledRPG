@@ -23,10 +23,10 @@ MonoBehaviour:
   mSkillType: 0
   mProperty: 1
   mElement: 2
+  mEffectTime: 0.3
   mBuffList:
   - {fileID: 11400000, guid: 504f9e0068f2e8e4fab6fea7038fd8f0, type: 2}
   mNerfList: []
-  IsRangeType: 1
-  IsInstantType: 0
+  mShootType: 1
   mRange: 11
   mStartPosition: {x: -4, y: 0}
