@@ -15,6 +15,7 @@ TagManager:
   - Effect
   - Neutral
   - Companion
+  - NPCSpawner
   layers:
   - Default
   - TransparentFX
