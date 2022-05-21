@@ -256,7 +256,17 @@ public class Unit : MonoBehaviour, IUnit
                 PlayAnimation("Attack");
                 yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f);
                 if (mTarget)
+                {
                     mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+
+                    if(mTarget.mBuffNerfController.SearchBuff("Counter"))
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        mTarget.mTarget = this;
+                        mTarget?.mTarget?.TakeDamage(mStatus.mDamage, DamageType.Magical);
+
+                    }
+                }
                 yield return new WaitForSeconds(mWaitingTimeForBattle);
                 mAiBuild.actionEvent = ActionEvent.BackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
