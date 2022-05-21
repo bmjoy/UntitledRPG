@@ -396,6 +396,8 @@ MonoBehaviour:
   mBattleWorldCam: {fileID: 4960472748198753175}
   mShakeAmount: 3
   mFrequency: 1.5
+  mMaximumZoomFOV: 3
+  mDurationZoomFOV: 1
   mCamera: {fileID: 0}
   mPostProcessing: {fileID: 0}
   mBloom: {fileID: 0}

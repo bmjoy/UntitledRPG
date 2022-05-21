@@ -1,7 +1,19 @@
 fileFormatVersion: 2
 guid: 682a7c477370820458d476a73d67d008
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 8383086920520650989
+    second: attack 1 with VFX_0
+  - first:
+      213: 5861473912609603257
+    second: attack 1 with VFX_1
+  - first:
+      213: 925941728350480733
+    second: attack 1 with VFX_2
+  - first:
+      213: 3933778295072892699
+    second: attack 1 with VFX_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +101,95 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: attack 1 with VFX_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 57
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.425, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de05bd28325b65470800000000000000
+      internalID: 8383086920520650989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 1 with VFX_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 38
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.425, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9be7055d773285150800000000000000
+      internalID: 5861473912609603257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 1 with VFX_2
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 19
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.425, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d59aa09981b99dc00800000000000000
+      internalID: 925941728350480733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 1 with VFX_3
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 0
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.425, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1726fe6486979630800000000000000
+      internalID: 3933778295072892699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 17292e2d61a9e8d40bdc8a1c71b7bb15
     internalID: 0
     vertices: []
     indices: 

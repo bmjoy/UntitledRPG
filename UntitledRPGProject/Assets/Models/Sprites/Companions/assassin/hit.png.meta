@@ -1,7 +1,13 @@
 fileFormatVersion: 2
 guid: ca0f386d882e7694897918327fa14dfd
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -59066101396820148
+    second: hit_0
+  - first:
+      213: -9037724387597929990
+    second: hit_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +95,53 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: hit_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 19
+        width: 36
+        height: 19
+      alignment: 9
+      pivot: {x: 0.44, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4fa9f791b72e2ff0800000000000000
+      internalID: -59066101396820148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hit_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 36
+        height: 19
+      alignment: 9
+      pivot: {x: 0.44, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af1375bad8d839280800000000000000
+      internalID: -9037724387597929990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: efe0bafc7ed1d9c4cb1e287bdce2b389
     internalID: 0
     vertices: []
     indices: 

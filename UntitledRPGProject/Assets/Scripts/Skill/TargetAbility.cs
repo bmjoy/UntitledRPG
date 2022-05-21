@@ -75,9 +75,12 @@ public class TargetAbility : Skill_Setting
             if (isActive)
             {
                 mOwner.mTarget = mTarget;
+                
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
                 mOwner.mMagicDistance = mRange;
                 mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
+                if(mProperty == SkillProperty.Friendly)
+                    CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f, Vector3.Lerp(mOwner.transform.position, mTarget.transform.position, 0.5f)));
                 mOwner.StartCoroutine(Effect());
                 yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
                 mOwner.mStatus.mMana -= mManaCost;

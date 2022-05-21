@@ -1,7 +1,22 @@
 fileFormatVersion: 2
 guid: eaddfc9296813a14baa06e8f28886264
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -3959560159822221020
+    second: VFX for Cross Slice_0
+  - first:
+      213: -2418621829089570105
+    second: VFX for Cross Slice_1
+  - first:
+      213: -5988636524602019411
+    second: VFX for Cross Slice_2
+  - first:
+      213: 3466291011271796144
+    second: VFX for Cross Slice_3
+  - first:
+      213: 6223497224270117728
+    second: VFX for Cross Slice_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +104,116 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: VFX for Cross Slice_0
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 76
+        width: 46
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 421f1076301dc09c0800000000000000
+      internalID: -3959560159822221020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Cross Slice_1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 57
+        width: 46
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c25c17c2445f6ed0800000000000000
+      internalID: -2418621829089570105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Cross Slice_2
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 38
+        width: 46
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da1ba2e5fc614eca0800000000000000
+      internalID: -5988636524602019411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Cross Slice_3
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 19
+        width: 46
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b52cfe3f4dba1030800000000000000
+      internalID: 3466291011271796144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Cross Slice_4
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 0
+        width: 46
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06bff3180cd4e5650800000000000000
+      internalID: 6223497224270117728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6100b82d17a74ff4fa60d1c209c66a6d
     internalID: 0
     vertices: []
     indices: 

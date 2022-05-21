@@ -1,7 +1,22 @@
 fileFormatVersion: 2
 guid: a716a4b10be135c40a14441ef5c48a39
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -5490260308377763294
+    second: VFX for attack 2_0
+  - first:
+      213: 2138239811224450055
+    second: VFX for attack 2_1
+  - first:
+      213: 63002421732221758
+    second: VFX for attack 2_2
+  - first:
+      213: -4871568151652444065
+    second: VFX for attack 2_3
+  - first:
+      213: -3069066376937735723
+    second: VFX for attack 2_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +104,116 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: VFX for attack 2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 76
+        width: 43
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22287b2965daec3b0800000000000000
+      internalID: -5490260308377763294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for attack 2_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 57
+        width: 43
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 704b1a887cd8cad10800000000000000
+      internalID: 2138239811224450055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for attack 2_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 38
+        width: 43
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e33a6576e54dfd000800000000000000
+      internalID: 63002421732221758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for attack 2_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 19
+        width: 43
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5856a5a396b46cb0800000000000000
+      internalID: -4871568151652444065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for attack 2_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 43
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d9f78a046c7865d0800000000000000
+      internalID: -3069066376937735723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 1eac75df241237349af1c093c102dd91
     internalID: 0
     vertices: []
     indices: 

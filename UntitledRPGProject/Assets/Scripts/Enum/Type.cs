@@ -36,7 +36,8 @@ public enum WeaponType
     Soul,
     Bow,
     Orb,
-    Spear
+    Spear,
+    Double_Swords
 }
 public enum ArmorType
 {

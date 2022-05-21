@@ -70,6 +70,7 @@ public class NPC : MonoBehaviour
         {
             mProperty = ((Companion)mProperty != null) ? (Companion)mProperty
                 : Resources.Load<Companion>("Prefabs/Items/Companions/" + mName);
+            mProperty.Initialize();
             Companion companion = (Companion)mProperty;
             companion.mTransform = transform;
         }

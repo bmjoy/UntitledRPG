@@ -1,7 +1,31 @@
 fileFormatVersion: 2
 guid: 5ac256dea58b18c47947987e537b5aca
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 42924150760849096
+    second: run with VFX_0
+  - first:
+      213: 5382046916554409225
+    second: run with VFX_1
+  - first:
+      213: -4227271040971533988
+    second: run with VFX_2
+  - first:
+      213: -2756992721130952979
+    second: run with VFX_3
+  - first:
+      213: 4029046840823632946
+    second: run with VFX_4
+  - first:
+      213: 3755962544231412175
+    second: run with VFX_5
+  - first:
+      213: -5171821485666756092
+    second: run with VFX_6
+  - first:
+      213: 4697511204225477803
+    second: run with VFX_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +113,179 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: run with VFX_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 133
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ceb266a94f789000800000000000000
+      internalID: 42924150760849096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 114
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90546b1c72fd0ba40800000000000000
+      internalID: 5382046916554409225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 95
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c519891a267b555c0800000000000000
+      internalID: -4227271040971533988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 76
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de6e6a03ab13db9d0800000000000000
+      internalID: -2756992721130952979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 57
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 234d3b241cc0ae730800000000000000
+      internalID: 4029046840823632946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 38
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc1f596b80cdf1430800000000000000
+      internalID: 3755962544231412175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 19
+        width: 30
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40a9911a2cff938b0800000000000000
+      internalID: -5171821485666756092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: run with VFX_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bace6404d89e03140800000000000000
+      internalID: 4697511204225477803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c08dd1c7a04c34f4ea7a22eda6b6a10d
     internalID: 0
     vertices: []
     indices: 

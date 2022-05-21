@@ -1,7 +1,37 @@
 fileFormatVersion: 2
 guid: 3f564e6365dcdfd41923dee56fada372
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -195011537463460401
+    second: VFX for Sweep Attack_0
+  - first:
+      213: -7867738395122624617
+    second: VFX for Sweep Attack_1
+  - first:
+      213: 273194444434031576
+    second: VFX for Sweep Attack_2
+  - first:
+      213: -7442857769305800765
+    second: VFX for Sweep Attack_3
+  - first:
+      213: -7804630368678043615
+    second: VFX for Sweep Attack_4
+  - first:
+      213: 2308271735877641234
+    second: VFX for Sweep Attack_5
+  - first:
+      213: -5891374719611213557
+    second: VFX for Sweep Attack_6
+  - first:
+      213: -8377031426753318043
+    second: VFX for Sweep Attack_7
+  - first:
+      213: -7846146467297811248
+    second: VFX for Sweep Attack_8
+  - first:
+      213: -6093535967023683503
+    second: VFX for Sweep Attack_9
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,11 +119,221 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 171
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcd33663a0e2b4df0800000000000000
+      internalID: -195011537463460401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 152
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 797930d5d9d20d290800000000000000
+      internalID: -7867738395122624617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 133
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d3c91756e49ac300800000000000000
+      internalID: 273194444434031576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 114
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cf75c2fa48a5b890800000000000000
+      internalID: -7442857769305800765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 95
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12028b7c70260b390800000000000000
+      internalID: -7804630368678043615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 76
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 214af0ef9e0a80020800000000000000
+      internalID: 2308271735877641234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 57
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b096bd608e1ad3ea0800000000000000
+      internalID: -5891374719611213557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 38
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 563b5100d4ecebb80800000000000000
+      internalID: -8377031426753318043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 19
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d42701db53ec1390800000000000000
+      internalID: -7846146467297811248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX for Sweep Attack_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 91
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 158ac7ba2596f6ba0800000000000000
+      internalID: -6093535967023683503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c8e86d60bec45944780d7db7ba64417c
     internalID: 0
     vertices: []
     indices: 
