@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mName: Inferno
   mCost: 0
-  mSprite: {fileID: -8092556398824330654, guid: b60800e06ceeaae44b1722cb2b076928, type: 3}
+  mSprite: {fileID: 21300000, guid: 892c9706c8b60b242b417f9ee27879aa, type: 3}
   mBonusAbilities:
   - Type: 1
     Value: 25

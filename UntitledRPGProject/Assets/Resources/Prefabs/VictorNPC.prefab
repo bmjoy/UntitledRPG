@@ -169,18 +169,18 @@ MonoBehaviour:
   mComplete: 0
   mName: Victor
   m_DialogueList:
-  - Text: Greetings. My name is Eleven.
+  - Text: Victor is the name!
     Trigger: 0
-  - Text: Do you need help?
+  - Text: I can provide healing for you, for the right price of course.
     Trigger: 2
   m_DialogueYesCase:
-  - Text: My bow is yours.
+  - Text: On we go!
     Trigger: 0
   m_DialogueNoCase:
-  - Text: Okay. Let me know if you need assistance.
+  - Text: I understand. Have a good day.
     Trigger: 0
   m_DialogueFailToTradeCase:
-  - Text: That's too bad. You don't have enough Gold.
+  - Text: You need a lot more gold than that!
     Trigger: 0
   mProperty: {fileID: 0}
   m_NeedsList:
