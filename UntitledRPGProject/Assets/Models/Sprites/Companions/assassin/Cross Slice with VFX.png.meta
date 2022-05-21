@@ -1,7 +1,22 @@
 fileFormatVersion: 2
 guid: b86295232506d6b459c4db615be880a7
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -1138747051027465693
+    second: Cross Slice with VFX_0
+  - first:
+      213: -4276148315761950796
+    second: Cross Slice with VFX_1
+  - first:
+      213: 6353082246633437080
+    second: Cross Slice with VFX_2
+  - first:
+      213: -8091991333080765647
+    second: Cross Slice with VFX_3
+  - first:
+      213: -6676561544424407760
+    second: Cross Slice with VFX_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -68,7 +83,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -80,7 +95,19 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -89,11 +116,116 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Cross Slice with VFX_0
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 76
+        width: 43
+        height: 19
+      alignment: 9
+      pivot: {x: 0.35, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32afb76279b5230f0800000000000000
+      internalID: -1138747051027465693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cross Slice with VFX_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 57
+        width: 43
+        height: 19
+      alignment: 9
+      pivot: {x: 0.35, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bfbf1843c118a4c0800000000000000
+      internalID: -4276148315761950796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cross Slice with VFX_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 38
+        width: 43
+        height: 19
+      alignment: 9
+      pivot: {x: 0.35, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8973d6ba4aeaa2850800000000000000
+      internalID: 6353082246633437080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cross Slice with VFX_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 19
+        width: 43
+        height: 19
+      alignment: 9
+      pivot: {x: 0.35, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13b6e2a71c873bf80800000000000000
+      internalID: -8091991333080765647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cross Slice with VFX_4
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 43
+        height: 19
+      alignment: 9
+      pivot: {x: 0.35, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03dbc8736a61853a0800000000000000
+      internalID: -6676561544424407760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6c62cf41c5c14964eb24872c94e923df
     internalID: 0
     vertices: []
     indices: 

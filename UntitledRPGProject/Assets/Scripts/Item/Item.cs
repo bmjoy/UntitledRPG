@@ -25,6 +25,7 @@ public abstract class Item : MonoBehaviour
         if (Info.mName == null)
             Info.mName = Info.name;
         Name = Info.mName;
+        Debug.Log(Name);
         mOwner = null;
     }
 

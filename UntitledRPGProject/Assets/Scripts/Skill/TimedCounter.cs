@@ -44,10 +44,8 @@ public class TimedCounter : TimedBuff
     {
         string name = string.Empty;
         for (int i = 0; i < mOwner.GetComponent<Animator>().parameters.Length; i++)
-        {
             if (mOwner.GetComponent<Animator>().parameters[i].name == "Counter")
                 name = "Counter";
-        }
         if (name != string.Empty)
             mOwner.GetComponent<Animator>().SetBool(name, active);
     }

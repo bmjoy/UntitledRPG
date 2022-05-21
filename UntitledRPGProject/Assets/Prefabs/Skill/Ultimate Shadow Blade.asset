@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71f52365f67de6e479bee2bba029f16f, type: 3}
+  m_Name: Ultimate Shadow Blade
+  m_EditorClassIdentifier: 
+  mSprite: {fileID: 0}
+  mName: Ultimate Shadow Blade
+  mDescription: 
+  mManaCost: 20
+  mValue: 100
+  mOwner: {fileID: 0}
+  isActive: 1
+  isComplete: 1
+  mSkillType: 0
+  mProperty: 1
+  mElement: 5
+  mEffectTime: 5.1
+  mBuffList: []
+  mNerfList: []
+  mSkillNerfTarget: 0
+  mSkillBuffTarget: 0

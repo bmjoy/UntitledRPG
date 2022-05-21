@@ -24,6 +24,8 @@ public abstract class Skill_Setting : ScriptableObject
     public SkillElement mElement = SkillElement.Normal;
     public float mEffectTime = 0.0f;
 
+    public Action mActionTrigger = null;
+
     [Serializable]
     public class BuffList
     {

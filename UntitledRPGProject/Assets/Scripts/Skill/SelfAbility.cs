@@ -20,7 +20,48 @@ public class SelfAbility : Skill_Setting
 
     public override IEnumerator Effect()
     {
-        throw new NotImplementedException();
+        var colorParameter = new UnityEngine.Rendering.VolumeParameter<Color>();
+        switch (mElement)
+        {
+            case SkillElement.Normal:
+                break;
+            case SkillElement.Holy:
+                colorParameter.value = Color.white;
+                break;
+            case SkillElement.Shadow:
+                colorParameter.value = Color.green;
+                break;
+            case SkillElement.Water:
+                colorParameter.value = Color.cyan;
+                break;
+            case SkillElement.Fire:
+                colorParameter.value = Color.red;
+                break;
+            case SkillElement.Undead:
+                colorParameter.value = Color.magenta;
+                break;
+        }
+        if(mElement == SkillElement.Normal)
+        {
+            yield return null;
+        }
+        else
+        {
+            CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
+            while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)
+            {
+                CameraSwitcher.Instance.mBloom.intensity.value += Time.deltaTime * 2.0f;
+                yield return null;
+            }
+            yield return new WaitForSeconds(mEffectTime);
+
+            while (CameraSwitcher.Instance.mBloom.intensity.value != 0.0f)
+            {
+                CameraSwitcher.Instance.mBloom.intensity.value -= Time.deltaTime * 2.0f;
+                yield return null;
+            }
+        }
+
     }
 
     public override void Initialize(Unit owner)
@@ -60,16 +101,31 @@ public class SelfAbility : Skill_Setting
 
             if (isActive)
             {
+                mOwner.StartCoroutine(Effect());
                 float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
                 mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
-                yield return new WaitForSeconds(0.3f);
+                if (mProperty == SkillProperty.Friendly)
+                    CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f,mOwner.transform.position));
+                mActionTrigger?.Invoke();
+                yield return new WaitForSeconds(mEffectTime);
                 mOwner.mStatus.mMana -= mManaCost;
                 switch (mSkillType)
                 {
                     case SkillType.Attack:
                         {
-                            mOwner.TakeDamage(newValue, DamageType.Magical);
+                            IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+        : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+
+                            foreach(GameObject unit in group)
+                            {
+                                var i = unit.GetComponent<Unit>();
+                                if(UnityEngine.Random.Range(0.0f, 100.0f) >= 60.0f)
+                                    i.TakeDamage(mOwner.mStatus.mDamage * 2.0f, DamageType.Physical);
+                                else
+                                    i.TakeDamage(mOwner.mStatus.mDamage, DamageType.Physical);
+                            }
+
                             DoBuff();
                             DoNerf();
                         }

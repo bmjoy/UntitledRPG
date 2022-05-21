@@ -263,9 +263,7 @@ public class Unit : MonoBehaviour, IUnit
                     {
                         yield return new WaitForSeconds(0.5f);
                         mTarget.mTarget = this;
-
                         mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
-
                     }
                 }
                 yield return new WaitForSeconds(mWaitingTimeForBattle);

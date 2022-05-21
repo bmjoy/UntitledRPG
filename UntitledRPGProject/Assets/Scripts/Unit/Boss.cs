@@ -56,14 +56,30 @@ public class Boss : Enemy
                 if (mBuffNerfController.GetBuffCount() > 0)
                     StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
                 if (mTarget)
+                {
                     mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                    if (mTarget.mBuffNerfController.SearchBuff("Counter"))
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        mTarget.mTarget = this;
+                        mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
+                    }
+                }
 
                 mAnimator.SetBool("Attack2", true);
                 yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.1f);
                 if (mBuffNerfController.GetBuffCount() > 0)
                    StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
                 if (mTarget)
+                {
                     mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                    if (mTarget.mBuffNerfController.SearchBuff("Counter"))
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        mTarget.mTarget = this;
+                        mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
+                    }
+                }
             }
             else
             {
@@ -72,7 +88,15 @@ public class Boss : Enemy
                 if(mBuffNerfController.GetBuffCount() > 0)
                     StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
                 if (mTarget)
+                {
                     mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                    if (mTarget.mBuffNerfController.SearchBuff("Counter"))
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        mTarget.mTarget = this;
+                        mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
+                    }
+                }
             }
 
             yield return new WaitForSeconds(mWaitingTimeForBattle);
