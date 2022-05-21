@@ -88,4 +88,14 @@ public class BuffAndNerfEntity : MonoBehaviour
         }
 
     }
+
+    public int GetBuffCount()
+    {
+        return mBuff.Count;
+    }
+
+    public int GetNerfCount()
+    {
+        return mNerf.Count;
+    }
 }

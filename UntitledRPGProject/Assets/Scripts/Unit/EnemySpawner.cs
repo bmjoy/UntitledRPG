@@ -9,7 +9,8 @@ public class EnemySpawner : Spawner
     {
         None,
         Ghoul,
-        Spitter
+        Spitter,
+        Temple_Guardian
     }
     [SerializeField]
     private List<EnemyUnit> mEnemyList = new List<EnemyUnit>();

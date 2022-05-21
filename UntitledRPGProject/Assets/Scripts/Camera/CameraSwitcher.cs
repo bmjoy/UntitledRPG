@@ -22,6 +22,8 @@ public class CameraSwitcher : MonoBehaviour
     [SerializeField]
     private CinemachineVirtualCamera mBattleWorldCam;
 
+    [SerializeField] private float mShakeAmount; 
+    [SerializeField] private float mFrequency;
 
     public CinemachineStateDrivenCamera mCamera;
     public VolumeProfile mPostProcessing;
@@ -62,5 +64,22 @@ public class CameraSwitcher : MonoBehaviour
     public static void UpdateCamera(Transform transform)
     {
         Instance.mBattleWorldCam.m_Follow = Instance.mBattleWorldCam.m_LookAt = transform;
+    }
+
+    bool _isCameraUsing = false;
+    public IEnumerator ShakeCamera(float duration)
+    {
+        if (_isCameraUsing)
+            yield return null;
+        else
+        {
+            _isCameraUsing = true;
+            Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = mShakeAmount;
+            Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = mFrequency;
+            yield return new WaitForSeconds(duration);
+            Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain =
+                Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.0f;
+            _isCameraUsing = false;
+        }
     }
 }

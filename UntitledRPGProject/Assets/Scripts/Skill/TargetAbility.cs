@@ -77,14 +77,12 @@ public class TargetAbility : Skill_Setting
             if (isActive)
             {
                 mOwner.mTarget = mTarget;
-                mOwner.mStatus.mMana -= mManaCost;
-
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
                 mOwner.mMagicDistance = mRange;
                 mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
                 mOwner.StartCoroutine(Effect());
                 yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
-
+                mOwner.mStatus.mMana -= mManaCost;
                 if (IsRangeType && isActive)
                 {
                     mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
@@ -200,7 +198,7 @@ public class TargetAbility : Skill_Setting
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
         mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
-        mProjectile.transform.position += new Vector3(0.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
+        mProjectile.transform.localPosition += new Vector3(3.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
         mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.GetComponent<SpriteRenderer>().sortingOrder;
         mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
         Destroy(mProjectile.gameObject, mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
@@ -212,7 +210,7 @@ public class TargetAbility : Skill_Setting
         RaycastHit hit;
         if (mProperty == SkillProperty.Friendly)
         {
-            if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
+            if (Physics.Raycast(ray, out hit, 500, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
                 : LayerMask.GetMask("Enemy")))
             {
                 mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
@@ -223,7 +221,7 @@ public class TargetAbility : Skill_Setting
         }
         else
         {
-            if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Enemy")
+            if (Physics.Raycast(ray, out hit, 500, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Enemy")
                 : LayerMask.GetMask("Ally")))
             {
                 mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
