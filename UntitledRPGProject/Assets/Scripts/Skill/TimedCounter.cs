@@ -34,6 +34,7 @@ public class TimedCounter : TimedBuff
         if (!mReinforced)
         {
             var ArmorUp = (Counter)Buff;
+            mReinforced = true;
             mTarget.mStatus.mArmor = mTarget.mStatus.mArmor * ArmorUp.mMultiplier + (mOwner.mStatus.mMagicPower * ArmorUp.mMagicPowerMultiplier);
             Find(true);
         }
@@ -47,7 +48,6 @@ public class TimedCounter : TimedBuff
             if (mOwner.GetComponent<Animator>().parameters[i].name == "Counter")
                 name = "Counter";
         }
-        Debug.Log("Name: " + name);
         if (name != string.Empty)
             mOwner.GetComponent<Animator>().SetBool(name, active);
     }

@@ -22,6 +22,7 @@ public abstract class TimedBuff
     {
         if (isActive)
         {
+            mTurn--;
             if (mTurn <= 0)
             {
                 isActive = false;
@@ -29,7 +30,6 @@ public abstract class TimedBuff
             }
             else
                 Apply();
-            mTurn--;
         }
     }
     public void Activate()

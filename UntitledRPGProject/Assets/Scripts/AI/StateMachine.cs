@@ -8,10 +8,12 @@ public class StateMachine : MonoBehaviour
     public State mCurrentState;
     public Dictionary<string, object> mStates = new Dictionary<string, object>();
     public Unit mAgent;
+    public Unit mPreferredTarget;
 
     private void Awake()
     {
         mAgent = this.transform.GetComponent<Unit>();
+        mPreferredTarget = null;
     }
 
     public void AddState<T>(T newState, string stateName) where T : class

@@ -106,7 +106,7 @@ MonoBehaviour:
   mOrder: 0
   mField: {fileID: 0}
   mSelected: {fileID: 0}
-  mType: 2
+  mType: 0
   mFlag: 0
   mSetting: {fileID: 11400000, guid: cedd0c8e1f9060746afdf69f770098c5, type: 2}
   mWaitingTimeForBattle: 0.75
@@ -117,7 +117,7 @@ MonoBehaviour:
   mAttackDistance: 2
   mMagicDistance: 8
   mMyHealthBar: {fileID: 0}
-  mWeaponType: 0
+  mWeaponType: 4
 --- !u!114 &4185755230128914879
 MonoBehaviour:
   m_ObjectHideFlags: 0

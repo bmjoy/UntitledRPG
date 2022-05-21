@@ -34,3 +34,11 @@ public enum SKillShootType
     Range,
     Instant
 }
+
+public enum SkillTarget
+{
+    None,
+    Self,
+    All,
+    Random
+}
