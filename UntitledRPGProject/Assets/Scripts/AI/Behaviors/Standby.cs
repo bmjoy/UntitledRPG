@@ -50,10 +50,39 @@ public class Standby : State
         bool condition1 = percent > randomNumber;
         bool condition2 = agent.mStatus.mHealth > agent.mTarget.mStatus.mHealth;
         bool condition3 = targetPercent <= BattleManager.Instance.mPercentageHP;
+        bool condition4 = agent.mBuffNerfController.GetBuffCount() > 0;
+
+        string behavior = string.Empty;
+        behavior = (condition1 || condition2 || condition3 || condition4) ? "Attack" : "Defend";
 
         agent.mTarget?.mSelected.SetActive(true);
 
-        agent.mAiBuild.stateMachine.ChangeState((condition1 || condition2 || condition3) ? "Attack" : "Defend");
+        if(agent.GetType() == typeof(Boss) && !condition4)
+        {
+            Boss boss = (Boss)agent;
+            foreach(Boss.BossPatterns patterns in boss.mBossPatterns)
+            {
+                if(patterns.mPattern == Boss.BossPatterns.Patterns.MagicWhenHalfHealth)
+                {
+                    boss._magicWhenHalfHealth = boss.HalfHealthEvent(patterns.mPercentage);
+                    break;
+                }
+            }
+            if (boss._magicWhenHalfHealth && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
+                behavior = "Magic";
+            else
+                behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
+        }
+        else
+        {
+            if (agent.mSkillDataBase != null)
+            {
+                if (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 50) >= 50)
+                    behavior = "Magic";
+            }
+        }
+
+        agent.mAiBuild.stateMachine.ChangeState(behavior);
     }
 
     private bool Find(Unit agent)

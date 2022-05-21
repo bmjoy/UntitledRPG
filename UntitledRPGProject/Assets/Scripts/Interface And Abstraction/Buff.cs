@@ -6,7 +6,6 @@ public abstract class Buff : ScriptableObject
 {
     public int mTurn;
     public bool IsTurnFinished = false;
-    public float mDamageMultiplier = 0.6f;
     public float mMagicPowerMultiplier = 0.6f;
     public abstract TimedBuff Initialize(Unit owner, Unit target);
 }

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Phantom
   m_EditorClassIdentifier: 
   mTurn: 1
-  IsTurnFinished: 1
-  mDamageMultiplier: 0.6
+  IsTurnFinished: 0
   mMagicPowerMultiplier: 0.6
   mMultiplier: 2
