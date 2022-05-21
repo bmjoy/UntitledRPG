@@ -89,6 +89,25 @@ public class BuffAndNerfEntity : MonoBehaviour
 
     }
 
+    public bool SearchBuff(string name)
+    {
+        foreach(var b in mBuff)
+        {
+            if (b.Key.GetType().ToString() == name)
+                return true;
+        }
+        return false;
+    }   
+    public bool SearchNerf(string name)
+    {
+        foreach(var n in mNerf)
+        {
+            if(n.Key.name == name)
+                return true;
+        }
+        return false;
+    }
+
     public int GetBuffCount()
     {
         return mBuff.Count;

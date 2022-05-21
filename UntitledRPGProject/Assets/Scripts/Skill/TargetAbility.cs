@@ -8,9 +8,7 @@ public class TargetAbility : Skill_Setting
 {
     private Unit mTarget;
     private GameObject mProjectile;
-    public bool IsRangeType = false;
-    public bool IsInstantType = false;
-
+    public SKillShootType mShootType = SKillShootType.Melee;
     [SerializeField]
     private float mRange = 4.0f;
     [SerializeField]
@@ -83,27 +81,28 @@ public class TargetAbility : Skill_Setting
                 mOwner.StartCoroutine(Effect());
                 yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
                 mOwner.mStatus.mMana -= mManaCost;
-                if (IsRangeType && isActive)
+                if (mShootType == SKillShootType.Range)
                 {
                     mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
-                    yield return new WaitForSeconds(0.3f);
-                    if(IsInstantType == false)
-                    {
-                        Shoot();
-                        yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
-                    }
-                    else
-                        CommonState();
+                    yield return new WaitForSeconds(mEffectTime);
+                    Shoot();
+                    yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
                 }
-                else if (!IsRangeType && isActive)
+                else if (mShootType == SKillShootType.Melee)
                 {
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(mEffectTime);
                     mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
                     Melee();
                     yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
                     CommonState();
                 }
-                    mOwner.mAiBuild.actionEvent = ActionEvent.BackWalk;
+                else if(mShootType == SKillShootType.Instant)
+                {
+                    mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
+                    yield return new WaitForSeconds(mEffectTime);
+                    CommonState();
+                }    
+                mOwner.mAiBuild.actionEvent = ActionEvent.BackWalk;
 
                 if(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
                 {
@@ -172,25 +171,20 @@ public class TargetAbility : Skill_Setting
 
     private void Shoot()
     {
-        if (IsInstantType == false)
-        {
-            float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
-            Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-            mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
-            mProjectile.GetComponent<Projectile>().mDamage = newValue;
-            mProjectile.transform.LookAt(dir);
+        float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
+        Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
+        mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
+        mProjectile.GetComponent<Projectile>().mDamage = newValue;
+        mProjectile.transform.LookAt(dir);
 
-            mProjectile.GetComponent<Projectile>().Initialize(mTarget,
-        () => {
-            mTarget.TakeDamage(newValue, DamageType.Magical);
-            foreach (var buff in mBuffList)
-                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
-            foreach (var nerf in mNerfList)
-                mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
-        });
-        }
-        else
-            CommonState();
+        mProjectile.GetComponent<Projectile>().Initialize(mTarget,
+    () => {
+        mTarget.TakeDamage(newValue, DamageType.Magical);
+        foreach (var buff in mBuffList)
+            mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+        foreach (var nerf in mNerfList)
+            mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
+    });
 
     }
 

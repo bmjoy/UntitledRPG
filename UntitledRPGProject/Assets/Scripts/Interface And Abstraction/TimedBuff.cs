@@ -34,6 +34,7 @@ public abstract class TimedBuff
     }
     public void Activate()
     {
+        Apply();
         if (!Buff.IsTurnFinished || mTurn <= 0)
             mTurn += Buff.mTurn;
         else if (!Buff.IsTurnFinished)

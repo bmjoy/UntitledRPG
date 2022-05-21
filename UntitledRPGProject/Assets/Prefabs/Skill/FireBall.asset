@@ -23,9 +23,9 @@ MonoBehaviour:
   mSkillType: 0
   mProperty: 1
   mElement: 0
+  mEffectTime: 0.5
   mBuffList: []
   mNerfList: []
-  IsRangeType: 1
-  IsInstantType: 0
+  mShootType: 1
   mRange: 30
   mStartPosition: {x: 2, y: 0}
