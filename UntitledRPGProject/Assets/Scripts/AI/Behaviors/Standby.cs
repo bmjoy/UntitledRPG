@@ -82,6 +82,9 @@ public class Standby : State
             }
         }
 
+        if (agent.mAiBuild.stateMachine.mPreferredTarget)
+            behavior = "Attack";
+
         agent.mAiBuild.stateMachine.ChangeState(behavior);
     }
 
@@ -90,7 +93,14 @@ public class Standby : State
         List<GameObject> list = new List<GameObject>((agent.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
             : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()); 
         if (list.Count == 0) return false;
-        agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
+        if (agent.mAiBuild.stateMachine.mPreferredTarget)
+        {
+            agent.mTarget = agent.mAiBuild.stateMachine.mPreferredTarget;
+            agent.mAiBuild.stateMachine.mPreferredTarget = null;
+        }
+        else
+            agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
+
         return !agent.mTarget.mConditions.isDied;
     }
 }

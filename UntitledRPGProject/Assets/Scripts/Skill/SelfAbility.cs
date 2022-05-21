@@ -1,11 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/SelfAbility")]
 public class SelfAbility : Skill_Setting
 {
+    [SerializeField]
+    SkillTarget mSkillNerfTarget;
+    [SerializeField]
+    SkillTarget mSkillBuffTarget;
     public override void Activate(MonoBehaviour parent)
     {
         isActive = false;
@@ -65,40 +70,31 @@ public class SelfAbility : Skill_Setting
                     case SkillType.Attack:
                         {
                             mOwner.TakeDamage(newValue, DamageType.Magical);
-                            foreach(var buff in mBuffList)
-                                mOwner.SetBuff(buff.Initialize(mOwner,mOwner));
-                            foreach(var nerf in mNerfList)
-                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
-
+                            DoBuff();
+                            DoNerf();
                         }
                         break;
                     case SkillType.Buff:
                         {
-                            foreach (var buff in mBuffList)
-                                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+                            DoBuff();
                         }
                         break;
                     case SkillType.BuffNerf:
                         {
-                            foreach (var buff in mBuffList)
-                                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
-                            foreach (var nerf in mNerfList)
-                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            DoBuff();
+                            DoNerf();
                         }
                         break;
                     case SkillType.Nerf:
                         {
-                            foreach (var nerf in mNerfList)
-                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            DoNerf();
                         }
                         break;
                     case SkillType.Heal:
                         {
                             mOwner.TakeRecover(newValue);
-                            foreach (var buff in mBuffList)
-                                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
-                            foreach (var nerf in mNerfList)
-                                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+                            DoBuff();
+                            DoNerf();
                             break;
                         }
                     case SkillType.Summon:
@@ -121,4 +117,79 @@ public class SelfAbility : Skill_Setting
         isComplete = true;
         yield return null;
     }
+
+    private void DoBuff()
+    {
+        if (mSkillBuffTarget == SkillTarget.All)
+        {
+            IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player)
+                    : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy);
+            foreach (var unit in group)
+            {
+                var i = unit.GetComponent<Unit>();
+                foreach (var buff in mBuffList)
+                    i.SetBuff(buff.Initialize(mOwner, i));
+            }
+        }
+        else if (mSkillBuffTarget == SkillTarget.Random)
+        {
+            IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+                    : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+            foreach (var unit in group)
+            {
+                var i = unit.GetComponent<Unit>();
+                if (UnityEngine.Random.Range(1, 2) == 2)
+                    continue;
+                foreach (var buff in mBuffList)
+                    i.SetBuff(buff.Initialize(mOwner, i));
+            }
+        }
+        else if (mSkillBuffTarget == SkillTarget.Self)
+        {
+            foreach (var buff in mBuffList)
+                mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    private void DoNerf()
+    {
+        if (mSkillNerfTarget == SkillTarget.All)
+        {
+            IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+                    : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+            foreach (var unit in group)
+            {
+                var i = unit.GetComponent<Unit>();
+                foreach (var nerf in mNerfList)
+                    i.SetNerf(nerf.Initialize(mOwner, i));
+            }
+        }
+        else if (mSkillNerfTarget == SkillTarget.Random)
+        {
+            IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+                    : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+            foreach (var unit in group)
+            {
+                var i = unit.GetComponent<Unit>();
+                if (UnityEngine.Random.Range(1, 2) == 2)
+                    continue;
+                foreach (var nerf in mNerfList)
+                    i.SetNerf(nerf.Initialize(mOwner, i));
+            }
+        }
+        else if (mSkillNerfTarget == SkillTarget.Self)
+        {
+            foreach (var nerf in mNerfList)
+                mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+        }
+        else
+        {
+            return;
+        }
+    }
+
 }

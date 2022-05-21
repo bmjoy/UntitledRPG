@@ -23,7 +23,9 @@ MonoBehaviour:
   mSkillType: 1
   mProperty: 0
   mElement: 3
+  mEffectTime: 0
   mBuffList:
   - {fileID: 0}
   mNerfList: []
-  mEffect: {fileID: 0}
+  mSkillNerfTarget: 0
+  mSkillBuffTarget: 0
