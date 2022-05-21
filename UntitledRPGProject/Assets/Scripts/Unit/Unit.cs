@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour, IUnit
 {
-
-
     [HideInInspector]
     public Unit mTarget = null;
     [HideInInspector]
@@ -23,22 +21,25 @@ public class Unit : MonoBehaviour, IUnit
     private GameObject mFirePos;
     private GameObject mCanvas;
 
-    private Animator mAnimator;
+    protected Animator mAnimator;
     private Rigidbody mRigidbody;
     public Unit_Setting mSetting;
     [SerializeField]
-    private float mWaitingTimeForBattle = 0.75f;
+    protected float mWaitingTimeForBattle = 0.75f;
     [SerializeField]
     private Vector2 mFireLocation;
     public Unit_Setting Unit_Setting => mSetting;
-    private Skill_DataBase mSkillDataBase;
-    private SpriteRenderer mSpriteRenderer;
+    [HideInInspector]
+    public Skill_DataBase mSkillDataBase;
+    [HideInInspector]
+    public SpriteRenderer mSpriteRenderer;
 
-    private BuffAndNerfEntity mBuffNerfController;
+    [HideInInspector]
+    public BuffAndNerfEntity mBuffNerfController;
     protected InventroySystem mInventroySystem;
 
-    private TextMeshProUGUI mLevelText;
-    private MiniHealthBar mHealthBar;
+    protected TextMeshProUGUI mLevelText;
+    protected MiniHealthBar mHealthBar;
     private bool isGrounded = false;
     private bool isAIinitialized = false;
   
@@ -52,7 +53,7 @@ public class Unit : MonoBehaviour, IUnit
     private float mGroundDistance = 2.0f;
     
     [SerializeField]
-    private float mAttackDistance= 0.0f;
+    protected float mAttackDistance= 0.0f;
     [HideInInspector]
     public float mMagicDistance = 0.0f;
 
@@ -142,10 +143,11 @@ public class Unit : MonoBehaviour, IUnit
         mAiBuild.stateMachine = (mAiBuild.stateMachine == null) ? gameObject.AddComponent<StateMachine>()
             : GetComponent<StateMachine>();
         mAiBuild.stateMachine.mAgent = this;
-        mAiBuild.stateMachine.AddState<Waiting>(new Waiting(), "Waiting");
-        mAiBuild.stateMachine.AddState<Standby>(new Standby(), "Standby");
-        mAiBuild.stateMachine.AddState<AttackBehavior>(new AttackBehavior(), "Attack");
-        mAiBuild.stateMachine.AddState<DefendBehavior>(new DefendBehavior(), "Defend");
+        mAiBuild.stateMachine.AddState<State>(new Waiting(), "Waiting");
+        mAiBuild.stateMachine.AddState<State>(new Standby(), "Standby");
+        mAiBuild.stateMachine.AddState<State>(new AttackBehavior(), "Attack");
+        mAiBuild.stateMachine.AddState<State>(new DefendBehavior(), "Defend");
+        mAiBuild.stateMachine.AddState<State>(new MagicBehavior(), "Magic");
         mAiBuild.stateMachine.ChangeState("Waiting");
         isAIinitialized = true;
     }
@@ -190,14 +192,14 @@ public class Unit : MonoBehaviour, IUnit
         CheckGround();
     }
 
-    private ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
+    protected ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
     {
         transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * 7.0f);
         mAnimator.SetFloat("Speed", 1.0f);
         return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
     }
 
-    private void CheckGround()
+    protected void CheckGround()
     {
         isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
         mVelocity.y = (isGrounded && mVelocity.y <= 0.0f) ? -GetComponent<BoxCollider>().size.y + 0.2f : mVelocity.y;
@@ -219,7 +221,7 @@ public class Unit : MonoBehaviour, IUnit
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
+                if (Physics.Raycast(ray, out hit, 500, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
                 {
                     mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
                     mTarget?.mSelected.SetActive(true);
