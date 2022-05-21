@@ -68,7 +68,7 @@ public class Standby : State
                     break;
                 }
             }
-            if (boss._magicWhenHalfHealth && boss.mSkillDataBase.Mana >= boss.mStatus.mMana)
+            if (boss._magicWhenHalfHealth && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
                 behavior = "Magic";
             else
                 behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
