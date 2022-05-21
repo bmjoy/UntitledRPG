@@ -263,7 +263,8 @@ public class Unit : MonoBehaviour, IUnit
                     {
                         yield return new WaitForSeconds(0.5f);
                         mTarget.mTarget = this;
-                        mTarget?.mTarget?.TakeDamage(mStatus.mDamage, DamageType.Magical);
+
+                        mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
 
                     }
                 }
@@ -293,6 +294,7 @@ public class Unit : MonoBehaviour, IUnit
                 Destroy(go, 1.0f);
                 yield return new WaitUntil(() => go == null);
             }
+
             TurnEnded();
         }
 
@@ -345,7 +347,6 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mHealth -= value;
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
-        
         if (mStatus.mHealth <= 0.0f)
         {
             mSelected.SetActive(false);

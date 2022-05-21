@@ -140,7 +140,8 @@ public class BattleManager : MonoBehaviour
                     if (!mCurrentUnit.mConditions.isDied)
                         mOrders.Enqueue(mCurrentUnit);
                     onDequeuingOrderEvent?.Invoke(mCurrentUnit);
-                    onEnqueuingSingleOrderEvent?.Invoke(mCurrentUnit);
+                    if(!mCurrentUnit.mConditions.isDied)
+                        onEnqueuingSingleOrderEvent?.Invoke(mCurrentUnit);
                 }
                 break;
             case GameStatus.Result:
