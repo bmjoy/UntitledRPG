@@ -19,7 +19,6 @@ public class Boss : Enemy
         public int mPercentage;
     }
 
-    [HideInInspector]
     public List<BossPatterns> mBossPatterns;
     [HideInInspector]
     public bool _doubleAttack = false;
