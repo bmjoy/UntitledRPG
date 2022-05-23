@@ -100,11 +100,13 @@ public class Unit : MonoBehaviour, IUnit
     {
         if(mGroundCheck == null)
         {
-            GameObject groundCheck = new GameObject("GroundCheck");
-            groundCheck.transform.position = new Vector3(transform.position.x,
-                transform.position.y - (transform.GetComponent<BoxCollider>().size.y), transform.position.z);
+            GameObject groundCheck = Instantiate(Resources.Load<GameObject>("Prefabs/UnitGroundCheck"),(
+             new Vector3(transform.position.x,
+                transform.position.y - (transform.GetComponent<BoxCollider>().size.y / 2.0f), transform.position.z)),Quaternion.identity);
             groundCheck.transform.parent = transform;
             mGroundCheck = groundCheck;
+            if (mFlag == Flag.Enemy)
+                mGroundCheck.GetComponent<SpriteRenderer>().flipX = true;
         }
 
         if (mType == AttackType.Range && mFirePos == null)
@@ -163,6 +165,7 @@ public class Unit : MonoBehaviour, IUnit
             case ActionEvent.None:
                 {
                     mAnimator.SetBool("Death", (mConditions.isDied) ? true : false);
+                    mGroundCheck.GetComponent<Animator>().SetBool("Run", false);
                     if (mAiBuild.type == AIType.Auto)
                         mAiBuild.stateMachine.ActivateState();
                     transform.position = (Vector3.Distance(transform.position, mField.transform.position) > 0.5f) ?
@@ -186,7 +189,8 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.actionEvent = Run(mField.transform.position, 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
                 break;
             case ActionEvent.Busy:
-                    mAnimator.SetFloat("Speed", 0.0f);
+                mGroundCheck.GetComponent<Animator>().SetBool("Run", false);
+                mAnimator.SetFloat("Speed", 0.0f);
                 break;
         }
         CheckGround();
@@ -196,6 +200,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * 7.0f);
         mAnimator.SetFloat("Speed", 1.0f);
+        mGroundCheck.GetComponent<Animator>().SetBool("Run", true);
         return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
     }
 
@@ -264,6 +269,11 @@ public class Unit : MonoBehaviour, IUnit
                         yield return new WaitForSeconds(0.5f);
                         mTarget.mTarget = this;
                         mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
+                        if (mStatus.mHealth <= 0.0f)
+                        {
+                            mAiBuild.actionEvent = ActionEvent.Busy;
+                            mGroundCheck.SetActive(false);
+                        }
                     }
                 }
                 yield return new WaitForSeconds(mWaitingTimeForBattle);

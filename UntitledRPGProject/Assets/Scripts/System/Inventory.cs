@@ -3,32 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Inventory
 {
-    public readonly Dictionary<string,Item> myInventory = new Dictionary<string,Item>();
+    public readonly List<KeyValuePair<int,Item>> myInventory = new List<KeyValuePair<int, Item>>();
+    public int myIndex = 0;
 
     public void Add(Item item)
     {
         if ((item.GetType() == typeof(Armor) || item.GetType() == typeof(Weapon)))
         {
-            if (!myInventory.ContainsKey(item.Name) && !PlayerController.Instance.CheckItemExist(item.Name))
-            {
-                item.Initialize();
-                myInventory.Add(item.Name, item);
-            }
-            else
-                Debug.LogWarning("<color=yellow>Warning!</color> each equipment cannot have more than one");
+            item.Initialize(myIndex);
+            myInventory.Add(new KeyValuePair<int, Item>(myIndex, item));
+            myIndex++;
         }
         else if(item.GetType() == typeof(Expendables))
         {
-            if(!myInventory.ContainsKey(item.Name))
+            if(!myInventory.Contains(new KeyValuePair<int, Item>(item.ID, item)))
             {
-                item.Initialize();
-                myInventory.Add(item.Name, item);
+                item.Initialize(myIndex);
+                myInventory.Add(new KeyValuePair<int, Item>(item.ID, item));
+                myIndex++;
             }
             else
             {
-                var i = (Expendables)Get(item.Name);
-                if(i.Amount < 50)
-                    myInventory[item.Name].Apply();
+                var it = (Expendables)Get(item.ID, item.Name);
+                if(it.Amount < 50)
+                    Get(item.ID, item.Name).Apply();
                 else
                     Debug.LogWarning("<color=yellow>Warning!</color> expendables are reached to maximum!");
             }
@@ -37,12 +35,30 @@ public class Inventory
 
     public void Remove(Item item)
     {
-        if(myInventory.ContainsKey(item.Name))
-            myInventory.Remove(item.Name);
+        myInventory.Remove(myInventory.Find(x => x.Value.ID == item.ID));
     }
 
-    public Item Get(string name)
+    public void Delete(Item item)
     {
-        return myInventory[name];
+        foreach(Transform it in PlayerController.Instance.transform.Find("Bag"))
+        {
+            if(it.GetComponent<Item>() == Get(item.ID,item.Name))
+            {
+                GameObject.Destroy(it.gameObject);
+                break;
+            }
+        }
+        Remove(item);
+    }
+
+    public Item Get(int ID, string name)
+    {
+        foreach(var item in myInventory)
+        {
+            if(item.Key == ID && item.Value.Name == name)
+                return item.Value;
+        }
+
+        return null;
     }
 }

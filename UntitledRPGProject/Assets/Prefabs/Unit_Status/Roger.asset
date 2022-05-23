@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
   m_Name: Roger
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Roger
   Level: 1
   EXP: 0
   MaxHealth: 200

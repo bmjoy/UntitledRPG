@@ -44,8 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 0
-  Name: 
+  Name: Cap
   mOwner: {fileID: 0}
+  ID: 0
   Info: {fileID: 11400000, guid: 20b37098f69e53044aff809d55441a90, type: 2}
-  Bonus: []
+  Bonus:
+  - Type: 5
+    Value: 2
+    Skill: {fileID: 0}
   armorType: 0

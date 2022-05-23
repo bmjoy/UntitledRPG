@@ -66,8 +66,12 @@ public class InventoryUI : MonoBehaviour
         if (mInitialized == false)
             return;
         if(active == true)
+        {
             transform.gameObject.SetActive(true);
 
+        }
+        InventorySetup();
+        _intialized = false;
         StartCoroutine(Wait(active));
     }
 
@@ -160,53 +164,75 @@ public class InventoryUI : MonoBehaviour
     unit.GetComponent<InventroySystem>().mInventoryInfo.Arm.Info.mSprite : mEmptyImage;
     }
 
-    private void InventoryUpdate()
+    bool _intialized = false;
+    List<GameObject> items = new List<GameObject>();
+    private void InventorySetup()
     {
+        if (_intialized)
+            return;
+        items.Clear();
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
-            string obj = item.Value.Name;
-            bool exist = false;
-            foreach (Transform ui in mItemsGroup.transform)
-            {
-                if (ui.GetComponent<SetItemUI>().mItem.Name == obj)
-                {
-                    exist = true;
-                    break;
-                }
-            }
-            if (exist == false)
-            {
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity);
-                go.transform.SetParent(mItemsGroup.transform);
-                go.GetComponent<SetItemUI>().mItem = item.Value as Item;
-                go.GetComponent<SetItemUI>().Initialize();
+            EquipmentItem equipment = (EquipmentItem)item.Value;
 
-                if(item.Value is Weapon)
+            if (equipment.IsEquipped)
+                continue;
+
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity);
+            go.transform.SetParent(mItemsGroup.transform);
+
+            go.GetComponent<SetItemUI>().mItem = item.Value;
+            go.GetComponent<SetItemUI>().ID = item.Key;
+            go.GetComponent<SetItemUI>().Initialize();
+
+            items.Add(go);
+
+            if (item.Value is Weapon)
+            {
+                mEquipmentImageGroup.transform.Find("Weapon").GetComponent<UnSetItemUI>().Initialize();
+            }
+            else if (item.Value is Armor)
+            {
+                var i = (Armor)item.Value;
+                switch (i.armorType)
                 {
-                    mEquipmentImageGroup.transform.Find("Weapon").GetComponent<UnSetItemUI>().Initialize();
-                }
-                else if(item.Value is Armor)
-                {
-                    var i = (Armor)item.Value;
-                    switch (i.armorType)
-                    {
-                        case ArmorType.Bracer:
-                            mEquipmentImageGroup.transform.Find("Arm").GetComponent<UnSetItemUI>().Initialize();
-                            break;
-                        case ArmorType.BodyArmor:
-                            mEquipmentImageGroup.transform.Find("Body").GetComponent<UnSetItemUI>().Initialize();
-                            break;
-                        case ArmorType.LegArmor:
-                            mEquipmentImageGroup.transform.Find("Leg").GetComponent<UnSetItemUI>().Initialize();
-                            break;
-                        case ArmorType.Helmet:
-                            mEquipmentImageGroup.transform.Find("Head").GetComponent<UnSetItemUI>().Initialize();
-                            break;
-                    }
+                    case ArmorType.Bracer:
+                        mEquipmentImageGroup.transform.Find("Arm").GetComponent<UnSetItemUI>().Initialize();
+                        break;
+                    case ArmorType.BodyArmor:
+                        mEquipmentImageGroup.transform.Find("Body").GetComponent<UnSetItemUI>().Initialize();
+                        break;
+                    case ArmorType.LegArmor:
+                        mEquipmentImageGroup.transform.Find("Leg").GetComponent<UnSetItemUI>().Initialize();
+                        break;
+                    case ArmorType.Helmet:
+                        mEquipmentImageGroup.transform.Find("Head").GetComponent<UnSetItemUI>().Initialize();
+                        break;
                 }
             }
+
+        }
+        _intialized = true;
+    }
+
+    private void InventoryUpdate()
+    {
+        if(PlayerController.Instance.mInventory.myInventory.Count != items.Count)
+        {
+            foreach (var item in items)
+            {
+                Destroy(item.gameObject);
+            }
+            items.Clear();
+            foreach (Transform item in mItemsGroup.transform)
+            {
+                Destroy(item.gameObject);
+            }
+            _intialized = false;
+            InventorySetup();
         }
     }
+
     private void OnEnable()
     {
         if (mInitialized == false)

@@ -18,12 +18,14 @@ MonoBehaviour:
   mManaCost: 10
   mValue: 0
   mOwner: {fileID: 0}
-  isActive: 0
-  isComplete: 0
-  mSkillType: 0
+  isActive: 1
+  isComplete: 1
+  mSkillType: 2
   mProperty: 0
   mElement: 2
   mEffectTime: 0
   mBuffList:
   - {fileID: 11400000, guid: 2c3ad03d5d970d54c8ee887526446965, type: 2}
   mNerfList: []
+  mSkillNerfTarget: 0
+  mSkillBuffTarget: 1

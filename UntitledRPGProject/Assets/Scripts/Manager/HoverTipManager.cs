@@ -11,6 +11,10 @@ public class HoverTipManager : MonoBehaviour
 
     public static Action<string, Vector2> onMouseHover;
     public static Action onMouseOutside;
+    [SerializeField]
+    private int mWidth = 35;
+    [SerializeField]
+    private int mHeight = 50;
 
     private void OnEnable()
     {
@@ -35,7 +39,7 @@ public class HoverTipManager : MonoBehaviour
         mTipText.text = tip;
         mTipWindow.sizeDelta = new Vector2(mTipText.preferredWidth, mTipText.preferredHeight);
         mTipWindow.gameObject.SetActive(true);
-        mTipWindow.transform.position = new Vector2(pos.x + mTipWindow.sizeDelta.x * 1.5f, pos.y + 50);
+        mTipWindow.transform.position = new Vector2(pos.x + mWidth, pos.y + mHeight);
     }
 
     private void HideTip()

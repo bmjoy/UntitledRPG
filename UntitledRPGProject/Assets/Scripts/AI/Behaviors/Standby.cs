@@ -37,6 +37,7 @@ public class Standby : State
     public override void Exit(Unit agent)
     {
         randomNumber = -1;
+        agent.mAiBuild.stateMachine.mPreferredTarget = null;
     }
 
     private IEnumerator WaitforSecond(Unit agent)
@@ -96,7 +97,6 @@ public class Standby : State
         if (agent.mAiBuild.stateMachine.mPreferredTarget)
         {
             agent.mTarget = agent.mAiBuild.stateMachine.mPreferredTarget;
-            agent.mAiBuild.stateMachine.mPreferredTarget = null;
         }
         else
             agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();

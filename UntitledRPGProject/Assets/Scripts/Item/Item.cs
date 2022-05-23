@@ -11,21 +11,19 @@ public abstract class Item : MonoBehaviour
     public string Name = string.Empty;
     [HideInInspector]
     public Unit mOwner;
-
+    public int ID = -1;
     public ItemInfo Info;
 
-    public virtual void Initialize()
+    public virtual void Initialize(int id)
     {
         if (Info == null)
         {
-            Debug.Log("Fail to initialize! " + name);
+            Debug.Log("Fail to initialize!");
             return;
         }
         Value = Info.mCost;
-        if (Info.mName == null)
-            Info.mName = Info.name;
         Name = Info.mName;
-        Debug.Log(Name);
+        ID = id;
         mOwner = null;
     }
 

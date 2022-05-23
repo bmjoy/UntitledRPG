@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private InteractSystem mInteractSystem;
 
     public Inventory mInventory;
-    public Weapon weapon;
+    private GameObject mBag;
 
     private bool isLeft = false;
     public bool onBattle = false;
@@ -60,6 +61,13 @@ public class PlayerController : MonoBehaviour
             groundCheck.transform.position = new Vector3(transform.position.x, transform.position.y - 1.0f, transform.position.z);
             groundCheck.transform.parent = transform;
             mGroundCheck = groundCheck;
+        }
+
+        if(mBag == null)
+        {
+            GameObject myBag = new GameObject("Bag");
+            myBag.transform.SetParent(gameObject.transform);
+            mBag = myBag;
         }
 
         mCharacterController = GetComponent<CharacterController>();
@@ -83,16 +91,6 @@ public class PlayerController : MonoBehaviour
             return;
         if (Interaction)
             return;
-
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            mInventory.Add(Resources.Load<Item>("Prefabs/Items/Cap"));
-            mInventory.Add(Resources.Load<Item>("Prefabs/Items/Inferno"));
-        }
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-
-        }
 
         mState = mState.Handle();
         StateControl();
@@ -144,22 +142,6 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
-    }
-
-    public bool CheckItemExist(string name)
-    {
-        foreach(GameObject unit in mHeroes)
-        {
-            var system = unit.GetComponent<InventroySystem>();
-            if ((system.mInventoryInfo.mWeapon != null && system.mInventoryInfo.mWeapon.IsEquipped && system.mInventoryInfo.mWeapon.Name == name)
-                || (system.mInventoryInfo.Head != null && system.mInventoryInfo.Head.IsEquipped && system.mInventoryInfo.Head.Name == name)
-                || (system.mInventoryInfo.Arm != null && system.mInventoryInfo.Arm.IsEquipped && system.mInventoryInfo.Arm.Name == name)
-                || (system.mInventoryInfo.Leg != null && system.mInventoryInfo.Leg.IsEquipped && system.mInventoryInfo.Leg.Name == name)
-                || (system.mInventoryInfo.Body != null && system.mInventoryInfo.Body.IsEquipped && system.mInventoryInfo.Body.Name == name))
-                return true;
-        }
-
-        return false;
     }
 
     private GameObject[] fields;

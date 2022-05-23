@@ -126,7 +126,10 @@ public class BattleManager : MonoBehaviour
                         UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                         var data = mCurrentUnit.GetComponent<Skill_DataBase>();
                         if (data != null)
-                            UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty");
+                            UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty","Skill");
+                        UIManager.Instance.ChangeHoverTip("This unit can give <b><color=red>" + mCurrentUnit.mStatus.mDamage + "</color>Damage</b>!", "Attack");
+                        UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b> and " +
+                            "<b>" + "Defend <color=green>" + mCurrentUnit.mStatus.mDefend + "%</color></b> can block damages", "Defend");
                         status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
                     }
                 }
@@ -180,6 +183,32 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    List<Enemy> enemyList = new List<Enemy>();
+    List<GameObject> enemyItemList = new List<GameObject>();
+    private void GetEnemyItem()
+    {
+        enemyList.Clear();
+        foreach(GameObject unit in mUnits.Where(x => x.GetComponent<Enemy>()).ToList())
+        {
+            enemyList.Add(unit.GetComponent<Enemy>());
+        }
+        foreach (Enemy enemy in enemyList)
+        {
+            if(UnityEngine.Random.Range(0,100) < enemy.mItemDropRate)
+            {
+                enemyItemList.AddRange(enemy.mSetting.Item);
+            }
+        }
+
+        foreach(var item in enemyItemList)
+        {
+            GameObject i = Instantiate(item);
+            i.transform.SetParent(PlayerController.Instance.transform.Find("Beg"));
+            PlayerController.Instance.mInventory.Add(i.GetComponent<Item>());
+        }
+
+    }
+
     private IEnumerator RewardTime()
     {
         UIManager.Instance.FadeInScreen();
@@ -190,7 +219,7 @@ public class BattleManager : MonoBehaviour
         
         foreach (var unit in PlayerController.Instance.mHeroes)
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
-
+        GetEnemyItem();
         PlayerController.Instance.mGold += GameManager.s_TotalGold;
         yield return new WaitForSeconds(mWaitTime);
         UIManager.Instance.FadeOutScreen();

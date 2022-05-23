@@ -18,7 +18,7 @@ GameObject:
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4784066881939559800
 Transform:
@@ -71,7 +71,6 @@ MonoBehaviour:
   mModel: {fileID: 0}
   mHeroes:
   - {fileID: 0}
-  weapon: {fileID: 4942790779909110465, guid: 82188a8d6da44ed46801ddcbaddee394, type: 3}
   onBattle: 0
   mGold: 0
 --- !u!65 &4784066880903253926
@@ -99,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a7872c73366664aaa0fc2b869cfab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mRadius: 10
-  mCoolTime: 3
+  mRadius: 3
+  mCoolTime: 2
   IsInteracting: 0
 --- !u!1 &4784066881648165659
 GameObject:

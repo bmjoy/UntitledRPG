@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public static int s_ID = 0;
     public static int s_TotalExp = 0;
     public static int s_TotalGold = 0;
+    public int _ItemID = 0;
     public int TotalSoul = 0;
     [HideInInspector]
     public GameObject mCamera;
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
         s_ID = 0;
         s_TotalExp = 0;
         s_TotalGold = 0;
+        _ItemID = 0;
         TotalSoul = 0;
     }
 
