@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
     public Canvas mCanvas;
     public GameObject mBattleUI;
     public GameObject mSkillDescription;
+    public GameObject mAttackDescription;
+    public GameObject mDefendDescription;
     public GameObject mSkillUseCheck;
     public GameObject mBasicText;
     public GameObject mFadeScreen;
@@ -39,6 +41,7 @@ public class UIManager : MonoBehaviour
 
     private Button mYesButton;
     private Button mNoButton;
+    private Image mEKeyButton;
 
     public GameObject mOrderbar;
 
@@ -71,6 +74,7 @@ public class UIManager : MonoBehaviour
         mDialogueText = mDialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>();
         mYesButton = mDialogueBox.transform.Find("YesButton").GetComponent<Button>();
         mNoButton = mDialogueBox.transform.Find("NoButton").GetComponent<Button>();
+        mEKeyButton = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
 
         mInventoryUI.Initialize();
 
@@ -159,9 +163,16 @@ public class UIManager : MonoBehaviour
         mSkillUseCheck.GetComponent<TextMeshProUGUI>().text = text;
     }
 
-    public void ChangeHoverTip(string text)
+    public void ChangeHoverTip(string text, string action)
     {
-        mSkillDescription.GetComponent<HoverTip>().mTipToShow = text;
+        if (action == "Skill")
+            mSkillDescription.GetComponent<HoverTip>().mTipToShow = text;
+        else if (action == "Attack")
+            mAttackDescription.GetComponent<HoverTip>().mTipToShow = text;
+        else if (action == "Defend")
+            mDefendDescription.GetComponent<HoverTip>().mTipToShow = text;
+        else
+            Debug.LogWarning("<color=yellow>Warning! " + "</color>" + action + " doesn't exist!");
     }
 
     public void ChangeText(string text)
@@ -222,6 +233,7 @@ public class UIManager : MonoBehaviour
 
     public void DisplayButtonsInDialogue(bool action)
     {
+        mEKeyButton.gameObject.SetActive(!action);
         mYesButton.gameObject.SetActive(action);
         mNoButton.gameObject.SetActive(action);
     }

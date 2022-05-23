@@ -10,7 +10,6 @@ public class InteractSystem : MonoBehaviour
     private float mCoolTime = 0.5f;
     private float mCurrentCoolTime = 0.0f;
     private NPC mClosestNPC = null;
-    private float mDistance = float.MaxValue;
     public bool IsInteracting = false;
 
     // Update is called once per frame
@@ -27,7 +26,7 @@ public class InteractSystem : MonoBehaviour
         for (int i = 0; i < colliders.Length; ++i)
         {
             var hit = colliders[i];
-            mClosestNPC = (Vector3.Distance(hit.transform.position, transform.position) < mDistance ) 
+            mClosestNPC = (Vector3.Distance(hit.transform.position, transform.position) < mRadius) 
                 ? hit.transform.GetComponent<NPC>() : mClosestNPC;
         }
 

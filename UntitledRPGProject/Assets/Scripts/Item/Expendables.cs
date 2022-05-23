@@ -5,10 +5,9 @@ using UnityEngine;
 public class Expendables : Item
 {
     public int Amount = 1;
-
-    public override void Initialize()
+    public override void Initialize(int id)
     {
-        base.Initialize();
+        base.Initialize(id);
         Amount = 1;
     }
 

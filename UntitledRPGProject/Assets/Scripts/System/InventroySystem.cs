@@ -29,25 +29,27 @@ public class InventroySystem : MonoBehaviour
         mInventoryInfo = new InventoryInfo();
     }
 
-    public void Equip(object item)
+    public bool Equip(object item)
     {
+        bool isExisted = false;
         if (item is Weapon)
         {
             Weapon weapon = (Weapon)item;
             if(weapon.weaponType != transform.GetComponent<Unit>().mStatus.mWeaponType)
             {
                 Debug.Log("It is not vaild!");
-                return;
+                return isExisted;
             }
-            if (PlayerController.Instance.mInventory.Get(weapon.Name) == null)
-                return;
+            if (PlayerController.Instance.mInventory.Get(weapon.ID, weapon.Name) == null)
+                return isExisted;
             mInventoryInfo.mWeapon = Check(weapon, mInventoryInfo.mWeapon) as Weapon;
+            return isExisted;
         }
         else if(item is Armor)
         {
             Armor armor = (Armor)item;
-            if (PlayerController.Instance.mInventory.Get(armor.Name) == null)
-                return;
+            if (PlayerController.Instance.mInventory.Get(armor.ID, armor.Name) == null)
+                return isExisted;
             switch (armor.armorType)
             {
                 case ArmorType.Bracer:
@@ -63,9 +65,13 @@ public class InventroySystem : MonoBehaviour
                     mInventoryInfo.Head = Check(armor, mInventoryInfo.Head) as Armor;
                     break;
             }
+            return isExisted;
         }
         else
+        {
             Debug.Log("<color=red> the item </color> is not vaild!");
+            return isExisted;
+        }
     }
 
     private EquipmentItem Check(EquipmentItem item, EquipmentItem current)
@@ -78,12 +84,13 @@ public class InventroySystem : MonoBehaviour
         return current;
     }
 
-    public void UnEquip(object item)
+    public bool UnEquip(object item)
     {
         if (item is Weapon)
         {
             Weapon weapon = (Weapon)item;
             mInventoryInfo.mWeapon = Exist(mInventoryInfo.mWeapon) as Weapon;
+            return true;
         }
         else if(item is Armor)
         {
@@ -103,9 +110,13 @@ public class InventroySystem : MonoBehaviour
                     mInventoryInfo.Head = Exist(mInventoryInfo.Head) as Armor;
                     break;
             }
+            return true;
         }
         else
+        {
             Debug.Log("<color=yellow> the item </color> is not vaild!");
+            return false;
+        }
     }
 
     private EquipmentItem Exist(EquipmentItem current)

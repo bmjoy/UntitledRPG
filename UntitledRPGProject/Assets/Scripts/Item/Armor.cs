@@ -6,9 +6,10 @@ public class Armor : EquipmentItem
 {
     [HideInInspector]
     public ArmorType armorType;
-    public override void Initialize()
+
+    public override void Initialize(int id)
     {
-        base.Initialize();
+        base.Initialize(id);
         var info = (ArmorInfo)Info;
         armorType = info.mArmorType;
     }

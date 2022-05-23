@@ -50,10 +50,10 @@ public class VinActionTrigger : MonoBehaviour
         mirror4.GetComponent<Rigidbody>().AddForce(Vector3.forward * 1.5f, ForceMode.Impulse);
 
         yield return new WaitForSeconds(time / 6.0f);
-        mirror.GetComponent<Animator>().speed = 1.25f;
-        mirror2.GetComponent<Animator>().speed = 1.45f;
-        mirror3.GetComponent<Animator>().speed = 1.65f;
-        mirror4.GetComponent<Animator>().speed = 1.85f;
+        mirror.GetComponent<Animator>().speed = 0.75f;
+        mirror2.GetComponent<Animator>().speed = 0.95f;
+        mirror3.GetComponent<Animator>().speed = 1.15f;
+        mirror4.GetComponent<Animator>().speed = 1.35f;
 
         transform.GetComponent<Rigidbody>().isKinematic = true;
         mirror.GetComponent<Rigidbody>().isKinematic = true;
@@ -85,6 +85,7 @@ public class VinActionTrigger : MonoBehaviour
             mirrors2.GetComponent<Animator>().speed = 1.25f + i;
             Destroy(mirrors2, 5.0f - (i + 1.25f));
             yield return new WaitForSeconds(time / 6.0f);
+
 
             i++;
         }

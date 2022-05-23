@@ -6,9 +6,10 @@ public class Weapon : EquipmentItem
 {
     [HideInInspector]
     public WeaponType weaponType;
-    public override void Initialize()
+
+    public override void Initialize(int id)
     {
-        base.Initialize();
+        base.Initialize(id);
         var info = (WeaponInfo)Info;
         weaponType = info.mWeaponType;
     }

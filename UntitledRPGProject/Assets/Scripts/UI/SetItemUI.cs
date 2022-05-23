@@ -9,7 +9,7 @@ public class SetItemUI : MonoBehaviour
     public Button mButton;
     public Image mSprite;
     public TextMeshProUGUI mName;
-    public int mAmount;
+    public int ID;
     public Item mItem;
 
     public void Initialize()
@@ -21,6 +21,7 @@ public class SetItemUI : MonoBehaviour
         mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
         mName.text = mItem.Name;
         mButton.onClick.AddListener(() => Activate());
+        ID = mItem.ID;
     }
 
     public void Activate()
@@ -28,14 +29,15 @@ public class SetItemUI : MonoBehaviour
         int index = UIManager.Instance.mInventoryUI.mIndex;
         var unit = PlayerController.Instance.mHeroes[index].GetComponent<InventroySystem>();
         var item = (EquipmentItem)mItem;
-        item.IsEquipped = false;
-        unit.Equip(item);
-
-        mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        mName.text = mItem.Name;
-        if(mItem is Weapon || mItem is Armor)
+        if (unit.Equip(item))
         {
-            Destroy(gameObject);
+            Debug.Log("Hi");
+            mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            mName.text = mItem.Name;
+            if (mItem is Weapon || mItem is Armor)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

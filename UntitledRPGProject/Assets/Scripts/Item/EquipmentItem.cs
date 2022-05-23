@@ -7,10 +7,9 @@ public class EquipmentItem : Item
     public bool IsEquipped { get; set; } = false;
     [HideInInspector]
     public List<BonusAbility> Bonus = new List<BonusAbility>();
-
-    public override void Initialize()
+    public override void Initialize(int id)
     {
-        base.Initialize();
+        base.Initialize(id);
         var obj = (EquipmentInfo)Info;
         IsEquipped = false;
         Bonus.Clear();
@@ -20,6 +19,7 @@ public class EquipmentItem : Item
 
     public virtual void ChangeOwner(Unit gameObject)
     {
+        IsEquipped = false;
         mOwner = gameObject;
     }
 
