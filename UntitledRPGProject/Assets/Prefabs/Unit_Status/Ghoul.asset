@@ -18,7 +18,7 @@ MonoBehaviour:
   MaxHealth: 50
   MaxMana: 10
   Magic_Resistance: 5
-  Attack: 5
+  Attack: 10
   Defend: 1
   MagicPower: 25
   Armor: 1
