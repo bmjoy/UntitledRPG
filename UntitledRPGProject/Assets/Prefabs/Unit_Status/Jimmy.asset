@@ -16,7 +16,7 @@ MonoBehaviour:
   Level: 1
   EXP: 0
   MaxHealth: 300
-  MaxMana: 12
+  MaxMana: 20
   Magic_Resistance: 1
   Attack: 80
   Defend: 10
