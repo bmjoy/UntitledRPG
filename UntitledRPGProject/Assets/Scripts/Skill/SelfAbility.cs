@@ -5,12 +5,13 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/SelfAbility")]
-public class SelfAbility : Skill_Setting
+public class SelfAbility : DamagableAbility
 {
     [SerializeField]
     SkillTarget mSkillNerfTarget;
     [SerializeField]
     SkillTarget mSkillBuffTarget;
+
     public override void Activate(MonoBehaviour parent)
     {
         isActive = false;
@@ -121,9 +122,9 @@ public class SelfAbility : Skill_Setting
                             {
                                 var i = unit.GetComponent<Unit>();
                                 if(UnityEngine.Random.Range(0.0f, 100.0f) >= 60.0f)
-                                    i.TakeDamage(mOwner.mStatus.mDamage * 2.0f, DamageType.Physical);
+                                    i.TakeDamage((mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage) * 2.0f, DamageType.Physical);
                                 else
-                                    i.TakeDamage(mOwner.mStatus.mDamage, DamageType.Physical);
+                                    i.TakeDamage(mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage, DamageType.Physical);
                             }
 
                             DoBuff();
@@ -153,8 +154,6 @@ public class SelfAbility : Skill_Setting
                             DoNerf();
                             break;
                         }
-                    case SkillType.Summon:
-                        break;
                     default:
                         break;
                 }

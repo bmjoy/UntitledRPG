@@ -231,12 +231,12 @@ public class BattleManager : MonoBehaviour
 
     private bool BattleResult()
     {
-        if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        if (Instance.mUnits.Where(t => t.GetComponent<Unit>().mFlag == Flag.Enemy).ToList().TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             isWin = true;
             return true;
         }
-        else if (PlayerController.Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        else if (Instance.mUnits.Where(t => t.GetComponent<Unit>().mFlag == Flag.Player).ToList().TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             isWin = false;
             return true;
@@ -282,10 +282,16 @@ public class BattleManager : MonoBehaviour
     public void ResetField()
     {
         for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
+        {
             Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
+            Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).GetComponent<Field>().IsExist = false;
+        }
 
         for (int i = 0; i < Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
+        {
             Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
+            Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).GetComponent<Field>().IsExist = false;
+        }
         Instance.mCurrentField.SetActive(false);
     }
 

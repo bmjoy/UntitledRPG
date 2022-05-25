@@ -25,8 +25,6 @@ public class Unit : MonoBehaviour, IUnit
     private Rigidbody mRigidbody;
     public Unit_Setting mSetting;
     [SerializeField]
-    protected float mWaitingTimeForBattle = 0.75f;
-    [SerializeField]
     private Vector2 mFireLocation;
     public Unit_Setting Unit_Setting => mSetting;
     [HideInInspector]
@@ -56,6 +54,8 @@ public class Unit : MonoBehaviour, IUnit
     protected float mAttackDistance= 0.0f;
     [HideInInspector]
     public float mMagicDistance = 0.0f;
+
+    public Action mActionTrigger = null;
 
     protected virtual void Start()
     {
@@ -105,8 +105,6 @@ public class Unit : MonoBehaviour, IUnit
                 transform.position.y - (transform.GetComponent<BoxCollider>().size.y / 2.0f), transform.position.z)),Quaternion.identity);
             groundCheck.transform.parent = transform;
             mGroundCheck = groundCheck;
-            if (mFlag == Flag.Enemy)
-                mGroundCheck.GetComponent<SpriteRenderer>().flipX = true;
         }
 
         if (mType == AttackType.Range && mFirePos == null)
@@ -121,8 +119,10 @@ public class Unit : MonoBehaviour, IUnit
             Destroy(mCanvas);
             mCanvas = null;
         }
-        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position, Quaternion.identity);
+        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position
+            + new Vector3(0.0f,GetComponent<BoxCollider>().center.y + 0.5f, 0.0f), Quaternion.identity);
         mCanvas.transform.SetParent(transform);
+        mCanvas.GetComponent<Canvas>().sortingOrder = 8;
         mSelected = mCanvas.transform.Find("Selected").gameObject;
         mHealthBar = mCanvas.transform.Find("Borader").Find("HealthBarPrefab").GetComponent<MiniHealthBar>();
         mHealthBar.Initialize(mStatus.mHealth, mStatus.mMaxHealth, mStatus.mMana, mStatus.mMaxMana);
@@ -165,7 +165,6 @@ public class Unit : MonoBehaviour, IUnit
             case ActionEvent.None:
                 {
                     mAnimator.SetBool("Death", (mConditions.isDied) ? true : false);
-                    mGroundCheck.GetComponent<Animator>().SetBool("Run", false);
                     if (mAiBuild.type == AIType.Auto)
                         mAiBuild.stateMachine.ActivateState();
                     transform.position = (Vector3.Distance(transform.position, mField.transform.position) > 0.5f) ?
@@ -189,7 +188,6 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.actionEvent = Run(mField.transform.position, 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
                 break;
             case ActionEvent.Busy:
-                mGroundCheck.GetComponent<Animator>().SetBool("Run", false);
                 mAnimator.SetFloat("Speed", 0.0f);
                 break;
         }
@@ -200,7 +198,6 @@ public class Unit : MonoBehaviour, IUnit
     {
         transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * 7.0f);
         mAnimator.SetFloat("Speed", 1.0f);
-        mGroundCheck.GetComponent<Animator>().SetBool("Run", true);
         return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
     }
 
@@ -250,6 +247,7 @@ public class Unit : MonoBehaviour, IUnit
 
         if (mConditions.isCancel == false && mTarget)
         {
+            mTarget?.mSelected.SetActive(false);
             mSpriteRenderer.sortingOrder = (transform.position.z < mTarget?.transform.position.z) ? 3 : 4;
             mTarget.mSpriteRenderer.sortingOrder = (transform.position.z > mTarget?.transform.position.z) ? 3 : 4;
 
@@ -259,32 +257,45 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.actionEvent = ActionEvent.AttackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
                 PlayAnimation("Attack");
-                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f);
+                float mTime = mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                 if (mTarget)
                 {
-                    mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                    if(mActionTrigger != null)
+                    {
+                        mTime -= 0.1f;
+                        mActionTrigger?.Invoke();
+                    }
+                    else
+                    {
+                        mTime /= 9.0f;
+                        yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 9.0f);
+                        mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                    }
 
                     if(mTarget.mBuffNerfController.SearchBuff("Counter"))
                     {
-                        yield return new WaitForSeconds(0.5f);
+                        mTime += 0.25f;
+                        yield return new WaitForSeconds(0.25f);
                         mTarget.mTarget = this;
                         mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
                         if (mStatus.mHealth <= 0.0f)
                         {
                             mAiBuild.actionEvent = ActionEvent.Busy;
                             mGroundCheck.SetActive(false);
+                            mTime = 0.1f;
                         }
                     }
                 }
-                yield return new WaitForSeconds(mWaitingTimeForBattle);
-                mAiBuild.actionEvent = ActionEvent.BackWalk;
+                yield return new WaitForSeconds(mTime);
+                if (mStatus.mHealth > 0.0f)
+                    mAiBuild.actionEvent = ActionEvent.BackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
             }
             else if(mType == AttackType.Range)
             {
                 mAiBuild.actionEvent = ActionEvent.Busy;
                 PlayAnimation("Attack");
-                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f);
+                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
                 bullet.Initialize(mTarget, mStatus.mDamage);
@@ -294,7 +305,7 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.actionEvent = ActionEvent.Busy;
                 PlayAnimation("Attack");
-                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length);
+                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f);
                 Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
                 if (mTarget)
@@ -317,7 +328,7 @@ public class Unit : MonoBehaviour, IUnit
             transform.position.y + GetComponent<BoxCollider>().size.y / 2.0f,
             transform.position.z), Quaternion.identity);
         Destroy(go, 1.5f);
-        yield return new WaitForSeconds(mWaitingTimeForBattle);
+        yield return new WaitForSeconds(0.25f);
         TurnEnded();
     }
 
@@ -330,7 +341,7 @@ public class Unit : MonoBehaviour, IUnit
             BattleManager.Instance.Cancel();
         else
         {
-            yield return new WaitForSeconds(mWaitingTimeForBattle);
+            yield return new WaitForSeconds(0.25f);
             TurnEnded();
         }
     }
@@ -375,6 +386,7 @@ public class Unit : MonoBehaviour, IUnit
             UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
             mBuffNerfController.Stop();
             mField.GetComponent<Field>().Picked(false);
+            mField.GetComponent<Field>().IsExist = false;
         }
         mAnimator.SetTrigger("Hit");
     }

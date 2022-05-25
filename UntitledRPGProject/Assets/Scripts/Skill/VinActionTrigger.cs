@@ -6,6 +6,7 @@ public class VinActionTrigger : MonoBehaviour
 {
     float time = 0.0f;
     private Vector3 pos;
+    private bool _isShadow = false;
     void Start()
     {
         GetComponent<Skill_DataBase>().mSkill.mActionTrigger += SkillAction;
@@ -15,7 +16,14 @@ public class VinActionTrigger : MonoBehaviour
     {
         pos = transform.position;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+        _isShadow = true;
         StartCoroutine(Move());
+    }
+
+    private void Update()
+    {
+        CameraSwitcher.Instance.mLiftGammaGain.gamma.value = (_isShadow) ? Vector4.Lerp(CameraSwitcher.Instance.mLiftGammaGain.gamma.value, new Vector4(1, 1, 1, -0.6f), Time.deltaTime * 5.0f)
+            : Vector4.Lerp(CameraSwitcher.Instance.mLiftGammaGain.gamma.value, Vector4.zero, Time.deltaTime * 5.0f);
     }
 
     IEnumerator Move()
@@ -95,6 +103,7 @@ public class VinActionTrigger : MonoBehaviour
         Destroy(mirror2);
         Destroy(mirror3);
         Destroy(mirror4);
+        _isShadow = false;
     }
 
     private void OnDestroy()

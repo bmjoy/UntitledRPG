@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public abstract class Skill_Setting : ScriptableObject
+public class Skill_Setting : ScriptableObject
 {
     public Sprite mSprite;
     [TextArea]
@@ -14,10 +14,11 @@ public abstract class Skill_Setting : ScriptableObject
     public string mDescription;
     [Range(0.0f, 1000.0f)]
     public float mManaCost;
-    [Range(0.0f, 1000.0f)]
-    public float mValue;
+    [HideInInspector]
     public Unit mOwner;
+    [HideInInspector]
     public bool isActive = false;
+    [HideInInspector]
     public bool isComplete = false;
     public SkillType mSkillType;
     public SkillProperty mProperty;
@@ -42,9 +43,9 @@ public abstract class Skill_Setting : ScriptableObject
     public List<Nerf> mNerfList = new List<Nerf>();
 
     public UnityAction mAction;
-    
-    public abstract void Initialize(Unit owner);
-    public abstract void Activate(MonoBehaviour parent);
-    public abstract IEnumerator Effect();
-    public abstract IEnumerator WaitforDecision();
+
+    public virtual void Initialize(Unit owner) { }
+    public virtual void Activate(MonoBehaviour parent) { }
+    public virtual IEnumerator Effect() { yield return null; }
+    public virtual IEnumerator WaitforDecision() { yield return null; }
 }

@@ -32,6 +32,7 @@ public class CameraSwitcher : MonoBehaviour
     public VolumeProfile mPostProcessing;
 
     public Bloom mBloom;
+    public LiftGammaGain mLiftGammaGain;
     private void Start()
     {
         mCamera = this.GetComponent<CinemachineStateDrivenCamera>();
@@ -46,6 +47,7 @@ public class CameraSwitcher : MonoBehaviour
         else
             mPostProcessing = GameObject.Find("PostProcessing").GetComponent<Volume>().profile;
         mPostProcessing.TryGet(out mBloom);
+        mPostProcessing.TryGet(out mLiftGammaGain);
         
     }
     private Animator mAnimator;

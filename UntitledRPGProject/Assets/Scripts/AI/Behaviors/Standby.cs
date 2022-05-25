@@ -38,6 +38,7 @@ public class Standby : State
     {
         randomNumber = -1;
         agent.mAiBuild.stateMachine.mPreferredTarget = null;
+        agent.mTarget?.mSelected.SetActive(false);
     }
 
     private IEnumerator WaitforSecond(Unit agent)
@@ -54,37 +55,47 @@ public class Standby : State
         bool condition4 = agent.mBuffNerfController.GetBuffCount() > 0;
 
         string behavior = string.Empty;
-        behavior = (condition1 || condition2 || condition3 || condition4) ? "Attack" : "Defend";
+        behavior = ((condition1 || condition2 || condition3 || condition4) && agent.mType != AttackType.None) ? "Attack" : "Defend";
 
         agent.mTarget?.mSelected.SetActive(true);
 
-        if(agent.GetType() == typeof(Boss) && !condition4)
+        if(agent.GetType() == typeof(Boss))
         {
-            Boss boss = (Boss)agent;
-            foreach(Boss.BossPatterns patterns in boss.mBossPatterns)
+            if(!condition4)
             {
-                if(patterns.mPattern == Boss.BossPatterns.Patterns.MagicWhenHalfHealth)
+                Boss boss = (Boss)agent;
+                foreach (Boss.BossPatterns patterns in boss.mBossPatterns)
                 {
-                    boss._magicWhenHalfHealth = boss.HalfHealthEvent(patterns.mPercentage);
-                    break;
+                    if (patterns.mPattern == Boss.BossPatterns.Patterns.MagicWhenHalfHealth)
+                    {
+                        boss._magicWhenHalfHealth = boss.HalfHealthEvent(patterns.mPercentage);
+                        break;
+                    }
                 }
+                if (boss._magicWhenHalfHealth && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
+                    behavior = "Magic";
+                else
+                    behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
             }
-            if (boss._magicWhenHalfHealth && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
-                behavior = "Magic";
-            else
-                behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
         }
         else
         {
             if (agent.mSkillDataBase != null)
             {
-                if (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 50) >= 50)
+                if (agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
                     behavior = "Magic";
+                else
+                {
+                    if (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)
+                        behavior = "Magic";
+                }
             }
         }
 
-        if (agent.mAiBuild.stateMachine.mPreferredTarget)
+        if (agent.mAiBuild.stateMachine.mPreferredTarget && agent.mType != AttackType.None)
             behavior = "Attack";
+        if(agent.mAiBuild.stateMachine.mPreferredTarget && agent.mType == AttackType.None)
+            behavior = "Defend";
 
         agent.mAiBuild.stateMachine.ChangeState(behavior);
     }

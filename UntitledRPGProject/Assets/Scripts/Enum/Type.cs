@@ -12,7 +12,8 @@ public enum AttackType
 {
     Melee = 0,
     Range,
-    Instant
+    Instant,
+    None
 }
 
 public enum BuffType
@@ -45,4 +46,13 @@ public enum ArmorType
     BodyArmor,
     LegArmor,
     Bracer
+}
+
+public enum EnemyUnit
+{
+    None,
+    Ghoul,
+    Spitter,
+    Summoner,
+    Temple_Guardian
 }

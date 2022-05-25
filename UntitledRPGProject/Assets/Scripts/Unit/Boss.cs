@@ -24,6 +24,8 @@ public class Boss : Enemy
     public bool _doubleAttack = false;
     [HideInInspector]
     public bool _magicWhenHalfHealth = false;
+    [HideInInspector]
+    public BossHealthBar mMyHealthBar;
 
     protected override void Update()
     {
@@ -99,12 +101,24 @@ public class Boss : Enemy
                 }
             }
 
-            yield return new WaitForSeconds(mWaitingTimeForBattle);
+            yield return new WaitForSeconds(0.25f);
             mAiBuild.actionEvent = ActionEvent.BackWalk;
             yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
             TurnEnded();
         }
+    }
 
+    public override void TakeDamage(float dmg, DamageType type)
+    {
+        base.TakeDamage(dmg, type);
+        mMyHealthBar.mCurrentHealth = (mStatus.mHealth > 0.0f) ? mStatus.mHealth : 0.0f;
+        mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
+    }
+
+    public override void TakeRecover(float val)
+    {
+        base.TakeRecover(val);
+        mMyHealthBar.mNextHealth = mStatus.mHealth;
     }
 
     public override void TurnEnded()

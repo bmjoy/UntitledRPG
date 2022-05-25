@@ -52,8 +52,6 @@ public class Prowler : MonoBehaviour
         mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();
         mStateMachine.mAgent = this;
         mStateMachine.AddState<Idle>(new Idle(), "Idle");
-        mStateMachine.AddState<Wander>(new Wander(), "Wander");
-        mStateMachine.AddState<Stop>(new Stop(), "Stop");
         mStateMachine.AddState<Find>(new Find(), "Find");
         mStateMachine.AddState<Pursuit>(new Pursuit(), "Pursuit");
         mStateMachine.ChangeState("Idle");

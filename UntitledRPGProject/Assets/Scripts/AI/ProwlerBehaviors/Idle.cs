@@ -17,7 +17,12 @@ public class Idle : P_State
     {
         mTime += Time.deltaTime;
         if (mTime > agent.mStandbyTime)
-            agent.ChangeBehavior((agent.GetType().Name == "EnemyProwler") ? "Find" : "Wander");
+        {
+            if((agent.GetType().Name == "EnemyProwler"))
+            {
+                agent.ChangeBehavior("Find");
+            }
+        }
     }
 
     public override void Exit(Prowler agent)

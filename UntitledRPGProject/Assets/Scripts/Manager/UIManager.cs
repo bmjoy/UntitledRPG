@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
     private Image mEKeyButton;
 
     public GameObject mOrderbar;
+    private BossHealthBar mBossHealthBar;
 
     public InventoryUI mInventoryUI;
 
@@ -59,6 +60,8 @@ public class UIManager : MonoBehaviour
             if (bar.name == "Borader")
                 mHealthBarList.Add(bar.transform.Find("HealthBarInBattleGround").GetComponent<BigHealthBar>());
         }
+
+        mBossHealthBar = mCanvas.transform.Find("BossBorader").Find("HealthBarInBattleGround").GetComponent<BossHealthBar>();
 
         GameManager.Instance.onFadeGameOverScreenEvent += FadeInScreen;
         GameManager.Instance.onFadeGameOverScreenEvent += FadeInWord;
@@ -156,6 +159,24 @@ public class UIManager : MonoBehaviour
             mHealthBarList[i].gameObject.SetActive(display);
             mHealthBarList[i].Active(display);
         }
+        for (int i = 0; i < BattleManager.Instance.mUnits.Count; ++i)
+        {
+            if (BattleManager.Instance.mUnits[i].GetComponent<Unit>().GetType() == typeof(Boss))
+            {
+                if(display)
+                {
+                    mBossHealthBar.Initialize(
+    BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mHealth,
+    BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mMaxHealth);
+                    BattleManager.Instance.mUnits[i].GetComponent<Boss>().mMyHealthBar = mBossHealthBar;
+                }
+
+                mBossHealthBar.gameObject.SetActive(display);
+                mBossHealthBar.Active(display);
+
+                break;
+            }
+        }
     }
 
     public void ChangeText_Skill(string text)
@@ -203,7 +224,6 @@ public class UIManager : MonoBehaviour
     {
         mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", true);
         mFadeScreen.GetComponent<Animator>().SetBool("FadeIn", false);
-        StartCoroutine(WaitScreen());
     }
 
     public void FadeOutWord()
@@ -211,13 +231,6 @@ public class UIManager : MonoBehaviour
         mBasicText.GetComponent<Animator>().SetBool("FadeIn", false);
         mBasicText.GetComponent<Animator>().SetBool("FadeOut", true);
     }
-
-    private IEnumerator WaitScreen()
-    {
-        yield return new WaitForSeconds(CameraSwitcher.Instance.mCamera.m_DefaultBlend.m_Time);
-        mFadeScreen.SetActive(false);
-        DisplayText(false);
-    }    
 
     public void AddListenerYesButton(UnityAction action = null)
     {
