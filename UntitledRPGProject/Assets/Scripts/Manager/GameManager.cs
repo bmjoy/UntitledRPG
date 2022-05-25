@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public GameState mGameState;
     private GameObject[] EnemyProwlers;
+    private GameObject[] NPCProwlers;
     public Dictionary<string, UnitDataStorage> mUnitData = new Dictionary<string, UnitDataStorage>();
 
     public static int s_ID = 0;
@@ -108,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     private void ResetObjects()
     {
-        ActiveEnemyProwlers(true);
+        ActiveAllProwlers(true);
         BattleManager.Instance.StopAllCoroutines();
         BattleManager.Instance.ResetField();
         Destroy(mEnemyProwler.gameObject);
@@ -128,7 +129,8 @@ public class GameManager : MonoBehaviour
         onBattle?.Invoke(id); // Enemy preparation
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
-        ActiveEnemyProwlers(false);
+        NPCProwlers = GameObject.FindGameObjectsWithTag("Neutral");
+        ActiveAllProwlers(false);
         mGameState = GameState.Busy;
     }
 
@@ -148,7 +150,7 @@ public class GameManager : MonoBehaviour
         mGameState = GameState.GamePlay;
     }
 
-    private void ActiveEnemyProwlers(bool active)
+    private void ActiveAllProwlers(bool active)
     {
         for (int i = 0; i < Instance.EnemyProwlers.Length; ++i)
         {
@@ -158,6 +160,14 @@ public class GameManager : MonoBehaviour
                     continue;
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
+            }
+        }
+
+        for (int i = 0; i < Instance.NPCProwlers.Length; i++)
+        {
+            if(Instance.NPCProwlers[i] != null)
+            {
+                Instance.NPCProwlers[i].SetActive(active);
             }
         }
     }

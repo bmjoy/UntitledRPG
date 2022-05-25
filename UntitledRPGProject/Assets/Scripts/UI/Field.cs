@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Field : MonoBehaviour
 {
+    public bool IsExist = false;
     private void Start()
     {
         if(transform.GetComponent<ParticleSystem>())

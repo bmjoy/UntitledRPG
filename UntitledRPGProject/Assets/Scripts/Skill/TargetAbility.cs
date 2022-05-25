@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/TargetAbility")]
-public class TargetAbility : Skill_Setting
+public class TargetAbility : DamagableAbility
 {
     private Unit mTarget;
     private GameObject mProjectile;
@@ -167,8 +167,6 @@ public class TargetAbility : Skill_Setting
                         mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
                 }
                     break;
-            case SkillType.Summon:
-                break;
         }
     }
 

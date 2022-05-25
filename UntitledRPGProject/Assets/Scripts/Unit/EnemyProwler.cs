@@ -81,6 +81,7 @@ public class EnemyProwler : Prowler
             yield return new WaitForSeconds(0.1f);
             mEnemySpawnGroup[i].transform.position = BattleManager.Instance.enemyCenter;
             mEnemySpawnGroup[i].GetComponent<Unit>().mField = BattleManager.enemyFieldParent.GetChild(i).gameObject;
+            BattleManager.enemyFieldParent.GetChild(i).GetComponent<Field>().IsExist = true;
             mEnemySpawnGroup[i].gameObject.SetActive(true);
         }
         onBattle = true;
