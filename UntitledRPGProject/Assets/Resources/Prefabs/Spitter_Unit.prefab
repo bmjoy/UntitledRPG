@@ -98,17 +98,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTarget: {fileID: 0}
   mOrder: 0
+  mField: {fileID: 0}
+  mSelected: {fileID: 0}
   mType: 1
   mFlag: 2
-  mField: {fileID: 0}
   mSetting: {fileID: 11400000, guid: d044718d399362a4f8d971cb899b25b6, type: 2}
-  mWaitingTimeForBattle: 0.75
   mFireLocation: {x: 1, y: 0.75}
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
+  mBuffNerfController: {fileID: 0}
   mAttackDistance: 2
   mMagicDistance: 5
-  mSelected: {fileID: 0}
+  mItemDropRate: 100
 --- !u!212 &2363663712266155629
 SpriteRenderer:
   m_ObjectHideFlags: 0

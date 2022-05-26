@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
     private BossHealthBar mBossHealthBar;
 
     public InventoryUI mInventoryUI;
+    public VictoryScreen mVictoryScreen;
 
     // Start is called before the first frame update
     void Start()
@@ -78,9 +79,9 @@ public class UIManager : MonoBehaviour
         mYesButton = mDialogueBox.transform.Find("YesButton").GetComponent<Button>();
         mNoButton = mDialogueBox.transform.Find("NoButton").GetComponent<Button>();
         mEKeyButton = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
-
+        mVictoryScreen = mCanvas.transform.Find("VictoryScreen").GetComponent<VictoryScreen>();
         mInventoryUI.Initialize();
-
+        mVictoryScreen.Initialize();
         mYesButton.onClick.RemoveAllListeners();
         mNoButton.onClick.RemoveAllListeners();
         DisplayBattleInterface(false);
