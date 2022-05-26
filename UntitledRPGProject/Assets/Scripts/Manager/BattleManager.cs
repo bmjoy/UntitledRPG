@@ -188,6 +188,7 @@ public class BattleManager : MonoBehaviour
     private void GetEnemyItem()
     {
         enemyList.Clear();
+        enemyItemList.Clear();
         foreach(GameObject unit in mUnits.Where(x => x.GetComponent<Enemy>()).ToList())
         {
             enemyList.Add(unit.GetComponent<Enemy>());
@@ -199,6 +200,8 @@ public class BattleManager : MonoBehaviour
                 enemyItemList.AddRange(enemy.mSetting.Item);
             }
         }
+
+        UIManager.Instance.mVictoryScreen.UpdateItemList(enemyItemList);
 
         foreach(var item in enemyItemList)
         {
@@ -213,20 +216,18 @@ public class BattleManager : MonoBehaviour
     {
         UIManager.Instance.FadeInScreen();
         yield return new WaitForSeconds(0.5f);
-        UIManager.Instance.FadeInWord();
-        UIManager.Instance.ChangeText("Victory! \n\n EXP: " + GameManager.s_TotalExp + "\n\n Gold: " + GameManager.s_TotalGold);
         int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
-        
         foreach (var unit in PlayerController.Instance.mHeroes)
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
+        UIManager.Instance.mVictoryScreen.Active(true);
         GetEnemyItem();
         PlayerController.Instance.mGold += GameManager.s_TotalGold;
         yield return new WaitForSeconds(mWaitTime);
         UIManager.Instance.FadeOutScreen();
-        UIManager.Instance.FadeOutWord();
-        GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
+        GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
+        UIManager.Instance.mVictoryScreen.StartCoroutine(UIManager.Instance.mVictoryScreen.WaitForEnd());
         status = GameStatus.Finish;
-        yield return null;
+
     }
 
     private bool BattleResult()

@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private bool isLeft = false;
     public bool onBattle = false;
     public int mGold = 0;
+    public int mSoul = 0;
     private Animator mAnimator;
 
     public bool Interaction { get { return mInteractSystem.IsInteracting; } }

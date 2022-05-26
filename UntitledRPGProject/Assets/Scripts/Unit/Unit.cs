@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Unit : MonoBehaviour, IUnit
 {
@@ -210,7 +211,22 @@ public class Unit : MonoBehaviour, IUnit
         if (transform.position.y <= -50.0f)
             transform.position = new Vector3(mField.transform.position.x, mField.transform.position.y + 5.0f, mField.transform.position.z);
     }
-
+    virtual public KeyValuePair<bool, BonusStatus> LevelUP()
+    {
+        BonusStatus bonus = new BonusStatus();
+        if (mStatus.mEXP == 500 * mStatus.mLevel)
+        {
+            bonus.mHealth += Random.Range(5, 10);
+            bonus.mMana += Random.Range(5, 10);
+            bonus.mDamage = Random.Range(1, 5);
+            bonus.mMagicPower = Random.Range(1, 5);
+            bonus.mArmor = Random.Range(1, 5);
+            bonus.mMagic_Resistance = Random.Range(1, 5);
+            mStatus.mLevel++;
+            return new KeyValuePair<bool, BonusStatus>(true, bonus);
+        }
+        return new KeyValuePair<bool, BonusStatus>(false, bonus);
+    }
     virtual public IEnumerator AttackAction(DamageType type, Action onComplete)
     {
         mConditions.isCancel = false;
@@ -262,7 +278,7 @@ public class Unit : MonoBehaviour, IUnit
                 {
                     if(mActionTrigger != null)
                     {
-                        mTime -= 0.1f;
+                        mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 2.0f;
                         mActionTrigger?.Invoke();
                     }
                     else
@@ -295,7 +311,7 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.actionEvent = ActionEvent.Busy;
                 PlayAnimation("Attack");
-                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f);
+                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
                 bullet.Initialize(mTarget, mStatus.mDamage);
@@ -378,7 +394,7 @@ public class Unit : MonoBehaviour, IUnit
                 Destroy(mHealthBar.gameObject, 3.0f);
                 GameManager.s_TotalExp += mStatus.mEXP;
                 GameManager.s_TotalGold += mStatus.mGold;
-                GameManager.Instance.TotalSoul += GameManager.Instance.mAmountofSoul;
+                GameManager.s_TotalSoul += GameManager.Instance.mAmountofSoul;
             }
             mAnimator.SetBool("Death",true);
             mHealthBar.ActiveDeathAnimation(true);

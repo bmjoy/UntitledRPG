@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: Ghoul Summon
   mDescription: 
   mManaCost: 0
-  mValue: 0
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -27,6 +26,6 @@ MonoBehaviour:
   mBuffList: []
   mNerfList: []
   mSummonUnit: 1
-  mTurn: 3
+  mTurn: 2
   mSelectedField: {fileID: 0}
   mSkillUsageEveryTurn: 3
