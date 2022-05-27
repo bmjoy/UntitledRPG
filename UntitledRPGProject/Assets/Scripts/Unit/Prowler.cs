@@ -46,7 +46,6 @@ public class Prowler : MonoBehaviour
         mAnimator = mModel.GetComponent<Animator>();
         mSpriteRenderer = mModel.GetComponent<SpriteRenderer>();
 
-        mAnimator.SetFloat("Speed", 0.0f);
         mOriginalSpeed = mAgent.speed;
 
         mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();

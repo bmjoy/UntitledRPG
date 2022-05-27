@@ -34,7 +34,7 @@ public class EnemySpawner : Spawner
                     break;
             }
 
-            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity);
+            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity);
             newModel.transform.parent = newEnemyProwler.transform;
             newEnemyProwler.tag = "EnemyProwler";
             newEnemyProwler.layer = 6;
@@ -44,7 +44,7 @@ public class EnemySpawner : Spawner
             {
                 if (mEnemyList[i] == EnemyUnit.None)
                     continue;
-                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity);
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity);
                 newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
                 obj.transform.parent = newEnemyProwler.transform;
                 obj.SetActive(false);

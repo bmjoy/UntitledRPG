@@ -2,22 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VinActionTrigger : MonoBehaviour
+public class VinActionTrigger : ActionTrigger
 {
-    float time = 0.0f;
-    private Vector3 pos;
     private bool _isShadow = false;
     void Start()
     {
-        GetComponent<Skill_DataBase>().mSkill.mActionTrigger += SkillAction;
-        time = GetComponent<Skill_DataBase>().mSkill.mEffectTime;
+        GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartActionTrigger;
+        mTime = GetComponent<Skill_DataBase>().mSkill.mEffectTime;
     }
-    void SkillAction()
+    protected override void StartActionTrigger()
     {
-        pos = transform.position;
+        mPos = transform.position;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
         _isShadow = true;
-        StartCoroutine(Move());
+        StartCoroutine(Action());
     }
 
     private void Update()
@@ -26,12 +24,12 @@ public class VinActionTrigger : MonoBehaviour
             : Vector4.Lerp(CameraSwitcher.Instance.mLiftGammaGain.gamma.value, Vector4.zero, Time.deltaTime * 5.0f);
     }
 
-    IEnumerator Move()
+    protected override IEnumerator Action()
     {
-        GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/MirrorVin"),transform.position,Quaternion.identity);
-        GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/MirrorVin"),transform.position,Quaternion.identity);        
-        GameObject mirror3 = Instantiate(Resources.Load<GameObject>("Prefabs/MirrorVin"),transform.position,Quaternion.identity);
-        GameObject mirror4 = Instantiate(Resources.Load<GameObject>("Prefabs/MirrorVin"),transform.position,Quaternion.identity);        
+        GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);
+        GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);        
+        GameObject mirror3 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);
+        GameObject mirror4 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);        
 
         mirror.GetComponent<Animator>().SetTrigger("Skill");
         mirror2.GetComponent<Animator>().SetTrigger("Skill");
@@ -57,7 +55,7 @@ public class VinActionTrigger : MonoBehaviour
         mirror3.GetComponent<Rigidbody>().AddForce(Vector3.forward * 2.0f, ForceMode.Impulse);
         mirror4.GetComponent<Rigidbody>().AddForce(Vector3.forward * 1.5f, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(time / 6.0f);
+        yield return new WaitForSeconds(mTime / 6.0f);
         mirror.GetComponent<Animator>().speed = 0.75f;
         mirror2.GetComponent<Animator>().speed = 0.95f;
         mirror3.GetComponent<Animator>().speed = 1.15f;
@@ -84,20 +82,20 @@ public class VinActionTrigger : MonoBehaviour
             mirror3.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
             mirror4.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
 
-            GameObject mirrors = Instantiate(Resources.Load<GameObject>("Prefabs/MirrorVin"), transform.position, Quaternion.identity);
+            GameObject mirrors = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"), transform.position, Quaternion.identity);
             mirrors.GetComponent<Animator>().SetTrigger("Skill");
-            GameObject mirrors2 = Instantiate(Resources.Load<GameObject>("Prefabs/MirrorVin"), transform.position, Quaternion.identity);
+            GameObject mirrors2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"), transform.position, Quaternion.identity);
             mirrors2.GetComponent<Animator>().SetTrigger("Skill");
             mirrors.GetComponent<Animator>().speed = 1.25f + i;
             Destroy(mirrors, 5.0f - (i + 1.25f));
             mirrors2.GetComponent<Animator>().speed = 1.25f + i;
             Destroy(mirrors2, 5.0f - (i + 1.25f));
-            yield return new WaitForSeconds(time / 6.0f);
+            yield return new WaitForSeconds(mTime / 6.0f);
 
 
             i++;
         }
-        transform.position = pos;
+        transform.position = mPos;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.None;
         Destroy(mirror);
         Destroy(mirror2);
@@ -109,6 +107,6 @@ public class VinActionTrigger : MonoBehaviour
     private void OnDestroy()
     {
         if (GetComponent<Skill_DataBase>().mSkill != null)
-            GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= SkillAction;
+            GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartActionTrigger;
     }
 }

@@ -22,7 +22,8 @@ public class Unit : MonoBehaviour, IUnit
     private GameObject mFirePos;
     private GameObject mCanvas;
 
-    protected Animator mAnimator;
+    [HideInInspector]
+    public Animator mAnimator;
     private Rigidbody mRigidbody;
     public Unit_Setting mSetting;
     [SerializeField]
@@ -120,7 +121,7 @@ public class Unit : MonoBehaviour, IUnit
             Destroy(mCanvas);
             mCanvas = null;
         }
-        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/CanvasForUnit"), transform.position
+        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForUnit"), transform.position
             + new Vector3(0.0f,GetComponent<BoxCollider>().center.y + 0.5f, 0.0f), Quaternion.identity);
         mCanvas.transform.SetParent(transform);
         mCanvas.GetComponent<Canvas>().sortingOrder = 8;

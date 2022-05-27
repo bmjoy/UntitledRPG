@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7389589112674920907}
   - component: {fileID: 7389589112674920903}
   - component: {fileID: 7389589112674920902}
-  - component: {fileID: 9018896811559824665}
+  - component: {fileID: 672369417286092870}
   m_Layer: 9
   m_Name: VinNPC
   m_TagString: Neutral
@@ -153,7 +153,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &9018896811559824665
+--- !u!114 &672369417286092870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7389589112674920909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47544ec451d3d0742bf58b9ab5b31143, type: 3}
+  m_Script: {fileID: 11500000, guid: 98e378bf466c4d742996e78c54a1cf5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NPCType: 3
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_DialogueFailToTradeCase:
   - Text: That's too bad. You don't have enough Gold.
     Trigger: 0
-  mProperty: {fileID: 0}
+  mGoods: []
   m_NeedsList:
   - Name: Money
     Value: 100
