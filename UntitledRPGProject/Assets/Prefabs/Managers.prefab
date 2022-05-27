@@ -409,6 +409,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTipText: {fileID: 6929830115158372335}
   mTipWindow: {fileID: 6929830114778847778}
+  mWidth: 35
+  mHeight: 50
 --- !u!1 &6929830115563871203
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,9 +747,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGameState: 1
-  mPlayer: {fileID: 0}
+  _ItemID: 0
+  mCamera: {fileID: 0}
   mEnemyProwler: {fileID: 0}
-  mCurrentField: {fileID: 0}
+  mCurrentLevel: 0
+  mAmountofSoul: 20
+  mWaitForRestart: 3
 --- !u!114 &6929830116175226480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,9 +765,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59695027ace0b945a0156731ca02552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCurrentField: {fileID: 0}
   mUnits: []
   playerCenter: {x: 0, y: 0, z: 0}
   enemyCenter: {x: 0, y: 0, z: 0}
+  mCurrentUnit: {fileID: 0}
+  mPercentageHP: 30
   status: 0
   mWaitTime: 4
 --- !u!114 &6929830116175226481
@@ -777,14 +785,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d67542ff0c39b924fbff32d69232d288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mTextForTarget: 
+  mTextForAccpet: 
+  mTextForGameOver: Wasted!
   mCanvas: {fileID: 6929830115177245968}
   mBattleUI: {fileID: 6929830115563871203}
   mSkillDescription: {fileID: 6929830116201014904}
+  mAttackDescription: {fileID: 0}
+  mDefendDescription: {fileID: 0}
   mSkillUseCheck: {fileID: 6929830116283816642}
   mBasicText: {fileID: 6929830115610240068}
   mFadeScreen: {fileID: 6929830116724676792}
-  mMagicFadeScreen: {fileID: 0}
+  mDialogueBox: {fileID: 0}
   mOrderbar: {fileID: 6929830116237585300}
+  mInventoryUI: {fileID: 0}
+  mVictoryScreen: {fileID: 0}
 --- !u!1 &6929830116201014904
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,6 +1023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac15567639440034d8d2f47eb9945225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: {fileID: 0}
   Ypos: 5
   mSpriteLocalScale: 0.25
   mSpeed: 50
