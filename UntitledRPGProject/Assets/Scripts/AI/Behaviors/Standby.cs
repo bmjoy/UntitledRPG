@@ -64,15 +64,7 @@ public class Standby : State
             if(!condition4)
             {
                 Boss boss = (Boss)agent;
-                foreach (Boss.BossPatterns patterns in boss.mBossPatterns)
-                {
-                    if (patterns.mPattern == Boss.BossPatterns.Patterns.MagicWhenHalfHealth)
-                    {
-                        boss._magicWhenHalfHealth = boss.HalfHealthEvent(patterns.mPercentage);
-                        break;
-                    }
-                }
-                if (boss._magicWhenHalfHealth && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
+                if (boss.GetComponent<Boss>().HalfHealthEvent(boss.GetComponent<Boss>().mHealthTriggerPercentage[0]) && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
                     behavior = "Magic";
                 else
                     behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";

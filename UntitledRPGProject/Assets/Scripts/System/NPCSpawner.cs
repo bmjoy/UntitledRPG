@@ -17,7 +17,7 @@ public class NPCSpawner : Spawner
             mObject = null;
         }
 
-        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/" + mName + "NPC"), transform.position, Quaternion.identity);
+        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mName + "NPC"), transform.position, Quaternion.identity);
         mObject.transform.position = new Vector3(transform.position.x,transform.position.y + 2.5f, transform.position.z);
         mObject.tag = "Neutral";
         mObject.layer = 9;

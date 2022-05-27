@@ -10,8 +10,7 @@ public class Companion : Item
     public bool isSuccess = false;
     public override void Apply()
     {
-        Debug.Log(Name);
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/" + Name), PlayerController.Instance.transform.position, Quaternion.identity);
+        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Allys/" + Name), PlayerController.Instance.transform.position, Quaternion.identity);
         go.transform.SetParent(PlayerController.Instance.transform);
         go.GetComponent<Unit>().ResetUnit();
         go.SetActive(false);

@@ -10,7 +10,6 @@ public class Idle : P_State
     {
         mTime = 0.0f;
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
-        agent.mAnimator.SetFloat("Speed", 0.0f);
     }
 
     public override void Execute(Prowler agent)
