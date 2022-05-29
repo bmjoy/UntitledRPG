@@ -279,7 +279,7 @@ public class Unit : MonoBehaviour, IUnit
                 {
                     if(mActionTrigger != null)
                     {
-                        mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 2.0f;
+                        mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f;
                         mActionTrigger?.Invoke();
                     }
                     else
@@ -376,7 +376,7 @@ public class Unit : MonoBehaviour, IUnit
         if (type == DamageType.Physical)
         {
             value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
-            value = (value - mStatus.mArmor + mBonusStatus.mArmor <= 0.0f) ? 1.0f : value - mStatus.mArmor + mBonusStatus.mArmor;
+            value = (value - (mStatus.mArmor + mBonusStatus.mArmor) <= 0.0f) ? 1.0f : value - (mStatus.mArmor + mBonusStatus.mArmor);
         }
         else
             value = (value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance) <= 0.0f) ? 1.0f : value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance);

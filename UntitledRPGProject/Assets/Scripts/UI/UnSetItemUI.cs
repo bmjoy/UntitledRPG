@@ -41,5 +41,6 @@ public class UnSetItemUI : MonoBehaviour
         }
         
         mSprite.sprite = UIManager.Instance.mInventoryUI.mEmptyImage;
+        UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
     }
 }

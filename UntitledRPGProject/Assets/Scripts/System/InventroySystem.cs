@@ -43,6 +43,7 @@ public class InventroySystem : MonoBehaviour
             if (PlayerController.Instance.mInventory.Get(weapon.ID, weapon.Name) == null)
                 return isExisted;
             mInventoryInfo.mWeapon = Check(weapon, mInventoryInfo.mWeapon) as Weapon;
+            UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
             return isExisted;
         }
         else if(item is Armor)
@@ -65,6 +66,7 @@ public class InventroySystem : MonoBehaviour
                     mInventoryInfo.Head = Check(armor, mInventoryInfo.Head) as Armor;
                     break;
             }
+            UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
             return isExisted;
         }
         else
@@ -128,6 +130,7 @@ public class InventroySystem : MonoBehaviour
             PlayerController.Instance.mInventory.Add(current);
             current = null;
         }
+        UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
         return current;
     }
 

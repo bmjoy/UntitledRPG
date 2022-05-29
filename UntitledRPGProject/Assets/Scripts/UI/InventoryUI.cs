@@ -68,7 +68,6 @@ public class InventoryUI : MonoBehaviour
         if(active == true)
         {
             transform.gameObject.SetActive(true);
-
         }
         InventorySetup();
         _intialized = false;
@@ -171,6 +170,7 @@ public class InventoryUI : MonoBehaviour
         if (_intialized)
             return;
         items.Clear();
+
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
             EquipmentItem equipment = (EquipmentItem)item.Value;
@@ -232,6 +232,22 @@ public class InventoryUI : MonoBehaviour
             InventorySetup();
         }
     }
+
+    public void InventoryUpdateByButton()
+    {
+        foreach (var item in items)
+        {
+            Destroy(item.gameObject);
+        }
+        items.Clear();
+        foreach (Transform item in mItemsGroup.transform)
+        {
+            Destroy(item.gameObject);
+        }
+        _intialized = false;
+        InventorySetup();
+    }
+
 
     private void OnEnable()
     {
