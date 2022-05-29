@@ -38,7 +38,6 @@ public class Hero : NPC
     public override IEnumerator Interact(Action Callback)
     {
         yield return StartCoroutine(base.Interact(Callback));
-        Debug.Log("Hi");
         yield return new WaitForSeconds(0.25f);
         if (isTrading)
             Destroy(gameObject, 0.5f);
