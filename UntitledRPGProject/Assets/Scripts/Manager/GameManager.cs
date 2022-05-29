@@ -24,7 +24,8 @@ public class GameManager : MonoBehaviour
     private GameObject[] EnemyProwlers;
     private GameObject[] NPCProwlers;
     public Dictionary<string, UnitDataStorage> mUnitData = new Dictionary<string, UnitDataStorage>();
-
+    public GameObject[] mArmorPool;
+    public GameObject[] mWeaponPool;
     public static int s_ID = 0;
     public static int s_TotalExp = 0;
     public static int s_TotalGold = 0;
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
         s_TotalGold = 0;
         _ItemID = 0;
         s_TotalSoul = 0;
+        mArmorPool = Resources.LoadAll<GameObject>("Prefabs/Items/Equipments/Armors/");
+        mWeaponPool = Resources.LoadAll<GameObject>("Prefabs/Items/Equipments/Weapons/");
     }
 
     private void Update()

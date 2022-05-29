@@ -22,15 +22,6 @@ public enum BuffType
     Magic
 }
 
-public enum NPCType
-{
-    None,
-    Villager,
-    Market,
-    Hero,
-    Trap
-}
-
 public enum WeaponType
 {
     None,

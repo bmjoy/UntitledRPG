@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8a240bfc6dd884592a6cca1996a189, type: 3}
   m_Name: Armor_Lvl_5
   m_EditorClassIdentifier: 
-  mName: Armor_Lvl_1
+  mName: Armor_Lvl_5
   mCost: 0
   mSprite: {fileID: 21300000, guid: c2c8b8ad3a2afdc49a93d63c4d8af20c, type: 3}
   mBonusAbilities:

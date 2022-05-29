@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8985402103640690984}
   - component: {fileID: 8985402103640690985}
   - component: {fileID: 6333057469042830242}
+  - component: {fileID: -3195471757453502611}
   m_Layer: 9
   m_Name: ArmorMerchantNPC
   m_TagString: Neutral
@@ -165,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9020c9cb218afa54c9adbf89f01a4372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NPCType: 0
   mComplete: 0
   mName: Zyro
   m_DialogueList:
@@ -182,5 +182,17 @@ MonoBehaviour:
   m_DialogueFailToTradeCase:
   - Text: It seems you don't have enough coins!
     Trigger: 0
-  mGoods:
-  - {fileID: 4942790779909110465, guid: 82188a8d6da44ed46801ddcbaddee394, type: 3}
+--- !u!114 &-3195471757453502611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8985402103640690978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe09b29aaf7c0f243a4c691dbfe8d0c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myItem: []
+  mType: 0

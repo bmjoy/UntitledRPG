@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class Merchant : NPC
 {
+    SlotManager mSlotManager;
+    
     protected override void Start()
     {
         base.Start();
+        mSlotManager = GetComponent<SlotManager>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+            mComplete = true;
     }
 
     public override IEnumerator Event()
@@ -21,7 +30,6 @@ public class Merchant : NPC
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        Debug.Log("Hi");
         UIManager.Instance.DisplayButtonsInDialogue(true);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);
@@ -29,7 +37,15 @@ public class Merchant : NPC
 
     public override IEnumerator Trade()
     {
-        // TODO: make end button to finish the trade
-        yield return null;
+        UIManager.Instance.AddListenerExitButton(() => {
+            foreach (var dialogue in m_DialogueNoCase)
+                m_DialogueQueue.Enqueue(dialogue);
+            mComplete = true;
+        });
+        mSlotManager.StartTrade();
+        UIManager.Instance.DisplayExitButtonInDialogue(true);
+        yield return new WaitUntil(() => mComplete);
+        mSlotManager.EndTrade();
+        UIManager.Instance.DisplayExitButtonInDialogue(false);
     }
 }

@@ -8,8 +8,6 @@ using UnityEngine.Events;
 
 public class NPC : MonoBehaviour
 {
-    [SerializeField]
-    protected NPCType m_NPCType;
     [HideInInspector]
     public bool mComplete = false;
     public string mName = string.Empty;
@@ -43,9 +41,6 @@ public class NPC : MonoBehaviour
     [SerializeField]
     protected List<Dialogue> m_DialogueFailToTradeCase = new List<Dialogue>();
     protected Item mProperty;
-
-    [SerializeField]
-    List<Item> mGoods = new List<Item>();
 
     protected virtual void Start()
     {

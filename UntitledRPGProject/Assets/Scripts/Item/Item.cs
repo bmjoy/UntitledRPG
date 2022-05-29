@@ -13,6 +13,7 @@ public abstract class Item : MonoBehaviour
     public Unit mOwner;
     public int ID = -1;
     public ItemInfo Info;
+    public bool isSold = false;
 
     public virtual void Initialize(int id)
     {

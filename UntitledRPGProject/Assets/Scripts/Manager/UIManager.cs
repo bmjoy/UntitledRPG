@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour
 
     private Button mYesButton;
     private Button mNoButton;
+    private Button mExitButton;
     private Image mEKeyButton;
 
     public GameObject mOrderbar;
@@ -48,6 +49,7 @@ public class UIManager : MonoBehaviour
 
     public InventoryUI mInventoryUI;
     public VictoryScreen mVictoryScreen;
+    public MerchantScreen mMerchantScreen;
 
     // Start is called before the first frame update
     void Start()
@@ -78,8 +80,10 @@ public class UIManager : MonoBehaviour
         mDialogueText = mDialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>();
         mYesButton = mDialogueBox.transform.Find("YesButton").GetComponent<Button>();
         mNoButton = mDialogueBox.transform.Find("NoButton").GetComponent<Button>();
+        mExitButton = mDialogueBox.transform.Find("ExitButton").GetComponent<Button>();
         mEKeyButton = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
         mVictoryScreen = mCanvas.transform.Find("VictoryScreen").GetComponent<VictoryScreen>();
+        mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize();
         mYesButton.onClick.RemoveAllListeners();
@@ -243,6 +247,12 @@ public class UIManager : MonoBehaviour
     {
         mNoButton.onClick.RemoveAllListeners();
         mNoButton.onClick.AddListener(action);
+    }    
+    
+    public void AddListenerExitButton(UnityAction action = null)
+    {
+        mExitButton.onClick.RemoveAllListeners();
+        mExitButton.onClick.AddListener(action);
     }
 
     public void DisplayButtonsInDialogue(bool action)
@@ -250,5 +260,11 @@ public class UIManager : MonoBehaviour
         mEKeyButton.gameObject.SetActive(!action);
         mYesButton.gameObject.SetActive(action);
         mNoButton.gameObject.SetActive(action);
+    }
+
+    public void DisplayExitButtonInDialogue(bool action)
+    {
+        mEKeyButton.gameObject.SetActive(!action);
+        mExitButton.gameObject.SetActive(action);
     }
 }
