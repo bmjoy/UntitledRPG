@@ -34,6 +34,8 @@ public class InteractSystem : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerController.Instance.onBattle)
+            return;
         if (mCurrentCoolTime > 0.0f)
         {
             mCurrentCoolTime -= Time.deltaTime;

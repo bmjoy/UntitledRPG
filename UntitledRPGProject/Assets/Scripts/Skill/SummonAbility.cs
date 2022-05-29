@@ -161,7 +161,7 @@ public class SummonAbility : Skill_Setting
 
                 if (mSelectedField)
                 {
-                    GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity);
+                    GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity);
                     unit.GetComponent<Animator>().SetTrigger("Spawn");
                     unit.GetComponent<Unit>().mField = mSelectedField;
                     unit.GetComponent<Unit>().ResetUnit();
