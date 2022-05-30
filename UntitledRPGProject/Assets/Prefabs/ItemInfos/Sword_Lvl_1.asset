@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9a87318eb2cdf47af93bdd00b481da, type: 3}
   m_Name: Sword_Lvl_1
   m_EditorClassIdentifier: 
-  mName: 
+  mName: Sword lvl.1
   mCost: 15
   mSprite: {fileID: 21300000, guid: 78304658e07d67443afdc68e97285dca, type: 3}
   mBonusAbilities:

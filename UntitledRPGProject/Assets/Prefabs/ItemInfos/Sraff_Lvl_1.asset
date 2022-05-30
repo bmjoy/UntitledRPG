@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9a87318eb2cdf47af93bdd00b481da, type: 3}
   m_Name: Sraff_Lvl_1
   m_EditorClassIdentifier: 
-  mName: 
+  mName: Staff lvl.1
   mCost: 15
   mSprite: {fileID: 21300000, guid: 0c8595eb98f406d49adc94c720d77ad7, type: 3}
   mBonusAbilities:
   - Type: 2
     Value: 15
     Skill: {fileID: 0}
-  mWeaponType: 0
+  mWeaponType: 1
