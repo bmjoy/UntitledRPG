@@ -15,4 +15,3 @@ MonoBehaviour:
   mName: Eleven
   mCost: 100
   mSprite: {fileID: 0}
-  transform: {fileID: 0}

@@ -23,7 +23,8 @@ MonoBehaviour:
   MagicPower: 25
   Armor: 10
   Agility: 3
-  Gold: 300
+  Gold: 100
+  WeaponType: 0
   BasicSprite: {fileID: -6356620016437325989, guid: a6097a492d2c5ad4d801242d81ed371f, type: 3}
   SFXClips: []
   Item: []
