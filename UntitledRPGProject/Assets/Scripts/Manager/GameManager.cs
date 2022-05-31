@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Restart()
     {
-        onFadeGameOverScreenEvent?.Invoke();
+        onFadeGameOverScreenEvent?.Invoke(null);
         UIManager.Instance.ChangeText("<color=red>" + UIManager.Instance.mTextForGameOver + "</color>");
         yield return new WaitForSeconds(mWaitForRestart);
         onGameOverToReset?.Invoke();
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
     public event Action onPlayerBattleStart;
     public event Action onPlayerBattleEnd;
     public event Action<int> onBattle;
-    public event Action onFadeGameOverScreenEvent;
+    public event Action<Action> onFadeGameOverScreenEvent;
     public event Action onGameOverToReset;
     public event Action<int, Action> onEnemyWin;
     public void OnBattleStart(int id)

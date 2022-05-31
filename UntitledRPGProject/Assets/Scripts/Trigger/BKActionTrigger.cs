@@ -93,11 +93,20 @@ public class BKActionTrigger : ActionTrigger
         if (GetComponent<Boss>().mTarget)
         {
             GetComponent<Boss>().mTarget.TakeDamage(GetComponent<Boss>().mStatus.mDamage + GetComponent<Boss>().mBonusStatus.mDamage, DamageType.Physical);
-            if (GetComponent<Boss>().mTarget.mBuffNerfController.SearchBuff("Counter"))
+            if (GetComponent<Unit>().mTarget.mBuffNerfController.SearchBuff("Counter"))
             {
-                yield return new WaitForSeconds(0.5f);
-                GetComponent<Boss>().mTarget.mTarget = GetComponent<Boss>();
-                GetComponent<Boss>().mTarget.mTarget.TakeDamage(GetComponent<Boss>().mTarget.mStatus.mDamage, DamageType.Magical);
+                Counter counter = GetComponent<Unit>().mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
+                if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
+                {
+                    yield return new WaitForSeconds(0.25f);
+                    GetComponent<Unit>().mTarget.mTarget = this.GetComponent<Unit>();
+                    GetComponent<Unit>().mTarget.mTarget.TakeDamage(GetComponent<Unit>().mTarget.mStatus.mDamage, DamageType.Magical);
+                    if (GetComponent<Unit>().mStatus.mHealth <= 0.0f)
+                    {
+                        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+                    }
+                }
+
             }
         }
     }
