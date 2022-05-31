@@ -38,7 +38,6 @@ public class VictoryScreen : MonoBehaviour
         gameObject.SetActive(active);
         if (active)
         {
-            GetComponent<Animator>().Play("Intro");
             UpdateCharacterList();
         }
         else

@@ -35,10 +35,7 @@ public class UIManager : MonoBehaviour
     public GameObject mFadeScreen;
     public GameObject mDialogueBox;
     public GameObject mScreenTransition;
-
-    private Animator mTransitionAnimator;    
-    public GameObject mInventoryScreenTransition;
-    private Animator mInventoryTransitionAnimator;    
+    private Animator mTransitionAnimator;      
     public GameObject mVictoryScreenTransition;
     private Animator mVictoryTransitionAnimator;
 
@@ -93,13 +90,10 @@ public class UIManager : MonoBehaviour
         mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
 
         mScreenTransition = mCanvas.transform.Find("ScreenTransition").gameObject;
-        mTransitionAnimator = mScreenTransition.GetComponent<Animator>();        
-        mInventoryScreenTransition = mCanvas.transform.Find("ScreenTransitionInventory").gameObject;
-        mInventoryTransitionAnimator = mInventoryScreenTransition.GetComponent<Animator>();        
+        mTransitionAnimator = mScreenTransition.GetComponent<Animator>();                
         mVictoryScreenTransition = mCanvas.transform.Find("ScreenTransitionVictory").gameObject;
         mVictoryTransitionAnimator = mVictoryScreenTransition.GetComponent<Animator>();
         mScreenTransition.SetActive(false);
-        mInventoryScreenTransition.SetActive(false);
         mVictoryScreenTransition.SetActive(false);
 
         mInventoryUI.Initialize();
@@ -128,13 +122,6 @@ public class UIManager : MonoBehaviour
         {
             mInventoryUI.Active(!switchOfInventory);
             switchOfInventory = !switchOfInventory;
-            if (switchOfInventory)
-            {
-                mInventoryScreenTransition.SetActive(true);
-                mInventoryTransitionAnimator.Play("Expand");
-            }
-            else
-                mInventoryScreenTransition.SetActive(false);
             mTime += mCoolTime;
         }
         if (mTime >= 0.0f)
@@ -149,8 +136,6 @@ public class UIManager : MonoBehaviour
         mVictoryScreenTransition.SetActive(false);
     }
 
-
-
     public static void ResetUI()
     {
         Instance.mYesButton.onClick.RemoveAllListeners();
@@ -164,7 +149,7 @@ public class UIManager : MonoBehaviour
     {
         FadeInScreen(() => { StopFade(); });
         mScreenTransition.SetActive(true);
-        mTransitionAnimator.Play("Style 5 Expand");
+        mTransitionAnimator.Play("Expand");
     }
 
     public void BattleEnd()
