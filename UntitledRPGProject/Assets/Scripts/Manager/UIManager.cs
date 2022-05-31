@@ -36,7 +36,11 @@ public class UIManager : MonoBehaviour
     public GameObject mDialogueBox;
     public GameObject mScreenTransition;
 
-    private Animator mTransitionAnimator;
+    private Animator mTransitionAnimator;    
+    public GameObject mInventoryScreenTransition;
+    private Animator mInventoryTransitionAnimator;    
+    public GameObject mVictoryScreenTransition;
+    private Animator mVictoryTransitionAnimator;
 
     private List<BigHealthBar> mHealthBarList = new List<BigHealthBar>();
 
@@ -89,8 +93,14 @@ public class UIManager : MonoBehaviour
         mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
 
         mScreenTransition = mCanvas.transform.Find("ScreenTransition").gameObject;
-        mTransitionAnimator = mScreenTransition.GetComponent<Animator>();
+        mTransitionAnimator = mScreenTransition.GetComponent<Animator>();        
+        mInventoryScreenTransition = mCanvas.transform.Find("ScreenTransitionInventory").gameObject;
+        mInventoryTransitionAnimator = mInventoryScreenTransition.GetComponent<Animator>();        
+        mVictoryScreenTransition = mCanvas.transform.Find("ScreenTransitionVictory").gameObject;
+        mVictoryTransitionAnimator = mVictoryScreenTransition.GetComponent<Animator>();
         mScreenTransition.SetActive(false);
+        mInventoryScreenTransition.SetActive(false);
+        mVictoryScreenTransition.SetActive(false);
 
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize();
@@ -108,14 +118,39 @@ public class UIManager : MonoBehaviour
         mInventoryUI.gameObject.SetActive(false);
     }
 
+    bool switchOfInventory = false;
+    float mTime = 0.0f;
+    float mCoolTime = 1.0f;
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f)
         {
-            mInventoryUI.Active(!mInventoryUI.gameObject.activeInHierarchy);
+            mInventoryUI.Active(!switchOfInventory);
+            switchOfInventory = !switchOfInventory;
+            if (switchOfInventory)
+            {
+                mInventoryScreenTransition.SetActive(true);
+                mInventoryTransitionAnimator.Play("Expand");
+            }
+            else
+                mInventoryScreenTransition.SetActive(false);
+            mTime += mCoolTime;
         }
-
+        if (mTime >= 0.0f)
+            mTime -= Time.deltaTime;
     }
+  
+    public IEnumerator VictoryTransition()
+    {
+        mVictoryScreenTransition.SetActive(true);
+        mVictoryTransitionAnimator.Play("Expand");
+        yield return new WaitForSeconds(3.0f);
+        mVictoryScreenTransition.SetActive(false);
+    }
+
+
+
     public static void ResetUI()
     {
         Instance.mYesButton.onClick.RemoveAllListeners();
