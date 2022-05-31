@@ -219,7 +219,8 @@ public class BattleManager : MonoBehaviour
     private IEnumerator RewardTime()
     {
         UIManager.Instance.FadeInScreen();
-        yield return new WaitForSeconds(0.5f);
+        UIManager.Instance.StartCoroutine(UIManager.Instance.VictoryTransition());
+        yield return new WaitForSeconds(1.5f);
         int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
         foreach (var unit in PlayerController.Instance.mHeroes)
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
