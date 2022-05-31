@@ -26,10 +26,16 @@ public class InteractSystem : MonoBehaviour
         for (int i = 0; i < colliders.Length; ++i)
         {
             var hit = colliders[i];
-            mClosestNPC = (Vector3.Distance(hit.transform.position, transform.position) < mRadius) 
-                ? hit.transform.GetComponent<NPC>() : mClosestNPC;
+            if(Vector3.Distance(hit.transform.position, transform.position) < mRadius)
+            {
+                mClosestNPC = hit.transform.GetComponent<NPC>();
+                mClosestNPC.mInteraction.SetActive(true);
+            }
+            else
+            {
+                hit.transform.GetComponent<NPC>().mInteraction.SetActive(false);
+            }
         }
-
     }
 
     private void Update()

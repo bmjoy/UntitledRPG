@@ -34,6 +34,9 @@ public class UIManager : MonoBehaviour
     public GameObject mBasicText;
     public GameObject mFadeScreen;
     public GameObject mDialogueBox;
+    public GameObject mScreenTransition;
+
+    private Animator mTransitionAnimator;
 
     private List<BigHealthBar> mHealthBarList = new List<BigHealthBar>();
 
@@ -84,6 +87,11 @@ public class UIManager : MonoBehaviour
         mEKeyButton = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
         mVictoryScreen = mCanvas.transform.Find("VictoryScreen").GetComponent<VictoryScreen>();
         mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
+
+        mScreenTransition = mCanvas.transform.Find("ScreenTransition").gameObject;
+        mTransitionAnimator = mScreenTransition.GetComponent<Animator>();
+        mScreenTransition.SetActive(false);
+
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize();
         mYesButton.onClick.RemoveAllListeners();
@@ -119,13 +127,16 @@ public class UIManager : MonoBehaviour
 
     public void BattleStart()
     {
-        mOrderbar.gameObject.SetActive(true);
+        FadeInScreen(() => { StopFade(); });
+        mScreenTransition.SetActive(true);
+        mTransitionAnimator.Play("Style 5 Expand");
     }
 
     public void BattleEnd()
     {
         mOrderbar.GetComponent<OrderBar>().Clear();
         mOrderbar.gameObject.SetActive(false);
+        mScreenTransition.SetActive(false);
     }
 
     public void DisplayBattleInterface(bool display)
@@ -211,18 +222,35 @@ public class UIManager : MonoBehaviour
         mDialogueText.GetComponent<TextMeshProUGUI>().text = text;
     }
 
-    public void FadeInScreen()
+    public void StopFade()
+    {
+        StartCoroutine(Stop());
+    }
+
+    private IEnumerator Stop()
+    {
+        yield return new WaitForSeconds(1.0f);
+        FadeOutScreen();
+        yield return new WaitForSeconds(0.5f);
+
+        UIManager.Instance.DisplayHealthBar(true);
+        mOrderbar.gameObject.SetActive(true);
+    }
+
+    public void FadeInScreen(Action action = null)
     {
         mFadeScreen.SetActive(true);
         mFadeScreen.GetComponent<Animator>().SetBool("FadeIn",true);
         mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", false);
+        action?.Invoke();
     }
 
-    public void FadeInWord()
+    public void FadeInWord(Action action = null)
     {
         DisplayText(true);
         mBasicText.GetComponent<Animator>().SetBool("FadeIn", true);
         mBasicText.GetComponent<Animator>().SetBool("FadeOut", false);
+        action?.Invoke();
     }
 
     public void FadeOutScreen()

@@ -58,6 +58,7 @@ public class Unit : MonoBehaviour, IUnit
     public float mMagicDistance = 0.0f;
 
     public Action mActionTrigger = null;
+    public Action mStartActionTrigger = null;
 
     protected virtual void Start()
     {
@@ -291,16 +292,21 @@ public class Unit : MonoBehaviour, IUnit
 
                     if(mTarget.mBuffNerfController.SearchBuff("Counter"))
                     {
-                        mTime += 0.25f;
-                        yield return new WaitForSeconds(0.25f);
-                        mTarget.mTarget = this;
-                        mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
-                        if (mStatus.mHealth <= 0.0f)
+                        Counter counter = mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
+                        if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
                         {
-                            mAiBuild.actionEvent = ActionEvent.Busy;
-                            mGroundCheck.SetActive(false);
-                            mTime = 0.1f;
+                            mTime += 0.25f;
+                            yield return new WaitForSeconds(0.25f);
+                            mTarget.mTarget = this;
+                            mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
+                            if (mStatus.mHealth <= 0.0f)
+                            {
+                                mAiBuild.actionEvent = ActionEvent.Busy;
+                                mGroundCheck.SetActive(false);
+                                mTime = 0.1f;
+                            }
                         }
+
                     }
                 }
                 yield return new WaitForSeconds(mTime);
@@ -383,6 +389,7 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mHealth -= value;
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
+
         if (mStatus.mHealth <= 0.0f)
         {
             mSelected.SetActive(false);

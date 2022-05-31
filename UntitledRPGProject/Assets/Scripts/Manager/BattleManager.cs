@@ -92,9 +92,11 @@ public class BattleManager : MonoBehaviour
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
         onEnqueuingOrderEvent?.Invoke();
-        UIManager.Instance.DisplayHealthBar(true);
         status = GameStatus.Start;
     }
+
+    float mTime = 0.0f;
+    float mPendingTime = 2.0f;
 
     private void Update()
     {
@@ -103,7 +105,8 @@ public class BattleManager : MonoBehaviour
             case GameStatus.None: break;
             case GameStatus.Start:
                 {
-                    status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None)) ? GameStatus.Queue : GameStatus.Start;
+                    status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None) && mTime >= mPendingTime) ? GameStatus.Queue : GameStatus.Start;
+                    mTime += Time.deltaTime;
                 }
                 break;
             case GameStatus.Queue:
@@ -177,6 +180,7 @@ public class BattleManager : MonoBehaviour
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     onReward = false;
                     mCurrentUnit = null;
+                    mTime = 0.0f;
                     status = GameStatus.None;
                 }
                 break;

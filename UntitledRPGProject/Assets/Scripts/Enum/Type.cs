@@ -45,6 +45,7 @@ public enum EnemyUnit
     Ghoul,
     Spitter,
     Summoner,
+    Spirit_Boxer,
     Temple_Guardian,
     The_Bloody_King
 }

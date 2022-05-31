@@ -41,9 +41,20 @@ public class NPC : MonoBehaviour
     [SerializeField]
     protected List<Dialogue> m_DialogueFailToTradeCase = new List<Dialogue>();
     protected Item mProperty;
+    private GameObject mCanvas;
+    public GameObject mInteraction;
 
     protected virtual void Start()
     {
+        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForNPC"), transform.position
+    + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity);
+        mCanvas.transform.SetParent(transform);
+        if(!GetComponent<Billboard>().mUseStaticBillboard)
+            mCanvas.transform.localRotation = new Quaternion(0.0f, 180.0f, 0.0f, 1.0f);
+        else
+            mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+        mInteraction = mCanvas.transform.Find("Interaction").gameObject;
+        mInteraction.SetActive(false);
     }
 
     public virtual IEnumerator Interact(Action Callback)
