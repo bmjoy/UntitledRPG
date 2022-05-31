@@ -170,6 +170,20 @@ public class BattleManager : MonoBehaviour
                         status = GameStatus.Finish;
                         UIManager.Instance.BattleEnd();
                     }
+                    if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) && _AvailableSkip)
+                    {
+                        StopCoroutine(RewardTime());
+                        int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
+                        foreach (var unit in PlayerController.Instance.mHeroes)
+                            unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
+                        UIManager.Instance.mVictoryScreen.Active(true);
+                        GetEnemyItem();
+                        PlayerController.Instance.mGold += GameManager.s_TotalGold;
+                        UIManager.Instance.FadeOutScreen();
+                        GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
+                        UIManager.Instance.mVictoryScreen.StartCoroutine(UIManager.Instance.mVictoryScreen.WaitForEnd());
+                        status = GameStatus.Finish;
+                    }
                 }
                 break;
             case GameStatus.Finish:
@@ -180,6 +194,7 @@ public class BattleManager : MonoBehaviour
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     onReward = false;
                     mCurrentUnit = null;
+                    _AvailableSkip = false;
                     mTime = 0.0f;
                     status = GameStatus.None;
                 }
@@ -216,11 +231,16 @@ public class BattleManager : MonoBehaviour
 
     }
 
+    bool _AvailableSkip = false;
+    [SerializeField]
+    float _TransitionTime = 2.1f;
+
     private IEnumerator RewardTime()
     {
         UIManager.Instance.FadeInScreen();
         UIManager.Instance.StartCoroutine(UIManager.Instance.VictoryTransition());
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(_TransitionTime);
+        _AvailableSkip = true;
         int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
         foreach (var unit in PlayerController.Instance.mHeroes)
             unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
