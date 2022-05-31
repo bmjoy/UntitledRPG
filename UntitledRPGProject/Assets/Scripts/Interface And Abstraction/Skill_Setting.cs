@@ -26,6 +26,7 @@ public class Skill_Setting : ScriptableObject
     public float mEffectTime = 0.0f;
 
     public Action mActionTrigger = null;
+    public string mAnimationName = string.Empty;
 
     [Serializable]
     public class BuffList
@@ -41,9 +42,6 @@ public class Skill_Setting : ScriptableObject
     }
     
     public List<Nerf> mNerfList = new List<Nerf>();
-
-    public UnityAction mAction;
-
     public virtual void Initialize(Unit owner) { }
     public virtual void Activate(MonoBehaviour parent) { }
     public virtual IEnumerator Effect() { yield return null; }

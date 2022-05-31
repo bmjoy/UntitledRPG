@@ -6,16 +6,16 @@ public class Skill_DataBase : MonoBehaviour
 {
     //public List<Skill_Setting> mSkills = new List<Skill_Setting>();
     [SerializeField]
-    private Skill_Setting mSkillData;
+    protected Skill_Setting mSkillData;
     [HideInInspector]
     public Skill_Setting mSkill;
 
-    public Skill_Setting Skill { set { Skill = value; } get { return mSkill; } }
-    public string Name { get { return mSkill.mName; } }
-    public float Mana { get { return mSkill.mManaCost; } }
-    public string Description { get { return mSkill.mDescription; } }
+    public virtual Skill_Setting Skill { set { Skill = value; } get { return mSkill; } }
+    public virtual string Name { get { return mSkill.mName; } }
+    public virtual float Mana { get { return mSkill.mManaCost; } }
+    public virtual string Description { get { return mSkill.mDescription; } }
 
-    private void Start()
+    protected virtual void Start()
     {
         if (mSkillData == null)
             return;
@@ -24,7 +24,7 @@ public class Skill_DataBase : MonoBehaviour
         mSkill.Initialize(GetComponent<Unit>());
     }
 
-    public void Use()
+    public virtual void Use()
     {
         if (mSkill == null)
             return;

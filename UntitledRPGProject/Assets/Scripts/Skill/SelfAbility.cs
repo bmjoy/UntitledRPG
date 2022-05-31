@@ -104,8 +104,8 @@ public class SelfAbility : DamagableAbility
             {
                 mOwner.StartCoroutine(Effect());
                 float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
-                bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
-                mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
+                bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
+                mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                 if (mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f,mOwner.transform.position));
                 mActionTrigger?.Invoke();
@@ -121,7 +121,7 @@ public class SelfAbility : DamagableAbility
                             foreach(GameObject unit in group)
                             {
                                 var i = unit.GetComponent<Unit>();
-                                if(UnityEngine.Random.Range(0.0f, 100.0f) >= 60.0f)
+                                if(UnityEngine.Random.Range(0.0f, 100.0f) >= 60.0f && isCritical)
                                     i.TakeDamage((mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage) * 2.0f, DamageType.Physical);
                                 else
                                     i.TakeDamage(mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage, DamageType.Physical);
@@ -246,5 +246,5 @@ public class SelfAbility : DamagableAbility
             return;
         }
     }
-
+    
 }

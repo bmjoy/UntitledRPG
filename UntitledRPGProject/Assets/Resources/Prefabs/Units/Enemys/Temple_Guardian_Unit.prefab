@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 8503835047027739709}
   - component: {fileID: 4410274329419264462}
   - component: {fileID: 2835481550144315835}
-  - component: {fileID: 2805332332469211062}
   - component: {fileID: 6473329595191843639}
   - component: {fileID: 5492263627869333423}
+  - component: {fileID: -4975865343632171896}
   m_Layer: 6
   m_Name: Temple_Guardian_Unit
   m_TagString: Enemy
@@ -150,20 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mUseStaticBillboard: 0
---- !u!114 &2805332332469211062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8503835047027739707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 683a73d42a0e517499238e0bd2754fed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mSkillData: {fileID: 11400000, guid: 029d82734e98b99469c59b45f77c47b6, type: 2}
-  mSkill: {fileID: 0}
 --- !u!114 &6473329595191843639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +179,6 @@ MonoBehaviour:
   mItemDropRate: 20
   _magicWhenHalfHealth: 0
   mMyHealthBar: {fileID: 0}
-  mTime: 0
   mAttackTriggerPercentage: 50
   mHealthTriggerPercentage:
   - 50
@@ -211,3 +196,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mPos: {x: 0, y: 0, z: 0}
   mTime: 0
+--- !u!114 &-4975865343632171896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8503835047027739707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 999697a48339a3a4b92a319c9be647c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mSkillData: {fileID: 11400000, guid: 029d82734e98b99469c59b45f77c47b6, type: 2}
+  mSkill: {fileID: 0}
+  mSkillDatas: []
+  mMaxCoolDown: 3
+  mCoolDown: 0

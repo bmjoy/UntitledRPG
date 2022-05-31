@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: PhantomDance
   mDescription: Phantom dance!
   mManaCost: 5
-  mValue: 8
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 0
@@ -24,9 +23,12 @@ MonoBehaviour:
   mProperty: 1
   mElement: 2
   mEffectTime: 0.3
+  mAnimationName: Skill
   mBuffList:
   - {fileID: 11400000, guid: 504f9e0068f2e8e4fab6fea7038fd8f0, type: 2}
   mNerfList: []
+  mValue: 8
+  isCritical: 0
   mShootType: 1
   mRange: 11
   mStartPosition: {x: -4, y: 0}

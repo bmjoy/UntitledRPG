@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: Temple Vision
   mDescription: PowerUP
   mManaCost: 10
-  mValue: 0
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -24,8 +23,11 @@ MonoBehaviour:
   mProperty: 0
   mElement: 2
   mEffectTime: 0.5
+  mAnimationName: Skill
   mBuffList:
   - {fileID: 11400000, guid: 2c3ad03d5d970d54c8ee887526446965, type: 2}
   mNerfList: []
+  mValue: 25
+  isCritical: 0
   mSkillNerfTarget: 0
   mSkillBuffTarget: 1

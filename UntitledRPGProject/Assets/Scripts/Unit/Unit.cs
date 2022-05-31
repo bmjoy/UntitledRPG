@@ -215,7 +215,7 @@ public class Unit : MonoBehaviour, IUnit
     virtual public KeyValuePair<bool, BonusStatus> LevelUP()
     {
         BonusStatus bonus = new BonusStatus();
-        if (mStatus.mEXP == 500 * mStatus.mLevel)
+        if (mStatus.mEXP >= GameManager.Instance.mRequiredEXP * mStatus.mLevel)
         {
             bonus.mHealth += Random.Range(5, 10);
             bonus.mMana += Random.Range(5, 10);

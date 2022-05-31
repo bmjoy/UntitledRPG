@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TGActionTrigger : ActionTrigger
 {
-
     protected override IEnumerator Action()
     {
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime) / 2.0f;

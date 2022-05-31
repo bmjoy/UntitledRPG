@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: Ultimate Shadow Blade
   mDescription: 
   mManaCost: 20
-  mValue: 100
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -24,7 +23,10 @@ MonoBehaviour:
   mProperty: 1
   mElement: 5
   mEffectTime: 5.1
+  mAnimationName: Skill
   mBuffList: []
   mNerfList: []
+  mValue: 100
+  isCritical: 1
   mSkillNerfTarget: 0
   mSkillBuffTarget: 0

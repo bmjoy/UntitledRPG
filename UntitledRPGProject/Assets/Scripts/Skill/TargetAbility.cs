@@ -76,7 +76,7 @@ public class TargetAbility : DamagableAbility
             {
                 mOwner.mTarget = mTarget;
                 
-                bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
+                bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mMagicDistance = mRange;
                 mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
                 if(mProperty == SkillProperty.Friendly)
@@ -86,7 +86,7 @@ public class TargetAbility : DamagableAbility
                 mOwner.mStatus.mMana -= mManaCost;
                 if (mShootType == SKillShootType.Range)
                 {
-                    mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
+                    mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
                     Shoot();
                     yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
@@ -94,14 +94,14 @@ public class TargetAbility : DamagableAbility
                 else if (mShootType == SKillShootType.Melee)
                 {
                     yield return new WaitForSeconds(mEffectTime);
-                    mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
+                    mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                     Melee();
-                    yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
+                    yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + mEffectTime);
                     CommonState();
                 }
                 else if(mShootType == SKillShootType.Instant)
                 {
-                    mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
+                    mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }    
@@ -192,11 +192,14 @@ public class TargetAbility : DamagableAbility
     private void Melee()
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
-        mProjectile.transform.localPosition += new Vector3(3.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
-        mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.GetComponent<SpriteRenderer>().sortingOrder;
-        mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
-        Destroy(mProjectile.gameObject, mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
+        if(Resources.Load<GameObject>("Prefabs/Skills/" + mName))
+        {
+            mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
+            mProjectile.transform.localPosition += new Vector3(3.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
+            mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.GetComponent<SpriteRenderer>().sortingOrder;
+            mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
+            Destroy(mProjectile.gameObject, mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
+        }
     }
 
     private void Raycasting()
@@ -241,7 +244,6 @@ public class TargetAbility : DamagableAbility
         switch (mElement)
         {
             case SkillElement.Normal:
-                colorParameter.value = Color.yellow;
                 break;
             case SkillElement.Holy:
                 colorParameter.value = Color.white;
@@ -259,20 +261,28 @@ public class TargetAbility : DamagableAbility
                 colorParameter.value = Color.black;
                 break;
         }
-        CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
-
-        yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
-        while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)
+        if (mElement == SkillElement.Normal)
         {
-            CameraSwitcher.Instance.mBloom.intensity.value += Time.deltaTime * 2.0f;
             yield return null;
         }
-        yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent != ActionEvent.Busy);
-
-        while (CameraSwitcher.Instance.mBloom.intensity.value != 0.0f)
+        else
         {
-            CameraSwitcher.Instance.mBloom.intensity.value -= Time.deltaTime * 2.0f;
-            yield return null;
+            CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
+
+            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
+            while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)
+            {
+                CameraSwitcher.Instance.mBloom.intensity.value += Time.deltaTime * 2.0f;
+                yield return null;
+            }
+            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent != ActionEvent.Busy);
+
+            while (CameraSwitcher.Instance.mBloom.intensity.value != 0.0f)
+            {
+                CameraSwitcher.Instance.mBloom.intensity.value -= Time.deltaTime * 2.0f;
+                yield return null;
+            }
         }
+
     }
 }

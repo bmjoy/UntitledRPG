@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
+  m_Name: The Bloody King
+  m_EditorClassIdentifier: 
+  Name: The Bloody King
+  Level: 1
+  EXP: 1000
+  MaxHealth: 500
+  MaxMana: 250
+  Magic_Resistance: 100
+  Attack: 50
+  Defend: 5
+  MagicPower: 25
+  Armor: 25
+  Agility: 3
+  Gold: 2500
+  WeaponType: 0
+  BasicSprite: {fileID: -685476648212503728, guid: 175c4097a4c4f4845bc8e1b03c202447, type: 3}
+  SFXClips: []
+  Item: []

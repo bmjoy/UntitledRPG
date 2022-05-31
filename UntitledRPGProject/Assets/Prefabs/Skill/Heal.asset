@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: Heal
   mDescription: Heal
   mManaCost: 15
-  mValue: 25
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -24,8 +23,11 @@ MonoBehaviour:
   mProperty: 0
   mElement: 3
   mEffectTime: 0.5
+  mAnimationName: Skill
   mBuffList: []
   mNerfList: []
+  mValue: 25
+  isCritical: 0
   mShootType: 2
   mRange: 20
   mStartPosition: {x: 0, y: 0}
