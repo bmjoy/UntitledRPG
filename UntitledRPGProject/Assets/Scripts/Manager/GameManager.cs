@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public int mCurrentLevel = 0;
 
+    public int mRequiredEXP = 500;
     public int mAmountofSoul = 20;
     [SerializeField]
     private float mWaitForRestart = 3.0f;

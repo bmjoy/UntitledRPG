@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: HellFire
   mDescription: Fire
   mManaCost: 5
-  mValue: 10
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -24,9 +23,12 @@ MonoBehaviour:
   mProperty: 1
   mElement: 0
   mEffectTime: 0.3
+  mAnimationName: Skill
   mBuffList: []
   mNerfList:
   - {fileID: 11400000, guid: 61afe5be2cf25114ab0396c4d71c19a8, type: 2}
+  mValue: 10
+  isCritical: 0
   mShootType: 0
   mRange: 4
   mStartPosition: {x: 6, y: 1}

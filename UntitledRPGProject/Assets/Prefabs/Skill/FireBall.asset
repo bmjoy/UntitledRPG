@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: FireBall
   mDescription: It is the acient skill
   mManaCost: 5
-  mValue: 3
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -24,8 +23,11 @@ MonoBehaviour:
   mProperty: 1
   mElement: 0
   mEffectTime: 0.5
+  mAnimationName: Skill
   mBuffList: []
   mNerfList: []
+  mValue: 3
+  isCritical: 0
   mShootType: 1
   mRange: 30
   mStartPosition: {x: 2, y: 0}

@@ -61,14 +61,40 @@ public class Standby : State
 
         if(agent.GetType() == typeof(Boss))
         {
-            if(!condition4)
+            Boss boss = (Boss)agent;
+            var database = boss.GetComponent<Boss_Skill_DataBase>();
+            if (boss.GetComponent<Boss>().mHealthTriggerPercentage.Length > 1)
             {
-                Boss boss = (Boss)agent;
-                if (boss.GetComponent<Boss>().HalfHealthEvent(boss.GetComponent<Boss>().mHealthTriggerPercentage[0]) && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
+                if (boss.mActionTriggerComponent._isUltimate)
+                {
+                    boss.GetComponent<Boss_Skill_DataBase>().ChangeSkill(database.mUltimateSkillIndex);
                     behavior = "Magic";
+                }
                 else
-                    behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
+                {
+                    for (int i = 0; i < boss.mHealthTriggerPercentage.Length; ++i)
+                    {
+                        if (boss.GetComponent<Boss>().HalfHealthEvent(boss.GetComponent<Boss>().mHealthTriggerPercentage[i]))
+                        {
+                            boss.GetComponent<Boss_Skill_DataBase>().ChangeSkill(i);
+                            behavior = (boss.mSkillDataBase.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
+                        }
+                    }
+                    if (database.mSkill.mSkillType == SkillType.Buff && condition4)
+                        behavior = "Attack";
+                }
             }
+            else
+            {
+                if (database.mSkill.mSkillType == SkillType.Buff && !condition4)
+                {
+                    if (boss.GetComponent<Boss>().HalfHealthEvent(boss.GetComponent<Boss>().mHealthTriggerPercentage[0]) && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
+                        behavior = "Magic";
+                    else
+                        behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
+                }
+            }
+
         }
         else
         {

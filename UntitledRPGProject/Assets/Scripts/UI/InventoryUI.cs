@@ -120,6 +120,7 @@ public class InventoryUI : MonoBehaviour
         mCurrentUnit.sprite = go.GetComponent<Image>().sprite;
         mCurrentUnitAnimator.runtimeAnimatorController = go.transform.GetComponent<Animator>().runtimeAnimatorController;
         Destroy(go);
+        InventoryUpdateByButton();
     }
 
     private void PrintStatus(int num)
@@ -174,6 +175,15 @@ public class InventoryUI : MonoBehaviour
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
             EquipmentItem equipment = (EquipmentItem)item.Value;
+            if(equipment.GetType() == typeof(Weapon))
+            {
+                var unit = PlayerController.Instance.mHeroes[mIndex].GetComponent<Player>();
+                WeaponInfo weapon = (WeaponInfo)item.Value.Info;
+                if (weapon.mWeaponType != unit.mWeaponType)
+                {
+                    continue;
+                }
+            }
 
             if (equipment.IsEquipped)
                 continue;

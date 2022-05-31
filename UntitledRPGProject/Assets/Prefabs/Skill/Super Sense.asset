@@ -16,7 +16,6 @@ MonoBehaviour:
   mName: Super Sense
   mDescription: Super Sense
   mManaCost: 10
-  mValue: 5
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -24,9 +23,12 @@ MonoBehaviour:
   mProperty: 0
   mElement: 5
   mEffectTime: 0.3
+  mAnimationName: Skill
   mBuffList:
   - {fileID: 11400000, guid: 0f8d10de288b6cc4b87a7b06c355db4c, type: 2}
   mNerfList:
   - {fileID: 11400000, guid: 0707a831379829847b9a153512e30c6f, type: 2}
+  mValue: 5
+  isCritical: 0
   mSkillNerfTarget: 2
   mSkillBuffTarget: 1

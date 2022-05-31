@@ -109,4 +109,9 @@ public class VinActionTrigger : ActionTrigger
         if (GetComponent<Skill_DataBase>().mSkill != null)
             GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartActionTrigger;
     }
+    private void OnApplicationQuit()
+    {
+        if (GetComponent<Skill_DataBase>().mSkill != null)
+            GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartActionTrigger;
+    }
 }

@@ -6,6 +6,7 @@ public abstract class ActionTrigger : MonoBehaviour
 {
     public Vector3 mPos;
     public float mTime;
+    public bool _isUltimate;
     protected abstract void StartActionTrigger();
     protected abstract IEnumerator Action();
 }

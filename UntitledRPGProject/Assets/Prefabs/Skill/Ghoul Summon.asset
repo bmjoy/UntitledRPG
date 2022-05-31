@@ -23,6 +23,7 @@ MonoBehaviour:
   mProperty: 0
   mElement: 4
   mEffectTime: 1
+  mAnimationName: Skill
   mBuffList: []
   mNerfList: []
   mSummonUnit: 1

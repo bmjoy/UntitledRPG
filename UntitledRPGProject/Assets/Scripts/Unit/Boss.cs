@@ -14,6 +14,14 @@ public class Boss : Enemy
 
     public float mAttackTriggerPercentage = 50.0f;
     public float[] mHealthTriggerPercentage;
+    [HideInInspector]
+    public ActionTrigger mActionTriggerComponent;
+
+    protected override void Start()
+    {
+        base.Start();
+        mActionTriggerComponent = GetComponent<ActionTrigger>();
+    }
 
     protected override void Update()
     {
