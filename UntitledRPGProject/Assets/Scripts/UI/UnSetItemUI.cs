@@ -36,11 +36,11 @@ public class UnSetItemUI : MonoBehaviour
                 unit.UnEquip(unit.mInventoryInfo.Leg);
                 break;
             case "Weapon":
-                unit.UnEquip(unit.mInventoryInfo.mWeapon);
+                unit.UnEquip(unit.mInventoryInfo.Weapon);
                 break;
         }
         
         mSprite.sprite = UIManager.Instance.mInventoryUI.mEmptyImage;
-        UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
+        UIManager.Instance.mInventoryUI.InventoryUpdate();
     }
 }

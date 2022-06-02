@@ -35,8 +35,6 @@ public class Find : P_State
                 agent.ChangeBehavior("Pursuit");
             }
         }
-
-
         if(mTime > agent.mStandbyTime || Vector3.Distance(agent.transform.position, dest) < 1.1f)
             agent.ChangeBehavior("Idle");
     }

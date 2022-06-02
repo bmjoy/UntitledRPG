@@ -57,15 +57,15 @@ public class BKActionTrigger : ActionTrigger
 
     private IEnumerator AttackAction()
     {
-        mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime) / 2.0f;
+        mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
         GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), GetComponent<Boss>().mTarget.transform.position, Quaternion.identity);
         slash.GetComponent<Animator>().Play("Slash1");
         Destroy(slash, 1.0f);
-        StartCoroutine(Damage());
-        yield return new WaitForSeconds(mTime);
+        DamageState();
+        yield return new WaitForSeconds(mTime / 2.0f);
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
 
-        StartCoroutine(Damage());
+        DamageState();
         yield return new WaitForSeconds(mTime);
         GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), new Vector3(GetComponent<Boss>().mTarget.transform.position.x, GetComponent<Boss>().mTarget.transform.position.y + 1.5f , GetComponent<Boss>().mTarget.transform.position.z), Quaternion.identity);
         slash2.GetComponent<Animator>().Play("Slash2");
@@ -73,41 +73,17 @@ public class BKActionTrigger : ActionTrigger
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f) - 0.2f;
         if (GetComponent<Boss>().mBuffNerfController.GetBuffCount() > 0)
         {
-            StartCoroutine(Damage());
+            DamageState();
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
-            yield return new WaitForSeconds(mTime + 0.75f);
         }
-        else
-            yield return new WaitForSeconds(mTime + 0.75f);
-        if (GetComponent<Boss>().mStatus.mHealth > 0.0f)
-            GetComponent<Boss>().mAiBuild.actionEvent = ActionEvent.BackWalk;
-        yield return new WaitUntil(() => GetComponent<Boss>().mAiBuild.actionEvent == ActionEvent.Busy);
-        GetComponent<Boss>().mAnimator.SetBool("Attack2", false);
-        GetComponent<Boss>().TurnEnded();
-
     }
 
-    private IEnumerator Damage()
+    private void DamageState()
     {
-        
         if (GetComponent<Boss>().mTarget)
         {
             GetComponent<Boss>().mTarget.TakeDamage(GetComponent<Boss>().mStatus.mDamage + GetComponent<Boss>().mBonusStatus.mDamage, DamageType.Physical);
-            if (GetComponent<Unit>().mTarget.mBuffNerfController.SearchBuff("Counter"))
-            {
-                Counter counter = GetComponent<Unit>().mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
-                if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
-                {
-                    yield return new WaitForSeconds(0.25f);
-                    GetComponent<Unit>().mTarget.mTarget = this.GetComponent<Unit>();
-                    GetComponent<Unit>().mTarget.mTarget.TakeDamage(GetComponent<Unit>().mTarget.mStatus.mDamage, DamageType.Magical);
-                    if (GetComponent<Unit>().mStatus.mHealth <= 0.0f)
-                    {
-                        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
-                    }
-                }
-
-            }
+            StartCoroutine(GetComponent<Boss>().CounterState(GetComponent<Boss>().mTarget.mStatus.mDamage));
         }
     }
 
@@ -119,7 +95,6 @@ public class BKActionTrigger : ActionTrigger
         StartCoroutine(AttackAction());
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mActionTrigger += StartActionTrigger;

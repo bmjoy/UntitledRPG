@@ -32,7 +32,7 @@ public class Cheat : MonoBehaviour
             {
                 hero.GetComponent<InventroySystem>().UnEquip(hero.GetComponent<InventroySystem>().mInventoryInfo.Arm);
                 hero.GetComponent<InventroySystem>().UnEquip(hero.GetComponent<InventroySystem>().mInventoryInfo.Head);
-                hero.GetComponent<InventroySystem>().UnEquip(hero.GetComponent<InventroySystem>().mInventoryInfo.mWeapon);
+                hero.GetComponent<InventroySystem>().UnEquip(hero.GetComponent<InventroySystem>().mInventoryInfo.Weapon);
                 hero.GetComponent<InventroySystem>().UnEquip(hero.GetComponent<InventroySystem>().mInventoryInfo.Body);
                 hero.GetComponent<InventroySystem>().UnEquip(hero.GetComponent<InventroySystem>().mInventoryInfo.Leg);
             }

@@ -6,9 +6,7 @@ public class InventroySystem : MonoBehaviour
 {
     public class InventoryInfo
     {
-
-        public Weapon mWeapon;
-
+        public Weapon Weapon;
         public Armor Head;
         public Armor Body;
         public Armor Arm;
@@ -16,7 +14,7 @@ public class InventroySystem : MonoBehaviour
 
         public InventoryInfo()
         {
-            mWeapon = null;
+            Weapon = null;
             Head = null;
             Body = null;
             Leg = null;
@@ -42,8 +40,7 @@ public class InventroySystem : MonoBehaviour
             }
             if (PlayerController.Instance.mInventory.Get(weapon.ID, weapon.Name) == null)
                 return isExisted;
-            mInventoryInfo.mWeapon = Check(weapon, mInventoryInfo.mWeapon) as Weapon;
-            UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
+            mInventoryInfo.Weapon = Check(weapon, mInventoryInfo.Weapon) as Weapon;
             return isExisted;
         }
         else if(item is Armor)
@@ -66,7 +63,6 @@ public class InventroySystem : MonoBehaviour
                     mInventoryInfo.Head = Check(armor, mInventoryInfo.Head) as Armor;
                     break;
             }
-            UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
             return isExisted;
         }
         else
@@ -83,6 +79,7 @@ public class InventroySystem : MonoBehaviour
         item.ChangeOwner(transform.GetComponent<Unit>());
         PlayerController.Instance.mInventory.Remove(current);
         current.Apply();
+        UIManager.Instance.mInventoryUI.InventoryUpdate();
         return current;
     }
 
@@ -91,7 +88,7 @@ public class InventroySystem : MonoBehaviour
         if (item is Weapon)
         {
             Weapon weapon = (Weapon)item;
-            mInventoryInfo.mWeapon = Exist(mInventoryInfo.mWeapon) as Weapon;
+            mInventoryInfo.Weapon = Exist(mInventoryInfo.Weapon) as Weapon;
             return true;
         }
         else if(item is Armor)
@@ -126,11 +123,10 @@ public class InventroySystem : MonoBehaviour
         if (current != null)
         {
             current.End();
-            current.ChangeOwner(null);
             PlayerController.Instance.mInventory.Add(current);
             current = null;
         }
-        UIManager.Instance.mInventoryUI.InventoryUpdateByButton();
+        UIManager.Instance.mInventoryUI.InventoryUpdate();
         return current;
     }
 

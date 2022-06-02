@@ -122,9 +122,11 @@ public class SelfAbility : DamagableAbility
                             {
                                 var i = unit.GetComponent<Unit>();
                                 if(UnityEngine.Random.Range(0.0f, 100.0f) >= 60.0f && isCritical)
-                                    i.TakeDamage((mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage) * 2.0f, DamageType.Physical);
+                                    i.TakeDamage((mDamageType == DamageType.Physical) ? (mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage) * 2.0f
+                                        : (mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower) * 2.0f, mDamageType);
                                 else
-                                    i.TakeDamage(mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage, DamageType.Physical);
+                                    i.TakeDamage((mDamageType == DamageType.Physical) ? (mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage)
+                                        : (mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower), mDamageType);
                             }
 
                             DoBuff();

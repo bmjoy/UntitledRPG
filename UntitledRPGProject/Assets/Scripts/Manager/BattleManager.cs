@@ -173,23 +173,19 @@ public class BattleManager : MonoBehaviour
                     if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) && _AvailableSkip)
                     {
                         StopCoroutine(RewardTime());
-                        int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
-                        foreach (var unit in PlayerController.Instance.mHeroes)
-                            unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
-                        UIManager.Instance.mVictoryScreen.Active(true);
-                        GetEnemyItem();
-                        PlayerController.Instance.mGold += GameManager.s_TotalGold;
+
                         UIManager.Instance.FadeOutScreen();
                         GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
                         UIManager.Instance.mVictoryScreen.StartCoroutine(UIManager.Instance.mVictoryScreen.WaitForEnd());
                         status = GameStatus.Finish;
+                        _AvailableSkip = false;
                     }
                 }
                 break;
             case GameStatus.Finish:
                 {
                     foreach (GameObject unit in mUnits)
-                        unit.GetComponent<Unit>().ClearBuffAndNerf();
+                        unit.GetComponent<BuffAndNerfEntity>().Stop();
                     UIManager.Instance.DisplayHealthBar(false);
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     onReward = false;
@@ -247,12 +243,7 @@ public class BattleManager : MonoBehaviour
         UIManager.Instance.mVictoryScreen.Active(true);
         GetEnemyItem();
         PlayerController.Instance.mGold += GameManager.s_TotalGold;
-        yield return new WaitForSeconds(mWaitTime);
-        UIManager.Instance.FadeOutScreen();
         GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
-        UIManager.Instance.mVictoryScreen.StartCoroutine(UIManager.Instance.mVictoryScreen.WaitForEnd());
-        status = GameStatus.Finish;
-
     }
 
     private bool BattleResult()

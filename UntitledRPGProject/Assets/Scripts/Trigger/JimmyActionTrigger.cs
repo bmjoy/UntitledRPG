@@ -25,28 +25,11 @@ public class JimmyActionTrigger : ActionTrigger
         yield return new WaitForSeconds(0.3f);
         for (int i = 0; i < mCombo; ++i)
         {
-            GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunchFire"), new Vector3(GetComponent<Unit>().transform.position.x, GetComponent<Unit>().transform.position.y + 0.5f + Random.Range(-0.3f,0.1f), GetComponent<Unit>().transform.position.z + 1.0f), Quaternion.identity);
+            GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunchFire"), new Vector3(GetComponent<Unit>().transform.position.x, GetComponent<Unit>().transform.position.y + 0.4f + Random.Range(-0.3f,0.1f), GetComponent<Unit>().transform.position.z + 1.0f), Quaternion.identity);
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunch"), new Vector3(mPos.x, mPos.y + h, mPos.z + Random.Range(-h, h)), Quaternion.identity);
             
             GetComponent<Unit>().mTarget?.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage) / mCombo, DamageType.Physical);
-            if (GetComponent<Unit>().mTarget.mBuffNerfController.SearchBuff("Counter"))
-            {
-                Counter counter = GetComponent<Unit>().mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
-                if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
-                {
-                    yield return new WaitForSeconds(0.05f);
-                    GetComponent<Unit>().mTarget.mTarget = this.GetComponent<Unit>();
-                    GetComponent<Unit>().mTarget.mTarget.TakeDamage(GetComponent<Unit>().mTarget.mStatus.mDamage / mCombo, DamageType.Magical);
-                    if (GetComponent<Unit>().mStatus.mHealth <= 0.0f)
-                    {
-                        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
-                    }
-                }
-            }
-            else
-            {
-
-            }
+            StartCoroutine(GetComponent<Unit>().CounterState(GetComponent<Unit>().mTarget.mStatus.mDamage / mCombo));
             Destroy(go, 0.5f);
             Destroy(gofire, 0.3f);
             transform.position += new Vector3(0.0f, 0.0f, Random.Range(-0.1f, 0.1f));

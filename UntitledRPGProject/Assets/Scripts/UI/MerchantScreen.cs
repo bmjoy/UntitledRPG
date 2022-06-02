@@ -29,9 +29,7 @@ public class MerchantScreen : MonoBehaviour
     public void Active(bool active)
     {
         for (int i = 0; i < slots.Length; ++i)
-        {
             slots[i].gameObject.SetActive(active);
-        }
         mBoarder.gameObject.SetActive(active);
     }
 }

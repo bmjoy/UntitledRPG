@@ -96,5 +96,6 @@ public class EquipmentItem : Item
             }
         }
         Bonus.Clear();
+        ChangeOwner(null);
     }
 }

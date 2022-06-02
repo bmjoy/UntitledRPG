@@ -28,5 +28,6 @@ MonoBehaviour:
   mNerfList: []
   mValue: 100
   isCritical: 1
+  mDamageType: 0
   mSkillNerfTarget: 0
   mSkillBuffTarget: 0

@@ -59,7 +59,7 @@ public class Unit : MonoBehaviour, IUnit
 
     public Action mActionTrigger = null;
     public Action mStartActionTrigger = null;
-
+    private float mTime = 0.0f;
     protected virtual void Start()
     {
     }
@@ -249,9 +249,7 @@ public class Unit : MonoBehaviour, IUnit
                         break;
                 }
                 else
-                {
                     mTarget?.mSelected.SetActive(false);
-                }
                 if (Input.GetMouseButtonDown(1))
                 {
                     BattleManager.Instance.Cancel();
@@ -265,7 +263,7 @@ public class Unit : MonoBehaviour, IUnit
 
         if (mConditions.isCancel == false && mTarget)
         {
-            mTarget?.mSelected.SetActive(false);
+            mTarget.mSelected.SetActive(false);
             mSpriteRenderer.sortingOrder = (transform.position.z < mTarget?.transform.position.z) ? 3 : 4;
             mTarget.mSpriteRenderer.sortingOrder = (transform.position.z > mTarget?.transform.position.z) ? 3 : 4;
 
@@ -274,14 +272,16 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.actionEvent = ActionEvent.AttackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+                
                 PlayAnimation("Attack");
-                float mTime = mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                mTime = mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                 if (mTarget)
                 {
                     if(mActionTrigger != null)
                     {
                         mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f;
                         mActionTrigger?.Invoke();
+                        yield return new WaitForSeconds(GetComponent<ActionTrigger>().mTime);
                     }
                     else
                     {
@@ -289,30 +289,12 @@ public class Unit : MonoBehaviour, IUnit
                         yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 9.0f);
                         mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                     }
-
-                    if(mTarget.mBuffNerfController.SearchBuff("Counter"))
-                    {
-                        Counter counter = mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
-                        if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
-                        {
-                            mTime += 0.25f;
-                            yield return new WaitForSeconds(0.25f);
-                            mTarget.mTarget = this;
-                            mTarget.mTarget.TakeDamage(mTarget.mStatus.mDamage, DamageType.Magical);
-                            if (mStatus.mHealth <= 0.0f)
-                            {
-                                mAiBuild.actionEvent = ActionEvent.Busy;
-                                mGroundCheck.SetActive(false);
-                                mTime = 0.1f;
-                            }
-                        }
-
-                    }
+                    StartCoroutine(CounterState(mTarget.mStatus.mDamage));
                 }
                 yield return new WaitForSeconds(mTime);
-                if (mStatus.mHealth > 0.0f)
-                    mAiBuild.actionEvent = ActionEvent.BackWalk;
+                mAiBuild.actionEvent = ((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+
             }
             else if(mType == AttackType.Range)
             {
@@ -331,8 +313,7 @@ public class Unit : MonoBehaviour, IUnit
                 yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f);
                 Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
-                if (mTarget)
-                    mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                 Destroy(go, 1.0f);
                 yield return new WaitUntil(() => go == null);
             }
@@ -367,6 +348,36 @@ public class Unit : MonoBehaviour, IUnit
             yield return new WaitForSeconds(0.25f);
             TurnEnded();
         }
+    }
+
+    public IEnumerator CounterState(float dmg)
+    {
+        bool exist = false;
+        for (int i = 0; i < mTarget.GetComponent<Animator>().parameters.Length; i++)
+            if (mTarget.GetComponent<Animator>().parameters[i].name == "Melee")
+                exist = true;
+        if (exist)
+            mTarget.GetComponent<Animator>().SetBool("Melee", false);
+        if (mTarget.mBuffNerfController.SearchBuff("Counter"))
+        {
+            Counter counter = mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
+            if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
+            {
+                if (exist)
+                    mTarget.GetComponent<Animator>().SetBool("Melee", true);
+                mTime += 0.25f;
+                yield return new WaitForSeconds(0.25f);
+                mTarget.mTarget = this;
+                mTarget.mTarget.TakeDamage(dmg, DamageType.Magical);
+                if (mStatus.mHealth <= 0.0f)
+                {
+                    mAiBuild.actionEvent = ActionEvent.Busy;
+                    mGroundCheck.SetActive(false);
+                    mTime = 0.1f;
+                }
+            }
+        }
+
     }
 
     virtual public void PlayAnimation(string name)
@@ -435,10 +446,6 @@ public class Unit : MonoBehaviour, IUnit
         mOrder = Order.TurnEnd;
         mAiBuild.stateMachine.ChangeState("Waiting");
     }
-    virtual public void DisableUI()
-    {
-        mHealthBar.Active(false);
-    }
 
     virtual public void SetBuff(TimedBuff buff)
     {
@@ -450,20 +457,39 @@ public class Unit : MonoBehaviour, IUnit
         mBuffNerfController.AddNerf(nerf);
     }
 
-    public void BuffAndNerfTick()
-    {
-        mBuffNerfController?.Tick();
-    }
-
-    public void ClearBuffAndNerf()
-    {
-        mBuffNerfController?.Stop();
-    }
-
     virtual public void ResetUnit()
     {
         Componenet_Initialize();
         Prefab_Initialize();
         AI_Initialize();
     }
+
+    public void DisableUnit(Vector3 pos)
+    {
+        transform.position = pos;
+        mHealthBar.Active(false);
+        GetComponent<BuffAndNerfEntity>().Stop();
+        gameObject.SetActive(false);
+    }
+
+    public void EnableUnit(int index)
+    {
+        if(mFlag == Flag.Player)
+        {
+            transform.position = BattleManager.Instance.playerCenter;
+            mField = BattleManager.playerFieldParent.GetChild(index).gameObject;
+            BattleManager.playerFieldParent.GetChild(index).GetComponent<Field>().IsExist = true;
+        }
+        else
+        {
+            transform.position = BattleManager.Instance.enemyCenter;
+            mField = BattleManager.enemyFieldParent.GetChild(index).gameObject;
+            BattleManager.enemyFieldParent.GetChild(index).GetComponent<Field>().IsExist = true;
+        }
+
+        mAiBuild.actionEvent = ActionEvent.IntroWalk;
+        gameObject.SetActive(true);
+    }
+
+
 }
