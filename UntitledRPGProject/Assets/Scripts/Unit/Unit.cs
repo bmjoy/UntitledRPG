@@ -60,6 +60,11 @@ public class Unit : MonoBehaviour, IUnit
     public Action mActionTrigger = null;
     public Action mStartActionTrigger = null;
     private float mTime = 0.0f;
+    private float mWalkTime = 0.0f;
+    private float mMaxWalkTime = 0.3f;
+
+    private List<AudioClip> mRunClips = new List<AudioClip>();
+
     protected virtual void Start()
     {
     }
@@ -135,6 +140,15 @@ public class Unit : MonoBehaviour, IUnit
         mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.Active(false);
         mSelected.SetActive(false);
+
+        mRunClips.Clear();
+        if(mSetting.Clips.Count > 0)
+        {
+            mRunClips.Add(mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Run0).Clip);
+            mRunClips.Add(mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Run1).Clip);
+            mRunClips.Add(mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Run2).Clip);
+        }
+
     }
 
     public void AI_Initialize()
@@ -195,6 +209,16 @@ public class Unit : MonoBehaviour, IUnit
                 break;
         }
         CheckGround();
+        
+        if(mAnimator.GetFloat("Speed") > 0.1f && mRunClips.Count > 0)
+        {
+            mWalkTime += Time.deltaTime;
+            if(mWalkTime >= mMaxWalkTime)
+            {
+                AudioManager.PlaySfx(mRunClips[Random.Range(0, mRunClips.Count - 1)], 0.6f);
+                mWalkTime = 0.0f;
+            }
+        }
     }
 
     protected ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
@@ -216,7 +240,7 @@ public class Unit : MonoBehaviour, IUnit
     virtual public KeyValuePair<bool, BonusStatus> LevelUP()
     {
         BonusStatus bonus = new BonusStatus();
-        if (mStatus.mEXP >= GameManager.Instance.mRequiredEXP * mStatus.mLevel)
+        if (mStatus.mEXP >= GameManager.Instance.mRequiredEXP + (50.0f * mStatus.mLevel))
         {
             bonus.mHealth += Random.Range(5, 10);
             bonus.mMana += Random.Range(5, 10);
@@ -225,6 +249,12 @@ public class Unit : MonoBehaviour, IUnit
             bonus.mArmor = Random.Range(1, 5);
             bonus.mMagic_Resistance = Random.Range(1, 5);
             mStatus.mLevel++;
+            mStatus.mMaxHealth += bonus.mHealth;
+            mStatus.mMaxMana += bonus.mMana;
+            mStatus.mDamage += bonus.mDamage;
+            mStatus.mMagicPower += bonus.mMagicPower;
+            mStatus.mArmor += bonus.mArmor;
+            mStatus.mMagic_Resistance += bonus.mMagic_Resistance;
             return new KeyValuePair<bool, BonusStatus>(true, bonus);
         }
         return new KeyValuePair<bool, BonusStatus>(false, bonus);
@@ -377,7 +407,16 @@ public class Unit : MonoBehaviour, IUnit
                 }
             }
         }
-
+    }
+    
+    public bool DodgeState()
+    {
+        if (mBuffNerfController.SearchBuff("Dodge"))
+        {
+            Dodge dodge = mBuffNerfController.GetBuff("Dodge") as Dodge;
+            return (dodge.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f));
+        }
+        return false;
     }
 
     virtual public void PlayAnimation(string name)
@@ -389,6 +428,10 @@ public class Unit : MonoBehaviour, IUnit
     {
         if (mConditions.isDied)
             return;
+
+        if (DodgeState())
+            return;
+
         float value = dmg;
         if (type == DamageType.Physical)
         {

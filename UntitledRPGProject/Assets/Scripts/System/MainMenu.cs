@@ -13,7 +13,16 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         loader = GameObject.Find("GameLoader");
-        button.onClick.AddListener(()=>loader.GetComponent<SceneLoader>().StartGame());
-        button.onClick.AddListener(()=>mCanvas.sortingOrder = -1);
+        GameManager.Instance.mGameState = GameState.MainMenu;
+        if(GameManager.Instance.mMainMenuMusic)
+        {
+            AudioManager.Instance.musicSource.clip = GameManager.Instance.mMainMenuMusic;
+            AudioManager.Instance.musicSource.Play();
+        }
+
+
+        button.onClick.AddListener(() => loader.GetComponent<SceneLoader>().StartGame());
+        button.onClick.AddListener(() => mCanvas.sortingOrder = -1);
+        button.onClick.AddListener(() => GameManager.Instance.mGameState = GameState.Initialize);
     }
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class ActionTrigger : MonoBehaviour
 {
-    public Vector3 mPos;
+    protected Vector3 mPos;
+    [HideInInspector]
     public float mTime;
     public bool _isUltimate;
     protected abstract void StartActionTrigger();

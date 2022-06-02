@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
         musicSource.loop = true;
+        musicSource.volume = 0.7f;
     }
 
     public static void FadeOutMusic()
@@ -28,9 +29,9 @@ public class AudioManager : MonoBehaviour
 
     public static void PlaySfx(AudioClip clip, float volume = 1.0f)
     {
-        Instance.sfxSource.clip = clip;
-        Instance.sfxSource.volume = volume;
-        Instance.sfxSource.Play();
+        //Instance.sfxSource.clip = clip;
+        //Instance.sfxSource.volume = volume;
+        Instance.sfxSource.PlayOneShot(clip,volume);
     }
 
     private static IEnumerator BeginFadeOut(float duration)

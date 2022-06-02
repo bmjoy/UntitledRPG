@@ -6,6 +6,11 @@ using UnityEngine.AI;
 
 public class EnemyProwler : Prowler
 {
+    private GameObject mCanvas;
+    [HideInInspector]
+    public GameObject mExclamation;
+    [HideInInspector]
+    public GameObject mParticles;
     public List<GameObject> mEnemySpawnGroup;
     public bool isWin = false;
 
@@ -21,17 +26,38 @@ public class EnemyProwler : Prowler
         GameManager.Instance.onEnemyWin += Win;
 
         base.Initialize();
+        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForEnemyProwler"), transform.position
++ new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity);
+        mCanvas.transform.SetParent(transform);
 
+        mExclamation = mCanvas.transform.Find("Exclamation").gameObject;
+        mParticles = mCanvas.transform.Find("Found").gameObject;
+
+        if (!mModel.GetComponent<Billboard>().mUseStaticBillboard)
+            mCanvas.transform.localRotation = new Quaternion(0.0f, 180.0f, 0.0f, 1.0f);
+        else
+            mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
         if (agent.Length > 1)
             for (int i = 0; i < agent.Length; i++)
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
+
+        mExclamation.SetActive(false);
+        mParticles.SetActive(false);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     public void EnemySpawn(int id)
     {
         if(id == this.id)
         {
+            mExclamation.SetActive(false);
+            mParticles.SetActive(false);
             mCollider.enabled = false;
             mModel.SetActive(false);
             StartCoroutine(WaitForSpawn());

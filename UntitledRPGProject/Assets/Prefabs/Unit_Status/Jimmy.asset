@@ -28,11 +28,11 @@ MonoBehaviour:
   BasicSprite: {fileID: 4723107735738678597, guid: afc849dbfd8c6754bb91ca57af662b9b, type: 3}
   Clips:
   - Type: 0
-    Clip: {fileID: 8300000, guid: 3dfbcb13cb5e17d42bbd5246de6a1615, type: 3}
+    Clip: {fileID: 8300000, guid: f873cc8d0f014f442a45a2974abc103c, type: 3}
   - Type: 1
-    Clip: {fileID: 8300000, guid: 69f41cdf4d5606544b642bc8c5571777, type: 3}
+    Clip: {fileID: 8300000, guid: 80917cb9eb3abb54981e33ebba93e1ef, type: 3}
   - Type: 2
-    Clip: {fileID: 8300000, guid: 58a7d6502d4509949b73dea4772c354e, type: 3}
+    Clip: {fileID: 8300000, guid: 682b8decd52cd114c82fef7b7b66aa38, type: 3}
   - Type: 4
     Clip: {fileID: 8300000, guid: 2514b61240806ba4384ae6436698b9e9, type: 3}
   - Type: 5

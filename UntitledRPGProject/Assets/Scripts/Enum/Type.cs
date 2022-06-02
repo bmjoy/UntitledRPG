@@ -47,6 +47,7 @@ public enum EnemyUnit
     Spitter,
     Summoner,
     Spirit_Boxer,
+    Droid_Assassin,
     Temple_Guardian,
     The_Bloody_King
 }
