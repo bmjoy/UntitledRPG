@@ -26,5 +26,5 @@ MonoBehaviour:
   Gold: 0
   WeaponType: 1
   BasicSprite: {fileID: 4723107735738678597, guid: afc849dbfd8c6754bb91ca57af662b9b, type: 3}
-  SFXClips: []
+  Clips: []
   Item: []

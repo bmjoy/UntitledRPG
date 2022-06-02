@@ -17,9 +17,7 @@ public class VictoryScreen : MonoBehaviour
         mItemList = transform.Find("Panel").Find("ItemList");
         _basicSprite = Boraders[0].Find("Sprite").GetComponent<Image>().sprite;
         foreach (Transform t in Boraders)
-        {
             t.gameObject.SetActive(false);
-        }
         Active(false);
     }
 
@@ -35,17 +33,12 @@ public class VictoryScreen : MonoBehaviour
 
     public void Active(bool active)
     {
-        gameObject.SetActive(active);
         if (active)
-        {
             UpdateCharacterList();
-        }
         else
         {
             foreach (Transform t in mItemList.Find("ItemScroll").Find("Items"))
-            {
                 Destroy(t.gameObject);
-            }
         }
         if (PlayerController.Instance != null)
         {
@@ -54,6 +47,7 @@ public class VictoryScreen : MonoBehaviour
                 Boraders[i].gameObject.SetActive(active);
             }
         }
+        gameObject.SetActive(active);
     }
 
     private void UpdateCharacterList()
@@ -83,7 +77,7 @@ public class VictoryScreen : MonoBehaviour
     public IEnumerator WaitForEnd()
     {
         GetComponent<Animator>().SetTrigger("Outro");
-        yield return new WaitForSeconds(GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime +0.1f);
+        yield return new WaitForSeconds(GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime +0.5f);
         GetComponent<Animator>().ResetTrigger("Outro");
         Active(false);
     }

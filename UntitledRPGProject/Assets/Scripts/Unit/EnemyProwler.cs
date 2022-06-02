@@ -9,11 +9,6 @@ public class EnemyProwler : Prowler
     public List<GameObject> mEnemySpawnGroup;
     public bool isWin = false;
 
-    protected override void Start()
-    {
-        mLastPos = Vector3.zero;
-    }
-
     public override void Setup(float rad, float ang, int _id, GameObject model)
     {
         base.Setup(rad, ang, _id, model);
@@ -63,8 +58,7 @@ public class EnemyProwler : Prowler
 
             for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
             {
-                mEnemySpawnGroup[i].transform.position = transform.position;
-                mEnemySpawnGroup[i].GetComponent<Unit>().DisableUI();
+                mEnemySpawnGroup[i].GetComponent<Unit>().DisableUnit(transform.position);
                 mEnemySpawnGroup[i].gameObject.SetActive(false);
             }
         }
@@ -79,10 +73,7 @@ public class EnemyProwler : Prowler
         for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
         {
             yield return new WaitForSeconds(0.1f);
-            mEnemySpawnGroup[i].transform.position = BattleManager.Instance.enemyCenter;
-            mEnemySpawnGroup[i].GetComponent<Unit>().mField = BattleManager.enemyFieldParent.GetChild(i).gameObject;
-            BattleManager.enemyFieldParent.GetChild(i).GetComponent<Field>().IsExist = true;
-            mEnemySpawnGroup[i].gameObject.SetActive(true);
+            mEnemySpawnGroup[i].GetComponent<Unit>().EnableUnit(i);
         }
         onBattle = true;
     }    

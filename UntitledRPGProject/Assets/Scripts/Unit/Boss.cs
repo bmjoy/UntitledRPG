@@ -11,8 +11,6 @@ public class Boss : Enemy
     public bool _magicWhenHalfHealth = false;
     [HideInInspector]
     public BossHealthBar mMyHealthBar;
-
-    public float mAttackTriggerPercentage = 50.0f;
     public float[] mHealthTriggerPercentage;
     [HideInInspector]
     public ActionTrigger mActionTriggerComponent;
@@ -26,23 +24,6 @@ public class Boss : Enemy
     protected override void Update()
     {
         base.Update();
-    }
-
-    public override IEnumerator AttackAction(DamageType type, Action onComplete)
-    {
-        if(mTarget)
-        {
-            mSpriteRenderer.sortingOrder = (transform.position.z < mTarget?.transform.position.z) ? 3 : 4;
-            mTarget.mSpriteRenderer.sortingOrder = (transform.position.z > mTarget?.transform.position.z) ? 3 : 4;
-
-            onComplete?.Invoke();
-            mAiBuild.actionEvent = ActionEvent.AttackWalk;
-            yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
-            PlayAnimation("Attack");
-            
-            mActionTrigger?.Invoke();
-
-        }
     }
 
     public override void TakeDamage(float dmg, DamageType type)

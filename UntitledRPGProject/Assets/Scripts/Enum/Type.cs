@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,4 +49,26 @@ public enum EnemyUnit
     Spirit_Boxer,
     Temple_Guardian,
     The_Bloody_King
+}
+
+[Serializable]
+public class SoundClip
+{
+    public enum SoundType
+    {
+        Attack0,
+        Attack1,
+        Attack2,
+        Death,
+        Run0,
+        Run1,
+        Run2,
+        SkillChanneling,
+        SkillShoot0,
+        SkillShoot1,
+        SkillShoot2,
+    }
+
+    public SoundType Type;
+    public AudioClip Clip;
 }

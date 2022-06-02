@@ -9,6 +9,8 @@ public class TimedTaunt : TimedNerf
 
     public TimedTaunt(Taunt nerf, Unit owner, Unit target) : base(nerf, owner, target)
     {
+        if (Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
+            return;
         taunt = (Taunt)Nerf;
         if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > 0)
         {

@@ -188,11 +188,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < mHeroes.Count; ++i)
         {
             yield return new WaitForSeconds(0.1f);
-            mHeroes[i].transform.position = BattleManager.Instance.playerCenter;
-            mHeroes[i].GetComponent<Unit>().mField = BattleManager.playerFieldParent.GetChild(i).gameObject;
-            BattleManager.playerFieldParent.GetChild(i).GetComponent<Field>().IsExist = true;
-            mHeroes[i].GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.IntroWalk;
-            mHeroes[i].gameObject.SetActive(true);
+            mHeroes[i].GetComponent<Unit>().EnableUnit(i);
         }
 
         onBattle = true;
@@ -200,18 +196,12 @@ public class PlayerController : MonoBehaviour
 
     public void OnBattleEnd()
     {
-        IsDied = false;
+        IsDied = onBattle = false;
         mCharacterController.enabled = mCollider.enabled = true;
         mState = new IdleState();
-        onBattle = false;
         mModel.SetActive(true);
         for (int i = 0; i < mHeroes.Count; ++i)
-        {
-            mHeroes[i].transform.position = transform.position;
-            mHeroes[i].GetComponent<Unit>().DisableUI();
-            mHeroes[i].GetComponent<Unit>().ClearBuffAndNerf();
-            mHeroes[i].gameObject.SetActive(false);
-        }
+            mHeroes[i].GetComponent<Unit>().DisableUnit(transform.position);
     }
 
 
@@ -220,9 +210,8 @@ public class PlayerController : MonoBehaviour
         if (onBattle)
             return;
         if (other.gameObject.name == "NextLevel")
-        {
             Debug.Log("Hi");
-        }
+
         var unit = other.GetComponent<EnemyProwler>();
 
         if (unit != null && !unit.onBattle)

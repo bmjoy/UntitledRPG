@@ -21,6 +21,6 @@ public class Unit_Setting : ScriptableObject
     public WeaponType WeaponType;
 
     public Sprite BasicSprite;
-    public List<AudioClip> SFXClips;
+    public List<SoundClip> Clips;
     public List<GameObject> Item;
 }

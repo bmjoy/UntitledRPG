@@ -13,7 +13,7 @@ public class Standby : State
         agent.mConditions.isDefend = false;
         agent.mConditions.isPicked = true;
         agent.mOrder = Order.Standby;
-        agent.BuffAndNerfTick();
+        agent.GetComponent<BuffAndNerfEntity>().Tick();
         agent.mField.GetComponent<Field>().Picked(true);
         IsSucceeded = false;
         IsSearched = false;
@@ -24,14 +24,13 @@ public class Standby : State
     {
         if (agent.mAiBuild.type == AIType.Auto)
         {
-            IsSucceeded = (IsSucceeded == false) ? Find(agent) : true;
-            if(!IsSearched)
+            IsSucceeded = Find(agent);
+            if(IsSucceeded && !IsSearched)
             {
                 agent.StartCoroutine(WaitforSecond(agent));
                 IsSearched = true;
             }
         }
-
     }
 
     public override void Exit(Unit agent)

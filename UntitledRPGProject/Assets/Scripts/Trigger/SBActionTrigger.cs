@@ -12,16 +12,15 @@ public class SBActionTrigger : ActionTrigger
 
     protected override void StartActionTrigger()
     {
-
+        GetComponent<Unit>().SetBuff(_Counter.Initialize(GetComponent<Unit>(), GetComponent<Unit>()));
     }
 
     private void Start()
     {
-        GetComponent<Unit>().SetBuff(_Counter.Initialize(GetComponent<Unit>(), GetComponent<Unit>()));
+        StartActionTrigger();
     }
     private void OnDestroy()
     {
-
     }
 
 }

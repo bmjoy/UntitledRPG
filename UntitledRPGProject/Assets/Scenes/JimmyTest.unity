@@ -348,7 +348,6 @@ GameObject:
   m_Component:
   - component: {fileID: 217793484}
   - component: {fileID: 217793483}
-  - component: {fileID: 217793482}
   - component: {fileID: 217793485}
   - component: {fileID: 217793486}
   m_Layer: 0
@@ -358,14 +357,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &217793482
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 217793481}
-  m_Enabled: 1
 --- !u!20 &217793483
 Camera:
   m_ObjectHideFlags: 0
@@ -1202,7 +1193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126804, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 316.56
+      value: 352.82
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126804, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: m_LocalRotation.w

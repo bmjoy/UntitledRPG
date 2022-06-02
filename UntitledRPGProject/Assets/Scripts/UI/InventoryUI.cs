@@ -36,7 +36,7 @@ public class InventoryUI : MonoBehaviour
         {
             PrintStatus(mIndex);
             PrintStatusBonus(mIndex);
-            InventoryUpdate();
+            //InventoryUpdate();
         }
 
     }
@@ -59,6 +59,15 @@ public class InventoryUI : MonoBehaviour
         {
             transform.GetComponent<Button>().image.sprite = mEmptyImage;
         }
+        foreach (var item in items)
+        {
+            Destroy(item.gameObject);
+        }
+        items.Clear();
+        foreach (Transform item in mItemsGroup.transform)
+        {
+            Destroy(item.gameObject);
+        }
     }
 
     public void Active(bool active)
@@ -68,9 +77,10 @@ public class InventoryUI : MonoBehaviour
         if(active == true)
         {
             transform.gameObject.SetActive(true);
+            InventorySetup();
+            _intialized = false;
         }
-        InventorySetup();
-        _intialized = false;
+
         StartCoroutine(Wait(active));
     }
 
@@ -82,14 +92,12 @@ public class InventoryUI : MonoBehaviour
         mTextAreaGroup.SetActive(active);
         mButtonGroup.SetActive(active);
         mEquipmentImageGroup.SetActive(active);
-        yield return new WaitForSeconds(1.0f);
-
         if (active == false)
         {
             Clear();
             transform.gameObject.SetActive(false);
         }
-
+        yield return null;
     }
 
     public void Display(int num)
@@ -120,7 +128,7 @@ public class InventoryUI : MonoBehaviour
         mCurrentUnit.sprite = go.GetComponent<Image>().sprite;
         mCurrentUnitAnimator.runtimeAnimatorController = go.transform.GetComponent<Animator>().runtimeAnimatorController;
         Destroy(go);
-        InventoryUpdateByButton();
+        InventoryUpdate();
     }
 
     private void PrintStatus(int num)
@@ -152,8 +160,8 @@ public class InventoryUI : MonoBehaviour
         mBonusValuesGroup.transform.Find("MagicResistance").GetComponent<TextMeshProUGUI>().text = "+" + unit.mBonusStatus.mMagic_Resistance.ToString();
         mBonusValuesGroup.transform.Find("Agility").GetComponent<TextMeshProUGUI>().text = "+" + unit.mBonusStatus.mAgility.ToString();
 
-        mEquipmentImageGroup.transform.Find("Weapon").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.mWeapon) ?
-            unit.GetComponent<InventroySystem>().mInventoryInfo.mWeapon.Info.mSprite : mEmptyImage;
+        mEquipmentImageGroup.transform.Find("Weapon").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Weapon) ?
+            unit.GetComponent<InventroySystem>().mInventoryInfo.Weapon.Info.mSprite : mEmptyImage;
         mEquipmentImageGroup.transform.Find("Body").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Body) ?
             unit.GetComponent<InventroySystem>().mInventoryInfo.Body.Info.mSprite : mEmptyImage;
         mEquipmentImageGroup.transform.Find("Leg").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Leg) ?
@@ -179,15 +187,10 @@ public class InventoryUI : MonoBehaviour
             {
                 var unit = PlayerController.Instance.mHeroes[mIndex].GetComponent<Player>();
                 WeaponInfo weapon = (WeaponInfo)item.Value.Info;
-                if (weapon.mWeaponType != unit.mWeaponType)
-                {
-                    continue;
-                }
+                if (weapon.mWeaponType != unit.mWeaponType) continue;
             }
 
-            if (equipment.IsEquipped)
-                continue;
-
+            if (equipment.IsEquipped) continue;
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity);
             go.transform.SetParent(mItemsGroup.transform);
 
@@ -198,9 +201,7 @@ public class InventoryUI : MonoBehaviour
             items.Add(go);
 
             if (item.Value is Weapon)
-            {
                 mEquipmentImageGroup.transform.Find("Weapon").GetComponent<UnSetItemUI>().Initialize();
-            }
             else if (item.Value is Armor)
             {
                 var i = (Armor)item.Value;
@@ -225,25 +226,7 @@ public class InventoryUI : MonoBehaviour
         _intialized = true;
     }
 
-    private void InventoryUpdate()
-    {
-        if(PlayerController.Instance.mInventory.myInventory.Count != items.Count)
-        {
-            foreach (var item in items)
-            {
-                Destroy(item.gameObject);
-            }
-            items.Clear();
-            foreach (Transform item in mItemsGroup.transform)
-            {
-                Destroy(item.gameObject);
-            }
-            _intialized = false;
-            InventorySetup();
-        }
-    }
-
-    public void InventoryUpdateByButton()
+    public void InventoryUpdate()
     {
         foreach (var item in items)
         {

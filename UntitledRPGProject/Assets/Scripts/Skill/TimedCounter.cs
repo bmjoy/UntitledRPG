@@ -8,6 +8,8 @@ public class TimedCounter : TimedBuff
     private bool mReinforced = false;
     public TimedCounter(Buff buff, Unit owner, Unit target) : base(buff, owner, target)
     {
+        if (Resources.Load<GameObject>("Prefabs/Effects/" + Buff.name) == null)
+            return;
         if (mTarget.transform.Find(Buff.name + "(Clone)") == null && mTarget.mStatus.mHealth > 0.0f)
         {
             GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Buff.name), new Vector3(mTarget.transform.position.x, mTarget.transform.position.y + 0.5f, mTarget.transform.position.z + 0.2f), Quaternion.identity);
@@ -22,9 +24,9 @@ public class TimedCounter : TimedBuff
         {
             var ArmorUp = (Counter)Buff;
             mTarget.mStatus.mArmor = mTarget.mStatus.mArmor / ArmorUp.mMultiplier - (mOwner.mStatus.mMagicPower * ArmorUp.mMagicPowerMultiplier);
-            Find(false);
             Buff.IsTurnFinished = true;
             mReinforced = false;
+            Find(false);
         }
         GameObject.Destroy(effectObject);
     }

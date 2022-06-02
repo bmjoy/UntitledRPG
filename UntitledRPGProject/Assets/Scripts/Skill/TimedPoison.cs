@@ -9,6 +9,8 @@ public class TimedPoison : TimedNerf
 
     public TimedPoison(Poison nerf, Unit owner, Unit target) : base(nerf, owner, target)
     {
+        if (Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
+            return;
         poison = (Poison)Nerf;
         if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > nerf.mDamage + mOwner.mStatus.mMagicPower * poison.mMagicPowerMultiplier)
         {

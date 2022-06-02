@@ -70,7 +70,6 @@ public class Slot : MonoBehaviour
         }
         if(PlayerController.Instance.mGold >= result)
         {
-            Debug.Log("Hi");
             PlayerController.Instance.mGold -= result;
             PlayerController.Instance.mInventory.Add(mMyItem.GetComponent<Item>());
             mMyItem.GetComponent<Item>().isSold = true;
