@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5240089215578680952}
   - component: {fileID: 256503596960977804}
   - component: {fileID: 1865227988924204025}
-  - component: {fileID: 5138264995439281669}
+  - component: {fileID: -5368854147677335127}
   m_Layer: 6
   m_Name: Spirit_Boxer_Unit
   m_TagString: Enemy
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mUseStaticBillboard: 0
---- !u!114 &5138264995439281669
+--- !u!114 &-5368854147677335127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,10 +185,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5240089215578680953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b9ca1f9ec42396428cb1da25b49f21a, type: 3}
+  m_Script: {fileID: 11500000, guid: 665b021c4f48b14478b68dcf1dfc7381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mPos: {x: 0, y: 0, z: 0}
-  mTime: 0
-  _isUltimate: 0
-  _Counter: {fileID: 11400000, guid: 8372107083274cc48a2e915ae7c21ba3, type: 2}
+  _InitialBuff: {fileID: 11400000, guid: 8372107083274cc48a2e915ae7c21ba3, type: 2}

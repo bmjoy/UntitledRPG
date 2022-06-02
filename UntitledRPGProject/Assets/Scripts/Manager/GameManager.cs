@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
         mCamera = Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
     }
 
-    public GameState mGameState;
+    public GameState mGameState = GameState.MainMenu;
     private GameObject[] EnemyProwlers;
     private GameObject[] NPCProwlers;
     public Dictionary<string, UnitDataStorage> mUnitData = new Dictionary<string, UnitDataStorage>();
@@ -38,10 +38,15 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public int mCurrentLevel = 0;
 
-    public int mRequiredEXP = 500;
+    public int mRequiredEXP = 100;
     public int mAmountofSoul = 20;
     [SerializeField]
     private float mWaitForRestart = 3.0f;
+
+    public AudioClip mBattleMusic;
+    public AudioClip mBossMusic;
+    public AudioClip mBackGroundMusic;
+    public AudioClip mMainMenuMusic;
 
     private void Start()
     {
@@ -66,9 +71,18 @@ public class GameManager : MonoBehaviour
     }
     private void UpdateGameState()
     {
+        Debug.Log(mGameState.ToString());
         switch (mGameState)
         {
             case GameState.MainMenu: break;
+            case GameState.Initialize:
+                {
+                    AudioManager.Instance.musicSource.Stop();
+                    AudioManager.Instance.musicSource.clip = mBackGroundMusic;
+                    AudioManager.Instance.musicSource.Play();
+                    mGameState = GameState.GamePlay;
+                }
+                break;
             case GameState.GamePlay:
             case GameState.GamePause:Pause(); break;
             case GameState.Busy:break;
@@ -87,6 +101,10 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
+        // TODO: Gameover music
+        //AudioManager.Instance.musicSource.Stop();
+        //AudioManager.Instance.musicSource.clip = mBackGroundMusic;
+        //AudioManager.Instance.musicSource.Play();
         CameraSwitcher.SwitchCamera();
         onEnemyWin(Instance.mEnemyProwler.id, () =>
         {
@@ -129,6 +147,9 @@ public class GameManager : MonoBehaviour
     public event Action<int, Action> onEnemyWin;
     public void OnBattleStart(int id)
     {
+        AudioManager.Instance.musicSource.Stop();
+        AudioManager.Instance.musicSource.clip = mBattleMusic;
+        AudioManager.Instance.musicSource.Play();
         BattleManager.Instance.SetBattleField();
         onBattle?.Invoke(id); // Enemy preparation
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch
@@ -147,6 +168,10 @@ public class GameManager : MonoBehaviour
 
     public void OnBattleEnd()
     {
+        AudioManager.Instance.musicSource.Stop();
+        AudioManager.Instance.musicSource.clip = mBackGroundMusic;
+        AudioManager.Instance.musicSource.Play();
+
         CameraSwitcher.SwitchCamera();
         ResetObjects();
         UIManager.Instance.DisplayBattleInterface(false);
@@ -162,6 +187,8 @@ public class GameManager : MonoBehaviour
             {
                 if (Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == Instance.mEnemyProwler.id)
                     continue;
+                Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mExclamation.SetActive(false);
+                Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mParticles.SetActive(false);
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
             }

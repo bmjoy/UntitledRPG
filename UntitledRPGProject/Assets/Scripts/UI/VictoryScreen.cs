@@ -27,7 +27,7 @@ public class VictoryScreen : MonoBehaviour
         {
             var fill = Boraders[i].Find("EXP").Find("Fill").GetComponent<Image>().fillAmount;
             var hero = PlayerController.Instance.mHeroes[i].GetComponent<Unit>().mStatus;
-            Boraders[i].Find("EXP").Find("Fill").GetComponent<Image>().fillAmount = Mathf.Lerp(fill, (float)(hero.mEXP) / (float)(500 * hero.mLevel), Time.deltaTime * 1.5f);
+            Boraders[i].Find("EXP").Find("Fill").GetComponent<Image>().fillAmount = Mathf.Lerp(fill, (float)(hero.mEXP) / (float)(GameManager.Instance.mRequiredEXP + (50 * hero.mLevel)), Time.deltaTime * 1.5f);
         }
     }
 
@@ -69,7 +69,7 @@ public class VictoryScreen : MonoBehaviour
             }
             borader.Find("Name").GetComponent<TextMeshProUGUI>().text = hero.mSetting.Name;
             borader.Find("Level").GetComponent<TextMeshProUGUI>().text = "Lv. " + hero.mStatus.mLevel.ToString();
-            borader.Find("EXPValue").GetComponent<TextMeshProUGUI>().text = (levelUp.Key) ? "Level up!" : hero.mStatus.mEXP.ToString() + " / " + 500 *  hero.mStatus.mLevel;
+            borader.Find("EXPValue").GetComponent<TextMeshProUGUI>().text = (levelUp.Key) ? "Level up!" : hero.mStatus.mEXP.ToString() + " / " + (GameManager.Instance.mRequiredEXP + (50 *  hero.mStatus.mLevel));
             borader.Find("Sprite").GetComponent<Image>().sprite = Resources.Load<Image>("Prefabs/UI/" + hero.mSetting.Name + "_UI").sprite;
             borader.Find("Sprite").GetComponent<Animator>().runtimeAnimatorController = Resources.Load<Animator>("Prefabs/UI/" + hero.mSetting.Name + "_UI").runtimeAnimatorController;
         }
