@@ -747,10 +747,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGameState: 1
+  mArmorPool: []
+  mWeaponPool: []
   _ItemID: 0
   mCamera: {fileID: 0}
   mEnemyProwler: {fileID: 0}
   mCurrentLevel: 0
+  mRequiredEXP: 500
   mAmountofSoul: 20
   mWaitForRestart: 3
 --- !u!114 &6929830116175226480
@@ -773,6 +776,7 @@ MonoBehaviour:
   mPercentageHP: 30
   status: 0
   mWaitTime: 4
+  _TransitionTime: 2.1
 --- !u!114 &6929830116175226481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,9 +801,12 @@ MonoBehaviour:
   mBasicText: {fileID: 6929830115610240068}
   mFadeScreen: {fileID: 6929830116724676792}
   mDialogueBox: {fileID: 0}
+  mScreenTransition: {fileID: 0}
+  mVictoryScreenTransition: {fileID: 0}
   mOrderbar: {fileID: 6929830116237585300}
   mInventoryUI: {fileID: 0}
   mVictoryScreen: {fileID: 0}
+  mMerchantScreen: {fileID: 0}
 --- !u!1 &6929830116201014904
 GameObject:
   m_ObjectHideFlags: 0
