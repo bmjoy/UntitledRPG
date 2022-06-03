@@ -185,10 +185,10 @@ public class GameManager : MonoBehaviour
         {
             if (Instance.EnemyProwlers[i] != null)
             {
-                if (Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == Instance.mEnemyProwler.id)
-                    continue;
                 Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mExclamation.SetActive(false);
                 Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mParticles.SetActive(false);
+                if (Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == Instance.mEnemyProwler.id)
+                    continue;
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
             }

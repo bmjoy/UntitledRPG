@@ -75,15 +75,7 @@ public class Prowler : MonoBehaviour
         else
             mStateMachine.ActivateState();
         mSpriteRenderer.flipX = (mVelocity.x < -0.001f) ? true : false;
-        if (mAnimator.GetFloat("Speed") > 0.1f && _RunClip.Count > 0)
-        {
-            mWalkTime += Time.deltaTime;
-            if (mWalkTime >= mMaxWalkTime)
-            {
-                AudioManager.PlaySfx(_RunClip[UnityEngine.Random.Range(0, _RunClip.Count - 1)], 0.6f);
-                mWalkTime = 0.0f;
-            }
-        }
+
     }
 
     public virtual void ChangeBehavior(string name)
