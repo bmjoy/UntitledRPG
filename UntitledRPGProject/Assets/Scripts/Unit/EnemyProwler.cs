@@ -50,14 +50,23 @@ public class EnemyProwler : Prowler
     {
         base.Update();
         mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+        if (mAnimator.GetFloat("Speed") > 0.1f && _RunClip.Count > 0)
+        {
+            mWalkTime += Time.deltaTime;
+            if (mWalkTime >= mMaxWalkTime)
+            {
+                AudioManager.PlaySfx(_RunClip[UnityEngine.Random.Range(0, _RunClip.Count - 1)], 0.6f);
+                mWalkTime = 0.0f;
+            }
+        }
     }
 
     public void EnemySpawn(int id)
     {
-        if(id == this.id)
+        mExclamation.SetActive(false);
+        mParticles.SetActive(false);
+        if (id == this.id)
         {
-            mExclamation.SetActive(false);
-            mParticles.SetActive(false);
             mCollider.enabled = false;
             mModel.SetActive(false);
             StartCoroutine(WaitForSpawn());
