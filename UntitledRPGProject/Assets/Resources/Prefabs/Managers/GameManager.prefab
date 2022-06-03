@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24835ed513b1b5b43abfe629ae338c5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mGameState: 1
+  mGameState: 0
   mArmorPool: []
   mWeaponPool: []
   _ItemID: 0
@@ -51,5 +51,9 @@ MonoBehaviour:
   mEnemyProwler: {fileID: 0}
   mCurrentLevel: 0
   mRequiredEXP: 100
-  mAmountofSoul: 1
+  mAmountofSoul: 20
   mWaitForRestart: 3
+  mBattleMusic: {fileID: 8300000, guid: ae67aa85357330f4a9f054ae733abd13, type: 3}
+  mBossMusic: {fileID: 0}
+  mBackGroundMusic: {fileID: 8300000, guid: 95c821be533427a4a9491fe36d93a0d1, type: 3}
+  mMainMenuMusic: {fileID: 8300000, guid: 468d3471d16c5ea4ab13a7aaefb065ba, type: 3}
