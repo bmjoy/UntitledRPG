@@ -5,10 +5,6 @@ using UnityEngine;
 public class NPCSpawner : Spawner
 {
     public string mName;
-    [SerializeField]
-    private float mRadius = 100.0f;
-    [SerializeField]
-    private float mAngle = 60.0f;
     protected override GameObject CreateNewObject()
     {
         if(mObject)
@@ -21,7 +17,7 @@ public class NPCSpawner : Spawner
         mObject.transform.position = new Vector3(transform.position.x,transform.position.y + 2.5f, transform.position.z);
         mObject.tag = "Neutral";
         mObject.layer = 9;
-        mObject.AddComponent<Prowler>().Setup(mRadius, mAngle, ID, mObject);
+        mObject.AddComponent<Prowler>().Setup(10.0f, 0.0f, 0.0f, ID, mObject);
         mObject.GetComponent<Prowler>().Initialize();
         return mObject;
     }
