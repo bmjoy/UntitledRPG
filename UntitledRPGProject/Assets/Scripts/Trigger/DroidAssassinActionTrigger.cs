@@ -46,6 +46,8 @@ public class DroidAssassinActionTrigger : ActionTrigger
                 slash.GetComponent<SpriteRenderer>().flipX = true;
             }
             Destroy(slash, 0.5f);
+            if (GetComponent<Unit>().mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
             yield return new WaitForSeconds(0.08f);
         }
     }
@@ -63,7 +65,6 @@ public class DroidAssassinActionTrigger : ActionTrigger
     void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
-
     }
 
     private void OnDestroy()

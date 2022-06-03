@@ -40,6 +40,8 @@ public class TGActionTrigger : ActionTrigger
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
         if (boss.mTarget)
         {
+            if(GetComponent<Unit>().mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip,0.6f);
             boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
             StartCoroutine(boss.CounterState(boss.mTarget.mStatus.mDamage));
         }

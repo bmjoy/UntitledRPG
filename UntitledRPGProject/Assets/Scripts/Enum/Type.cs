@@ -57,17 +57,10 @@ public class SoundClip
 {
     public enum SoundType
     {
-        Attack0,
-        Attack1,
-        Attack2,
+        Attack,
         Death,
-        Run0,
-        Run1,
-        Run2,
-        SkillChanneling,
-        SkillShoot0,
-        SkillShoot1,
-        SkillShoot2,
+        Run,
+        Skill
     }
 
     public SoundType Type;

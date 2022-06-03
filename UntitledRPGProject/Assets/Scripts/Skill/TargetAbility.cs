@@ -88,6 +88,8 @@ public class TargetAbility : DamagableAbility
                 {
                     mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
+                    if(mOwner.mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 0.6f);
                     Shoot();
                     yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
                 }
@@ -95,6 +97,8 @@ public class TargetAbility : DamagableAbility
                 {
                     yield return new WaitForSeconds(mEffectTime);
                     mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
+                    if (mOwner.mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 0.6f);
                     Melee();
                     yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + mEffectTime);
                     CommonState();
@@ -102,6 +106,8 @@ public class TargetAbility : DamagableAbility
                 else if(mShootType == SKillShootType.Instant)
                 {
                     mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
+                    if (mOwner.mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 0.6f);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }    

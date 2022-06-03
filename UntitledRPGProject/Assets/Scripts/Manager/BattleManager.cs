@@ -170,7 +170,7 @@ public class BattleManager : MonoBehaviour
                         status = GameStatus.Finish;
                         UIManager.Instance.BattleEnd();
                     }
-                    if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) && _AvailableSkip)
+                    if((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && _AvailableSkip)
                     {
                         StopCoroutine(RewardTime());
 
