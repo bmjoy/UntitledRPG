@@ -63,8 +63,14 @@ public class Unit : MonoBehaviour, IUnit
     private float mWalkTime = 0.0f;
     private float mMaxWalkTime = 0.3f;
 
-    private List<AudioClip> mRunClips = new List<AudioClip>();
-
+    [HideInInspector]
+    public List<SoundClip> mRunClips = new List<SoundClip>();
+    [HideInInspector]
+    public List<SoundClip> mAttackClips = new List<SoundClip>();
+    [HideInInspector]
+    public List<SoundClip> mSkillClips = new List<SoundClip>();    
+    [HideInInspector]
+    public List<SoundClip> mDeathClips = new List<SoundClip>();
     protected virtual void Start()
     {
     }
@@ -142,11 +148,12 @@ public class Unit : MonoBehaviour, IUnit
         mSelected.SetActive(false);
 
         mRunClips.Clear();
+        mAttackClips.Clear();
         if(mSetting.Clips.Count > 0)
         {
-            mRunClips.Add(mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Run0).Clip);
-            mRunClips.Add(mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Run1).Clip);
-            mRunClips.Add(mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Run2).Clip);
+            mRunClips = mSetting.Clips.FindAll(s => s.Type == SoundClip.SoundType.Run);
+            mAttackClips = mSetting.Clips.FindAll(s => s.Type == SoundClip.SoundType.Attack);
+            mSkillClips = mSetting.Clips.FindAll(s => s.Type == SoundClip.SoundType.Skill);
         }
 
     }
@@ -215,7 +222,7 @@ public class Unit : MonoBehaviour, IUnit
             mWalkTime += Time.deltaTime;
             if(mWalkTime >= mMaxWalkTime)
             {
-                AudioManager.PlaySfx(mRunClips[Random.Range(0, mRunClips.Count - 1)], 0.6f);
+                AudioManager.PlaySfx(mRunClips[Random.Range(0, mRunClips.Count - 1)].Clip, 0.6f);
                 mWalkTime = 0.0f;
             }
         }
@@ -317,6 +324,8 @@ public class Unit : MonoBehaviour, IUnit
                     {
                         mTime /= 9.0f;
                         yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 9.0f);
+                        if (mAttackClips.Count > 0)
+                            AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                         mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                     }
                     StartCoroutine(CounterState(mTarget.mStatus.mDamage));
@@ -334,6 +343,8 @@ public class Unit : MonoBehaviour, IUnit
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
                 bullet.Initialize(mTarget, mStatus.mDamage);
+                if (mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                 yield return new WaitUntil(() => bullet.isDamaged == true);
             }
             else if(mType == AttackType.Instant)
@@ -344,6 +355,8 @@ public class Unit : MonoBehaviour, IUnit
                 Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                if (mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                 Destroy(go, 1.0f);
                 yield return new WaitUntil(() => go == null);
             }
@@ -397,6 +410,8 @@ public class Unit : MonoBehaviour, IUnit
                     mTarget.GetComponent<Animator>().SetBool("Melee", true);
                 mTime += 0.25f;
                 yield return new WaitForSeconds(0.25f);
+                if (mTarget.mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(mTarget.mAttackClips[Random.Range(0, mTarget.mAttackClips.Count - 1)].Clip, 0.6f);
                 mTarget.mTarget = this;
                 mTarget.mTarget.TakeDamage(dmg, DamageType.Magical);
                 if (mStatus.mHealth <= 0.0f)
@@ -446,6 +461,9 @@ public class Unit : MonoBehaviour, IUnit
 
         if (mStatus.mHealth <= 0.0f)
         {
+            if(mDeathClips.Count > 0)
+                AudioManager.PlaySfx(mDeathClips[Random.Range(0, mDeathClips.Count - 1)].Clip, 0.6f);
+
             mSelected.SetActive(false);
             mConditions.isDied = true;
             mLevelText.gameObject.SetActive(false);

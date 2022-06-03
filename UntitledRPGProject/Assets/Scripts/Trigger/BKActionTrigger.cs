@@ -83,6 +83,8 @@ public class BKActionTrigger : ActionTrigger
         if (GetComponent<Boss>().mTarget)
         {
             GetComponent<Boss>().mTarget.TakeDamage(GetComponent<Boss>().mStatus.mDamage + GetComponent<Boss>().mBonusStatus.mDamage, DamageType.Physical);
+            if (GetComponent<Unit>().mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Boss>().mAttackClips[Random.Range(0, GetComponent<Boss>().mAttackClips.Count - 1)].Clip, 0.6f);
             StartCoroutine(GetComponent<Boss>().CounterState(GetComponent<Boss>().mTarget.mStatus.mDamage));
         }
     }

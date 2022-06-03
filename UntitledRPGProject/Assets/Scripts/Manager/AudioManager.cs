@@ -19,7 +19,7 @@ public class AudioManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
         musicSource.loop = true;
-        musicSource.volume = 0.7f;
+        musicSource.volume = 0.3f;
     }
 
     public static void FadeOutMusic()

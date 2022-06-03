@@ -6,14 +6,9 @@ public class JimmyActionTrigger : ActionTrigger
 {
     [SerializeField]
     private float mCombo = 10.0f;
-    List<AudioClip> AttackClips = new List<AudioClip>();
     void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
-        
-        AttackClips.Add(GetComponent<Unit>().mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Attack0).Clip);
-        AttackClips.Add(GetComponent<Unit>().mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Attack1).Clip);
-        AttackClips.Add(GetComponent<Unit>().mSetting.Clips.Find(s => s.Type == SoundClip.SoundType.Attack2).Clip);
     }
     protected override void StartActionTrigger()
     {
@@ -43,7 +38,8 @@ public class JimmyActionTrigger : ActionTrigger
             mirror.GetComponent<Animator>().speed = Random.Range(0.7f, 1.05f);
             Destroy(mirror, 0.25f);
             yield return new WaitForSeconds(mTime / mCombo);
-            AudioManager.PlaySfx(AttackClips[Random.Range(0, 2)]);
+            if (GetComponent<Unit>().mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count-1)].Clip);
 
             h += 0.3f;
         }
