@@ -14,13 +14,9 @@ public class MainMenu : MonoBehaviour
     {
         loader = GameObject.Find("GameLoader");
         GameManager.Instance.mGameState = GameState.MainMenu;
-        if(GameManager.Instance.mMainMenuMusic)
-        {
-            AudioManager.Instance.musicSource.clip = GameManager.Instance.mMainMenuMusic;
-            AudioManager.Instance.musicSource.Play();
-        }
-
-
+        AudioManager.Instance.mAudioStorage.ChangeMusic("MainMenu");
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mMainMenuButtonSFX));
         button.onClick.AddListener(() => loader.GetComponent<SceneLoader>().StartGame());
         button.onClick.AddListener(() => mCanvas.sortingOrder = -1);
         button.onClick.AddListener(() => GameManager.Instance.mGameState = GameState.Initialize);

@@ -22,18 +22,24 @@ public abstract class TimedBuff
     {
         if (isActive)
         {
-            mTurn--;
             if (mTurn <= 0)
             {
                 isActive = false;
                 End();
             }
             else
+            {
+                if (Buff.BuffTick)
+                    AudioManager.PlaySfx(Buff.BuffTick);
                 Apply();
+            }
+            mTurn--;
         }
     }
     public void Activate()
     {
+        if (Buff.BuffStart)
+            AudioManager.PlaySfx(Buff.BuffStart);
         Apply();
         if (!Buff.IsTurnFinished || mTurn <= 0)
             mTurn += Buff.mTurn;

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 16c55f79a75d59e44a1c4e18afc44a52
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - mBattleMusic: {fileID: 8300000, guid: ae67aa85357330f4a9f054ae733abd13, type: 3}
+  - mBossMusic: {instanceID: 0}
+  - mVictoryMusic: {fileID: 8300000, guid: 7bcac8c74420c9f4abf3d2da5802e1e4, type: 3}
+  - mDefeatMusic: {fileID: 8300000, guid: b801c1518d56e2b4dad0289fd4d80bdd, type: 3}
+  - mBackGroundMusic: {fileID: 8300000, guid: 95c821be533427a4a9491fe36d93a0d1, type: 3}
+  - mMainMenuMusic: {fileID: 8300000, guid: 468d3471d16c5ea4ab13a7aaefb065ba, type: 3}
+  - mItemPurchaseSFX: {fileID: 8300000, guid: 73923844704a10d47b1cac20779dc936, type: 3}
+  - mLevelUPSFX: {fileID: 8300000, guid: 86803015242b0314d9f2ed57cba0d711, type: 3}
+  - mItemEquipSFX: {fileID: 8300000, guid: 8c7037a9d262efd47ba8e9f748c4e061, type: 3}
+  - mOpenInventorySFX: {fileID: 8300000, guid: c07a3fa0d83d92244a03b14fd402e78c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

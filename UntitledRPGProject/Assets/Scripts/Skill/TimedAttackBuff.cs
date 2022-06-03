@@ -23,7 +23,7 @@ public class TimedAttackBuff : TimedBuff
         if(mReinforced)
         {
             var AttackUp = (AttackBuff)Buff;
-            mTarget.mStatus.mDamage = mTarget.mStatus.mDamage / AttackUp.mMultiplier - (mOwner.mStatus.mMagicPower * AttackUp.mMagicPowerMultiplier);
+            mTarget.mStatus.mDamage = mTarget.mStatus.mDamage / AttackUp.mMultiplier;
             Buff.IsTurnFinished = true;
             mReinforced = false;
         }
@@ -35,7 +35,7 @@ public class TimedAttackBuff : TimedBuff
         if(!mReinforced)
         {
             var AttackUp = (AttackBuff)Buff;
-            mTarget.mStatus.mDamage = mTarget.mStatus.mDamage * AttackUp.mMultiplier + (mOwner.mStatus.mMagicPower * AttackUp.mMagicPowerMultiplier);
+            mTarget.mStatus.mDamage = mTarget.mStatus.mDamage * AttackUp.mMultiplier;
             mReinforced = true;
         }
     }

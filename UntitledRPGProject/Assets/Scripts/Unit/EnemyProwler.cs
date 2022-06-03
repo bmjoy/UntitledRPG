@@ -14,6 +14,8 @@ public class EnemyProwler : Prowler
     public List<GameObject> mEnemySpawnGroup;
     public bool isWin = false;
 
+    private float maxDistance = 10.0f;
+    private float minDistance = 2.0f;
     public override void Setup(float rad, float ang, float speed, int _id, GameObject model)
     {
         base.Setup(rad, ang, speed, _id, model);
@@ -55,7 +57,9 @@ public class EnemyProwler : Prowler
             mWalkTime += Time.deltaTime;
             if (mWalkTime >= mMaxWalkTime)
             {
-                AudioManager.PlaySfx(_RunClip[UnityEngine.Random.Range(0, _RunClip.Count - 1)], 0.6f);
+                float distance = Vector3.Distance(transform.position, PlayerController.Instance.transform.position);
+                if(_RunClip.Count > 0)
+                    AudioManager.PlaySfx(_RunClip[UnityEngine.Random.Range(0, _RunClip.Count - 1)].Clip, Mathf.Clamp01((distance - maxDistance) / (minDistance - maxDistance)));
                 mWalkTime = 0.0f;
             }
         }
@@ -63,8 +67,6 @@ public class EnemyProwler : Prowler
 
     public void EnemySpawn(int id)
     {
-        mExclamation.SetActive(false);
-        mParticles.SetActive(false);
         if (id == this.id)
         {
             mCollider.enabled = false;
@@ -110,6 +112,10 @@ public class EnemyProwler : Prowler
             yield return new WaitForSeconds(0.1f);
             mEnemySpawnGroup[i].GetComponent<Unit>().EnableUnit(i);
         }
+        
+        mExclamation.SetActive(false);
+        mParticles.SetActive(false);
+        mCanvas.SetActive(false);
         onBattle = true;
     }    
 

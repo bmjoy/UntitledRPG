@@ -23,7 +23,7 @@ public class TimedCounter : TimedBuff
         if (mReinforced)
         {
             var ArmorUp = (Counter)Buff;
-            mTarget.mStatus.mArmor = mTarget.mStatus.mArmor / ArmorUp.mMultiplier - (mOwner.mStatus.mMagicPower * ArmorUp.mMagicPowerMultiplier);
+            mTarget.mStatus.mArmor = mTarget.mStatus.mArmor / ArmorUp.mMultiplier;
             Buff.IsTurnFinished = true;
             mReinforced = false;
             Find(false);
@@ -37,7 +37,7 @@ public class TimedCounter : TimedBuff
         {
             var ArmorUp = (Counter)Buff;
             mReinforced = true;
-            mTarget.mStatus.mArmor = mTarget.mStatus.mArmor * ArmorUp.mMultiplier + (mOwner.mStatus.mMagicPower * ArmorUp.mMagicPowerMultiplier);
+            mTarget.mStatus.mArmor = mTarget.mStatus.mArmor * ArmorUp.mMultiplier;
             Find(true);
         }
     }

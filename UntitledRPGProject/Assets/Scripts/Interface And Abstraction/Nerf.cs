@@ -6,6 +6,7 @@ public abstract class Nerf : ScriptableObject
 {
     public int mTurn;
     public bool IsTurnFinished = false;
-    public float mMagicPowerMultiplier = 0.6f;
+    public AudioClip NerfStart;
+    public AudioClip NerfTick;
     public abstract TimedNerf Initialize(Unit owner, Unit target);
 }

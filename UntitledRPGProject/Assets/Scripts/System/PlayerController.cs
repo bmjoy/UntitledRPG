@@ -49,6 +49,11 @@ public class PlayerController : MonoBehaviour
     public int mSoul = 0;
     private Animator mAnimator;
 
+    [SerializeField]
+    private List<AudioClip> _RunClips = new List<AudioClip>();
+    private float mWalkTime = 0.0f;
+    [SerializeField]
+    private float mEveryWalkTime = 0.3f;
     public bool Interaction { get { return mInteractSystem.IsInteracting; } }
 
     // Start is called before the first frame update
@@ -109,6 +114,14 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
                 Vector3 moveDirection = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward;
                 mCharacterController.Move(moveDirection.normalized * mSpeed * Time.deltaTime);
+
+                mWalkTime += Time.deltaTime;
+                if(mWalkTime >= mEveryWalkTime)
+                {
+                    if(_RunClips.Count > 0)
+                        AudioManager.PlaySfx(_RunClips[UnityEngine.Random.Range(0, _RunClips.Count - 1)], 0.6f);
+                    mWalkTime = 0.0f;
+                }
             }
         }
 

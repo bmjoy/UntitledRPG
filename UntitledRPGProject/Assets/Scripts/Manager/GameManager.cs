@@ -43,14 +43,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float mWaitForRestart = 3.0f;
 
-    public AudioClip mBattleMusic;
-    public AudioClip mBossMusic;
-    public AudioClip mBackGroundMusic;
-    public AudioClip mMainMenuMusic;
+    
 
     private void Start()
     {
         mUnitData.Clear();
+        
         Initialize();
     }
 
@@ -71,14 +69,13 @@ public class GameManager : MonoBehaviour
     }
     private void UpdateGameState()
     {
-        Debug.Log(mGameState.ToString());
         switch (mGameState)
         {
             case GameState.MainMenu: break;
             case GameState.Initialize:
                 {
                     AudioManager.Instance.musicSource.Stop();
-                    AudioManager.Instance.musicSource.clip = mBackGroundMusic;
+                    AudioManager.Instance.musicSource.clip = AudioManager.Instance.mAudioStorage.mBackGroundMusic;
                     AudioManager.Instance.musicSource.Play();
                     mGameState = GameState.GamePlay;
                 }
@@ -102,9 +99,8 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         // TODO: Gameover music
-        //AudioManager.Instance.musicSource.Stop();
-        //AudioManager.Instance.musicSource.clip = mBackGroundMusic;
-        //AudioManager.Instance.musicSource.Play();
+        AudioManager.Instance.mAudioStorage.ChangeMusic("Defeat");
+        AudioManager.Instance.musicSource.loop = false;
         CameraSwitcher.SwitchCamera();
         onEnemyWin(Instance.mEnemyProwler.id, () =>
         {
@@ -127,6 +123,8 @@ public class GameManager : MonoBehaviour
         s_ID = 0;
         s_TotalExp = 0;
         s_TotalGold = 0;
+        AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
+        AudioManager.Instance.musicSource.loop = true;
     }
 
     private void ResetObjects()
@@ -147,9 +145,8 @@ public class GameManager : MonoBehaviour
     public event Action<int, Action> onEnemyWin;
     public void OnBattleStart(int id)
     {
-        AudioManager.Instance.musicSource.Stop();
-        AudioManager.Instance.musicSource.clip = mBattleMusic;
-        AudioManager.Instance.musicSource.Play();
+        AudioManager.Instance.mAudioStorage.ChangeMusic("Battle");
+        AudioManager.Instance.musicSource.loop = true;
         BattleManager.Instance.SetBattleField();
         onBattle?.Invoke(id); // Enemy preparation
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch
@@ -168,10 +165,8 @@ public class GameManager : MonoBehaviour
 
     public void OnBattleEnd()
     {
-        AudioManager.Instance.musicSource.Stop();
-        AudioManager.Instance.musicSource.clip = mBackGroundMusic;
-        AudioManager.Instance.musicSource.Play();
-
+        AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
+        AudioManager.Instance.musicSource.loop = true;
         CameraSwitcher.SwitchCamera();
         ResetObjects();
         UIManager.Instance.DisplayBattleInterface(false);

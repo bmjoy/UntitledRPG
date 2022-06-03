@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTurn: 1
   IsTurnFinished: 0
-  mMagicPowerMultiplier: 0
+  NerfStart: {fileID: 8300000, guid: 6a513cbe298e024479b2ce3439684351, type: 3}
+  NerfTick: {fileID: 0}

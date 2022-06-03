@@ -249,6 +249,7 @@ public class Unit : MonoBehaviour, IUnit
         BonusStatus bonus = new BonusStatus();
         if (mStatus.mEXP >= GameManager.Instance.mRequiredEXP + (50.0f * mStatus.mLevel))
         {
+            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mLevelUPSFX);
             bonus.mHealth += Random.Range(5, 10);
             bonus.mMana += Random.Range(5, 10);
             bonus.mDamage = Random.Range(1, 5);

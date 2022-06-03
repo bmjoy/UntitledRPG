@@ -161,6 +161,8 @@ public class BattleManager : MonoBehaviour
 
                     if (onReward == false && isWin)
                     {
+                        AudioManager.Instance.mAudioStorage.ChangeMusic("Victory");
+                        AudioManager.Instance.musicSource.loop = false;
                         onFinishOrderEvent?.Invoke();
                         StartCoroutine(RewardTime());
                         onReward = true;

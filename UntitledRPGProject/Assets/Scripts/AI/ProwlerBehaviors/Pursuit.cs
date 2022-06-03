@@ -4,22 +4,17 @@ using UnityEngine;
 
 public class Pursuit : P_State
 {
-    float mTime = 0.0f;
-    float mMaximumStandbyTime = 2.5f;
     public override void Enter(Prowler agent)
     {
-        mTime = 0.0f;
-        agent.mAgent.speed = agent.mSpeed * 2.0f;
-        agent.mAgent.SetDestination(agent.mLastPos);
+        agent.mAgent.speed = agent.mSpeed * 3.0f;
         agent.mAnimator.SetFloat("Speed", agent.mAgent.speed);
-
     }
 
     public override void Execute(Prowler agent)
     {
-        mTime += Time.deltaTime;
-        agent.mVelocity = agent.mAgent.velocity;
-        if (mTime > mMaximumStandbyTime)
+        agent.mAgent.SetDestination(PlayerController.Instance.transform.position);
+        float dist = Vector3.Distance(agent.transform.position, PlayerController.Instance.transform.position);
+        if (dist > agent.mRadius + agent.mRadius)
             agent.ChangeBehavior("Find");
     }
 

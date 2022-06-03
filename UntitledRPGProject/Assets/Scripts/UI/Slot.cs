@@ -70,6 +70,7 @@ public class Slot : MonoBehaviour
         }
         if(PlayerController.Instance.mGold >= result)
         {
+            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
             PlayerController.Instance.mGold -= result;
             PlayerController.Instance.mInventory.Add(mMyItem.GetComponent<Item>());
             mMyItem.GetComponent<Item>().isSold = true;

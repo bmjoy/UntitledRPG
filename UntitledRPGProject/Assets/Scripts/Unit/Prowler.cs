@@ -28,7 +28,7 @@ public class Prowler : MonoBehaviour
     public float mMaxWalkTime = 0.3f;
 
 
-    public List<AudioClip> _RunClip = new List<AudioClip>();
+    public List<SoundClip> _RunClip = new List<SoundClip>();
 
     protected virtual void Start()
     {

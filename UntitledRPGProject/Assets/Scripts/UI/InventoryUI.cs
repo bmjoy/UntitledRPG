@@ -92,6 +92,7 @@ public class InventoryUI : MonoBehaviour
         mTextAreaGroup.SetActive(active);
         mButtonGroup.SetActive(active);
         mEquipmentImageGroup.SetActive(active);
+        yield return new WaitForSeconds(1.0f);
         if (active == false)
         {
             Clear();

@@ -26,13 +26,19 @@ public abstract class TimedNerf
                 End();
             }
             else
+            {
+                if (Nerf.NerfTick)
+                    AudioManager.PlaySfx(Nerf.NerfTick);
                 Apply();
+            }
             mTurn--;
         }
     }
 
     public void Activate()
     {
+        if (Nerf.NerfStart)
+            AudioManager.PlaySfx(Nerf.NerfStart);
         if (!Nerf.IsTurnFinished || mTurn <= 0)
             mTurn += Nerf.mTurn;
         else if (!Nerf.IsTurnFinished)
