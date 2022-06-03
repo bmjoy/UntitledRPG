@@ -44,10 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGameState: 1
+  mArmorPool: []
+  mWeaponPool: []
+  _ItemID: 0
   mCamera: {fileID: 0}
-  mPlayer: {fileID: 0}
   mEnemyProwler: {fileID: 0}
-  mCurrentField: {fileID: 0}
-  TotalSoul: 0
-  mAmountofSoul: 20
+  mCurrentLevel: 0
+  mRequiredEXP: 100
+  mAmountofSoul: 1
   mWaitForRestart: 3
