@@ -9,7 +9,7 @@ public class Pursuit : P_State
     public override void Enter(Prowler agent)
     {
         mTime = 0.0f;
-        agent.mAgent.speed = 5.0f;
+        agent.mAgent.speed = agent.mSpeed * 2.0f;
         agent.mAgent.SetDestination(agent.mLastPos);
         agent.mAnimator.SetFloat("Speed", agent.mAgent.speed);
 

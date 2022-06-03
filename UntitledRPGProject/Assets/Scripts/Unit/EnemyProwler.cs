@@ -14,9 +14,9 @@ public class EnemyProwler : Prowler
     public List<GameObject> mEnemySpawnGroup;
     public bool isWin = false;
 
-    public override void Setup(float rad, float ang, int _id, GameObject model)
+    public override void Setup(float rad, float ang, float speed, int _id, GameObject model)
     {
-        base.Setup(rad, ang, _id, model);
+        base.Setup(rad, ang, speed, _id, model);
         mEnemySpawnGroup = new List<GameObject>();
     }
 

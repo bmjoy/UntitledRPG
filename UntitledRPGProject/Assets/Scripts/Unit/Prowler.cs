@@ -17,6 +17,7 @@ public class Prowler : MonoBehaviour
 
     public float mRadius = 5.0f;
     public float mAngle = 60.0f;
+    public float mSpeed = 1.0f;
     public float mStandbyTime = 3.0f;
 
     public Vector3 mLastPos = Vector3.zero;
@@ -28,10 +29,11 @@ public class Prowler : MonoBehaviour
         mLastPos = transform.position;
     }
 
-    public virtual void Setup(float rad, float ang, int _id, GameObject model)
+    public virtual void Setup(float rad, float ang, float speed, int _id, GameObject model)
     {
         mRadius = rad;
         mAngle = ang;
+        mSpeed = speed;
         id = _id;
         mModel = model;
     }

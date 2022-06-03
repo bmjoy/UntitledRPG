@@ -12,6 +12,8 @@ public class EnemySpawner : Spawner
     private float mRadius = 5.0f;
     [SerializeField]
     private float mAngle = 30.0f;
+    [SerializeField]
+    private float mSpeed = 3.0f;
 
     protected override GameObject CreateNewObject()
     {
@@ -38,7 +40,7 @@ public class EnemySpawner : Spawner
             newModel.transform.SetParent(newEnemyProwler.transform);
             newEnemyProwler.tag = "EnemyProwler";
             newEnemyProwler.layer = 6;
-            newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, ID, newModel.gameObject);
+            newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, mSpeed, ID, newModel.gameObject);
 
             for (int i = 0; i < mEnemyList.Count; i++)
             {
