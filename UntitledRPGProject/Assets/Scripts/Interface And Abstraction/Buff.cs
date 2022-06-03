@@ -6,6 +6,7 @@ public abstract class Buff : ScriptableObject
 {
     public int mTurn;
     public bool IsTurnFinished = false;
-    public float mMagicPowerMultiplier = 0.6f;
+    public AudioClip BuffStart;
+    public AudioClip BuffTick;
     public abstract TimedBuff Initialize(Unit owner, Unit target);
 }

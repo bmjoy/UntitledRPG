@@ -29,6 +29,7 @@ public class SetItemUI : MonoBehaviour
         int index = UIManager.Instance.mInventoryUI.mIndex;
         var unit = PlayerController.Instance.mHeroes[index].GetComponent<InventroySystem>();
         var item = (EquipmentItem)mItem;
+        AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemEquipSFX);
         if (unit.Equip(item))
         {
             Debug.Log("Hi");

@@ -43,14 +43,12 @@ public class Find : P_State
                 enemyProwler.mParticles.SetActive(true);
                 enemyProwler.mParticles.GetComponent<ParticleSystem>().Play();
                 isFound = true;
+                AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mExclamationSFX);
             }
         }
 
         if (mFacedTime >= 0.5f && isFound)
-        {
-            agent.mLastPos = player.transform.position;
             agent.ChangeBehavior("Pursuit");
-        }
         if (isFound)
             mFacedTime += Time.deltaTime;
         else

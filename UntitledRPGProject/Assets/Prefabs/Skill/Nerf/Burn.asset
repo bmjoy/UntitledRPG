@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fef6759db65d5ae439a3d4a6fed37040, type: 3}
   m_Name: Burn
   m_EditorClassIdentifier: 
-  mEffect: {fileID: 0}
   mTurn: 3
   IsTurnFinished: 1
+  NerfStart: {fileID: 8300000, guid: b6a5ca477fa2e85419bb155f8b9e8738, type: 3}
+  NerfTick: {fileID: 8300000, guid: 8354c32bbbf591d4a915fe8d51a3e5d7, type: 3}
+  mMagicPowerMultiplier: 0.6
   mDamage: 2

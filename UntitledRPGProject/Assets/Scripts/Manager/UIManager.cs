@@ -120,6 +120,7 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f)
         {
+            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mOpenInventorySFX);
             mInventoryUI.Active(!switchOfInventory);
             switchOfInventory = !switchOfInventory;
             mTime += mCoolTime;
@@ -175,7 +176,18 @@ public class UIManager : MonoBehaviour
 
     public void DisplayDialogueBox(bool display)
     {
-        mDialogueBox.SetActive(display);
+        if (display)
+            mDialogueBox.SetActive(display);
+        else
+            StartCoroutine(EndOfDialogueBox());
+    }
+
+    private IEnumerator EndOfDialogueBox()
+    {
+        mDialogueBox.GetComponent<Animator>().SetTrigger("Outro");
+        yield return new WaitForSeconds(1.0f);
+        mDialogueBox.SetActive(false);
+        mDialogueBox.GetComponent<Animator>().ResetTrigger("Outro");
     }
 
     public void DisplayHealthBar(bool display)

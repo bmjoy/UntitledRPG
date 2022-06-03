@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
 
     private static AudioManager mInstance;
     public static AudioManager Instance { get { return mInstance; } }
+    public AudioStorage mAudioStorage;
     private void Awake()
     {
         if (mInstance != null && mInstance != this)
@@ -20,6 +21,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         musicSource.loop = true;
         musicSource.volume = 0.3f;
+        mAudioStorage = GetComponent<AudioStorage>();
     }
 
     public static void FadeOutMusic()

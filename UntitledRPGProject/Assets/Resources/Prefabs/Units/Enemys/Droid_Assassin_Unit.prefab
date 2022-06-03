@@ -110,8 +110,12 @@ MonoBehaviour:
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
   mBuffNerfController: {fileID: 0}
-  mAttackDistance: 3.5
+  mAttackDistance: 2
   mMagicDistance: 5
+  mRunClips: []
+  mAttackClips: []
+  mSkillClips: []
+  mDeathClips: []
   mItemDropRate: 20
 --- !u!212 &3135470733083981224
 SpriteRenderer:

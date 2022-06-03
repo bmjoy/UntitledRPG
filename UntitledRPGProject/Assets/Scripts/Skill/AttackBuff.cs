@@ -6,7 +6,6 @@ using UnityEngine;
 public class AttackBuff : Buff
 {
     public float mMultiplier = 2.0f;
-
     public override TimedBuff Initialize(Unit owner, Unit target)
     {
         return new TimedAttackBuff(this, owner, target);

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 1796929566426921102}
   - component: {fileID: 1796929566426921101}
   - component: {fileID: 1796929566426921100}
+  - component: {fileID: 276421049703403807}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -80,6 +81,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: a0ff16968ea558f47b80bca53b4b2ec1, type: 2}
   musicSource: {fileID: 6063149805716921882}
   sfxSource: {fileID: 8701343731707656903}
+  mAudioStorage: {fileID: 0}
 --- !u!81 &1796929566426921100
 AudioListener:
   m_ObjectHideFlags: 0
@@ -88,6 +90,30 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1796929566426921203}
   m_Enabled: 1
+--- !u!114 &276421049703403807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796929566426921203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c55f79a75d59e44a1c4e18afc44a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mBattleMusic: {fileID: 8300000, guid: ae67aa85357330f4a9f054ae733abd13, type: 3}
+  mBossMusic: {fileID: 0}
+  mVictoryMusic: {fileID: 8300000, guid: 7bcac8c74420c9f4abf3d2da5802e1e4, type: 3}
+  mDefeatMusic: {fileID: 8300000, guid: b801c1518d56e2b4dad0289fd4d80bdd, type: 3}
+  mBackGroundMusic: {fileID: 8300000, guid: 95c821be533427a4a9491fe36d93a0d1, type: 3}
+  mMainMenuMusic: {fileID: 8300000, guid: 468d3471d16c5ea4ab13a7aaefb065ba, type: 3}
+  mItemPurchaseSFX: {fileID: 8300000, guid: 73923844704a10d47b1cac20779dc936, type: 3}
+  mLevelUPSFX: {fileID: 8300000, guid: a1d18875a26a60342902cc34a2c7fe35, type: 3}
+  mItemEquipSFX: {fileID: 8300000, guid: 8c7037a9d262efd47ba8e9f748c4e061, type: 3}
+  mOpenInventorySFX: {fileID: 8300000, guid: c07a3fa0d83d92244a03b14fd402e78c, type: 3}
+  mExclamationSFX: {fileID: 8300000, guid: 86803015242b0314d9f2ed57cba0d711, type: 3}
+  mMainMenuButtonSFX: {fileID: 8300000, guid: bdbc530505552de4ba6636f19f27b19b, type: 3}
 --- !u!1 &4890134167232618478
 GameObject:
   m_ObjectHideFlags: 0

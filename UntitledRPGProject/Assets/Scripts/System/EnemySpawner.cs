@@ -14,7 +14,6 @@ public class EnemySpawner : Spawner
     private float mAngle = 30.0f;
     [SerializeField]
     private float mSpeed = 3.0f;
-
     protected override GameObject CreateNewObject()
     {
         if (mEnemyList.Count == 1 && mEnemyList[0] == EnemyUnit.None)
@@ -51,6 +50,12 @@ public class EnemySpawner : Spawner
                 obj.transform.SetParent(newEnemyProwler.transform);
                 obj.SetActive(false);
             }
+
+            newEnemyProwler.GetComponent<EnemyProwler>()._RunClip = newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup[0].GetComponent<Unit>().mSetting.Clips.FindAll(
+                delegate (SoundClip s)
+                {
+                    return s.Type == SoundClip.SoundType.Run;
+                });
 
             newEnemyProwler.GetComponent<EnemyProwler>().Initialize();
             return newEnemyProwler;

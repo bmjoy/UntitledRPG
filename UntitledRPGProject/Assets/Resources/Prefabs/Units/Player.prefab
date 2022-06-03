@@ -73,6 +73,12 @@ MonoBehaviour:
   - {fileID: 0}
   onBattle: 0
   mGold: 0
+  mSoul: 0
+  _RunClips:
+  - {fileID: 8300000, guid: 2514b61240806ba4384ae6436698b9e9, type: 3}
+  - {fileID: 8300000, guid: 1bf5b01f905d4af4c9ec33c675807e10, type: 3}
+  - {fileID: 8300000, guid: e394ce71b9a899a439289e2e9711fa5b, type: 3}
+  mEveryWalkTime: 0.3
 --- !u!65 &4784066880903253926
 BoxCollider:
   m_ObjectHideFlags: 0

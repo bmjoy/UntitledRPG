@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTurn: 1
   IsTurnFinished: 0
-  mMagicPowerMultiplier: 0.6
+  BuffStart: {fileID: 8300000, guid: e3f95ceb628dd13409658c39f90efc32, type: 3}
+  BuffTick: {fileID: 0}
   mMultiplier: 2
+  mChanceRate: 1

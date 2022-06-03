@@ -36,6 +36,15 @@ public class InteractSystem : MonoBehaviour
                 hit.transform.GetComponent<NPC>().mInteraction.SetActive(false);
             }
         }
+        if(mClosestNPC != null)
+        {
+            if (Vector3.Distance(mClosestNPC.transform.position, transform.position) > mRadius)
+            {
+                mClosestNPC.mInteraction.SetActive(false);
+                mClosestNPC = null;
+            }
+        }
+
     }
 
     private void Update()

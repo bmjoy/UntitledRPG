@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b817812507daeba4f972c2980e41f456, type: 3}
   m_Name: Phantom
   m_EditorClassIdentifier: 
-  mTurn: 2
-  IsTurnFinished: 0
-  mMagicPowerMultiplier: 0.6
+  mTurn: 1
+  IsTurnFinished: 1
+  BuffStart: {fileID: 8300000, guid: e3f95ceb628dd13409658c39f90efc32, type: 3}
+  BuffTick: {fileID: 0}
   mMultiplier: 2
