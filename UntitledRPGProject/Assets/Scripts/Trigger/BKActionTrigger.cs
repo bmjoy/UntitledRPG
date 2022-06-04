@@ -13,6 +13,7 @@ public class BKActionTrigger : ActionTrigger
     private AudioClip clip;
     [SerializeField]
     private AudioClip clip2;
+    [SerializeField]
     private AudioClip originalClip;
     protected override IEnumerator Action()
     {
@@ -177,6 +178,7 @@ public class BKActionTrigger : ActionTrigger
         if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[1] != null)
             GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
         GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
+        GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
     }
 
     private void OnApplicationQuit()
@@ -186,5 +188,6 @@ public class BKActionTrigger : ActionTrigger
         if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[1] != null)
             GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
         GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
+        GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
     }
 }
