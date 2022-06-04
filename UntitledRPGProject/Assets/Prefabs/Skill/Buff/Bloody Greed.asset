@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bloody Greed
   m_EditorClassIdentifier: 
   mTurn: 5
-  IsTurnFinished: 1
+  IsTurnFinished: 0
   BuffStart: {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
   BuffTick: {fileID: 0}
   mMultiplier: 2

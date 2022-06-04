@@ -1,11 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BKActionTrigger : ActionTrigger
 {
     bool _isRed = false;
     List<GameObject> _mirrors = new List<GameObject>();
+    [SerializeField]
+    private float mShakeTime = 3.0f;
+    [SerializeField]
+    private AudioClip clip;
+    [SerializeField]
+    private AudioClip clip2;
+    private AudioClip originalClip;
     protected override IEnumerator Action()
     {
         GetComponent<Unit>().mAnimator.SetTrigger("Skill2");
@@ -18,16 +26,30 @@ public class BKActionTrigger : ActionTrigger
             _mirrors.Add(mirror);
 
         }
+        StartCoroutine(Slash());
         yield return new WaitForSeconds(mTime -2.3f);
-
         transform.position = mPos;
+
         yield return new WaitForSeconds(1.2f);
-        StartCoroutine(CameraSwitcher.Instance.ShakeCamera(1.0f));
+
+        StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mShakeTime));
         foreach (GameObject mirror in _mirrors)
         {
             mirror.GetComponent<Animator>().speed = 1.0f;
             mirror.GetComponent<Animator>().SetTrigger("Explosion");
+            if (GetComponent<Unit>().mSkillClips.Count > 0)
+                AudioManager.PlaySfx(clip2);
         }
+
+        IEnumerable<GameObject> group = group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+: BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+        DamagableAbility damagable = GetComponent<Boss_Skill_DataBase>().mSkillDatas[GetComponent<Boss_Skill_DataBase>().mUltimateSkillIndex] as DamagableAbility;
+        foreach (GameObject unit in group)
+        {
+            var i = unit.GetComponent<Unit>();
+            i.TakeDamage((damagable.mValue + GetComponent<Unit>().mStatus.mMagicPower + GetComponent<Unit>().mBonusStatus.mMagicPower), DamageType.Magical);
+        }
+
         GetComponent<Unit>().mAnimator.ResetTrigger("Skill2");
 
 
@@ -39,6 +61,41 @@ public class BKActionTrigger : ActionTrigger
             Destroy(mirror);
         }
         _mirrors.Clear();
+        GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
+    }
+
+    private IEnumerator Slash()
+    {
+        yield return new WaitForSeconds(0.75f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.05f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.22f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.05f);
+        for (int i = 0; i < 6; ++i)
+        {
+            if (GetComponent<Unit>().mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+            yield return new WaitForSeconds(0.12f);
+        }
+
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.25f);
+
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.2f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.5f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+
     }
 
     protected override void StartActionTrigger()
@@ -47,11 +104,14 @@ public class BKActionTrigger : ActionTrigger
         mTime = GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mEffectTime;
         mPos = transform.position;
         _isRed = true;
+
         StartCoroutine(Action());
     }
 
     public void StartUltimateTrigger()
     {
+        originalClip = GetComponent<Unit>().mSkillClips[0].Clip;
+        GetComponent<Unit>().mSkillClips[0].Clip = clip;
         _isUltimate = true;
     }
 

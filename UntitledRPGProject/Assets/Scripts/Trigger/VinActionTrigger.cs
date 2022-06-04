@@ -1,10 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class VinActionTrigger : ActionTrigger
 {
     private bool _isShadow = false;
+
+    [SerializeField]
+    private int mSlashAmount = 5;
+    [SerializeField]
+    private float mEverySlashTime = 0.15f;
+    [SerializeField]
+    private float mCriticalChance = 0.6f;
+    [SerializeField]
+    private AudioClip clip;
+
     void Start()
     {
         GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartActionTrigger;
@@ -24,6 +35,15 @@ public class VinActionTrigger : ActionTrigger
             : Vector4.Lerp(CameraSwitcher.Instance.mLiftGammaGain.gamma.value, Vector4.zero, Time.deltaTime * 5.0f);
     }
 
+    private IEnumerator Slash()
+    {
+        for (int i = 0; i < mSlashAmount; ++i)
+        {
+            if(GetComponent<Unit>().mSkillClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mSkillClips[Random.Range(0, GetComponent<Unit>().mSkillClips.Count - 1)].Clip);
+            yield return new WaitForSeconds(mEverySlashTime);
+        }
+    }
     protected override IEnumerator Action()
     {
         GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);
@@ -56,6 +76,9 @@ public class VinActionTrigger : ActionTrigger
         mirror4.GetComponent<Rigidbody>().AddForce(Vector3.forward * 1.5f, ForceMode.Impulse);
 
         yield return new WaitForSeconds(mTime / 6.0f);
+
+        
+
         mirror.GetComponent<Animator>().speed = 0.75f;
         mirror2.GetComponent<Animator>().speed = 0.95f;
         mirror3.GetComponent<Animator>().speed = 1.15f;
@@ -90,9 +113,8 @@ public class VinActionTrigger : ActionTrigger
             Destroy(mirrors, 5.0f - (i + 1.25f));
             mirrors2.GetComponent<Animator>().speed = 1.25f + i;
             Destroy(mirrors2, 5.0f - (i + 1.25f));
+            StartCoroutine(Slash());
             yield return new WaitForSeconds(mTime / 6.0f);
-
-
             i++;
         }
         transform.position = mPos;
@@ -101,6 +123,18 @@ public class VinActionTrigger : ActionTrigger
         Destroy(mirror2);
         Destroy(mirror3);
         Destroy(mirror4);
+        IEnumerable<GameObject> group = group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+: BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+        yield return new WaitForSeconds(0.5f);
+        foreach (GameObject unit in group)
+        {
+            var u = unit.GetComponent<Unit>();
+            AudioManager.PlaySfx(clip);
+            if (Random.Range(0.0f,1.0f) >= mCriticalChance)
+                u.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage) * 2.0f, DamageType.Physical);
+            else
+                u.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage), DamageType.Physical);
+        }
         _isShadow = false;
     }
 

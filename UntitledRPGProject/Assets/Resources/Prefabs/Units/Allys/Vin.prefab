@@ -217,3 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTime: 0
   _isUltimate: 0
+  mSlashAmount: 5
+  mEverySlashTime: 0.2
+  mCriticalChance: 0.6
+  clip: {fileID: 8300000, guid: 5f5726c1ea4ab224694f34b4a20d70d6, type: 3}

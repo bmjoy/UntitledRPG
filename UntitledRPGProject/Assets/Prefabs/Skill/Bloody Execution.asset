@@ -22,13 +22,13 @@ MonoBehaviour:
   mSkillType: 0
   mProperty: 1
   mElement: 5
-  mEffectTime: -0.3
+  mEffectTime: -0.55
   mAnimationName: Skill0
   mBuffList: []
   mNerfList:
   - {fileID: 11400000, guid: 518820b465061964a961654334ccf1bf, type: 2}
   mValue: 10
-  isCritical: 0
+  mDamageType: 0
   mShootType: 0
   mRange: 1
   mStartPosition: {x: 0, y: 0}
