@@ -51,7 +51,13 @@ public class Unit : MonoBehaviour, IUnit
     private Vector3 mVelocity = Vector3.zero;
     private GameObject mGroundCheck;
     private float mGroundDistance = 2.0f;
-    
+
+    [SerializeField]
+    private float mAttackTime = 1.0f;
+
+    [SerializeField]
+    private float mDefendTime = 1.0f;
+
     [SerializeField]
     protected float mAttackDistance= 0.0f;
     [HideInInspector]
@@ -59,7 +65,7 @@ public class Unit : MonoBehaviour, IUnit
 
     public Action mActionTrigger = null;
     public Action mStartActionTrigger = null;
-    private float mTime = 0.0f;
+    //private float mTime = 0.0f;
     private float mWalkTime = 0.0f;
     private float mMaxWalkTime = 0.3f;
 
@@ -312,26 +318,27 @@ public class Unit : MonoBehaviour, IUnit
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
                 
                 PlayAnimation("Attack");
-                mTime = mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                //mTime = mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                 if (mTarget)
                 {
                     if(mActionTrigger != null)
                     {
-                        mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f;
+                        //mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f;
                         mActionTrigger?.Invoke();
                         yield return new WaitForSeconds(GetComponent<ActionTrigger>().mTime);
                     }
                     else
                     {
-                        mTime /= 9.0f;
-                        yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 9.0f);
+                        //mTime /= 9.0f;
                         if (mAttackClips.Count > 0)
                             AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+                        yield return new WaitForSeconds(mAttackTime);
+
                         mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                     }
                     StartCoroutine(CounterState(mTarget.mStatus.mDamage));
                 }
-                yield return new WaitForSeconds(mTime);
+                yield return new WaitForSeconds(1.0f);
                 mAiBuild.actionEvent = ((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
 
@@ -340,24 +347,26 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.actionEvent = ActionEvent.Busy;
                 PlayAnimation("Attack");
-                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f);
+                if (mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+                yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
                 bullet.Initialize(mTarget, mStatus.mDamage);
-                if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+
                 yield return new WaitUntil(() => bullet.isDamaged == true);
             }
             else if(mType == AttackType.Instant)
             {
                 mAiBuild.actionEvent = ActionEvent.Busy;
                 PlayAnimation("Attack");
-                yield return new WaitForSeconds(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f);
+                if (mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+                yield return new WaitForSeconds(mAttackTime);
                 Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
-                if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+
                 Destroy(go, 1.0f);
                 yield return new WaitUntil(() => go == null);
             }
@@ -376,7 +385,7 @@ public class Unit : MonoBehaviour, IUnit
             transform.position.y + GetComponent<BoxCollider>().size.y / 2.0f,
             transform.position.z), Quaternion.identity);
         Destroy(go, 1.5f);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(mDefendTime);
         TurnEnded();
     }
 
@@ -409,7 +418,6 @@ public class Unit : MonoBehaviour, IUnit
             {
                 if (exist)
                     mTarget.GetComponent<Animator>().SetBool("Melee", true);
-                mTime += 0.25f;
                 yield return new WaitForSeconds(0.25f);
                 if (mTarget.mAttackClips.Count > 0)
                     AudioManager.PlaySfx(mTarget.mAttackClips[Random.Range(0, mTarget.mAttackClips.Count - 1)].Clip, 0.6f);
@@ -419,7 +427,6 @@ public class Unit : MonoBehaviour, IUnit
                 {
                     mAiBuild.actionEvent = ActionEvent.Busy;
                     mGroundCheck.SetActive(false);
-                    mTime = 0.1f;
                 }
             }
         }
