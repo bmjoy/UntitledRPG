@@ -103,14 +103,20 @@ MonoBehaviour:
   mSelected: {fileID: 0}
   mType: 3
   mFlag: 2
+  mAnimator: {fileID: 0}
   mSetting: {fileID: 11400000, guid: d7e86546fdb140f42ba065da5970c86e, type: 2}
-  mWaitingTimeForBattle: 0.75
   mFireLocation: {x: 5, y: 0}
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
   mBuffNerfController: {fileID: 0}
+  mAttackTime: 0.5
+  mDefendTime: 1
   mAttackDistance: 2
   mMagicDistance: 5
+  mRunClips: []
+  mAttackClips: []
+  mSkillClips: []
+  mDeathClips: []
   mItemDropRate: 20
 --- !u!212 &6098878248064161320
 SpriteRenderer:

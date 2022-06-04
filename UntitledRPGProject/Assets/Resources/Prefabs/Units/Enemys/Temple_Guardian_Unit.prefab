@@ -174,14 +174,20 @@ MonoBehaviour:
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
   mBuffNerfController: {fileID: 0}
+  mAttackTime: 0.1
+  mDefendTime: 1
   mAttackDistance: 4
   mMagicDistance: 0
+  mRunClips: []
+  mAttackClips: []
+  mSkillClips: []
+  mDeathClips: []
   mItemDropRate: 20
   _magicWhenHalfHealth: 0
   mMyHealthBar: {fileID: 0}
-  mAttackTriggerPercentage: 50
   mHealthTriggerPercentage:
   - 50
+  mActionTriggerComponent: {fileID: 0}
 --- !u!114 &5492263627869333423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,8 +200,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb46738f5b8dc7419e0f71348c59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mPos: {x: 0, y: 0, z: 0}
   mTime: 0
+  _isUltimate: 0
+  mAttackTriggerPercentage: 50
 --- !u!114 &-4975865343632171896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,5 +218,5 @@ MonoBehaviour:
   mSkillData: {fileID: 11400000, guid: 029d82734e98b99469c59b45f77c47b6, type: 2}
   mSkill: {fileID: 0}
   mSkillDatas: []
-  mMaxCoolDown: 3
-  mCoolDown: 0
+  mCurrentIndex: 0
+  mUltimateSkillIndex: 2
