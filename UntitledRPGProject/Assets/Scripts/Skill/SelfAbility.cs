@@ -103,61 +103,28 @@ public class SelfAbility : DamagableAbility
             if (isActive)
             {
                 mOwner.StartCoroutine(Effect());
-                float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
+                
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
+                mOwner.mStatus.mMana -= mManaCost;
                 mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                 if (mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f,mOwner.transform.position));
-                mActionTrigger?.Invoke();
-                yield return new WaitForSeconds(mEffectTime);
-                mOwner.mStatus.mMana -= mManaCost;
-                switch (mSkillType)
+
+                if (mActionTrigger != null)
                 {
-                    case SkillType.Attack:
-                        {
-                            IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
-        : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
-
-                            foreach(GameObject unit in group)
-                            {
-                                var i = unit.GetComponent<Unit>();
-                                if(UnityEngine.Random.Range(0.0f, 100.0f) >= 60.0f && isCritical)
-                                    i.TakeDamage((mDamageType == DamageType.Physical) ? (mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage) * 2.0f
-                                        : (mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower) * 2.0f, mDamageType);
-                                else
-                                    i.TakeDamage((mDamageType == DamageType.Physical) ? (mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage)
-                                        : (mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower), mDamageType);
-                            }
-
-                            DoBuff();
-                            DoNerf();
-                        }
-                        break;
-                    case SkillType.Buff:
-                        {
-                            DoBuff();
-                        }
-                        break;
-                    case SkillType.BuffNerf:
-                        {
-                            DoBuff();
-                            DoNerf();
-                        }
-                        break;
-                    case SkillType.Nerf:
-                        {
-                            DoNerf();
-                        }
-                        break;
-                    case SkillType.Heal:
-                        {
-                            mOwner.TakeRecover(newValue);
-                            DoBuff();
-                            DoNerf();
-                            break;
-                        }
-                    default:
-                        break;
+                    mActionTrigger?.Invoke();
+                    yield return new WaitForSeconds(mEffectTime);
+                    if (mOwner.GetComponent<Unit>().mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.GetComponent<Unit>().mSkillClips[UnityEngine.Random.Range(0, mOwner.GetComponent<Unit>().mSkillClips.Count - 1)].Clip);
+                    DoBuff();
+                    DoNerf();
+                }
+                else
+                {
+                    if (mOwner.GetComponent<Unit>().mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.GetComponent<Unit>().mSkillClips[UnityEngine.Random.Range(0, mOwner.GetComponent<Unit>().mSkillClips.Count - 1)].Clip);
+                    yield return new WaitForSeconds(mEffectTime);
+                    CommonState();
                 }
 
                 if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
@@ -175,6 +142,54 @@ public class SelfAbility : DamagableAbility
         yield return null;
     }
 
+    private void CommonState()
+    {
+        float newValue_M = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
+        float newValue_P = mValue + mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage;
+        switch (mSkillType)
+        {
+            case SkillType.Attack:
+                {
+                    IEnumerable<GameObject> group = group = (mOwner.mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+: BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+
+                    foreach (GameObject unit in group)
+                    {
+                        var i = unit.GetComponent<Unit>();
+                        i.TakeDamage((mDamageType == DamageType.Physical) ? (newValue_P) : (newValue_M), mDamageType);
+                    }
+
+                    DoBuff();
+                    DoNerf();
+                }
+                break;
+            case SkillType.Buff:
+                {
+                    DoBuff();
+                }
+                break;
+            case SkillType.BuffNerf:
+                {
+                    DoBuff();
+                    DoNerf();
+                }
+                break;
+            case SkillType.Nerf:
+                {
+                    DoNerf();
+                }
+                break;
+            case SkillType.Heal:
+                {
+                    mOwner.TakeRecover(newValue_M);
+                    DoBuff();
+                    DoNerf();
+                    break;
+                }
+            default:
+                break;
+        }
+    }
     private void DoBuff()
     {
         if (mSkillBuffTarget == SkillTarget.All)

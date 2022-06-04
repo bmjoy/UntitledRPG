@@ -9,6 +9,8 @@ public class TGActionTrigger : ActionTrigger
 {
     [SerializeField]
     private float mAttackTriggerPercentage = 50.0f;
+    [SerializeField]
+    private float mShakeTime = 1.0f;
     private bool mTriggered = false;
     protected override IEnumerator Action()
     {
@@ -37,7 +39,7 @@ public class TGActionTrigger : ActionTrigger
     {
         var boss = GetComponent<Boss>();
         if (boss.mBuffNerfController.GetBuffCount() > 0)
-            StartCoroutine(CameraSwitcher.Instance.ShakeCamera(boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
+            StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mShakeTime));
         if (boss.mTarget)
         {
             if(GetComponent<Unit>().mAttackClips.Count > 0)

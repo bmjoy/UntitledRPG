@@ -84,30 +84,36 @@ public class TargetAbility : DamagableAbility
                 mOwner.StartCoroutine(Effect());
                 yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
                 mOwner.mStatus.mMana -= mManaCost;
+
                 if (mShootType == SKillShootType.Range)
                 {
                     mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
                     if(mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 0.6f);
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     Shoot();
                     yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
                 }
                 else if (mShootType == SKillShootType.Melee)
                 {
+                    
                     yield return new WaitForSeconds(mEffectTime);
                     mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
-                    if (mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 0.6f);
-                    Melee();
+
+                    bool projectile = Melee();
+                    if (mOwner.mSkillClips.Count > 0 && projectile)
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + mEffectTime);
+                        if (mOwner.mSkillClips.Count > 0 && !projectile)
+                            AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     CommonState();
+                    yield return new WaitForSeconds(0.15f);
                 }
                 else if(mShootType == SKillShootType.Instant)
                 {
                     mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
                     if (mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 0.6f);
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }    
@@ -195,7 +201,7 @@ public class TargetAbility : DamagableAbility
 
     }
 
-    private void Melee()
+    private bool Melee()
     {
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
         if(Resources.Load<GameObject>("Prefabs/Skills/" + mName))
@@ -205,7 +211,9 @@ public class TargetAbility : DamagableAbility
             mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.GetComponent<SpriteRenderer>().sortingOrder;
             mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
             Destroy(mProjectile.gameObject, mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
+            return true;
         }
+        return false;
     }
 
     private void Raycasting()
