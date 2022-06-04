@@ -223,8 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTime: 0
   _isUltimate: 0
-  mSlashAmount: 18
-  mEverySlashTime: 0.07
   mShakeTime: 2
   clip: {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
   clip2: {fileID: 8300000, guid: 67e2342dc7a60834f8b41f62e7ce324e, type: 3}
+  originalClip: {fileID: 8300000, guid: c790a4428d69a6947a03d6a06529be8c, type: 3}
