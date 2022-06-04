@@ -28,7 +28,7 @@ MonoBehaviour:
   BasicSprite: {fileID: -6356620016437325989, guid: a6097a492d2c5ad4d801242d81ed371f, type: 3}
   Clips:
   - Type: 0
-    Clip: {fileID: 8300000, guid: 53183fa61022a97449b5d614b373f2f8, type: 3}
+    Clip: {fileID: 8300000, guid: 5f5726c1ea4ab224694f34b4a20d70d6, type: 3}
   - Type: 2
     Clip: {fileID: 8300000, guid: 21697d52395ad0746a8a3c9f78c2dba2, type: 3}
   - Type: 3

@@ -26,5 +26,11 @@ MonoBehaviour:
   Gold: 0
   WeaponType: 4
   BasicSprite: {fileID: -5646534648061465568, guid: 2d6c720b6928e654faa8c1d2c45cdf9a, type: 3}
-  Clips: []
+  Clips:
+  - Type: 0
+    Clip: {fileID: 8300000, guid: c790a4428d69a6947a03d6a06529be8c, type: 3}
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 311d21e8c849c0a49add03b385effe59, type: 3}
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 56068e31c384c4248acbcc9aa3ff9b11, type: 3}
   Item: []

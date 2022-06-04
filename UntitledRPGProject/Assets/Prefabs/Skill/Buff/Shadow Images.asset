@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTurn: 99
   IsTurnFinished: 0
-  mMagicPowerMultiplier: 0.6
+  BuffStart: {fileID: 0}
+  BuffTick: {fileID: 0}
   mChanceRate: 0.15

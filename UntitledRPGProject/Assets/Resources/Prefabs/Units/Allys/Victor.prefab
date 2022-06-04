@@ -108,16 +108,22 @@ MonoBehaviour:
   mSelected: {fileID: 0}
   mType: 2
   mFlag: 0
+  mAnimator: {fileID: 0}
   mSetting: {fileID: 11400000, guid: af56efab0a13a15448f704c83b77ffd2, type: 2}
-  mWaitingTimeForBattle: 0.75
   mFireLocation: {x: 2, y: 0.2}
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
   mBuffNerfController: {fileID: 0}
+  mAttackTime: 0.1
+  mDefendTime: 1
   mAttackDistance: 2
   mMagicDistance: 8
+  mRunClips: []
+  mAttackClips: []
+  mSkillClips: []
+  mDeathClips: []
   mMyHealthBar: {fileID: 0}
-  mWeaponType: 0
+  mWeaponType: 3
 --- !u!114 &5777200132697649015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mSkillData: {fileID: 11400000, guid: e58343bdf04275d4cb0b95c061ff810f, type: 2}
+  mSkill: {fileID: 0}
 --- !u!114 &5777200132697649013
 MonoBehaviour:
   m_ObjectHideFlags: 0
