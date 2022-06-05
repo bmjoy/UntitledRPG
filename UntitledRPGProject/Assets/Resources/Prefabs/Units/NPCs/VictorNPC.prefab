@@ -190,6 +190,6 @@ MonoBehaviour:
   mInteraction: {fileID: 0}
   m_NeedsList:
   - Name: Money
-    Value: 100
+    Value: 25
     Amount: 0
     onComplete: 0
