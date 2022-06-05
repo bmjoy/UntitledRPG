@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Armor_Lvl_1
   m_EditorClassIdentifier: 
   mName: Armor lvl. 1
-  mCost: 0
+  mCost: 10
   mSprite: {fileID: 21300000, guid: 0c6f64abe65c46c4eb1aec139706d44b, type: 3}
   mBonusAbilities:
   - Type: 5

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Boots_Lvl_4
   m_EditorClassIdentifier: 
   mName: Boots lvl. 4
-  mCost: 35
+  mCost: 40
   mSprite: {fileID: 21300000, guid: 7bcaba6746cd61d49b65936d466f2288, type: 3}
   mBonusAbilities:
   - Type: 4

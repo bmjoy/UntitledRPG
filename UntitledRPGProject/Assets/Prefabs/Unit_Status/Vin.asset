@@ -15,12 +15,12 @@ MonoBehaviour:
   Name: Vin
   Level: 1
   EXP: 0
-  MaxHealth: 45
-  MaxMana: 75
-  Magic_Resistance: 4
-  Attack: 25
-  Defend: 1
-  MagicPower: 5
+  MaxHealth: 100
+  MaxMana: 35
+  Magic_Resistance: 0
+  Attack: 80
+  Defend: 10
+  MagicPower: 50
   Armor: 10
   Agility: 10
   Gold: 0

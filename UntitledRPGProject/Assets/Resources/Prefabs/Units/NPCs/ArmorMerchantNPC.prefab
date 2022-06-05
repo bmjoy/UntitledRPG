@@ -169,12 +169,12 @@ MonoBehaviour:
   mComplete: 0
   mName: Zyro
   m_DialogueList:
-  - Text: Hello, dude! It's glad to see a stranger like you!
+  - Text: Hello, stranger! Glad to see a potential customer wandering around!
     Trigger: 0
-  - Text: Do ya wanna see some goods?
+  - Text: Wanna see some goods?
     Trigger: 2
   m_DialogueYesCase:
-  - Text: You got lucky, dude!
+  - Text: Thanks for buyin.
     Trigger: 1
   m_DialogueNoCase:
   - Text: Come back here anytime!

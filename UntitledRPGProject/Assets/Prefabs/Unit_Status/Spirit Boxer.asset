@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Spirit Boxer
   m_EditorClassIdentifier: 
   Name: Spirit Boxer
-  Level: 1
-  EXP: 200
+  Level: 5
+  EXP: 150
   MaxHealth: 125
   MaxMana: 0
   Magic_Resistance: 2
@@ -33,4 +33,6 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 7c7dbf7fb78885b469129584a32ad501, type: 3}
   - Type: 2
     Clip: {fileID: 8300000, guid: 9cb8156193b499f4e86b318332104b9a, type: 3}
-  Item: []
+  Item:
+  - {fileID: 3519973982565569764, guid: acad645e5905cc6448aec18464bd1aed, type: 3}
+  - {fileID: 6884613172769436045, guid: c40c9ca9ae014ee41ad14d91dde649d2, type: 3}
