@@ -15,14 +15,14 @@ MonoBehaviour:
   Name: The Bloody King
   Level: 25
   EXP: 1000
-  MaxHealth: 500
+  MaxHealth: 1000
   MaxMana: 250
-  Magic_Resistance: 100
-  Attack: 50
-  Defend: 5
-  MagicPower: 25
-  Armor: 25
-  Agility: 3
+  Magic_Resistance: 35
+  Attack: 100
+  Defend: 35
+  MagicPower: 35
+  Armor: 35
+  Agility: 5
   Gold: 2500
   WeaponType: 0
   BasicSprite: {fileID: -685476648212503728, guid: 175c4097a4c4f4845bc8e1b03c202447, type: 3}

@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Spitter
   Level: 2
-  EXP: 20
-  MaxHealth: 35
+  EXP: 35
+  MaxHealth: 100
   MaxMana: 50
   Magic_Resistance: 1
-  Attack: 15
+  Attack: 20
   Defend: 1
   MagicPower: 5
   Armor: 5
   Agility: 3
-  Gold: 200
+  Gold: 25
   WeaponType: 0
   BasicSprite: {fileID: 8793639957104055765, guid: 0c1c0a0eefdc7bb40b45c3af73616e40, type: 3}
   Clips:
@@ -31,4 +31,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 8230bb02f36e2a44f8e3a29990c7de36, type: 3}
   - Type: 0
     Clip: {fileID: 8300000, guid: a9ce2e2a1ebd0cd4f8b16d1e5f308b52, type: 3}
-  Item: []
+  Item:
+  - {fileID: 914373095374713423, guid: 7127613e139d7064f8d82bbc0f39dfbb, type: 3}
+  - {fileID: 6884613172769436045, guid: c40c9ca9ae014ee41ad14d91dde649d2, type: 3}
+  - {fileID: 2752632987366810350, guid: 92577cebcf6e5824b9f06167b69b0e86, type: 3}

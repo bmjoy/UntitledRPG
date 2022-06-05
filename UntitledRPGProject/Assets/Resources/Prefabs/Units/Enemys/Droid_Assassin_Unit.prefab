@@ -110,6 +110,8 @@ MonoBehaviour:
   mSkillDataBase: {fileID: 0}
   mSpriteRenderer: {fileID: 0}
   mBuffNerfController: {fileID: 0}
+  mAttackTime: 0.1
+  mDefendTime: 1
   mAttackDistance: 2
   mMagicDistance: 5
   mRunClips: []

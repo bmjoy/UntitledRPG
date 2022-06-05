@@ -225,5 +225,5 @@ MonoBehaviour:
   _isUltimate: 0
   mShakeTime: 2
   clip: {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
-  clip2: {fileID: 8300000, guid: 67e2342dc7a60834f8b41f62e7ce324e, type: 3}
-  originalClip: {fileID: 8300000, guid: c790a4428d69a6947a03d6a06529be8c, type: 3}
+  clip2: {fileID: 8300000, guid: cc76c35b3bdf57f4785409c50e49a478, type: 3}
+  originalClip: {fileID: 8300000, guid: cf508185c6822e5428a6950ca957f2c3, type: 3}

@@ -165,25 +165,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e378bf466c4d742996e78c54a1cf5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NPCType: 3
   mComplete: 0
   mName: Victor
   m_DialogueList:
-  - Text: Greetings. My name is Eleven.
+  - Text: ...
     Trigger: 0
-  - Text: Do you need help?
+  - Text: Need healing on your team?
     Trigger: 2
   m_DialogueYesCase:
-  - Text: My bow is yours.
+  - Text: ...
+    Trigger: 0
+  - Text: thanks.
     Trigger: 0
   m_DialogueNoCase:
-  - Text: Okay. Let me know if you need assistance.
+  - Text: ...
+    Trigger: 0
+  - Text: bye.
     Trigger: 0
   m_DialogueFailToTradeCase:
-  - Text: That's too bad. You don't have enough Gold.
+  - Text: ...
     Trigger: 0
-  mProperty: {fileID: 0}
-  mGoods: []
+  - Text: too poor.
+    Trigger: 0
+  mInteraction: {fileID: 0}
   m_NeedsList:
   - Name: Money
     Value: 100
