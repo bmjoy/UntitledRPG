@@ -165,7 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e378bf466c4d742996e78c54a1cf5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NPCType: 3
   mComplete: 0
   mName: Eleven
   m_DialogueList:
@@ -182,10 +181,9 @@ MonoBehaviour:
   m_DialogueFailToTradeCase:
   - Text: That's too bad. You don't have enough Gold.
     Trigger: 0
-  mProperty: {fileID: 0}
-  mGoods: []
+  mInteraction: {fileID: 0}
   m_NeedsList:
   - Name: Money
-    Value: 100
+    Value: 50
     Amount: 0
     onComplete: 0
