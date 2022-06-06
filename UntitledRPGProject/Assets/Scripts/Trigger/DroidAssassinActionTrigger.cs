@@ -7,6 +7,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
 {
     protected override IEnumerator Action()
     {
+        GetComponent<Unit>().PlayAnimation("Attack");
         yield return new WaitForSeconds(0.3f);
         StartCoroutine(Slash());
         for (int i = 0; i < 2; ++i)

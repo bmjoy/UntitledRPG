@@ -11,7 +11,8 @@ public class Idle : P_State
         mTime = 0.0f;
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
         agent.mAgent.velocity = Vector3.zero;
-        agent.mAgent.isStopped = true;
+        if(agent.gameObject.activeSelf)
+            agent.mAgent.isStopped = true;
     }
 
     public override void Execute(Prowler agent)

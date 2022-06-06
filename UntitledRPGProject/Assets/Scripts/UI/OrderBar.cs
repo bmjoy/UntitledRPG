@@ -59,7 +59,6 @@ public class OrderBar : MonoBehaviour
             queueImages.Add(unit, go);
         }
     }
-    bool backward = false;
     private void Update()
     {
         if(key != null)
@@ -76,19 +75,6 @@ public class OrderBar : MonoBehaviour
             }
             if (key.transform.localPosition.x <= -halfWidth)
                 key = null;
-        }
-        if(mText.gameObject.activeSelf)
-        {
-            if(!backward)
-                mText.transform.localPosition -= new Vector3(100.0f * Time.deltaTime, 0.0f, 0.0f);
-            else
-                mText.transform.localPosition += new Vector3(500.0f * Time.deltaTime, 0.0f, 0.0f);
-            if (mText.transform.localPosition.x < -Screen.width / 2.5f && !backward)
-            {
-                backward = true;
-            }
-            if (mText.transform.localPosition.x >= Screen.width / 5.0f && backward)
-                backward = false;
         }
     }
 
@@ -146,7 +132,7 @@ public class OrderBar : MonoBehaviour
 
     public void ChangeText(string s = "")
     {
-        mText.transform.localPosition = new Vector3(Screen.width / 5.0f, 0, 0);
+        mText.transform.localPosition = new Vector3(0, 0, 0);
         mText.GetComponent<TextMeshProUGUI>().text = s;
     }
 }

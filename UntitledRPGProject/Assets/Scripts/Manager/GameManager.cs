@@ -74,9 +74,7 @@ public class GameManager : MonoBehaviour
             case GameState.MainMenu: break;
             case GameState.Initialize:
                 {
-                    AudioManager.Instance.musicSource.Stop();
-                    AudioManager.Instance.musicSource.clip = AudioManager.Instance.mAudioStorage.mBackGroundMusic;
-                    AudioManager.Instance.musicSource.Play();
+                    AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
                     mGameState = GameState.GamePlay;
                 }
                 break;

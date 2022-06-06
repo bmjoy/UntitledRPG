@@ -19,6 +19,7 @@ public class TGActionTrigger : ActionTrigger
 
         if (mTriggered)
         {
+            
             yield return new WaitForSeconds(mTime / 3.0f);
             DamageState();
             yield return new WaitForSeconds(mTime / 2.0f);
@@ -65,6 +66,7 @@ public class TGActionTrigger : ActionTrigger
         }
         mPos = GetComponent<Unit>().mTarget.transform.position;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+        GetComponent<Boss>().PlayAnimation("Attack");
         StartCoroutine(Action());
     }
 

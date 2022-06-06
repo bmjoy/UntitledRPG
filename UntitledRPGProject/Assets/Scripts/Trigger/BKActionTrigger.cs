@@ -78,21 +78,15 @@ public class BKActionTrigger : ActionTrigger
 
         StartCoroutine(OneShot(0.25f));
 
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(0.2f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(0.5f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        StartCoroutine(OneShot(0.2f));
+        StartCoroutine(OneShot(0.5f));
     }
 
     private IEnumerator OneShot(float time)
     {
+        yield return new WaitForSeconds(time);
         if (GetComponent<Unit>().mAttackClips.Count > 0)
             AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(time);
     }
 
     protected override void StartActionTrigger()
@@ -114,19 +108,22 @@ public class BKActionTrigger : ActionTrigger
 
     private IEnumerator AttackAction()
     {
+        GetComponent<Boss>().PlayAnimation("Attack");
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+        yield return new WaitForSeconds(mTime / 3.0f);
         GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), GetComponent<Boss>().mTarget.transform.position, Quaternion.identity);
         slash.GetComponent<Animator>().Play("Slash1");
         Destroy(slash, 1.0f);
         DamageState();
         yield return new WaitForSeconds(mTime / 2.0f);
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
-
         DamageState();
-        yield return new WaitForSeconds(mTime);
-        GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), new Vector3(GetComponent<Boss>().mTarget.transform.position.x, GetComponent<Boss>().mTarget.transform.position.y + 1.5f , GetComponent<Boss>().mTarget.transform.position.z), Quaternion.identity);
+        GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), new Vector3(GetComponent<Boss>().mTarget.transform.position.x, GetComponent<Boss>().mTarget.transform.position.y + 1.5f, GetComponent<Boss>().mTarget.transform.position.z), Quaternion.identity);
         slash2.GetComponent<Animator>().Play("Slash2");
         Destroy(slash2, 1.0f);
+        yield return new WaitForSeconds(mTime);
+
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f) - 0.2f;
         if (GetComponent<Boss>().mBuffNerfController.GetBuffCount() > 0)
         {

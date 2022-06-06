@@ -12,6 +12,10 @@ public class AudioManager : MonoBehaviour
     private static AudioManager mInstance;
     public static AudioManager Instance { get { return mInstance; } }
     public AudioStorage mAudioStorage;
+
+    [SerializeField]
+    private float mFadeTime = 2.0f;
+
     private void Awake()
     {
         if (mInstance != null && mInstance != this)
@@ -26,7 +30,11 @@ public class AudioManager : MonoBehaviour
 
     public static void FadeOutMusic()
     {
-        mInstance.StartCoroutine(BeginFadeOut(2.0f));
+        mInstance.StartCoroutine(FadeOut(Instance.mFadeTime));
+    }
+    public static void FadeInMusic()
+    {
+        mInstance.StartCoroutine(FadeIn(Instance.mFadeTime));
     }
 
     public static void PlaySfx(AudioClip clip, float volume = 1.0f)
@@ -51,6 +59,39 @@ public class AudioManager : MonoBehaviour
                                      new float[] { 1.0f },
                                      duration);
     }
+
+    public static IEnumerator FadeOut(float FadeTime)
+    {
+        float startVolume = Instance.musicSource.volume;
+
+        while (Instance.musicSource.volume > 0)
+        {
+            Instance.musicSource.volume -= startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        Instance.musicSource.Stop();
+        Instance.musicSource.volume = startVolume;
+    }
+
+    public static IEnumerator FadeIn(float FadeTime)
+    {
+        float startVolume = 0.2f;
+
+        Instance.musicSource.volume = 0;
+        Instance.musicSource.Play();
+
+        while (Instance.musicSource.volume < 1.0f)
+        {
+            Instance.musicSource.volume += startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        Instance.musicSource.volume = 1f;
+    }
+
 
     public static void SetMasterVolume(float vol)
     {
