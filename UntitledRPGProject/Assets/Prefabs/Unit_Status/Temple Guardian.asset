@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Temple Guardian
   Level: 10
-  EXP: 50
-  MaxHealth: 100
+  EXP: 500
+  MaxHealth: 1000
   MaxMana: 50
   Magic_Resistance: 25
   Attack: 25
@@ -35,4 +35,6 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 67e2342dc7a60834f8b41f62e7ce324e, type: 3}
   - Type: 1
     Clip: {fileID: 8300000, guid: 8a78e3239878d2f4c83c3075be35224f, type: 3}
-  Item: []
+  Item:
+  - {fileID: 4264239816355072542, guid: 6dff5798c19961a4e80432dac0f96f93, type: 3}
+  - {fileID: 6884613172769436045, guid: 3ec7df7fbac291c41afb9494f7ec470d, type: 3}

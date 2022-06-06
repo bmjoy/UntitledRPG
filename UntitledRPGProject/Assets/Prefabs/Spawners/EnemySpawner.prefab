@@ -45,5 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGizmoColor: {r: 1, g: 0, b: 0, a: 0}
   mEnemyList: 01000000020000000200000002000000
-  mRadius: 5
-  mAngle: 60
+  mRadius: 10
+  mAngle: 360
+  mSpeed: 5

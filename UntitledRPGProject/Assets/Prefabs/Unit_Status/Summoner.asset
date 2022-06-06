@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: Summoner
   m_EditorClassIdentifier: 
   Name: Summoner
-  Level: 1
-  EXP: 250
-  MaxHealth: 100
+  Level: 3
+  EXP: 100
+  MaxHealth: 200
   MaxMana: 250
-  Magic_Resistance: 5
+  Magic_Resistance: 20
   Attack: 0
   Defend: 5
   MagicPower: 0
-  Armor: 5
+  Armor: 20
   Agility: 2
-  Gold: 20
+  Gold: 50
   WeaponType: 0
   BasicSprite: {fileID: 8793639957104055765, guid: d5b430cc97c9b58428f06e70b6365685, type: 3}
   Clips:
@@ -33,4 +33,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 7bae7a8ee6b300d4fb43e6a65f30aea0, type: 3}
   - Type: 0
     Clip: {fileID: 8300000, guid: 471efcd67be76024aac179cc9e75992b, type: 3}
-  Item: []
+  Item:
+  - {fileID: 4264239816355072542, guid: f3f264871e75f5647837d8ec5c6a0442, type: 3}
+  - {fileID: 3519973982565569764, guid: acad645e5905cc6448aec18464bd1aed, type: 3}
+  - {fileID: 2752632987366810350, guid: 92577cebcf6e5824b9f06167b69b0e86, type: 3}

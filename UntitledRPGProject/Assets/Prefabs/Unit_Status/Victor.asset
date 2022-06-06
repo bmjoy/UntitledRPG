@@ -15,11 +15,11 @@ MonoBehaviour:
   Name: Victor
   Level: 1
   EXP: 0
-  MaxHealth: 50
-  MaxMana: 100
+  MaxHealth: 100
+  MaxMana: 50
   Magic_Resistance: 25
   Attack: 10
-  Defend: 1
+  Defend: 10
   MagicPower: 20
   Armor: 1
   Agility: 3
