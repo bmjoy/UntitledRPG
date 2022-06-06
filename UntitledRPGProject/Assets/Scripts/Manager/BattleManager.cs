@@ -72,7 +72,8 @@ public class BattleManager : MonoBehaviour
 
     public void Initialize()
     {
-        UIManager.Instance.DisplayInventory(false);
+        if(UIManager.Instance.mInventoryUI.transform.gameObject.activeSelf)
+            UIManager.Instance.mInventoryUI.Active(false);
         StartCoroutine(Wait());
     }
 
@@ -118,6 +119,7 @@ public class BattleManager : MonoBehaviour
                     {
                         mCurrentUnit.mAiBuild.stateMachine.ChangeState("Waiting");
                         mCurrentUnit.mField.GetComponent<Field>().Picked(false);
+                        UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                         onDequeuingOrderEvent?.Invoke(mCurrentUnit);
                         mCurrentUnit = null;
                         return;
@@ -197,6 +199,15 @@ public class BattleManager : MonoBehaviour
                     status = GameStatus.None;
                 }
                 break;
+        }
+        if (mCurrentUnit != null && mCurrentUnit.mConditions.isDied)
+        {
+            mCurrentUnit.mAiBuild.stateMachine.ChangeState("Waiting");
+            mCurrentUnit.mField.GetComponent<Field>().Picked(false);
+            UIManager.Instance.DisplayBattleInterface(false);
+            onDequeuingOrderEvent?.Invoke(mCurrentUnit);
+            mCurrentUnit = null;
+            status = GameStatus.Queue;
         }
     }
 

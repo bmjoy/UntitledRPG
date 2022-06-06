@@ -163,18 +163,25 @@ public class PlayerController : MonoBehaviour
     public void ResetPlayerUnit()
     {
         mHeroes.Clear();
-        if(transform.Find("Eleven(Clone)"))
+        GameObject go = new GameObject("J");
+
+        bool finish = false;
+        while(!finish)
         {
-            GameObject go = new GameObject("J");
-            transform.Find("Eleven(Clone)").transform.SetParent(go.transform);
-            Destroy(go);
+            bool exist = false;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                if (transform.GetChild(i).tag == "PlayerCompanion")
+                {
+                    transform.GetChild(i).transform.SetParent(go.transform);
+                    exist = true;
+                }
+            }
+            if (finish == exist)
+                break;
         }
-        //if (transform.Find("Victor(Clone)"))
-        //{
-        //    GameObject go = new GameObject("J");
-        //    transform.Find("Victor(Clone)").transform.SetParent(go.transform);
-        //    Destroy(go);
-        //}
+
+        Destroy(go);
 
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -222,8 +229,6 @@ public class PlayerController : MonoBehaviour
     {
         if (onBattle)
             return;
-        if (other.gameObject.name == "NextLevel")
-            Debug.Log("Hi");
 
         var unit = other.GetComponent<EnemyProwler>();
 

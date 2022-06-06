@@ -162,3 +162,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSpeed: 20
   isDamaged: 0
+  clip: {fileID: 8300000, guid: 3dfbcb13cb5e17d42bbd5246de6a1615, type: 3}

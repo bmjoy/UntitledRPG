@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public class BKActionTrigger : ActionTrigger
-{
+{   
     bool _isRed = false;
     List<GameObject> _mirrors = new List<GameObject>();
     [SerializeField]
@@ -68,25 +68,15 @@ public class BKActionTrigger : ActionTrigger
     private IEnumerator Slash()
     {
         yield return new WaitForSeconds(0.75f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(0.05f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(0.22f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(0.05f);
+        StartCoroutine(OneShot(0.05f));
+        StartCoroutine(OneShot(0.22f));
+        StartCoroutine(OneShot(0.05f));
         for (int i = 0; i < 6; ++i)
         {
-            if (GetComponent<Unit>().mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-            yield return new WaitForSeconds(0.12f);
+            StartCoroutine(OneShot(0.12f));
         }
 
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
-        yield return new WaitForSeconds(0.25f);
+        StartCoroutine(OneShot(0.25f));
 
         if (GetComponent<Unit>().mAttackClips.Count > 0)
             AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
@@ -96,7 +86,13 @@ public class BKActionTrigger : ActionTrigger
         yield return new WaitForSeconds(0.5f);
         if (GetComponent<Unit>().mAttackClips.Count > 0)
             AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+    }
 
+    private IEnumerator OneShot(float time)
+    {
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(time);
     }
 
     protected override void StartActionTrigger()
@@ -177,8 +173,10 @@ public class BKActionTrigger : ActionTrigger
             GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mActionTrigger -= StartActionTrigger;        
         if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[1] != null)
             GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
-        GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
-        GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
+        if(GetComponent<Unit>().mActionTrigger != null)
+            GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
+        if (GetComponent<Unit>().mSkillClips.Count > 0)
+            GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
     }
 
     private void OnApplicationQuit()
@@ -187,7 +185,9 @@ public class BKActionTrigger : ActionTrigger
             GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mActionTrigger -= StartActionTrigger;
         if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[1] != null)
             GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
-        GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
-        GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
+        if(GetComponent<Unit>().mActionTrigger != null)
+            GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
+        if(GetComponent<Unit>().mSkillClips.Count>0)
+            GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
     }
 }

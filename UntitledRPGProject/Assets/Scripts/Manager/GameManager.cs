@@ -93,7 +93,12 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
             mGameState = (mGameState == GameState.GamePlay) ? GameState.GamePause : GameState.GamePlay;
+        if (mGameState == GameState.GamePause)
+            UIManager.Instance.DisplayOptionScreen(true);
+        else
+            UIManager.Instance.DisplayOptionScreen(false);
         Time.timeScale = (mGameState == GameState.GamePause) ? 0.0f : 1.0f;
+
     }
 
     private void GameOver()
@@ -172,6 +177,15 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.DisplayBattleInterface(false);
         onPlayerBattleEnd?.Invoke();
         mGameState = GameState.GamePlay;
+    }
+
+    public void StopAllProwlers()
+    {
+        EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
+        for (int i = 0; i < Instance.EnemyProwlers.Length; ++i)
+        {
+            Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().ChangeBehavior("Idle");
+        }
     }
 
     private void ActiveAllProwlers(bool active)

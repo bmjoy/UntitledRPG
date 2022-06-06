@@ -24,9 +24,9 @@ public class Inventory
             }
             else
             {
-                var it = (Expendables)Get(item.ID, item.Name);
+                var it = (Expendables)Get(item.Name);
                 if(it.Amount < 50)
-                    Get(item.ID, item.Name).Apply();
+                    Get(item.Name).Apply();
                 else
                     Debug.LogWarning("<color=yellow>Warning!</color> expendables are reached to maximum!");
             }
@@ -42,7 +42,7 @@ public class Inventory
     {
         foreach(Transform it in PlayerController.Instance.transform.Find("Bag"))
         {
-            if(it.GetComponent<Item>() == Get(item.ID,item.Name))
+            if(it.GetComponent<Item>() == Get(item.Name))
             {
                 GameObject.Destroy(it.gameObject);
                 break;
@@ -51,11 +51,11 @@ public class Inventory
         Remove(item);
     }
 
-    public Item Get(int ID, string name)
+    public Item Get(string name)
     {
         foreach(var item in myInventory)
         {
-            if(item.Key == ID && item.Value.Name == name)
+            if(item.Value.Name == name)
                 return item.Value;
         }
 

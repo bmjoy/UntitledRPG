@@ -135,6 +135,10 @@ MonoBehaviour:
   mChannelingTime: 0.05
   mMaximumDistance: 0.5
   mDamage: 0
+  clip:
+  - {fileID: 8300000, guid: f873cc8d0f014f442a45a2974abc103c, type: 3}
+  - {fileID: 8300000, guid: 80917cb9eb3abb54981e33ebba93e1ef, type: 3}
+  - {fileID: 8300000, guid: 682b8decd52cd114c82fef7b7b66aa38, type: 3}
   mCount: 0
 --- !u!1 &8699681589747669759
 GameObject:

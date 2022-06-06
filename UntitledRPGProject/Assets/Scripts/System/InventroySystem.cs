@@ -38,7 +38,7 @@ public class InventroySystem : MonoBehaviour
                 Debug.Log("It is not vaild!");
                 return isExisted;
             }
-            if (PlayerController.Instance.mInventory.Get(weapon.ID, weapon.Name) == null)
+            if (PlayerController.Instance.mInventory.Get(weapon.Name) == null)
                 return isExisted;
             mInventoryInfo.Weapon = Check(weapon, mInventoryInfo.Weapon) as Weapon;
             return isExisted;
@@ -46,7 +46,7 @@ public class InventroySystem : MonoBehaviour
         else if(item is Armor)
         {
             Armor armor = (Armor)item;
-            if (PlayerController.Instance.mInventory.Get(armor.ID, armor.Name) == null)
+            if (PlayerController.Instance.mInventory.Get(armor.Name) == null)
                 return isExisted;
             switch (armor.armorType)
             {
