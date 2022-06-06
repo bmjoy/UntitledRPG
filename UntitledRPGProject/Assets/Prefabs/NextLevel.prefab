@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7611940729746462027
+--- !u!1 &3147619951136795518
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,55 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2678286021081469868}
-  - component: {fileID: 6699237290124560843}
+  - component: {fileID: 3926752305441296337}
+  - component: {fileID: 5238545605311963895}
+  - component: {fileID: -6431531994074831674}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: NextLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2678286021081469868
+--- !u!4 &3926752305441296337
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7611940729746462027}
+  m_GameObject: {fileID: 3147619951136795518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 467.443, y: 217.86754, z: -58.094246}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6699237290124560843
+--- !u!114 &5238545605311963895
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7611940729746462027}
+  m_GameObject: {fileID: 3147619951136795518}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24835ed513b1b5b43abfe629ae338c5f, type: 3}
+  m_Script: {fileID: 11500000, guid: 67d4a36b25d738e41b60fee2f3e06a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mGameState: 0
-  mArmorPool: []
-  mWeaponPool: []
-  _ItemID: 0
-  mCamera: {fileID: 0}
-  mEnemyProwler: {fileID: 0}
-  mCurrentLevel: 0
-  mRequiredEXP: 50
-  mAmountofSoul: 1
-  mWaitForRestart: 3
+  _isBackLevel: 0
+  _isKeyRequired: 0
+  Key: {fileID: 0}
+--- !u!65 &-6431531994074831674
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3147619951136795518}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
