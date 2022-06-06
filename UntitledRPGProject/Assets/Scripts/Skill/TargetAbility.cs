@@ -30,8 +30,7 @@ public class TargetAbility : DamagableAbility
         {
             if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForTarget);
-                UIManager.Instance.DisplayAskingSkill(true);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForTarget);
                 mTarget = null;
 
                 foreach (GameObject unit in (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies)
@@ -50,6 +49,7 @@ public class TargetAbility : DamagableAbility
                     {
                         mTarget = null;
                         isActive = false;
+                        UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                         break;
                     }
                     yield return null;
@@ -60,7 +60,7 @@ public class TargetAbility : DamagableAbility
                     unit.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
                 }
 
-                UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForAccpet);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForAccpet);
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -72,11 +72,11 @@ public class TargetAbility : DamagableAbility
                     {
                         isActive = false;
                         mTarget = null;
+                        UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                         break;
                     }
                     yield return null;
                 }
-                UIManager.Instance.DisplayAskingSkill(false);
             }
             else
             {
@@ -86,6 +86,7 @@ public class TargetAbility : DamagableAbility
 
             if (isActive)
             {
+                UIManager.Instance.ChangeOrderBarText("<color=red>"+ mName + "!</color>");
                 mOwner.mTarget = mTarget;
                 
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));

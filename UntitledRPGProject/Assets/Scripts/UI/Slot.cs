@@ -74,6 +74,7 @@ public class Slot : MonoBehaviour
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
             PlayerController.Instance.mGold -= result;
+            mMyItem.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
             PlayerController.Instance.mInventory.Add(mMyItem.GetComponent<Item>());
             mMyItem.GetComponent<Item>().isSold = true;
             mButton.onClick.RemoveAllListeners();

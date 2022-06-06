@@ -262,6 +262,7 @@ public class Unit : MonoBehaviour, IUnit
             bonus.mMagicPower = Random.Range(1, 5);
             bonus.mArmor = Random.Range(1, 5);
             bonus.mMagic_Resistance = Random.Range(1, 5);
+            mStatus.mEXP = mStatus.mEXP - (GameManager.Instance.mRequiredEXP + (50 * mStatus.mLevel));
             mStatus.mLevel++;
             mStatus.mMaxHealth += bonus.mHealth;
             mStatus.mMaxMana += bonus.mMana;
@@ -270,6 +271,7 @@ public class Unit : MonoBehaviour, IUnit
             mStatus.mArmor += bonus.mArmor;
             mStatus.mMagic_Resistance += bonus.mMagic_Resistance;
             mLevelText.text = mStatus.mLevel.ToString();
+            
             return new KeyValuePair<bool, BonusStatus>(true, bonus);
         }
         return new KeyValuePair<bool, BonusStatus>(false, bonus);
@@ -280,8 +282,7 @@ public class Unit : MonoBehaviour, IUnit
         
         if (mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
         {
-            UIManager.Instance.ChangeText(UIManager.Instance.mTextForTarget);
-            UIManager.Instance.DisplayText(true);
+            UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForTarget);
             foreach (GameObject enemy in BattleManager.Instance.mEnemies)
             {
                 if (!enemy.GetComponent<Unit>().mConditions.isDied)
@@ -303,6 +304,7 @@ public class Unit : MonoBehaviour, IUnit
                 if (Input.GetMouseButtonDown(1))
                 {
                     BattleManager.Instance.Cancel();
+                    UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                     break;
                 }
                 yield return null;
@@ -311,12 +313,11 @@ public class Unit : MonoBehaviour, IUnit
             {
                 enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
             }
-            UIManager.Instance.DisplayText(false);
-            UIManager.Instance.ChangeText(UIManager.Instance.mTextForAccpet);
         }
 
         if (mConditions.isCancel == false && mTarget)
         {
+            UIManager.Instance.ChangeOrderBarText("Battle Start!");
             mTarget.mSelected.SetActive(false);
             mSpriteRenderer.sortingOrder = (transform.position.z < mTarget?.transform.position.z) ? 3 : 4;
             mTarget.mSpriteRenderer.sortingOrder = (transform.position.z > mTarget?.transform.position.z) ? 3 : 4;
@@ -380,6 +381,8 @@ public class Unit : MonoBehaviour, IUnit
 
             TurnEnded();
         }
+        else
+            UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
 
     }
 

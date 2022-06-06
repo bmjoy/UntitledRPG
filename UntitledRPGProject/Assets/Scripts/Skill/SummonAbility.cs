@@ -121,7 +121,7 @@ public class SummonAbility : Skill_Setting
         {
             if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.DisplayAskingSkill(true);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForAccpet);
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -132,17 +132,18 @@ public class SummonAbility : Skill_Setting
                     if (Input.GetMouseButtonDown(1))
                     {
                         isActive = false;
+                        UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                         break;
                     }
                     yield return null;
                 }
-                UIManager.Instance.DisplayAskingSkill(false);
             }
             else
                 isActive = true;
 
             if (isActive)
             {
+                UIManager.Instance.ChangeOrderBarText("<color=red>" + mName + "!</color>");
                 mOwner.StartCoroutine(Effect());
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
                 mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");

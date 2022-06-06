@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class OrderBar : MonoBehaviour
     private float halfWidth = 0.0f;
     private float partialWidth = 0.0f;
 
+    public TextMeshProUGUI mText;
+
     [SerializeField]
     private float Ypos = 5.0f;
     [SerializeField]
@@ -24,10 +27,16 @@ public class OrderBar : MonoBehaviour
     [SerializeField]
     private float mMaximumSpeed = 200.0f;
 
+    private void Start()
+    {
+        mText = transform.Find("Mask").Find("Text").GetComponent<TextMeshProUGUI>();
+    }
+
     public void Initialize()
     {
         image = transform.GetComponent<Image>();
-
+        mText = transform.Find("Mask").Find("Text").GetComponent<TextMeshProUGUI>();
+        mText.transform.localPosition = new Vector3(0, 0, 0);
         halfWidth = image.rectTransform.rect.width / 2.0f;
         partialWidth = image.rectTransform.rect.width / 8.0f;
         BattleManager.Instance.onEnqueuingSingleOrderEvent += EnqueueSignleOrder;
@@ -35,6 +44,7 @@ public class OrderBar : MonoBehaviour
         BattleManager.Instance.onMovingOrderEvent += MoveOrder;
         BattleManager.Instance.onDequeuingOrderEvent += DequeueOrder;
         BattleManager.Instance.onFinishOrderEvent += Clear;
+        ChangeText("Waiting for Order...");
         gameObject.SetActive(false);
     }
 
@@ -49,7 +59,7 @@ public class OrderBar : MonoBehaviour
             queueImages.Add(unit, go);
         }
     }
-
+    bool backward = false;
     private void Update()
     {
         if(key != null)
@@ -66,6 +76,19 @@ public class OrderBar : MonoBehaviour
             }
             if (key.transform.localPosition.x <= -halfWidth)
                 key = null;
+        }
+        if(mText.gameObject.activeSelf)
+        {
+            if(!backward)
+                mText.transform.localPosition -= new Vector3(100.0f * Time.deltaTime, 0.0f, 0.0f);
+            else
+                mText.transform.localPosition += new Vector3(500.0f * Time.deltaTime, 0.0f, 0.0f);
+            if (mText.transform.localPosition.x < -Screen.width / 2.5f && !backward)
+            {
+                backward = true;
+            }
+            if (mText.transform.localPosition.x >= Screen.width / 5.0f && backward)
+                backward = false;
         }
     }
 
@@ -119,5 +142,11 @@ public class OrderBar : MonoBehaviour
             Destroy(unit.Value);
         }    
         queueImages.Clear();
+    }
+
+    public void ChangeText(string s = "")
+    {
+        mText.transform.localPosition = new Vector3(Screen.width / 5.0f, 0, 0);
+        mText.GetComponent<TextMeshProUGUI>().text = s;
     }
 }
