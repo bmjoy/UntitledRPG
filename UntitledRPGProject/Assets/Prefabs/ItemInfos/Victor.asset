@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Victor
   m_EditorClassIdentifier: 
   mName: Victor
-  mCost: 100
+  mCost: 25
   mSprite: {fileID: 0}
