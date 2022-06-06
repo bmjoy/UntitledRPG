@@ -21,17 +21,15 @@ public class SetItemUI : MonoBehaviour
         mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
         mName.text = mItem.Name;
         GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + "</color>";
-        Debug.Log(mItem.Info.GetType().ToString());
         if(typeof(EquipmentInfo).IsAssignableFrom(mItem.Info.GetType()))
         {
-            Debug.Log("Hi");
             var item = (EquipmentInfo)mItem.Info;
             foreach(var i in item.mBonusAbilities)
             {
                 if(i.Type == BonusAbility.AbilityType.Magic)
                     GetComponent<HoverTip>().mTipToShow += "\n This item can use " + i.Type.ToString();
                 else
-                    GetComponent<HoverTip>().mTipToShow += "\n" + i.Type.ToString() + ": " + i.Value;
+                    GetComponent<HoverTip>().mTipToShow += "\n<color=green>" + i.Type.ToString() + "</color>: " + i.Value;
             }
         }
         mButton.onClick.AddListener(() => Activate());

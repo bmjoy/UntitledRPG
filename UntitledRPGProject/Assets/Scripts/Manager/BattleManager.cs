@@ -143,6 +143,7 @@ public class BattleManager : MonoBehaviour
                         UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b> and " +
                             "<b>" + "Defend <color=green>" + mCurrentUnit.mStatus.mDefend + "%</color></b> can block damages", "Defend");
                         status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
+                        UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                     }
                 }
                 break;
@@ -241,7 +242,7 @@ public class BattleManager : MonoBehaviour
         foreach(var item in enemyItemList)
         {
             GameObject i = Instantiate(item);
-            i.transform.SetParent(PlayerController.Instance.transform.Find("Beg"));
+            i.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
             PlayerController.Instance.mInventory.Add(i.GetComponent<Item>());
         }
 

@@ -23,6 +23,8 @@ public class Cheat : MonoBehaviour
             foreach (var item in itemList)
             {
                 Debug.Log("added");
+
+                item.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
                 PlayerController.Instance.mInventory.Add(item);
             }
         }

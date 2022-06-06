@@ -30,7 +30,6 @@ public class UIManager : MonoBehaviour
     public GameObject mSkillDescription;
     public GameObject mAttackDescription;
     public GameObject mDefendDescription;
-    public GameObject mSkillUseCheck;
     public GameObject mBasicText;
     public GameObject mFadeScreen;
     public GameObject mDialogueBox;
@@ -103,7 +102,6 @@ public class UIManager : MonoBehaviour
         mYesButton.onClick.RemoveAllListeners();
         mNoButton.onClick.RemoveAllListeners();
         DisplayBattleInterface(false);
-        DisplayAskingSkill(false);
         DisplayText(false);
         DisplayDialogueBox(false);
         DisplayInventory(false);
@@ -144,7 +142,6 @@ public class UIManager : MonoBehaviour
         Instance.mYesButton.onClick.RemoveAllListeners();
         Instance.mNoButton.onClick.RemoveAllListeners();
         Instance.DisplayBattleInterface(false);
-        Instance.DisplayAskingSkill(false);
         Instance.DisplayDialogueBox(false);
     }
 
@@ -171,13 +168,18 @@ public class UIManager : MonoBehaviour
         mBattleUI.SetActive(display);
     }
 
-    public void DisplayAskingSkill(bool display)
-    {
-        mSkillUseCheck.SetActive(display);
-    }
     public void DisplayText(bool display)
     {
         mBasicText.SetActive(display);
+    }    
+    public void DisplayOrderBarText(bool display)
+    {
+        mOrderbar.GetComponent<OrderBar>().mText.gameObject.SetActive(display);
+        if (display)
+        {
+            mOrderbar.GetComponent<OrderBar>().mText.transform.localPosition = new Vector3(Screen.width / 3.0f, 0, 0);
+            ChangeOrderBarText("");
+        }
     }
 
     public void DisplayOptionScreen(bool display)
@@ -237,11 +239,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ChangeText_Skill(string text)
-    {
-        mSkillUseCheck.GetComponent<TextMeshProUGUI>().text = text;
-    }
-
     public void ChangeHoverTip(string text, string action)
     {
         if (action == "Skill")
@@ -257,6 +254,10 @@ public class UIManager : MonoBehaviour
     public void ChangeText(string text)
     {
         mBasicText.GetComponent<TextMeshProUGUI>().text = text;
+    }    
+    public void ChangeOrderBarText(string text)
+    {
+        mOrderbar.GetComponent<OrderBar>().ChangeText(text);
     }
 
     public void ChangeDialogueText(string text)
