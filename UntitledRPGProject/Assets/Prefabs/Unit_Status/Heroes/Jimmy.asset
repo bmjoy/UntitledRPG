@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
+  m_Name: Jimmy
+  m_EditorClassIdentifier: 
+  Name: Jimmy
+  Level: 1
+  EXP: 0
+  MaxHealth: 100
+  MaxMana: 25
+  Magic_Resistance: 0
+  Attack: 35
+  Defend: 10
+  MagicPower: 15
+  Armor: 0
+  Agility: 5
+  Gold: 0
+  WeaponType: 1
+  BasicSprite: {fileID: 4723107735738678597, guid: afc849dbfd8c6754bb91ca57af662b9b, type: 3}
+  Clips:
+  - Type: 0
+    Clip: {fileID: 8300000, guid: f873cc8d0f014f442a45a2974abc103c, type: 3}
+  - Type: 0
+    Clip: {fileID: 8300000, guid: 80917cb9eb3abb54981e33ebba93e1ef, type: 3}
+  - Type: 0
+    Clip: {fileID: 8300000, guid: 682b8decd52cd114c82fef7b7b66aa38, type: 3}
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 311d21e8c849c0a49add03b385effe59, type: 3}
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 618ff127fa7cc65408d85c394a084b68, type: 3}
+  Item: []
