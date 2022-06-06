@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
+  m_Name: Temple Guardian
+  m_EditorClassIdentifier: 
+  Name: Temple Guardian
+  Level: 10
+  EXP: 500
+  MaxHealth: 1000
+  MaxMana: 50
+  Magic_Resistance: 25
+  Attack: 25
+  Defend: 25
+  MagicPower: 25
+  Armor: 10
+  Agility: 3
+  Gold: 100
+  WeaponType: 0
+  BasicSprite: {fileID: -6356620016437325989, guid: a6097a492d2c5ad4d801242d81ed371f, type: 3}
+  Clips:
+  - Type: 0
+    Clip: {fileID: 8300000, guid: 5f5726c1ea4ab224694f34b4a20d70d6, type: 3}
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 21697d52395ad0746a8a3c9f78c2dba2, type: 3}
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 67e2342dc7a60834f8b41f62e7ce324e, type: 3}
+  - Type: 1
+    Clip: {fileID: 8300000, guid: 8a78e3239878d2f4c83c3075be35224f, type: 3}
+  Item:
+  - {fileID: 4264239816355072542, guid: 6dff5798c19961a4e80432dac0f96f93, type: 3}
+  - {fileID: 6884613172769436045, guid: 3ec7df7fbac291c41afb9494f7ec470d, type: 3}
