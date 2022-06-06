@@ -17,10 +17,10 @@ MonoBehaviour:
   mSprite: {fileID: 21300000, guid: 892c9706c8b60b242b417f9ee27879aa, type: 3}
   mBonusAbilities:
   - Type: 1
-    Value: 25
+    Value: 200
     Skill: {fileID: 0}
   - Type: 2
-    Value: 25
+    Value: 200
     Skill: {fileID: 0}
   - Type: 3
     Value: 25

@@ -12,6 +12,7 @@ public class Pursuit : P_State
 
     public override void Execute(Prowler agent)
     {
+        agent.mVelocity = agent.mAgent.velocity;
         agent.mAgent.SetDestination(PlayerController.Instance.transform.position);
         float dist = Vector3.Distance(agent.transform.position, PlayerController.Instance.transform.position);
         if (dist > agent.mRadius + agent.mRadius)

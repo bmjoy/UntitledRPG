@@ -12,7 +12,8 @@ public class TimedPoison : TimedNerf
         if (Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
             return;
         poison = (Poison)Nerf;
-        if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > nerf.mDamage + mOwner.mStatus.mMagicPower * poison.mMagicPowerMultiplier)
+        poison.IsTurnFinished = false;
+        if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > ((mOwner.mStatus.mMagicPower * poison.mMagicPowerMultiplier)) - target.mMagicDistance)
         {
             GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.identity);
             go.transform.parent = target.transform;

@@ -195,10 +195,9 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator EndOfDialogueBox()
     {
-        mDialogueBox.GetComponent<Animator>().SetTrigger("Outro");
+        mDialogueBox.GetComponent<Animator>().Play("Outro");
         yield return new WaitForSeconds(1.0f);
         mDialogueBox.SetActive(false);
-        mDialogueBox.GetComponent<Animator>().ResetTrigger("Outro");
     }
 
     public void DisplayHealthBar(bool display)

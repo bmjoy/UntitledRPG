@@ -73,6 +73,7 @@ public class NPC : MonoBehaviour
             {
                 case Dialogue.TriggerType.None:
                     yield return new WaitForSeconds(0.5f);
+                    UIManager.Instance.DisplayButtonsInDialogue(false);
                     yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     break;
                 case Dialogue.TriggerType.Trade:
@@ -125,7 +126,6 @@ public class NPC : MonoBehaviour
             // Input quest?
             mComplete = true;
         });
-        Debug.Log("Trade");
         UIManager.Instance.DisplayButtonsInDialogue(true);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);

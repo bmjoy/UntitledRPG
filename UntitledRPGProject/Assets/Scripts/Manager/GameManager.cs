@@ -200,6 +200,13 @@ public class GameManager : MonoBehaviour
                     continue;
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
+                if(active)
+                {
+                    Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.isStopped = true;
+                    Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.SetDestination(Instance.EnemyProwlers[i].transform.position);
+                    Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().ChangeBehavior("Idle");
+                }
+
             }
         }
 
