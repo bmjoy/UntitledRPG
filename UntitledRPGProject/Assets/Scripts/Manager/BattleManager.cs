@@ -29,8 +29,13 @@ public class BattleManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
     }
+    [HideInInspector]
     public GameObject mCurrentField;
+    [HideInInspector]
     public List<GameObject> mUnits = new List<GameObject>();
+    [HideInInspector]
+    public List<GameObject> mEnemies = new List<GameObject>();
+    [HideInInspector]
     public Queue<Unit> mOrders = new Queue<Unit>();
     public Vector3 playerCenter = Vector3.zero;
     public Vector3 enemyCenter = Vector3.zero;
@@ -83,7 +88,9 @@ public class BattleManager : MonoBehaviour
         && GameManager.Instance.mEnemyProwler.onBattle == true);
         mUnits.Clear();
         mOrders.Clear();
+        mEnemies.Clear();
         mUnits.AddRange(PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
+        mEnemies = GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
         mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mUnits.Sort((a, b) => ((b.GetComponent<Unit>().mStatus.mAgility + b.GetComponent<Unit>().mBonusStatus.mAgility).CompareTo(
             a.GetComponent<Unit>().mStatus.mAgility + a.GetComponent<Unit>().mBonusStatus.mAgility)));

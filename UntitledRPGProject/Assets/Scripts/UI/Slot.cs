@@ -9,6 +9,7 @@ public class Slot : MonoBehaviour
     private TextMeshProUGUI mName;
     private TextMeshProUGUI mDescription;
     private TextMeshProUGUI mCost;
+    private GameObject mBoarder;
 
     private Image mItemImage;
     [SerializeField]
@@ -20,8 +21,9 @@ public class Slot : MonoBehaviour
     GameObject mMyItem = null;
     private bool isInitialized = false;
 
-    public void Initialize(ref GameObject myItem)
+    public void Initialize(ref GameObject myItem, Transform t)
     {
+        mBoarder = t.gameObject;
         mName = transform.Find("Name").GetComponent<TextMeshProUGUI>();
         mDescription = transform.Find("Status").GetComponent<TextMeshProUGUI>();
         mCost = transform.Find("Value").GetComponent<TextMeshProUGUI>();
@@ -75,6 +77,7 @@ public class Slot : MonoBehaviour
             PlayerController.Instance.mInventory.Add(mMyItem.GetComponent<Item>());
             mMyItem.GetComponent<Item>().isSold = true;
             mButton.onClick.RemoveAllListeners();
+            mBoarder.transform.Find("Money").Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
             ResetItem();
         }
     }

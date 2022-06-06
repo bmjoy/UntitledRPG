@@ -51,6 +51,14 @@ public class EnemyProwler : Prowler
     protected override void Update()
     {
         base.Update();
+        if (BattleManager.Instance.status != BattleManager.GameStatus.None
+|| PlayerController.Instance.Interaction)
+        {
+            mExclamation.SetActive(false);
+            mParticles.SetActive(false);
+            return;
+        }
+
         mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         if (mAnimator.GetFloat("Speed") > 0.1f && _RunClip.Count > 0)
         {

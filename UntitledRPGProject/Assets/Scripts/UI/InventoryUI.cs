@@ -11,6 +11,7 @@ public class InventoryUI : MonoBehaviour
     private GameObject mButtonGroup;
     private GameObject mEquipmentImageGroup;
     private GameObject mItemsGroup;
+    private GameObject mMoneyGroup;
 
     private Image mCurrentUnit;
     private Animator mCurrentUnitAnimator;
@@ -25,6 +26,7 @@ public class InventoryUI : MonoBehaviour
         mTextAreaGroup = transform.Find("TextArea").gameObject;
         mButtonGroup = transform.Find("Button").gameObject;
         mEquipmentImageGroup = transform.Find("Equipment").gameObject;
+        mMoneyGroup = transform.Find("Money").gameObject;
         mCurrentUnit = transform.Find("CurrentUnit").GetComponent<Image>();
         mItemsGroup = transform.Find("ItemScroll").transform.Find("Items").gameObject;
         mInitialized = true;
@@ -36,7 +38,6 @@ public class InventoryUI : MonoBehaviour
         {
             PrintStatus(mIndex);
             PrintStatusBonus(mIndex);
-            //InventoryUpdate();
         }
 
     }
@@ -240,6 +241,7 @@ public class InventoryUI : MonoBehaviour
         }
         _intialized = false;
         InventorySetup();
+        mMoneyGroup.transform.Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
     }
 
 

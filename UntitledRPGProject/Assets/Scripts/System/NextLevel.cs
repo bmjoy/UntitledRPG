@@ -14,7 +14,6 @@ public class NextLevel : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Hi");
             if (_isKeyRequired && !PlayerController.Instance.mInventory.Get(Key.Name))
                 return;
 

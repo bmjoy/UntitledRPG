@@ -33,6 +33,12 @@ public class TargetAbility : DamagableAbility
                 UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForTarget);
                 UIManager.Instance.DisplayAskingSkill(true);
                 mTarget = null;
+
+                foreach (GameObject unit in (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies)
+                {
+                    if (!unit.GetComponent<Unit>().mConditions.isDied)
+                        unit.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(true);
+                }
                 while (true)
                 {
                     Raycasting();
@@ -48,6 +54,12 @@ public class TargetAbility : DamagableAbility
                     }
                     yield return null;
                 }
+
+                foreach (GameObject unit in (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies)
+                {
+                    unit.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
+                }
+
                 UIManager.Instance.ChangeText_Skill(UIManager.Instance.mTextForAccpet);
                 while (true)
                 {

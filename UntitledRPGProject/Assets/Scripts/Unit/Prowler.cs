@@ -74,7 +74,7 @@ public class Prowler : MonoBehaviour
         }
         else
             mStateMachine.ActivateState();
-        mSpriteRenderer.flipX = (mVelocity.x < -0.001f) ? true : false;
+        mSpriteRenderer.flipX = (mVelocity.x < -0.1f) ? true : false;
 
     }
 

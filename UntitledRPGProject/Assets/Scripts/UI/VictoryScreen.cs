@@ -76,9 +76,8 @@ public class VictoryScreen : MonoBehaviour
     }
     public IEnumerator WaitForEnd()
     {
-        GetComponent<Animator>().SetTrigger("Outro");
+        GetComponent<Animator>().Play("Outro");
         yield return new WaitForSeconds(1.0f);
-        GetComponent<Animator>().ResetTrigger("Outro");
         Active(false);
     }
 

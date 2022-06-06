@@ -20,7 +20,7 @@ public class Unit : MonoBehaviour, IUnit
     public AttackType mType = AttackType.Melee;
     public Flag mFlag;
     private GameObject mFirePos;
-    private GameObject mCanvas;
+    public GameObject mCanvas;
 
     [HideInInspector]
     public Animator mAnimator;
@@ -269,6 +269,7 @@ public class Unit : MonoBehaviour, IUnit
             mStatus.mMagicPower += bonus.mMagicPower;
             mStatus.mArmor += bonus.mArmor;
             mStatus.mMagic_Resistance += bonus.mMagic_Resistance;
+            mLevelText.text = mStatus.mLevel.ToString();
             return new KeyValuePair<bool, BonusStatus>(true, bonus);
         }
         return new KeyValuePair<bool, BonusStatus>(false, bonus);
@@ -281,6 +282,11 @@ public class Unit : MonoBehaviour, IUnit
         {
             UIManager.Instance.ChangeText(UIManager.Instance.mTextForTarget);
             UIManager.Instance.DisplayText(true);
+            foreach (GameObject enemy in BattleManager.Instance.mEnemies)
+            {
+                if (!enemy.GetComponent<Unit>().mConditions.isDied)
+                    enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(true);
+            }
             while (true)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -300,6 +306,10 @@ public class Unit : MonoBehaviour, IUnit
                     break;
                 }
                 yield return null;
+            }
+            foreach (GameObject enemy in BattleManager.Instance.mEnemies)
+            {
+                enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
             }
             UIManager.Instance.DisplayText(false);
             UIManager.Instance.ChangeText(UIManager.Instance.mTextForAccpet);
