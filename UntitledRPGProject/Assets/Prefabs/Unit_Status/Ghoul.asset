@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ghoul
   Level: 1
-  EXP: 25
+  EXP: 50
   MaxHealth: 50
   MaxMana: 10
   Magic_Resistance: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
   MagicPower: 25
   Armor: 1
   Agility: 1
-  Gold: 10
+  Gold: 15
   WeaponType: 0
   BasicSprite: {fileID: -7352877885823856095, guid: 31b91fa256b4f5640bc238634f5c7c62, type: 3}
   Clips:
