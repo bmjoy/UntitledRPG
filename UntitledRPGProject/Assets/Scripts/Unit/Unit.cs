@@ -204,7 +204,7 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f,0.30f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
+                    mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f,0.25f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
                     mHealthBar.Active((mAiBuild.actionEvent == ActionEvent.None) ? true : false);
                 }
                 break;
@@ -215,7 +215,7 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.actionEvent = Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk);
                 break;
             case ActionEvent.BackWalk:
-                mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f, 0.30f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
+                mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f, 0.25f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
                 break;
             case ActionEvent.Busy:
                 mAnimator.SetFloat("Speed", 0.0f);
@@ -327,8 +327,6 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.actionEvent = ActionEvent.AttackWalk;
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
-                
-                PlayAnimation("Attack");
                 if (mTarget)
                 {
                     if(mActionTrigger != null)
@@ -338,6 +336,7 @@ public class Unit : MonoBehaviour, IUnit
                     }
                     else
                     {
+                        PlayAnimation("Attack");
                         if (mAttackClips.Count > 0)
                             AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                         yield return new WaitForSeconds(mAttackTime);
@@ -463,12 +462,11 @@ public class Unit : MonoBehaviour, IUnit
         if (mConditions.isDied)
             return;
 
-        if (DodgeState())
-            return;
-
         float value = dmg;
         if (type == DamageType.Physical)
         {
+            if (DodgeState())
+                return;
             value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
             value = (value - (mStatus.mArmor + mBonusStatus.mArmor) <= 0.0f) ? 1.0f : value - (mStatus.mArmor + mBonusStatus.mArmor);
         }
