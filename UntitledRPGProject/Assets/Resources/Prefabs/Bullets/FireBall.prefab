@@ -4934,6 +4934,10 @@ MonoBehaviour:
   mChannelingTime: 1.2
   mMaximumDistance: 3
   mDamage: 0
+  clip:
+  - {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
+  - {fileID: 8300000, guid: b6a5ca477fa2e85419bb155f8b9e8738, type: 3}
+  - {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
 --- !u!95 &6465691008148241313
 Animator:
   serializedVersion: 3

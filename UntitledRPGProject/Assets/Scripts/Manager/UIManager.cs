@@ -52,6 +52,7 @@ public class UIManager : MonoBehaviour
     private BossHealthBar mBossHealthBar;
 
     public InventoryUI mInventoryUI;
+    public OptionScreen mOptionScreenUI;
     public VictoryScreen mVictoryScreen;
     public MerchantScreen mMerchantScreen;
 
@@ -88,6 +89,7 @@ public class UIManager : MonoBehaviour
         mEKeyButton = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
         mVictoryScreen = mCanvas.transform.Find("VictoryScreen").GetComponent<VictoryScreen>();
         mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
+        mOptionScreenUI = mCanvas.transform.Find("OptionScreen").GetComponent<OptionScreen>();
 
         mScreenTransition = mCanvas.transform.Find("ScreenTransition").gameObject;
         mTransitionAnimator = mScreenTransition.GetComponent<Animator>();                
@@ -155,6 +157,10 @@ public class UIManager : MonoBehaviour
 
     public void BattleEnd()
     {
+        for (int i = 0; i < mHealthBarList.Count; i++)
+        {
+            mHealthBarList[i].Active(false);
+        }
         mOrderbar.GetComponent<OrderBar>().Clear();
         mOrderbar.gameObject.SetActive(false);
         mScreenTransition.SetActive(false);
@@ -172,6 +178,11 @@ public class UIManager : MonoBehaviour
     public void DisplayText(bool display)
     {
         mBasicText.SetActive(display);
+    }
+
+    public void DisplayOptionScreen(bool display)
+    {
+        mOptionScreenUI.Active(display);
     }
 
     public void DisplayDialogueBox(bool display)

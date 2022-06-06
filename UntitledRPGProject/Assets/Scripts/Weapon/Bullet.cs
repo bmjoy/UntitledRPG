@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviour
     private bool mInitialize = false;
     public bool isDamaged = false;
 
+    public AudioClip clip;
+
     void Start()
     {
         mAnimator = GetComponent<Animator>();
@@ -42,7 +44,7 @@ public class Bullet : MonoBehaviour
             int random = Random.Range(1, 2);
             mAnimator.Play((mCount >= 3) ? "Burst" + Random.Range(1, 2) : "Burst");
             isDamaged = true;
-            
+            AudioManager.PlaySfx(clip);
             Destroy(this.gameObject, 2.5f);
         }
     }

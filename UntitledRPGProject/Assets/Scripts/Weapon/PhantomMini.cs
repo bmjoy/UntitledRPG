@@ -29,6 +29,8 @@ public class PhantomMini : Phantom
                 int random = UnityEngine.Random.Range(1, 2);
                 GetComponent<Animator>().Play((mAnimationCount >= 3) ? "Burst" + UnityEngine.Random.Range(1, 2) : "Burst");
                 mActionEvent?.Invoke();
+                if (clip.Length > 0)
+                    AudioManager.PlaySfx(clip[UnityEngine.Random.Range(0, clip.Length - 1)]);
                 Destroy(this.gameObject, 1.0f);
             }
             else

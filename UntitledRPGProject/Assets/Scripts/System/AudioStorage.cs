@@ -17,6 +17,7 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mOpenInventorySFX;
     public AudioClip mExclamationSFX;
     public AudioClip mMainMenuButtonSFX;
+    public AudioClip mDefendSFX;
 
     public void ChangeMusic(string name)
     {

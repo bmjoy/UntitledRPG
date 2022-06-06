@@ -114,6 +114,7 @@ MonoBehaviour:
   mOpenInventorySFX: {fileID: 8300000, guid: c07a3fa0d83d92244a03b14fd402e78c, type: 3}
   mExclamationSFX: {fileID: 8300000, guid: 86803015242b0314d9f2ed57cba0d711, type: 3}
   mMainMenuButtonSFX: {fileID: 8300000, guid: bdbc530505552de4ba6636f19f27b19b, type: 3}
+  mDefendSFX: {fileID: 8300000, guid: 0553908956f1b5444ace312e90bb5dcb, type: 3}
 --- !u!1 &4890134167232618478
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +155,7 @@ AudioSource:
   m_GameObject: {fileID: 4890134167232618478}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: a0ff16968ea558f47b80bca53b4b2ec1, type: 2}
+  OutputAudioMixerGroup: {fileID: -3483205380406769323, guid: a0ff16968ea558f47b80bca53b4b2ec1, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -281,7 +282,7 @@ AudioSource:
   m_GameObject: {fileID: 6317774580939086336}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: a0ff16968ea558f47b80bca53b4b2ec1, type: 2}
+  OutputAudioMixerGroup: {fileID: -8710043415792846528, guid: a0ff16968ea558f47b80bca53b4b2ec1, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

@@ -204,7 +204,7 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.actionEvent = Run(mField.transform.position, 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
+                    mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f,0.35f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
                     mHealthBar.Active((mAiBuild.actionEvent == ActionEvent.None) ? true : false);
                 }
                 break;
@@ -215,7 +215,7 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.actionEvent = Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk);
                 break;
             case ActionEvent.BackWalk:
-                mAiBuild.actionEvent = Run(mField.transform.position, 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
+                mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f, 0.35f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
                 break;
             case ActionEvent.Busy:
                 mAnimator.SetFloat("Speed", 0.0f);
@@ -318,18 +318,15 @@ public class Unit : MonoBehaviour, IUnit
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
                 
                 PlayAnimation("Attack");
-                //mTime = mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
                 if (mTarget)
                 {
                     if(mActionTrigger != null)
                     {
-                        //mTime -= mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime / 3.0f;
                         mActionTrigger?.Invoke();
                         yield return new WaitForSeconds(GetComponent<ActionTrigger>().mTime);
                     }
                     else
                     {
-                        //mTime /= 9.0f;
                         if (mAttackClips.Count > 0)
                             AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                         yield return new WaitForSeconds(mAttackTime);
@@ -380,6 +377,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         mConditions.isDefend = true;
         onComplete?.Invoke();
+        AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDefendSFX);
         GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Defend"),
             new Vector3(transform.position.x,
             transform.position.y + GetComponent<BoxCollider>().size.y / 2.0f,

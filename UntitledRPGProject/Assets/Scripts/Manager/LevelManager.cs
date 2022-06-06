@@ -30,6 +30,17 @@ public class LevelManager : MonoBehaviour
     public void GoNextLevel()
     {
         mCurrentLevel++;
+        SceneLoader.Instance._sceneIndex += 1;
+        SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
+        SceneLoader.Instance.StartGame();
+    }
+
+    public void GoBackLevel()
+    {
+        mCurrentLevel--;
+        SceneLoader.Instance._sceneIndex -= 1;
+        SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
+        SceneLoader.Instance.StartGame();
     }
 
     public void RestartGame()
