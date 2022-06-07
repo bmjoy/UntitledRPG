@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
-    public float mItemDropRate = 20.0f;
-
     protected override void Start()
     {
         base.Start();

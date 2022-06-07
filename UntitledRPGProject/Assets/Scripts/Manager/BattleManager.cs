@@ -231,9 +231,12 @@ public class BattleManager : MonoBehaviour
         }
         foreach (Enemy enemy in enemyList)
         {
-            if(UnityEngine.Random.Range(0,100) < enemy.mItemDropRate)
+            foreach (ItemDrop obj in enemy.mSetting.Item)
             {
-                enemyItemList.AddRange(enemy.mSetting.Item);
+                if (UnityEngine.Random.Range(0, 100) <= obj.mRate)
+                {
+                    enemyItemList.Add(obj.mItem);
+                }
             }
         }
 

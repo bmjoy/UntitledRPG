@@ -22,5 +22,5 @@ public class Unit_Setting : ScriptableObject
 
     public Sprite BasicSprite;
     public List<SoundClip> Clips;
-    public List<GameObject> Item;
+    public List<ItemDrop> Item;
 }
