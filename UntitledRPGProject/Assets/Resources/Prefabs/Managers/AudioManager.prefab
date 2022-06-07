@@ -82,6 +82,7 @@ MonoBehaviour:
   musicSource: {fileID: 6063149805716921882}
   sfxSource: {fileID: 8701343731707656903}
   mAudioStorage: {fileID: 0}
+  mFadeTime: 1
 --- !u!81 &1796929566426921100
 AudioListener:
   m_ObjectHideFlags: 0
