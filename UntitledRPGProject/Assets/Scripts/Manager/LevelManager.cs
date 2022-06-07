@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.onGameOverToReset += RestartGame;
     }
 
-    public int mCurrentLevel = 1;
+    public int mCurrentLevel = 0;
     public void RespawnEntities()
     {
         var obj = GameObject.FindObjectOfType<UnitSpawnManager>();
@@ -45,9 +45,9 @@ public class LevelManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneLoader.Instance._sceneIndex = GameManager.Instance.mCurrentLevel = 2;
+        SceneLoader.Instance._sceneIndex = mCurrentLevel = 2;
         SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
         SceneLoader.Instance.StartGame();
-        mCurrentLevel = 1;
+        mCurrentLevel = 2;
     }
 }

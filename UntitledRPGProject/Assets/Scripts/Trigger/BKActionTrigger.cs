@@ -116,7 +116,7 @@ public class BKActionTrigger : ActionTrigger
         slash.GetComponent<Animator>().Play("Slash1");
         Destroy(slash, 1.0f);
         DamageState();
-        yield return new WaitForSeconds(mTime / 2.0f);
+        yield return new WaitForSeconds(mTime / 3.0f);
         mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
         DamageState();
         GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), new Vector3(GetComponent<Boss>().mTarget.transform.position.x, GetComponent<Boss>().mTarget.transform.position.y + 1.5f, GetComponent<Boss>().mTarget.transform.position.z), Quaternion.identity);

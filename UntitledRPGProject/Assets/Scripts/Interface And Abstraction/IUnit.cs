@@ -9,6 +9,7 @@ public interface IUnit
     void SetNerf(TimedNerf nerf);
     void TakeDamage(float dmg, DamageType type);
     void TakeRecover(float val);
+    void TakeRecoverMana(float val);
     KeyValuePair<bool, BonusStatus> LevelUP();
     IEnumerator AttackAction(DamageType type, Action onComplete);
     IEnumerator DefendAction(Action onComplete);

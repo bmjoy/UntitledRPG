@@ -52,41 +52,53 @@ public class Hero : NPC
             mComplete = true;
         });
         UIManager.Instance.AddListenerYesButton(() => {
-            foreach (var val in m_NeedsList)
+            if(PlayerController.Instance.mHeroes.Count >= 4)
             {
-                switch (val.Name)
-                {
-                    case "Money":
-                        {
-                            if (val.Value <= PlayerController.Instance.mGold)
-                            {
-                                PlayerController.Instance.mGold -= val.Value;
-                                val.onComplete = true;
-                            }
-                        }
-                        break;
-                    case "Item":
-                        //TODO: Item quest
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            isTrading = m_NeedsList.TrueForAll(t => t.onComplete == true);
-
-            if (isTrading)
-            {
-                foreach (var dialogue in m_DialogueYesCase)
-                    m_DialogueQueue.Enqueue(dialogue);
-                mProperty.Apply();
+                Dialogue dialogue = new Dialogue();
+                dialogue.Trigger = Dialogue.TriggerType.None;
+                dialogue.Text = "Hmm. It seems your party is full now.";
+                m_DialogueQueue.Enqueue(dialogue);
+                mComplete = true;
             }
             else
             {
-                foreach (var dialogue in m_DialogueFailToTradeCase)
-                    m_DialogueQueue.Enqueue(dialogue);
+                foreach (var val in m_NeedsList)
+                {
+                    switch (val.Name)
+                    {
+                        case "Money":
+                            {
+                                if (val.Value <= PlayerController.Instance.mGold)
+                                {
+                                    PlayerController.Instance.mGold -= val.Value;
+                                    val.onComplete = true;
+                                }
+                            }
+                            break;
+                        case "Item":
+                            //TODO: Item quest
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                isTrading = m_NeedsList.TrueForAll(t => t.onComplete == true);
+
+                if (isTrading)
+                {
+                    foreach (var dialogue in m_DialogueYesCase)
+                        m_DialogueQueue.Enqueue(dialogue);
+                    mProperty.Apply();
+                }
+                else
+                {
+                    foreach (var dialogue in m_DialogueFailToTradeCase)
+                        m_DialogueQueue.Enqueue(dialogue);
+                }
+                mComplete = true;
             }
-            mComplete = true;
+
         });
         UIManager.Instance.DisplayButtonsInDialogue(true);
         yield return new WaitUntil(() => mComplete);
