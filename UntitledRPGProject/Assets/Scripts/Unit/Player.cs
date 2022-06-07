@@ -65,7 +65,15 @@ public class Player : Unit
     public override void TakeRecover(float val)
     {
         base.TakeRecover(val);
-        mMyHealthBar.mNextHealth = mStatus.mHealth;
+        if(mMyHealthBar)
+            mMyHealthBar.mNextHealth = mStatus.mHealth;
+    }
+
+    public override void TakeRecoverMana(float val)
+    {
+        base.TakeRecoverMana(val);
+        if (mMyHealthBar)
+            mMyHealthBar.mCurrentMana = mStatus.mMana;
     }
 
     private void OnDisable()

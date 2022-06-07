@@ -52,6 +52,23 @@ public enum EnemyUnit
     The_Bloody_King
 }
 
+public enum NPCUnit
+{
+    None,
+    Roger,
+    Victor,
+    Vin,
+    Eleven,
+    ArmorMerchant,
+    WeaponMerchant
+}
+
+public enum EnvironmentObject
+{
+    None,
+    Well
+}
+
 [Serializable]
 public class SoundClip
 {

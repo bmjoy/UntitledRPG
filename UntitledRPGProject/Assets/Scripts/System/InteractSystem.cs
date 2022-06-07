@@ -9,14 +9,15 @@ public class InteractSystem : MonoBehaviour
     [SerializeField]
     private float mCoolTime = 0.5f;
     private float mCurrentCoolTime = 0.0f;
-    private NPC mClosestNPC = null;
+    private IInteractiveObject mClosestNPC = null;
     public bool IsInteracting = false;
 
     // Update is called once per frame
     void FixedUpdate()
     {
         if (PlayerController.Instance.onBattle) return;
-
+        if (mCurrentCoolTime > 0.0f)
+            return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, mRadius, LayerMask.GetMask("NPC"));
         if (colliders.Length == 0)
         {
@@ -28,19 +29,21 @@ public class InteractSystem : MonoBehaviour
             var hit = colliders[i];
             if(Vector3.Distance(hit.transform.position, transform.position) < mRadius)
             {
-                mClosestNPC = hit.transform.GetComponent<NPC>();
-                mClosestNPC.mInteraction.SetActive(true);
+                mClosestNPC = hit.transform.GetComponent<IInteractiveObject>();
+                mClosestNPC.React(true);
             }
             else
             {
-                hit.transform.GetComponent<NPC>().mInteraction.SetActive(false);
+                hit.transform.GetComponent<IInteractiveObject>().React(false);
             }
         }
+
         if(mClosestNPC != null)
         {
-            if (Vector3.Distance(mClosestNPC.transform.position, transform.position) > mRadius)
+            Vector3 pos = mClosestNPC.GetPosition();
+            if (Vector3.Distance(pos, transform.position) > mRadius)
             {
-                mClosestNPC.mInteraction.SetActive(false);
+                mClosestNPC.React(false);
                 mClosestNPC = null;
             }
         }
@@ -56,15 +59,15 @@ public class InteractSystem : MonoBehaviour
             mCurrentCoolTime -= Time.deltaTime;
             return;
         }
-        if (mClosestNPC && !IsInteracting && Input.GetKeyDown(KeyCode.E))
+        if (mClosestNPC != null && !IsInteracting && Input.GetKeyDown(KeyCode.E))
         {
-            if (mClosestNPC.mComplete)
-                return;
+            IsInteracting = true;
             PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
             PlayerController.Instance.mState = new IdleState();
-            IsInteracting = true;
-            mClosestNPC.StartCoroutine(
+            StartCoroutine(
                 mClosestNPC.Interact(() => { IsInteracting = false; mCurrentCoolTime += mCoolTime;
+                    Debug.Log(mClosestNPC.ToString());
+                    mClosestNPC.React(false);
                     mClosestNPC = null;
                 }));
         }

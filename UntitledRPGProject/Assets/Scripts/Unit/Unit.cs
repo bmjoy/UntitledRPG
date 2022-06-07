@@ -507,9 +507,17 @@ public class Unit : MonoBehaviour, IUnit
     virtual public void TakeRecover(float val)
     {
         mStatus.mHealth += val;
-        mHealthBar.mCurrentHealth = mStatus.mHealth;
         if (mStatus.mHealth >= mStatus.mMaxHealth)
             mStatus.mHealth = mStatus.mMaxHealth;
+        mHealthBar.mCurrentHealth = mStatus.mHealth;
+    }
+
+    virtual public void TakeRecoverMana(float val)
+    {
+        mStatus.mMana += val;
+        if (mStatus.mMana >= mStatus.mMaxMana)
+            mStatus.mMana = mStatus.mMaxMana;
+        mHealthBar.mCurrentMana = mStatus.mMana;
     }
     virtual public void TurnEnded()
     {
@@ -568,6 +576,5 @@ public class Unit : MonoBehaviour, IUnit
         mAiBuild.actionEvent = ActionEvent.IntroWalk;
         gameObject.SetActive(true);
     }
-
 
 }

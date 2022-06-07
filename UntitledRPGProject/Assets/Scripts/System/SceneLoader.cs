@@ -31,15 +31,15 @@ public class SceneLoader : MonoBehaviour
         Instantiate(Resources.Load<GameObject>("Prefabs/Managers/AudioManager"), Vector3.zero, Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), Vector3.zero, Quaternion.identity);
 
-        GameManager.Instance.mCurrentLevel = _sceneIndex;
+        LevelManager.Instance.mCurrentLevel = _sceneIndex;
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            GameManager.Instance.mCurrentLevel++;
-            _sceneIndex = GameManager.Instance.mCurrentLevel;
+            LevelManager.Instance.mCurrentLevel++;
+            _sceneIndex = LevelManager.Instance.mCurrentLevel;
             StartGame();
         }
     }

@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, IInteractiveObject
 {
     [HideInInspector]
     public bool mComplete = false;
@@ -129,5 +129,15 @@ public class NPC : MonoBehaviour
         UIManager.Instance.DisplayButtonsInDialogue(true);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);
+    }
+
+    public void React(bool active)
+    {
+        mInteraction.SetActive(active);
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
     }
 }

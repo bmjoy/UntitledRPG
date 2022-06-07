@@ -30,13 +30,10 @@ public class GameManager : MonoBehaviour
     public static int s_TotalExp = 0;
     public static int s_TotalGold = 0;
     public static int s_TotalSoul = 0;
-    public int _ItemID = 0;
     [HideInInspector]
     public GameObject mCamera;
     [HideInInspector]
     public EnemyProwler mEnemyProwler;
-    [HideInInspector]
-    public int mCurrentLevel = 0;
 
     public int mRequiredEXP = 100;
     public int mAmountofSoul = 20;
@@ -57,7 +54,6 @@ public class GameManager : MonoBehaviour
         s_ID = 0;
         s_TotalExp = 0;
         s_TotalGold = 0;
-        _ItemID = 0;
         s_TotalSoul = 0;
         mArmorPool = Resources.LoadAll<GameObject>("Prefabs/Items/Equipments/Armors/");
         mWeaponPool = Resources.LoadAll<GameObject>("Prefabs/Items/Equipments/Weapons/");

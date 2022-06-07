@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class NPCSpawner : Spawner
 {
-    public string mName;
+    [SerializeField]
+    private NPCUnit mType;
     protected override GameObject CreateNewObject()
     {
         if(mObject)
@@ -13,7 +14,7 @@ public class NPCSpawner : Spawner
             mObject = null;
         }
 
-        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mName + "NPC"), transform.position, Quaternion.identity);
+        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity);
         mObject.transform.position = new Vector3(transform.position.x,transform.position.y + 2.5f, transform.position.z);
         mObject.tag = "Neutral";
         mObject.layer = 9;
