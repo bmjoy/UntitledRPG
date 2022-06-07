@@ -83,3 +83,9 @@ public class SoundClip
     public SoundType Type;
     public AudioClip Clip;
 }
+[Serializable]
+public class ItemDrop
+{
+    public float mRate = 0.0f;
+    public GameObject mItem = null;
+}

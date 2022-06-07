@@ -32,6 +32,9 @@ MonoBehaviour:
   - Type: 0
     Clip: {fileID: 8300000, guid: a9ce2e2a1ebd0cd4f8b16d1e5f308b52, type: 3}
   Item:
-  - {fileID: 914373095374713423, guid: 7127613e139d7064f8d82bbc0f39dfbb, type: 3}
-  - {fileID: 6884613172769436045, guid: c40c9ca9ae014ee41ad14d91dde649d2, type: 3}
-  - {fileID: 2752632987366810350, guid: 92577cebcf6e5824b9f06167b69b0e86, type: 3}
+  - mRate: 0
+    mItem: {fileID: 0}
+  - mRate: 0
+    mItem: {fileID: 0}
+  - mRate: 0
+    mItem: {fileID: 0}
