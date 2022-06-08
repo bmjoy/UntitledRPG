@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9a87318eb2cdf47af93bdd00b481da, type: 3}
+  m_Name: Katana_Level_3
+  m_EditorClassIdentifier: 
+  mName: Katana lvl.1
+  mCost: 60
+  mSprite: {fileID: 21300000, guid: d19f2bf490ad8f348bc25f6c475c5fdd, type: 3}
+  mBonusAbilities:
+  - Type: 1
+    Value: 45
+    Skill: {fileID: 0}
+  mWeaponType: 5
