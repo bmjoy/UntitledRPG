@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnvironmentSpawner : Spawner
 {
@@ -11,9 +12,10 @@ public class EnvironmentSpawner : Spawner
     {
         if (type == EnvironmentObject.None)
             return null;
-        GameObject newObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, Quaternion.identity);
-        newObject.GetComponent<Environment>().Initialize(ID);
-        return newObject;
+        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, Quaternion.identity);
+        mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
+        mObject.GetComponent<Environment>().Initialize(ID);
+        return mObject;
     }
 
     public override void Spawn()

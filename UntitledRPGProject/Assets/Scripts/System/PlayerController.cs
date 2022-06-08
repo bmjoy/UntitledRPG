@@ -54,7 +54,12 @@ public class PlayerController : MonoBehaviour
     private float mWalkTime = 0.0f;
     [SerializeField]
     private float mEveryWalkTime = 0.3f;
-    public bool Interaction { get { return mInteractSystem.IsInteracting; } }
+    public bool Interaction { get 
+        {
+            if (mInteractSystem == null)
+                return false;
+            return mInteractSystem.IsInteracting; 
+        } }
 
     // Start is called before the first frame update
     void Start()
@@ -76,9 +81,9 @@ public class PlayerController : MonoBehaviour
             mBag = myBag;
         }
 
-        mCharacterController = GetComponent<CharacterController>();
         GameManager.Instance.onPlayerBattleStart += OnBattleStart;
         GameManager.Instance.onPlayerBattleEnd += OnBattleEnd;
+        mCharacterController = GetComponent<CharacterController>();
         mAnimator = transform.GetComponentInChildren<Animator>();
         mSpriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
         mCollider = GetComponent<BoxCollider>();

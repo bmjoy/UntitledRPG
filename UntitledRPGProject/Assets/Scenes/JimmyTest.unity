@@ -142,6 +142,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCSpawner (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 903507447933824871, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -206,6 +218,18 @@ PrefabInstance:
     - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_Name
       value: NPCSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 903507447933824871, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_RootOrder
@@ -1027,7 +1051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7198477840467503723, guid: eb618e23af9b480449f84e87b0f55944, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.78
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7198477840467503723, guid: eb618e23af9b480449f84e87b0f55944, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1065,6 +1089,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnvironmentSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 7198477840467503733, guid: eb618e23af9b480449f84e87b0f55944, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7198477840467503733, guid: eb618e23af9b480449f84e87b0f55944, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7198477840467503733, guid: eb618e23af9b480449f84e87b0f55944, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb618e23af9b480449f84e87b0f55944, type: 3}
 --- !u!1001 &1287806002
@@ -1085,6 +1121,18 @@ PrefabInstance:
     - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_Name
       value: NPCSpawner (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 903507447933824871, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_RootOrder
@@ -1236,6 +1284,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCSpawner (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 903507447933824871, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1300,6 +1360,18 @@ PrefabInstance:
     - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_Name
       value: NPCSpawner (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 903507447933824871, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_RootOrder
@@ -1672,6 +1744,18 @@ PrefabInstance:
     - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_Name
       value: NPCSpawner (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 903507447933824871, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_RootOrder

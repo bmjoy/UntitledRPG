@@ -27,6 +27,7 @@ public class SlotManager : MonoBehaviour
 
     public void StartTrade()
     {
+        UIManager.Instance.mMerchantScreen.gameObject.SetActive(true);
         UIManager.Instance.mMerchantScreen.Active(true);
         UIManager.Instance.mMerchantScreen.InitializeALL(ref myItem);
     }
@@ -34,6 +35,7 @@ public class SlotManager : MonoBehaviour
     public void EndTrade()
     {
         UIManager.Instance.mMerchantScreen.Active(false);
+        UIManager.Instance.mMerchantScreen.gameObject.SetActive(false);
     }
 
     private void OnDestroy()

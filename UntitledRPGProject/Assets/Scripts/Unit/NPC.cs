@@ -12,8 +12,8 @@ public class NPC : MonoBehaviour, IInteractiveObject
     public bool mComplete = false;
     public string mName = string.Empty;
     protected bool isTrading = false;
-    delegate IEnumerator TriggerEvent();
-    TriggerEvent mTrigger;
+    protected delegate IEnumerator TriggerEvent();
+    protected TriggerEvent mTrigger;
 
     [Serializable]
     public class Dialogue
@@ -101,6 +101,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
 
     public virtual IEnumerator Event()
     {
+        mTrigger = null;
         UIManager.Instance.AddListenerNoButton(() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
@@ -117,6 +118,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
 
     public virtual IEnumerator Trade()
     {
+        mTrigger = null;
         UIManager.Instance.AddListenerNoButton(() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);

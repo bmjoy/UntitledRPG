@@ -164,7 +164,7 @@ public class SummonAbility : Skill_Setting
                 {
                     GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity);
                     unit.GetComponent<Animator>().SetTrigger("Spawn");
-                    unit.GetComponent<Unit>().mField = mSelectedField;
+                    unit.GetComponent<Unit>().mField = mSelectedField.GetComponent<Field>();
                     unit.GetComponent<Unit>().ResetUnit();
                     unit.GetComponent<Unit>().mOrder = Order.Standby;
                     unit.GetComponent<Unit>().mFlag = mOwner.mFlag;
