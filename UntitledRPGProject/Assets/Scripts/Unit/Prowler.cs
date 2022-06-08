@@ -47,13 +47,13 @@ public class Prowler : MonoBehaviour
     public virtual void Initialize()
     {
         mCollider = gameObject.AddComponent<BoxCollider>();
-        mAgent = gameObject.AddComponent<NavMeshAgent>();
         mCollider.isTrigger = true;
+        mAgent = gameObject.AddComponent<NavMeshAgent>();
         mAgent.baseOffset = 2.0f;
+        
         mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
         mAnimator = mModel.GetComponent<Animator>();
         mSpriteRenderer = mModel.GetComponent<SpriteRenderer>();
-
         mOriginalSpeed = mAgent.speed;
 
         mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();

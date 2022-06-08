@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour, IUnit
     [HideInInspector]
     public Order mOrder = Order.Standby;
     [HideInInspector]
-    public GameObject mField;
+    public Field mField;
     [HideInInspector]
     public GameObject mSelected = null;
 
@@ -65,7 +65,6 @@ public class Unit : MonoBehaviour, IUnit
 
     public Action mActionTrigger = null;
     public Action mStartActionTrigger = null;
-    //private float mTime = 0.0f;
     private float mWalkTime = 0.0f;
     private float mMaxWalkTime = 0.3f;
 
@@ -415,10 +414,8 @@ public class Unit : MonoBehaviour, IUnit
 
     public IEnumerator CounterState(float dmg)
     {
-        bool exist = false;
-        for (int i = 0; i < mTarget.GetComponent<Animator>().parameters.Length; i++)
-            if (mTarget.GetComponent<Animator>().parameters[i].name == "Melee")
-                exist = true;
+        bool exist = (mTarget.GetComponent<Animator>().parameters.Where(s => s.name == "Melee").ToList().Count > 0);
+
         if (exist)
             mTarget.GetComponent<Animator>().SetBool("Melee", false);
         if (mTarget.mBuffNerfController.SearchBuff("Counter"))
@@ -563,13 +560,13 @@ public class Unit : MonoBehaviour, IUnit
         if(mFlag == Flag.Player)
         {
             transform.position = BattleManager.Instance.playerCenter;
-            mField = BattleManager.playerFieldParent.GetChild(index).gameObject;
+            mField = BattleManager.playerFieldParent.GetChild(index).GetComponent<Field>();
             BattleManager.playerFieldParent.GetChild(index).GetComponent<Field>().IsExist = true;
         }
         else
         {
             transform.position = BattleManager.Instance.enemyCenter;
-            mField = BattleManager.enemyFieldParent.GetChild(index).gameObject;
+            mField = BattleManager.enemyFieldParent.GetChild(index).GetComponent<Field>();
             BattleManager.enemyFieldParent.GetChild(index).GetComponent<Field>().IsExist = true;
         }
 

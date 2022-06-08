@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGizmoColor: {r: 0, g: 1, b: 0.26066065, a: 0}
-  mName: 
+  mType: 0

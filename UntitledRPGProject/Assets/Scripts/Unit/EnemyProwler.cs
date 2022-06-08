@@ -42,7 +42,7 @@ public class EnemyProwler : Prowler
         GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
         if (agent.Length > 1)
             for (int i = 0; i < agent.Length; i++)
-                Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
+                Physics.IgnoreCollision(this.GetComponent<BoxCollider>(), agent[i].GetComponent<BoxCollider>(),true);
 
         mExclamation.SetActive(false);
         mParticles.SetActive(false);

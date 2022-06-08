@@ -20,6 +20,7 @@ public class Merchant : NPC
 
     public override IEnumerator Event()
     {
+        mTrigger = null;
         UIManager.Instance.AddListenerNoButton(() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);

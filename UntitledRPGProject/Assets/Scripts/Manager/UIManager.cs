@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -62,12 +63,7 @@ public class UIManager : MonoBehaviour
         mCanvas.overrideSorting = true;
         mOrderbar.GetComponent<OrderBar>().Initialize();
 
-        foreach (Transform bar in mCanvas.transform.Find("HealthBarInBattleGroundGroup"))
-        {
-            if (bar.name == "Borader")
-                mHealthBarList.Add(bar.transform.Find("HealthBarInBattleGround").GetComponent<BigHealthBar>());
-        }
-
+        mHealthBarList = mCanvas.transform.Find("HealthBarInBattleGroundGroup").GetComponentsInChildren<BigHealthBar>().ToList();
         mBossHealthBar = mCanvas.transform.Find("BossBorader").Find("HealthBarInBattleGround").GetComponent<BossHealthBar>();
 
         GameManager.Instance.onFadeGameOverScreenEvent += FadeInScreen;
@@ -199,6 +195,8 @@ public class UIManager : MonoBehaviour
     {
         mDialogueBox.GetComponent<Animator>().Play("Outro");
         yield return new WaitForSeconds(1.0f);
+        mDialogueBox.transform.Find("YesButton").gameObject.SetActive(false);
+        mDialogueBox.transform.Find("NoButton").gameObject.SetActive(false);
         mDialogueBox.SetActive(false);
     }
 
