@@ -36,7 +36,7 @@ MonoBehaviour:
   - Type: 3
     Clip: {fileID: 8300000, guid: e67d59729c1a75744aa7224243f68a86, type: 3}
   Item:
-  - mRate: 0.3
+  - mRate: 30
     mItem: {fileID: 914373095374713423, guid: 7127613e139d7064f8d82bbc0f39dfbb, type: 3}
-  - mRate: 0.05
+  - mRate: 5
     mItem: {fileID: 3519973982565569764, guid: acad645e5905cc6448aec18464bd1aed, type: 3}
