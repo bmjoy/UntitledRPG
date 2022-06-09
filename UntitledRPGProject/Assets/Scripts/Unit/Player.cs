@@ -54,7 +54,8 @@ public class Player : Unit
     {
         base.TakeDamage(dmg, type);
         mMyHealthBar.mCurrentHealth = (mStatus.mHealth > 0.0f) ? mStatus.mHealth : 0.0f;
-        mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
+        if(mMyHealthBar.mCurrentHealth > 0.0f)
+            mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
         if (mConditions.isDied)
         {
             GameManager.Instance.mUnitData.Remove(mSetting.Name);

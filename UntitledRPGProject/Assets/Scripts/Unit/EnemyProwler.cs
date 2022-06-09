@@ -6,7 +6,8 @@ using UnityEngine.AI;
 
 public class EnemyProwler : Prowler
 {
-    private GameObject mCanvas;
+    public GameObject mCanvas;
+    public GameObject mTextCanvas;
     [HideInInspector]
     public GameObject mExclamation;
     [HideInInspector]
@@ -32,6 +33,13 @@ public class EnemyProwler : Prowler
 + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity);
         mCanvas.transform.SetParent(transform);
 
+        if(mModel.transform.Find("Canvas") != null)
+        {
+            mTextCanvas = mModel.transform.Find("Canvas").gameObject;
+            mTextCanvas.SetActive(false);
+        }
+
+
         mExclamation = mCanvas.transform.Find("Exclamation").gameObject;
         mParticles = mCanvas.transform.Find("Found").gameObject;
 
@@ -50,6 +58,8 @@ public class EnemyProwler : Prowler
 
     protected override void Update()
     {
+        if (GameManager.Instance.IsCinematicEvent)
+            return;
         base.Update();
         if (BattleManager.Instance.status != BattleManager.GameStatus.None
 || PlayerController.Instance.Interaction)

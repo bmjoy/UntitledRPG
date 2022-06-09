@@ -40,8 +40,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float mWaitForRestart = 3.0f;
 
-    
-
+    public bool IsCinematicEvent = false;
     private void Start()
     {
         mUnitData.Clear();
@@ -173,12 +172,14 @@ public class GameManager : MonoBehaviour
         mGameState = GameState.GamePlay;
     }
 
-    public void StopAllProwlers()
+    public void ControlAllProwlers(bool active)
     {
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
         for (int i = 0; i < Instance.EnemyProwlers.Length; ++i)
         {
             Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().ChangeBehavior("Idle");
+            Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.velocity = Vector3.zero;
+            Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.enabled = !active;
         }
     }
 
@@ -194,7 +195,7 @@ public class GameManager : MonoBehaviour
                     continue;
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
-                if(active)
+                if (active)
                 {
                     Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.isStopped = true;
                     Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.SetDestination(Instance.EnemyProwlers[i].transform.position);

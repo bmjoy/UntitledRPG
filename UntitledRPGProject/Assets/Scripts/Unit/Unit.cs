@@ -203,7 +203,7 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f,0.25f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
+                    mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f,0.5f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
                     mHealthBar.Active((mAiBuild.actionEvent == ActionEvent.None) ? true : false);
                 }
                 break;
@@ -214,7 +214,7 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.actionEvent = Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk);
                 break;
             case ActionEvent.BackWalk:
-                mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f, 0.25f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
+                mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f, 0.5f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
                 break;
             case ActionEvent.Busy:
                 mAnimator.SetFloat("Speed", 0.0f);
