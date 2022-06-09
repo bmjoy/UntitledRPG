@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private InteractSystem mInteractSystem;
 
     public Inventory mInventory;
+    public GameObject mCanvas;
     private GameObject mBag;
 
     private bool isLeft = false;
@@ -85,6 +86,8 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.onPlayerBattleEnd += OnBattleEnd;
         mCharacterController = GetComponent<CharacterController>();
         mAnimator = transform.GetComponentInChildren<Animator>();
+        mCanvas = transform.Find("Canvas").gameObject;
+        mCanvas.SetActive(false);
         mSpriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
         mCollider = GetComponent<BoxCollider>();
         mInteractSystem = GetComponent<InteractSystem>();
@@ -102,10 +105,12 @@ public class PlayerController : MonoBehaviour
             return;
         if (Interaction)
             return;
-
+        if (GameManager.Instance.IsCinematicEvent)
+            return;
         mState = mState.Handle();
         StateControl();
-        
+
+
         isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
         if(mState.ToString() != "BattleState")
         {

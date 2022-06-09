@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Spawner : MonoBehaviour
 {
-    protected GameObject mObject;
+    public GameObject mObject;
     protected bool mInitialized = false;
     protected int ID = 0;
     public Color mGizmoColor;

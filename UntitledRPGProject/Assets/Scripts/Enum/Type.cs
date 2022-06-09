@@ -89,3 +89,25 @@ public class ItemDrop
     public float mRate = 0.0f;
     public GameObject mItem = null;
 }
+[Serializable]
+public class CinematicEventMethod
+{
+    public enum CinematicEventType
+    {
+        None,
+        Animation,
+        FadeIn,
+        FadeOut,
+        Move,
+        MoveAndDialogue,
+        Dialogue,
+        Teleport
+    }
+
+    public CinematicEventType Type;
+    public string Dialogue = string.Empty;
+    public string AnimationName = string.Empty;
+    public float Time = 0.0f;
+    public Transform Position = null;
+    public GameObject Target = null;
+}
