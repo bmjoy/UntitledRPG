@@ -164,24 +164,14 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
         AudioManager.Instance.musicSource.loop = true;
         CameraSwitcher.SwitchCamera();
+        Debug.Log(EnemyProwlers.Length);
         ResetObjects();
         UIManager.Instance.DisplayBattleInterface(false);
         onPlayerBattleEnd?.Invoke();
         mGameState = GameState.GamePlay;
     }
 
-    public void ControlAllProwlers(bool active)
-    {
-        EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
-        for (int i = 0; i < Instance.EnemyProwlers.Length; ++i)
-        {
-            Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().ChangeBehavior("Idle");
-            Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.velocity = Vector3.zero;
-            Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.enabled = !active;
-        }
-    }
-
-    private void ActiveAllProwlers(bool active)
+    public void ActiveAllProwlers(bool active)
     {
         for (int i = 0; i < Instance.EnemyProwlers.Length; ++i)
         {
@@ -193,13 +183,6 @@ public class GameManager : MonoBehaviour
                     continue;
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
-                if (active)
-                {
-                    Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.isStopped = true;
-                    Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mAgent.SetDestination(Instance.EnemyProwlers[i].transform.position);
-                    Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().ChangeBehavior("Idle");
-                }
-
             }
         }
 

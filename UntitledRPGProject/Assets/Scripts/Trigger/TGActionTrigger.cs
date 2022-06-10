@@ -33,7 +33,7 @@ public class TGActionTrigger : ActionTrigger
         }
         yield return new WaitForSeconds(1.0f);
         Destroy(slash);
-        GetComponent<Boss>().mAnimator.SetBool("Attack2", false);
+        boss.mAnimator.SetBool("Attack2", false);
     }
 
     void DamageState()
@@ -43,8 +43,8 @@ public class TGActionTrigger : ActionTrigger
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mShakeTime));
         if (boss.mTarget)
         {
-            if(GetComponent<Unit>().mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip,0.6f);
+            if(boss.mAttackClips.Count > 0)
+                AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip,0.6f);
             boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
             StartCoroutine(boss.CounterState(boss.mTarget.mStatus.mDamage));
         }
@@ -56,7 +56,7 @@ public class TGActionTrigger : ActionTrigger
         if (UnityEngine.Random.Range(0, 100) >= mAttackTriggerPercentage)
         {
             mTriggered = true;
-            GetComponent<Boss>().mAnimator.SetBool("Attack2", true);
+            boss.mAnimator.SetBool("Attack2", true);
             mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime - 0.2f);
         }
         else
@@ -64,19 +64,19 @@ public class TGActionTrigger : ActionTrigger
             mTriggered = false;
             mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime - 0.2f) / 2.0f;
         }
-        mPos = GetComponent<Unit>().mTarget.transform.position;
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
-        GetComponent<Boss>().PlayAnimation("Attack");
+        mPos = boss.mTarget.transform.position;
+        boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        boss.mAnimator.Play("Attack");
         StartCoroutine(Action());
     }
 
     void Start()
     {
-        GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+        GetComponent<Boss>().mActionTrigger += StartActionTrigger;
     }
 
     private void OnDestroy()
     {
-        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+        GetComponent<Boss>().mActionTrigger -= StartActionTrigger;
     }
 }

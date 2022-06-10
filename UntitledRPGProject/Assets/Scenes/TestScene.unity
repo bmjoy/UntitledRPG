@@ -765,6 +765,10 @@ PrefabInstance:
       propertyPath: mName
       value: Eleven
       objectReference: {fileID: 0}
+    - target: {fileID: 903507447933824868, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
+      propertyPath: mType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 903507447933824869, guid: c1221b8cd15fa1043a48f41127423b41, type: 3}
       propertyPath: m_Name
       value: NPCSpawner
@@ -2824,7 +2828,6 @@ GameObject:
   m_Component:
   - component: {fileID: 987055794}
   - component: {fileID: 987055793}
-  - component: {fileID: 987055792}
   - component: {fileID: 987055791}
   - component: {fileID: 987055790}
   m_Layer: 0
@@ -2901,14 +2904,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!81 &987055792
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987055789}
-  m_Enabled: 1
 --- !u!20 &987055793
 Camera:
   m_ObjectHideFlags: 0

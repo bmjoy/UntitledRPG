@@ -31,6 +31,22 @@ public struct AIBuild
     public AIProperty property;
     public AIType type;
     public ActionEvent actionEvent;
+
+    public void SetActionEvent(ActionEvent action)
+    {
+        actionEvent = action;
+    }
+
+    public void ChangeState(string stateName)
+    {
+        stateMachine.ChangeState(stateName);
+    }
+
+    public void Update(bool isAI)
+    {
+        if(isAI)
+            stateMachine.ActivateState();
+    }
 }
 
 public struct Status
@@ -80,14 +96,12 @@ public struct BonusStatus
 }
 public struct Conditions
 {
-    public bool isPicked;
     public bool isDied;
     public bool isDefend;
     public bool isCancel;
 
-    public Conditions(bool pick, bool die, bool de, bool can)
+    public Conditions(bool die, bool de, bool can)
     {
-        isPicked = pick;
         isDied = die;
         isDefend = de;
         isCancel = can;

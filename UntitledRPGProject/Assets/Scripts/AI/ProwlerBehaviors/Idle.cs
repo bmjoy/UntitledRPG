@@ -14,6 +14,8 @@ public class Idle : P_State
     public override void Execute(Prowler agent)
     {
         agent.mAgent.velocity = Vector3.zero;
+        if (LevelManager.Instance.isNext)
+            return;
         mTime += Time.deltaTime;
         if (mTime > agent.mStandbyTime)
         {

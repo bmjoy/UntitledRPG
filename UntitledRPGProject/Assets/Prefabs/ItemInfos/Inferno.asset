@@ -20,7 +20,7 @@ MonoBehaviour:
     Value: 200
     Skill: {fileID: 0}
   - Type: 2
-    Value: 200
+    Value: 1200
     Skill: {fileID: 0}
   - Type: 3
     Value: 25

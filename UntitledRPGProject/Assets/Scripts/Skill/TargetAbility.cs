@@ -91,7 +91,7 @@ public class TargetAbility : DamagableAbility
                 mTarget?.mSelected.SetActive(false);
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mMagicDistance = mRange;
-                mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;
+                mOwner.mAiBuild.SetActionEvent(ActionEvent.MagicWalk);
                 if(mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f, Vector3.Lerp(mOwner.transform.position, mTarget.transform.position, 0.5f)));
                 mOwner.StartCoroutine(Effect());
@@ -100,7 +100,7 @@ public class TargetAbility : DamagableAbility
 
                 if (mShootType == SKillShootType.Range)
                 {
-                    mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
+                    mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
                     if(mOwner.mSkillClips.Count > 0)
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
@@ -111,12 +111,12 @@ public class TargetAbility : DamagableAbility
                 {
                     
                     yield return new WaitForSeconds(mEffectTime);
-                    mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
+                    mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
 
                     bool projectile = Melee();
                     if (mOwner.mSkillClips.Count > 0 && projectile)
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
-                    yield return new WaitForSeconds(mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + mEffectTime);
+                    yield return new WaitForSeconds(mOwner.mAnimator.GetCurrentAnimatorStateInfo(0).length + mEffectTime);
                         if (mOwner.mSkillClips.Count > 0 && !projectile)
                             AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     CommonState();
@@ -124,13 +124,13 @@ public class TargetAbility : DamagableAbility
                 }
                 else if(mShootType == SKillShootType.Instant)
                 {
-                    mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
+                    mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                     if (mOwner.mSkillClips.Count > 0)
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }    
-                mOwner.mAiBuild.actionEvent = ActionEvent.BackWalk;
+                mOwner.mAiBuild.SetActionEvent(ActionEvent.BackWalk);
 
                 if(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
                 {

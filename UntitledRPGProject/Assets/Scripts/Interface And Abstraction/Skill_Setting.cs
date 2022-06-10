@@ -28,18 +28,8 @@ public class Skill_Setting : ScriptableObject
     public Action mActionTrigger = null;
     public string mAnimationName = string.Empty;
 
-    [Serializable]
-    public class BuffList
-    {
-        public Buff mBuff;
-    }
-
     public List<Buff> mBuffList = new List<Buff>();
-    [Serializable]
-    public class NerfList
-    {
-        public Nerf mNerf;
-    }
+
     
     public List<Nerf> mNerfList = new List<Nerf>();
     public virtual void Initialize(Unit owner) { }

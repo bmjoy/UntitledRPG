@@ -17,6 +17,13 @@ public class Pursuit : P_State
         float dist = Vector3.Distance(agent.transform.position, PlayerController.Instance.transform.position);
         if (dist > agent.mRadius + agent.mRadius)
             agent.ChangeBehavior("Find");
+        if (LevelManager.Instance.isNext)
+        {
+            agent.mAgent.velocity = Vector3.zero;
+            agent.mAgent.SetDestination(agent.transform.position);
+            agent.ChangeBehavior("Idle");
+
+        }
     }
 
     public override void Exit(Prowler agent)

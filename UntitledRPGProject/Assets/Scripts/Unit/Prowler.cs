@@ -66,14 +66,20 @@ public class Prowler : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (BattleManager.Instance.status != BattleManager.GameStatus.None
+        if (LevelManager.Instance.isNext || GameManager.Instance.IsCinematicEvent || BattleManager.Instance.status != BattleManager.GameStatus.None
     || PlayerController.Instance.Interaction)
         {
             mStateMachine.ChangeState("Idle");
+            if (mAgent)
+                mAgent.isStopped = true;
             return;
         }
         else
+        {
+            if (mAgent)
+                mAgent.isStopped = false;
             mStateMachine.ActivateState();
+        }
         mSpriteRenderer.flipX = (mVelocity.x < -0.1f) ? true : false;
 
     }

@@ -145,8 +145,8 @@ public class SummonAbility : Skill_Setting
             {
                 UIManager.Instance.ChangeOrderBarText("<color=red>" + mName + "!</color>");
                 mOwner.StartCoroutine(Effect());
-                bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash("Skill"));
-                mOwner.PlayAnimation((hasState) ? "Skill" : "Attack");
+                bool hasState = mOwner.mAnimator.HasState(0, Animator.StringToHash("Skill"));
+                mOwner.mAnimator.Play((hasState) ? "Skill" : "Attack");
                 CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f, Vector3.Lerp(mOwner.transform.position, mSelectedField.transform.position, 0.5f)));
 
                 mActionTrigger?.Invoke();

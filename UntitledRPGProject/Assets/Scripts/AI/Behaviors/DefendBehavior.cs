@@ -17,6 +17,5 @@ public class DefendBehavior : State
 
     public override void Exit(Unit agent)
     {
-        agent.mConditions.isPicked = false;
     }
 }

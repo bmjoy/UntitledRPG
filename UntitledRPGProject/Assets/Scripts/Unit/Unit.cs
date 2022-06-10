@@ -97,7 +97,7 @@ public class Unit : MonoBehaviour, IUnit
             mSetting.Agility,
             mSetting.MagicPower,
             mSetting.WeaponType);
-        mConditions = new Conditions(false, false, false, false);
+        mConditions = new Conditions(false, false, false);
 
         mBonusStatus = new BonusStatus();
         mBonusStatus.mAgility = mBonusStatus.mArmor = mBonusStatus.mDefend = mBonusStatus.mDamage = mBonusStatus.mMana
@@ -168,7 +168,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         if (isAIinitialized)
             return;
-        mAiBuild.actionEvent = ActionEvent.IntroWalk;
+        mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
 
         mAiBuild.property = (AIProperty)UnityEngine.Random.Range(0, 2);
         mAiBuild.type = AIType.None;
@@ -199,8 +199,7 @@ public class Unit : MonoBehaviour, IUnit
             case ActionEvent.None:
                 {
                     mAnimator.SetBool("Death", (mConditions.isDied) ? true : false);
-                    if (mAiBuild.type == AIType.Auto)
-                        mAiBuild.stateMachine.ActivateState();
+                    mAiBuild.Update((mAiBuild.type == AIType.Auto));
                     transform.position = (Vector3.Distance(transform.position, mField.transform.position) > 0.5f) ?
     Vector3.MoveTowards(transform.position, mField.transform.position, Time.deltaTime * 7.0f) : transform.position;
                     mAnimator.SetFloat("Speed", Vector3.Distance(transform.position, mField.transform.position) > 0.5f ? 1.0f : 0.0f);
@@ -208,18 +207,18 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f,0.5f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk);
-                    mHealthBar.Active((mAiBuild.actionEvent == ActionEvent.None) ? true : false);
+                    mAiBuild.SetActionEvent(Run(mField.transform.position - new Vector3(0.0f,0.5f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk));
+                    mHealthBar.Active((mAiBuild.actionEvent == ActionEvent.None));
                 }
                 break;
             case ActionEvent.AttackWalk:
-                mAiBuild.actionEvent = Run(mTarget.transform.position, mAttackDistance, ActionEvent.Busy, ActionEvent.AttackWalk);
+                mAiBuild.SetActionEvent(Run(mTarget.transform.position, mAttackDistance, ActionEvent.Busy, ActionEvent.AttackWalk));
                 break;
             case ActionEvent.MagicWalk:
-                mAiBuild.actionEvent = Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk);
+                mAiBuild.SetActionEvent(Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk));
                 break;
             case ActionEvent.BackWalk:
-                mAiBuild.actionEvent = Run(mField.transform.position - new Vector3(0.0f, 0.5f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk);
+                mAiBuild.SetActionEvent(Run(mField.transform.position - new Vector3(0.0f, 0.5f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk));
                 break;
             case ActionEvent.Busy:
                 mAnimator.SetFloat("Speed", 0.0f);
@@ -252,7 +251,7 @@ public class Unit : MonoBehaviour, IUnit
         mVelocity.y += -9.8f * Time.deltaTime;
         mRigidbody.AddForce(mVelocity * Time.deltaTime);
         if (transform.position.y <= -50.0f)
-            transform.position = new Vector3(mField.transform.position.x, mField.transform.position.y + 5.0f, mField.transform.position.z);
+            transform.position = mField.transform.position + new Vector3(0.0f,5.0f,0.0f);
     }
     virtual public KeyValuePair<bool, BonusStatus> LevelUP()
     {
@@ -260,8 +259,8 @@ public class Unit : MonoBehaviour, IUnit
         if (mStatus.mEXP >= GameManager.Instance.mRequiredEXP + (50.0f * mStatus.mLevel))
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mLevelUPSFX);
-            bonus.mHealth += Random.Range(5, 10);
-            bonus.mMana += Random.Range(5, 10);
+            bonus.mHealth = Random.Range(5, 10);
+            bonus.mMana = Random.Range(5, 10);
             bonus.mDamage = Random.Range(1, 5);
             bonus.mMagicPower = Random.Range(1, 5);
             bonus.mArmor = Random.Range(1, 5);
@@ -314,9 +313,7 @@ public class Unit : MonoBehaviour, IUnit
                 yield return null;
             }
             foreach (GameObject enemy in BattleManager.Instance.mEnemies)
-            {
                 enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
-            }
         }
 
         if (mConditions.isCancel == false && mTarget)
@@ -329,7 +326,7 @@ public class Unit : MonoBehaviour, IUnit
             onComplete?.Invoke();
             if (mType == AttackType.Melee)
             {
-                mAiBuild.actionEvent = ActionEvent.AttackWalk;
+                mAiBuild.SetActionEvent(ActionEvent.AttackWalk);
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
                 if (mTarget)
                 {
@@ -340,7 +337,7 @@ public class Unit : MonoBehaviour, IUnit
                     }
                     else
                     {
-                        PlayAnimation("Attack");
+                        mAnimator.Play("Attack");
                         if (mAttackClips.Count > 0)
                             AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                         yield return new WaitForSeconds(mAttackTime);
@@ -350,45 +347,44 @@ public class Unit : MonoBehaviour, IUnit
                     StartCoroutine(CounterState(mTarget.mStatus.mDamage));
                 }
                 yield return new WaitForSeconds(1.0f);
-                mAiBuild.actionEvent = ((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy;
+                mAiBuild.SetActionEvent(((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy);
                 TurnEnded();
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
 
             }
             else if(mType == AttackType.Range)
             {
-                mAiBuild.actionEvent = ActionEvent.Busy;
-                PlayAnimation("Attack");
+                mAiBuild.SetActionEvent(ActionEvent.Busy);
+                mAnimator.Play("Attack");
                 if (mAttackClips.Count > 0)
                     AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
-                bullet.Initialize(mTarget, mStatus.mDamage);
-                TurnEnded();
+                bullet.Initialize(mTarget, mStatus.mDamage + mBonusStatus.mDamage);
+
                 yield return new WaitUntil(() => bullet.isDamaged == true);
+                TurnEnded();
             }
             else if(mType == AttackType.Instant)
             {
-                mAiBuild.actionEvent = ActionEvent.Busy;
-                PlayAnimation("Attack");
+                mAiBuild.SetActionEvent(ActionEvent.Busy);
+                mAnimator.Play("Attack");
                 if (mAttackClips.Count > 0)
                     AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
-                Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                 Destroy(go, 1.0f);
-                TurnEnded();
+
                 yield return new WaitUntil(() => go == null);
+                TurnEnded();
 
             }
-            mAiBuild.actionEvent = ActionEvent.None;
-            mAiBuild.stateMachine.ChangeState("Waiting");
+            mAiBuild.SetActionEvent(ActionEvent.None);
+            mAiBuild.ChangeState("Waiting");
         }
-        else
-            UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
-
+        UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
     }
 
     virtual public IEnumerator DefendAction(Action onComplete)
@@ -402,6 +398,7 @@ public class Unit : MonoBehaviour, IUnit
             transform.position.z), Quaternion.identity);
         Destroy(go, 1.5f);
         yield return new WaitForSeconds(mDefendTime);
+        mAiBuild.ChangeState("Waiting");
         TurnEnded();
     }
 
@@ -416,8 +413,8 @@ public class Unit : MonoBehaviour, IUnit
         {
             TurnEnded();
             yield return new WaitForSeconds(0.25f);
-            mAiBuild.actionEvent = ActionEvent.None;
-            mAiBuild.stateMachine.ChangeState("Waiting");
+            mAiBuild.SetActionEvent(ActionEvent.None);
+            mAiBuild.ChangeState("Waiting");
         }
     }
 
@@ -456,11 +453,6 @@ public class Unit : MonoBehaviour, IUnit
             return (dodge.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f));
         }
         return false;
-    }
-
-    virtual public void PlayAnimation(string name)
-    {
-        mAnimator.Play(name);
     }
 
     virtual public void TakeDamage(float dmg, DamageType type)
@@ -525,7 +517,6 @@ public class Unit : MonoBehaviour, IUnit
     }
     virtual public void TurnEnded()
     {
-        mConditions.isPicked = false;
         if(mTarget != null)
         {
             mTarget.mSelected.SetActive(false);
@@ -563,7 +554,8 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mMana -= mBonusStatus.mMana;
         mStatus.mMaxMana -= mBonusStatus.mMana;
 
-        GetComponent<BuffAndNerfEntity>().Stop();
+        mBuffNerfController.Stop();
+        mAiBuild.SetActionEvent(ActionEvent.None);
         gameObject.SetActive(false);
     }
 
@@ -587,7 +579,7 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mMana += mBonusStatus.mMana;
         mStatus.mMaxMana += mBonusStatus.mMana;
 
-        mAiBuild.actionEvent = ActionEvent.IntroWalk;
+        mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
         gameObject.SetActive(true);
     }
 

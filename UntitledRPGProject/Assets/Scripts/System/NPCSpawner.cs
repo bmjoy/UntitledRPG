@@ -14,7 +14,8 @@ public class NPCSpawner : Spawner
             Destroy(mObject);
             mObject = null;
         }
-
+        if (mType == NPCUnit.None)
+            return null;
         mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity);
         mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
 

@@ -7,13 +7,14 @@ public class DroidAssassinActionTrigger : ActionTrigger
 {
     protected override IEnumerator Action()
     {
-        GetComponent<Unit>().PlayAnimation("Attack");
+        var unit = GetComponent<Unit>();
+        unit.mAnimator.Play("Attack");
         yield return new WaitForSeconds(0.3f);
         StartCoroutine(Slash());
         for (int i = 0; i < 2; ++i)
         {
             float firstMirror = Random.Range(-3.5f, 3.5f);
-            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), new Vector3(GetComponent<Unit>().mTarget.transform.position.x, GetComponent<Unit>().mTarget.transform.position.y, GetComponent<Unit>().mTarget.transform.position.z + firstMirror), Quaternion.identity);
+            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f, firstMirror), Quaternion.identity);
             if(firstMirror < 0.0f)
                 mirror.GetComponent<SpriteRenderer>().flipX = true;
 
@@ -22,7 +23,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
             Destroy(mirror, 0.8f);
             float secondMirror = Random.Range(-1.0f, 1.0f);
 
-            GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), new Vector3(GetComponent<Unit>().mTarget.transform.position.x, GetComponent<Unit>().mTarget.transform.position.y, GetComponent<Unit>().mTarget.transform.position.z + secondMirror), Quaternion.identity);
+            GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f,secondMirror), Quaternion.identity);
             if (secondMirror < 0.0f)
                 mirror2.GetComponent<SpriteRenderer>().flipX = true;
             mirror2.GetComponent<Animator>().SetTrigger("Attack2");
@@ -31,33 +32,32 @@ public class DroidAssassinActionTrigger : ActionTrigger
             yield return new WaitForSeconds(mTime / 4.0f);
         }
         yield return new WaitForSeconds(mTime / 1.7f);
-        GetComponent<Unit>().mTarget?.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage), DamageType.Physical);
-        StartCoroutine(GetComponent<Unit>().CounterState(GetComponent<Unit>().mTarget.mStatus.mDamage));
+        unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
+        StartCoroutine(unit.CounterState(unit.mTarget.mStatus.mDamage));
 
     }
 
     private IEnumerator Slash()
     {
+        var unit = GetComponent<Unit>();
         for (int i = 0; i < 15; ++i)
         {
-            GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Droid_Assassin_Slash"), new Vector3(GetComponent<Unit>().mTarget.transform.position.x, GetComponent<Unit>().mTarget.transform.position.y, GetComponent<Unit>().mTarget.transform.position.z), Quaternion.identity);
+            GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Droid_Assassin_Slash"), unit.mTarget.transform.position, Quaternion.identity);
             slash.transform.Rotate(new Vector3(Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f)));
-            if(Random.Range(0,1) >= 1)
-            {
-                slash.GetComponent<SpriteRenderer>().flipX = true;
-            }
+            slash.GetComponent<SpriteRenderer>().flipX = (Random.Range(0, 1) >= 1);
             Destroy(slash, 0.5f);
-            if (GetComponent<Unit>().mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+            if (unit.mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
             yield return new WaitForSeconds(0.08f);
         }
     }
 
     protected override void StartActionTrigger()
     {
-        mPos = GetComponent<Unit>().mTarget.transform.position;
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
-        mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime+0.5f;
+        var unit = GetComponent<Unit>();
+        mPos = unit.mTarget.transform.position;
+        unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.5f;
         Find();
         StartCoroutine(Action());
     }
@@ -75,11 +75,12 @@ public class DroidAssassinActionTrigger : ActionTrigger
 
     private void Find()
     {
-        List<GameObject> list = new List<GameObject>((GetComponent<Unit>().mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
+        var unit = GetComponent<Unit>();
+        List<GameObject> list = new List<GameObject>((unit.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
             : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList());
         if (list.Count == 0) return;
-        if (GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget)
-            GetComponent<Unit>().mTarget = GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget;
+        if (unit.mAiBuild.stateMachine.mPreferredTarget)
+            unit.mTarget = unit.mAiBuild.stateMachine.mPreferredTarget;
         else
         {
             int index = 0;
@@ -94,7 +95,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
                     index = i;
                 }
             }
-            GetComponent<Unit>().mTarget = list[index].GetComponent<Unit>();
+            unit.mTarget = list[index].GetComponent<Unit>();
         }
     }
 }

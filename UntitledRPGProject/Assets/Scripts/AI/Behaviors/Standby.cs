@@ -11,7 +11,6 @@ public class Standby : State
     public override void Enter(Unit agent)
     {
         agent.mConditions.isDefend = false;
-        agent.mConditions.isPicked = true;
         agent.mOrder = Order.Standby;
         agent.GetComponent<BuffAndNerfEntity>().Tick();
         agent.mField.GetComponent<Field>().Picked(true);
@@ -95,9 +94,12 @@ public class Standby : State
         }
         else
         {
-            behavior = ((agent.mSkillDataBase != null) &&
-                (agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
-                || (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)) ? "Magic" : behavior;
+            if (agent.mSkillDataBase != null)
+            {
+                behavior = ((agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
+|| (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)) ? "Magic" : behavior;
+            }
+
         }
         if(agent.mAiBuild.stateMachine.mPreferredTarget)
             behavior = (agent.mType != AttackType.None) ? "Attack" : "Defend";
