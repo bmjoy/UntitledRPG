@@ -43,10 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59695027ace0b945a0156731ca02552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mCurrentField: {fileID: 0}
   mUnits: []
+  mEnemies: []
   playerCenter: {x: 0, y: 0, z: 0}
   enemyCenter: {x: 0, y: 0, z: 0}
+  mRunningSpeed: 20
   mCurrentUnit: {fileID: 0}
   mPercentageHP: 30
   status: 0
   mWaitTime: 4
+  _TransitionTime: 2.1

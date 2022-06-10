@@ -11,10 +11,10 @@ public class HealthBar : MonoBehaviour
 
     protected Animator mAnimator;
 
-    protected float mMaxHealth = 0.0f;
+    public float mMaxHealth = 0.0f;
     public float mCurrentHealth = 0.0f;
 
-    protected float mMaxMana = 0.0f;
+    public float mMaxMana = 0.0f;
     public float mCurrentMana = 0.0f;
 
     protected bool isInitialized = false;

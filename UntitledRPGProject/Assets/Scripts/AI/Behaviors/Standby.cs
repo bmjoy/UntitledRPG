@@ -42,19 +42,17 @@ public class Standby : State
 
     private IEnumerator WaitforSecond(Unit agent)
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         int percent = Mathf.RoundToInt((100 * agent.mStatus.mHealth) / agent.mStatus.mMaxHealth);
         int targetPercent = Mathf.RoundToInt((100 * agent.mTarget.mStatus.mHealth) / agent.mTarget.mStatus.mMaxHealth);
         randomNumber = (agent.mAiBuild.property == AIProperty.Offensive) ?
-            UnityEngine.Random.Range(30, 50) : randomNumber = UnityEngine.Random.Range(50, 70);
+            UnityEngine.Random.Range(10, 20) : randomNumber = UnityEngine.Random.Range(40, 60);
 
         bool condition1 = percent > randomNumber;
-        bool condition2 = agent.mStatus.mHealth > agent.mTarget.mStatus.mHealth;
-        bool condition3 = targetPercent <= BattleManager.Instance.mPercentageHP;
-        bool condition4 = agent.mBuffNerfController.GetBuffCount() > 0;
+        bool condition2 = percent > targetPercent;
+        bool condition3 = agent.mBuffNerfController.GetBuffCount() > 0;
 
-        string behavior = string.Empty;
-        behavior = ((condition1 || condition2 || condition3 || condition4) && agent.mType != AttackType.None) ? "Attack" : "Defend";
+        string behavior = ((condition1 || condition2 || condition3) && agent.mType != AttackType.None) ? "Attack" : "Defend";
 
         agent.mTarget?.mSelected.SetActive(true);
 
@@ -62,58 +60,47 @@ public class Standby : State
         {
             Boss boss = (Boss)agent;
             var database = boss.GetComponent<Boss_Skill_DataBase>();
-            if (boss.GetComponent<Boss>().mHealthTriggerPercentage.Length > 1)
+            if (boss.mHealthTriggerPercentage.Length > 1)
             {
                 if (boss.mActionTriggerComponent._isUltimate)
                 {
-                    boss.GetComponent<Boss_Skill_DataBase>().ChangeSkill(database.mUltimateSkillIndex);
+                    database.ChangeSkill(database.mUltimateSkillIndex);
                     behavior = "Magic";
                 }
                 else
                 {
                     for (int i = 0; i < boss.mHealthTriggerPercentage.Length; ++i)
                     {
-                        if (boss.GetComponent<Boss>().HalfHealthEvent(boss.GetComponent<Boss>().mHealthTriggerPercentage[i]))
+                        if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[i]))
                         {
-                            boss.GetComponent<Boss_Skill_DataBase>().ChangeSkill(i);
-                            behavior = (boss.mSkillDataBase.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
+                            database.ChangeSkill(i);
+                            behavior = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
                         }
                     }
-                    if (database.mSkill.mSkillType == SkillType.Buff && condition4)
+                    if (condition3)
                         behavior = "Attack";
                 }
             }
             else
             {
-                if (database.mSkill.mSkillType == SkillType.Buff && !condition4)
+                if (database.Type == SkillType.Buff && !condition3)
                 {
-                    if (boss.GetComponent<Boss>().HalfHealthEvent(boss.GetComponent<Boss>().mHealthTriggerPercentage[0]) && boss.mSkillDataBase.Mana <= boss.mStatus.mMana)
-                        behavior = "Magic";
+                    if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[0]))
+                        behavior = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
                     else
-                        behavior = (UnityEngine.Random.Range(0, 50) >= 50) ? "Defend" : "Attack";
+                        behavior = (UnityEngine.Random.Range(0, 100) >= 50) ? "Defend" : "Attack";
                 }
             }
 
         }
         else
         {
-            if (agent.mSkillDataBase != null)
-            {
-                if (agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
-                    behavior = "Magic";
-                else
-                {
-                    if (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)
-                        behavior = "Magic";
-                }
-            }
+            behavior = ((agent.mSkillDataBase != null) &&
+                (agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
+                || (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)) ? "Magic" : behavior;
         }
-
-        if (agent.mAiBuild.stateMachine.mPreferredTarget && agent.mType != AttackType.None)
-            behavior = "Attack";
-        if(agent.mAiBuild.stateMachine.mPreferredTarget && agent.mType == AttackType.None)
-            behavior = "Defend";
-
+        if(agent.mAiBuild.stateMachine.mPreferredTarget)
+            behavior = (agent.mType != AttackType.None) ? "Attack" : "Defend";
         agent.mAiBuild.stateMachine.ChangeState(behavior);
     }
 
@@ -122,13 +109,8 @@ public class Standby : State
         List<GameObject> list = new List<GameObject>((agent.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
             : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()); 
         if (list.Count == 0) return false;
-        if (agent.mAiBuild.stateMachine.mPreferredTarget)
-        {
-            agent.mTarget = agent.mAiBuild.stateMachine.mPreferredTarget;
-        }
-        else
-            agent.mTarget = list[Random.Range(0, list.Count)].GetComponent<Unit>();
-
+        agent.mTarget = (agent.mAiBuild.stateMachine.mPreferredTarget) ? agent.mAiBuild.stateMachine.mPreferredTarget
+            : list[Random.Range(0, list.Count)].GetComponent<Unit>();
         return !agent.mTarget.mConditions.isDied;
     }
 }

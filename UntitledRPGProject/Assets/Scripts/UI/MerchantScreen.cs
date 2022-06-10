@@ -36,5 +36,6 @@ public class MerchantScreen : MonoBehaviour
             slots[i].gameObject.SetActive(active);
         mBoarder.gameObject.SetActive(active);
         mMoney.gameObject.SetActive(active);
+        gameObject.SetActive(active);
     }
 }

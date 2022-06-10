@@ -143,8 +143,6 @@ public class GameManager : MonoBehaviour
     public event Action<int, Action> onEnemyWin;
     public void OnBattleStart(int id)
     {
-        AudioManager.Instance.mAudioStorage.ChangeMusic("Battle");
-        AudioManager.Instance.musicSource.loop = true;
         BattleManager.Instance.SetBattleField();
         onBattle?.Invoke(id); // Enemy preparation
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch

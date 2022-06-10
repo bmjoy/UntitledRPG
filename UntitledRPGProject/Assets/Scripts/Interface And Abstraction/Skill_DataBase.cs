@@ -14,6 +14,7 @@ public class Skill_DataBase : MonoBehaviour
     public virtual string Name { get { return mSkill.mName; } }
     public virtual float Mana { get { return mSkill.mManaCost; } }
     public virtual string Description { get { return mSkill.mDescription; } }
+    public virtual SkillType Type { get { return mSkill.mSkillType; } }
 
     protected virtual void Start()
     {

@@ -7,5 +7,6 @@ public interface IInteractiveObject
 {
     IEnumerator Interact(Action action = null);
     void React(bool active);
+    bool GetComplete();
     Vector3 GetPosition();
 }

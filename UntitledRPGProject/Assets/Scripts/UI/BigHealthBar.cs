@@ -72,6 +72,7 @@ public class BigHealthBar : HealthBar
         mNameText?.gameObject.SetActive(active);
         mHPText?.gameObject.SetActive(active);
         mMPText?.gameObject.SetActive(active);
+        gameObject.SetActive(active);
     }
 
     public override IEnumerator PlayBleed()

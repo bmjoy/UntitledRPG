@@ -78,7 +78,6 @@ public class AudioManager : MonoBehaviour
     public static IEnumerator FadeIn(float FadeTime)
     {
         float startVolume = 0.2f;
-
         Instance.musicSource.volume = 0;
         Instance.musicSource.Play();
 
@@ -88,8 +87,7 @@ public class AudioManager : MonoBehaviour
 
             yield return null;
         }
-
-        Instance.musicSource.volume = 1f;
+        Instance.musicSource.volume = 1.0f;
     }
 
 

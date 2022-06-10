@@ -56,7 +56,6 @@ public class UIManager : MonoBehaviour
     public VictoryScreen mVictoryScreen;
     public MerchantScreen mMerchantScreen;
 
-    // Start is called before the first frame update
     void Start()
     {
         mCanvas = transform.Find("Canvas").GetComponent<Canvas>();
@@ -151,9 +150,7 @@ public class UIManager : MonoBehaviour
     public void BattleEnd()
     {
         for (int i = 0; i < mHealthBarList.Count; i++)
-        {
             mHealthBarList[i].Active(false);
-        }
         mOrderbar.GetComponent<OrderBar>().Clear();
         mOrderbar.gameObject.SetActive(false);
         mScreenTransition.SetActive(false);
@@ -186,15 +183,22 @@ public class UIManager : MonoBehaviour
     public void DisplayDialogueBox(bool display)
     {
         if (display)
+        {
+            mDialogueText.gameObject.SetActive(display);
+            mEKeyButton.gameObject.SetActive(display);
             mDialogueBox.SetActive(display);
+        }
         else
             StartCoroutine(EndOfDialogueBox());
     }
 
     private IEnumerator EndOfDialogueBox()
     {
-        mDialogueBox.GetComponent<Animator>().Play("Outro");
+        if(mDialogueBox.activeSelf)
+            mDialogueBox.GetComponent<Animator>().Play("Outro");
         yield return new WaitForSeconds(1.0f);
+        mDialogueText.gameObject.SetActive(false);
+        mEKeyButton.gameObject.SetActive(false);
         mDialogueBox.transform.Find("YesButton").gameObject.SetActive(false);
         mDialogueBox.transform.Find("NoButton").gameObject.SetActive(false);
         mDialogueBox.SetActive(false);

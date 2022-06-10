@@ -178,6 +178,7 @@ MonoBehaviour:
   mAttackTime: 0.2
   mDefendTime: 1
   mAttackDistance: 4
+  mRunningSpeed: 9
   mMagicDistance: 0
   mRunClips: []
   mAttackClips: []

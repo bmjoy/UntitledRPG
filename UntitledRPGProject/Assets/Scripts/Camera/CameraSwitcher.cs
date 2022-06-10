@@ -20,13 +20,16 @@ public class CameraSwitcher : MonoBehaviour
     }
 
     [SerializeField]
-    private CinemachineVirtualCamera mBattleWorldCam;
+    private CinemachineVirtualCamera mBattleWorldCam;    
+    [SerializeField]
+    private CinemachineVirtualCamera mGameWorldCam;
 
     [SerializeField] private float mShakeAmount; 
     [SerializeField] private float mFrequency;
 
     [SerializeField] private float mMaximumZoomFOV = 10.0f;
     private float mCurrentFOV = 0.0f;
+    private float mCurrentGameWorldFOV = 0.0f;
 
     public CinemachineStateDrivenCamera mCamera;
     public VolumeProfile mPostProcessing;
@@ -37,6 +40,7 @@ public class CameraSwitcher : MonoBehaviour
     {
         mCamera = this.GetComponent<CinemachineStateDrivenCamera>();
         mCurrentFOV = mBattleWorldCam.m_Lens.FieldOfView;
+        mCurrentGameWorldFOV = mGameWorldCam.m_Lens.FieldOfView;
         GameManager.Instance.onPlayerBattleStart += SwitchCamera;
         if (GameObject.Find("PostProcessing") == null)
         {
@@ -86,6 +90,19 @@ public class CameraSwitcher : MonoBehaviour
                 Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.0f;
             _isCameraUsing = false;
         }
+    }    
+    
+    public IEnumerator PlayShakeCameraGameWorld()
+    {
+        Instance.mGameWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = mShakeAmount;
+        Instance.mGameWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = mFrequency;
+        yield return null;
+    }    
+    public IEnumerator StopShakeCameraGameWorld()
+    {
+        Instance.mGameWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain =
+            Instance.mGameWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.0f;
+        yield return null;
     }
 
     public IEnumerator ZoomCamera(float duration, Vector3 pos)
@@ -99,6 +116,9 @@ public class CameraSwitcher : MonoBehaviour
             GameObject fov = new GameObject("FOV");
             fov.transform.position = pos;
 
+            Transform temp_Follow = mBattleWorldCam.m_Follow;
+            Transform temp_LookAt = mBattleWorldCam.m_LookAt;
+
             mBattleWorldCam.m_Follow = fov.transform;
             mBattleWorldCam.m_LookAt = fov.transform;
             while (mBattleWorldCam.m_Lens.FieldOfView - 0.00001f > mMaximumZoomFOV)
@@ -107,14 +127,49 @@ public class CameraSwitcher : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
             yield return new WaitForSeconds(duration);
-            mBattleWorldCam.m_Follow = BattleManager.Instance.mCurrentField.transform;
-            mBattleWorldCam.m_LookAt = BattleManager.Instance.mCurrentField.transform;
+            mBattleWorldCam.m_Follow = temp_Follow;
+            mBattleWorldCam.m_LookAt = temp_LookAt;
             while (mBattleWorldCam.m_Lens.FieldOfView <= mCurrentFOV - 0.00001f)
             {
                 mBattleWorldCam.m_Lens.FieldOfView = Mathf.Lerp(mBattleWorldCam.m_Lens.FieldOfView, mCurrentFOV, Time.deltaTime * 15.0f);
                 yield return new WaitForEndOfFrame();
             }
             mBattleWorldCam.m_Lens.FieldOfView = mCurrentFOV;
+            Destroy(fov);
+            _isCameraUsing = false;
+        }
+    }
+
+    public IEnumerator ZoomCameraGameWorld(float duration, float maximum, Vector3 pos)
+    {
+        if (_isCameraUsing)
+            yield return null;
+        else
+        {
+            _isCameraUsing = true;
+
+            GameObject fov = new GameObject("FOV");
+            fov.transform.position = pos;
+
+            Transform temp_Follow = mGameWorldCam.m_Follow;
+            Transform temp_LookAt = mGameWorldCam.m_LookAt;
+
+            mGameWorldCam.m_Follow = fov.transform;
+            mGameWorldCam.m_LookAt = fov.transform;
+            while (mGameWorldCam.m_Lens.FieldOfView - 0.00001f > maximum)
+            {
+                mGameWorldCam.m_Lens.FieldOfView = Mathf.Lerp(mGameWorldCam.m_Lens.FieldOfView, maximum, Time.deltaTime * 15.0f);
+                yield return new WaitForEndOfFrame();
+            }
+            yield return new WaitForSeconds(duration);
+            mGameWorldCam.m_Follow = temp_Follow;
+            mGameWorldCam.m_LookAt = temp_LookAt;
+            while (mGameWorldCam.m_Lens.FieldOfView <= mCurrentGameWorldFOV - 0.00001f)
+            {
+                mGameWorldCam.m_Lens.FieldOfView = Mathf.Lerp(mGameWorldCam.m_Lens.FieldOfView, mCurrentGameWorldFOV, Time.deltaTime * 15.0f);
+                yield return new WaitForEndOfFrame();
+            }
+            mGameWorldCam.m_Lens.FieldOfView = mCurrentGameWorldFOV;
             Destroy(fov);
             _isCameraUsing = false;
         }

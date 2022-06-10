@@ -104,6 +104,7 @@ MonoBehaviour:
   mSelected: {fileID: 0}
   mType: 0
   mFlag: 2
+  mCanvas: {fileID: 0}
   mAnimator: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 56ae697c923eb844d97da61f2134389b, type: 2}
   mFireLocation: {x: 5, y: 0}
@@ -113,12 +114,12 @@ MonoBehaviour:
   mAttackTime: 0.1
   mDefendTime: 1
   mAttackDistance: 2
+  mRunningSpeed: 9
   mMagicDistance: 5
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
   mDeathClips: []
-  mItemDropRate: 20
 --- !u!212 &3135470733083981224
 SpriteRenderer:
   m_ObjectHideFlags: 0
