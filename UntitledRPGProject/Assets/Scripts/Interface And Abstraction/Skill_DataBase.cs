@@ -10,11 +10,11 @@ public class Skill_DataBase : MonoBehaviour
     [HideInInspector]
     public Skill_Setting mSkill;
 
-    public virtual Skill_Setting Skill { set { Skill = value; } get { return mSkill; } }
-    public virtual string Name { get { return mSkill.mName; } }
-    public virtual float Mana { get { return mSkill.mManaCost; } }
-    public virtual string Description { get { return mSkill.mDescription; } }
-    public virtual SkillType Type { get { return mSkill.mSkillType; } }
+    public Skill_Setting Skill { set { Skill = value; } get { return mSkill; } }
+    public override string ToString() { return mSkill.mName; }
+    public float Mana { get { return mSkill.mManaCost; } }
+    public string Description { get { return mSkill.mDescription; } }
+    public SkillType Type { get { return mSkill.mSkillType; } }
 
     protected virtual void Start()
     {

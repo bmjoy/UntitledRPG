@@ -90,7 +90,14 @@ public class CameraSwitcher : MonoBehaviour
                 Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.0f;
             _isCameraUsing = false;
         }
-    }    
+    }
+    
+    public static void StopShakeCamera()
+    {
+        Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain =
+    Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0.0f;
+        Instance._isCameraUsing = false;
+    }
     
     public IEnumerator PlayShakeCameraGameWorld()
     {

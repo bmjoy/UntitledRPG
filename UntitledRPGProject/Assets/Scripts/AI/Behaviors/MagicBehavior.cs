@@ -23,7 +23,6 @@ public class MagicBehavior : State
 
     public override void Exit(Unit agent)
     {
-        agent.mConditions.isPicked = false;
     }
 
     private void FindTarget(Unit agent)

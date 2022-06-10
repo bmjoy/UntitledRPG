@@ -17,6 +17,5 @@ public class AttackBehavior : State
 
     public override void Exit(Unit agent)
     {
-        agent.mConditions.isPicked = false;
     }
 }

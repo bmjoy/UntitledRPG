@@ -16,8 +16,7 @@ public class NextLevel : MonoBehaviour
         {
             if (_isKeyRequired && !PlayerController.Instance.mInventory.Get(Key.Name))
                 return;
-
-            GameManager.Instance.ControlAllProwlers(true);
+            LevelManager.Instance.isNext = true;
             if (!_isBackLevel)
                 LevelManager.Instance.GoNextLevel();
             else

@@ -17,7 +17,9 @@ public class BKActionTrigger : ActionTrigger
     private AudioClip originalClip;
     protected override IEnumerator Action()
     {
-        GetComponent<Unit>().mAnimator.SetTrigger("Skill2");
+        var boss = GetComponent<Boss>();
+        var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        boss.mAnimator.SetTrigger("Skill2");
         yield return new WaitForSeconds(mTime / 6.9f);
         transform.position = BattleManager.playerFieldParent.position + new Vector3(0.0f,0.0f,-2.0f);
         foreach (Transform t in BattleManager.playerFieldParent)
@@ -42,18 +44,16 @@ public class BKActionTrigger : ActionTrigger
                 AudioManager.PlaySfx(clip2);
         }
 
-        IEnumerable<GameObject> group = group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
+        IEnumerable<GameObject> group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
 : BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
-        DamagableAbility damagable = GetComponent<Boss_Skill_DataBase>().mSkillDatas[GetComponent<Boss_Skill_DataBase>().mUltimateSkillIndex] as DamagableAbility;
+        DamagableAbility damagable = boss_Skill.mSkillDatas[boss_Skill.mUltimateSkillIndex] as DamagableAbility;
         foreach (GameObject unit in group)
         {
             var i = unit.GetComponent<Unit>();
-            i.TakeDamage((damagable.mValue + GetComponent<Unit>().mStatus.mMagicPower + GetComponent<Unit>().mBonusStatus.mMagicPower), DamageType.Magical);
+            i.TakeDamage((damagable.mValue + boss.mStatus.mMagicPower + boss.mBonusStatus.mMagicPower), DamageType.Magical);
         }
 
-        GetComponent<Unit>().mAnimator.ResetTrigger("Skill2");
-
-
+        boss.mAnimator.ResetTrigger("Skill2");
         yield return new WaitForSeconds(0.5f);
         _isRed = false;
         _isUltimate = false;
@@ -62,44 +62,47 @@ public class BKActionTrigger : ActionTrigger
             Destroy(mirror);
         }
         _mirrors.Clear();
-        GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
+        boss.mSkillClips[0].Clip = originalClip;
     }
 
     private IEnumerator Slash()
     {
+        var boss = GetComponent<Boss>();
         yield return new WaitForSeconds(0.75f);
         yield return new WaitForSeconds(0.05f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count > 0)
+            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
         yield return new WaitForSeconds(0.22f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count > 0)
+            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
         yield return new WaitForSeconds(0.05f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count > 0)
+            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
         for (int i = 0; i < 6; ++i)
         {
             yield return new WaitForSeconds(0.12f);
-            if (GetComponent<Unit>().mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+            if (boss.mAttackClips.Count > 0)
+                AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
         }
 
         yield return new WaitForSeconds(0.25f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count > 0)
+            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
 
         yield return new WaitForSeconds(0.25f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count > 0)
+            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
         yield return new WaitForSeconds(0.5f);
-        if (GetComponent<Unit>().mAttackClips.Count > 0)
-            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count > 0)
+            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
     }
 
     protected override void StartActionTrigger()
     {
-        GetComponent<Boss>().mAiBuild.actionEvent = ActionEvent.Busy;
-        mTime = GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mEffectTime;
+        var boss = GetComponent<Boss>();
+        var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        mTime = boss_Skill.mSkillDatas[2].mEffectTime;
         mPos = transform.position;
         _isRed = true;
 
@@ -108,61 +111,67 @@ public class BKActionTrigger : ActionTrigger
 
     public void StartUltimateTrigger()
     {
-        originalClip = GetComponent<Unit>().mSkillClips[0].Clip;
-        GetComponent<Unit>().mSkillClips[0].Clip = clip;
+        var boss = GetComponent<Boss>();
+        originalClip = boss.mSkillClips[0].Clip;
+        boss.mSkillClips[0].Clip = clip;
         _isUltimate = true;
     }
 
     private IEnumerator AttackAction()
     {
-        GetComponent<Boss>().PlayAnimation("Attack");
-        mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        var boss = GetComponent<Boss>();
+        boss.mAnimator.Play("Attack");
+        mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
 
         yield return new WaitForSeconds(mTime / 3.0f);
-        GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), GetComponent<Boss>().mTarget.transform.position, Quaternion.identity);
+        GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position, Quaternion.identity);
         slash.GetComponent<Animator>().Play("Slash1");
         Destroy(slash, 1.0f);
         DamageState();
         yield return new WaitForSeconds(mTime / 3.0f);
-        mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
+        mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
         DamageState();
-        GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), new Vector3(GetComponent<Boss>().mTarget.transform.position.x, GetComponent<Boss>().mTarget.transform.position.y + 1.5f, GetComponent<Boss>().mTarget.transform.position.z), Quaternion.identity);
+        GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position + new Vector3(0.0f,1.5f,0.0f), Quaternion.identity);
         slash2.GetComponent<Animator>().Play("Slash2");
         Destroy(slash2, 1.0f);
         yield return new WaitForSeconds(mTime);
 
-        mTime = (GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f) - 0.2f;
-        if (GetComponent<Boss>().mBuffNerfController.GetBuffCount() > 0)
+        mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f) - 0.2f;
+        if (boss.mBuffNerfController.GetBuffCount() > 0)
         {
             DamageState();
-            StartCoroutine(CameraSwitcher.Instance.ShakeCamera(GetComponent<Boss>().mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
+            StartCoroutine(CameraSwitcher.Instance.ShakeCamera(boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
         }
     }
 
     private void DamageState()
     {
-        if (GetComponent<Boss>().mTarget)
+        var boss = GetComponent<Boss>();
+        if (boss.mTarget)
         {
-            GetComponent<Boss>().mTarget.TakeDamage(GetComponent<Boss>().mStatus.mDamage + GetComponent<Boss>().mBonusStatus.mDamage, DamageType.Physical);
-            if (GetComponent<Unit>().mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Boss>().mAttackClips[Random.Range(0, GetComponent<Boss>().mAttackClips.Count - 1)].Clip, 0.6f);
-            StartCoroutine(GetComponent<Boss>().CounterState(GetComponent<Boss>().mTarget.mStatus.mDamage));
+            boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
+            if (boss.mAttackClips.Count > 0)
+                AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip, 0.6f);
+            StartCoroutine(boss.CounterState(boss.mTarget.mStatus.mDamage));
         }
     }
 
     public void StartAttackActionTrigger()
     {
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
-        mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
-        GetComponent<Animator>().SetBool("Attack2", (GetComponent<Boss>().mBuffNerfController.GetBuffCount() > 0) ? true : false);
+        var boss = GetComponent<Boss>();
+        boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        mTime = boss.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+        boss.mAnimator.SetBool("Attack2", (boss.mBuffNerfController.GetBuffCount() > 0));
         StartCoroutine(AttackAction());
     }
 
     void Start()
     {
-        GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mActionTrigger += StartActionTrigger;
-        GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger += StartUltimateTrigger;
-        GetComponent<Unit>().mActionTrigger += StartAttackActionTrigger;
+        var boss = GetComponent<Boss>();
+        var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        boss_Skill.mSkillDatas[2].mActionTrigger += StartActionTrigger;
+        boss_Skill.mSkillDatas[1].mActionTrigger += StartUltimateTrigger;
+        boss.mActionTrigger += StartAttackActionTrigger;
     }
 
     private void Update()
@@ -173,25 +182,29 @@ public class BKActionTrigger : ActionTrigger
 
     private void OnDestroy()
     {
-        if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[2] != null)
-            GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mActionTrigger -= StartActionTrigger;        
-        if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[1] != null)
-            GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
-        if(GetComponent<Unit>().mActionTrigger != null)
-            GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
-        if (GetComponent<Unit>().mSkillClips.Count > 0)
-            GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
+        var boss = GetComponent<Boss>();
+        var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        if (boss_Skill.mSkillDatas[2] != null)
+            boss_Skill.mSkillDatas[2].mActionTrigger -= StartActionTrigger;        
+        if (boss_Skill.mSkillDatas[1] != null)
+            boss_Skill.mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
+        if(boss.mActionTrigger != null)
+            boss.mActionTrigger -= StartAttackActionTrigger;
+        if (boss.mSkillClips.Count > 0)
+            boss.mSkillClips[0].Clip = originalClip;
     }
 
     private void OnApplicationQuit()
     {
-        if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[2] != null)
-            GetComponent<Boss_Skill_DataBase>().mSkillDatas[2].mActionTrigger -= StartActionTrigger;
-        if (GetComponent<Boss_Skill_DataBase>().mSkillDatas[1] != null)
-            GetComponent<Boss_Skill_DataBase>().mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
-        if(GetComponent<Unit>().mActionTrigger != null)
-            GetComponent<Unit>().mActionTrigger -= StartAttackActionTrigger;
-        if(GetComponent<Unit>().mSkillClips.Count>0)
-            GetComponent<Unit>().mSkillClips[0].Clip = originalClip;
+        var boss = GetComponent<Boss>();
+        var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        if (boss_Skill.mSkillDatas[2] != null)
+            boss_Skill.mSkillDatas[2].mActionTrigger -= StartActionTrigger;
+        if (boss_Skill.mSkillDatas[1] != null)
+            boss_Skill.mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
+        if (boss.mActionTrigger != null)
+            boss.mActionTrigger -= StartAttackActionTrigger;
+        if (boss.mSkillClips.Count > 0)
+            boss.mSkillClips[0].Clip = originalClip;
     }
 }

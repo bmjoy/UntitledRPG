@@ -15,6 +15,8 @@ public class LevelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public bool isNext = false;
+
     private void Start()
     {
         GameManager.Instance.onGameOverToReset += RestartGame;

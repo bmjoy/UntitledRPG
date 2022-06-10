@@ -82,7 +82,7 @@ public class OrderBar : MonoBehaviour
     {
         foreach (var unit in queueImages)
         {
-            if(unit.Key.mConditions.isPicked)
+            if(unit.Key == BattleManager.Instance.mCurrentUnit)
             {
                 key = unit.Value;
                 break;

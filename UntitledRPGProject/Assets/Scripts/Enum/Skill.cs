@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,4 +42,15 @@ public enum SkillTarget
     Self,
     All,
     Random
+}
+
+[Serializable]
+public class BuffList
+{
+    public Buff mBuff;
+}
+[Serializable]
+public class NerfList
+{
+    public Nerf mNerf;
 }

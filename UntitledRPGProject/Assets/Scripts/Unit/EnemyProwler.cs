@@ -58,8 +58,6 @@ public class EnemyProwler : Prowler
 
     protected override void Update()
     {
-        if (GameManager.Instance.IsCinematicEvent)
-            return;
         base.Update();
         if (BattleManager.Instance.status != BattleManager.GameStatus.None
 || PlayerController.Instance.Interaction)

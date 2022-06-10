@@ -21,7 +21,6 @@ public class Find : P_State
         NavMeshHit mNavHit;
         NavMesh.SamplePosition(agent.transform.position + new Vector3((float)Random.Range(-3, 3), 0.0f, (float)Random.Range(-3, 3)),
             out mNavHit, 3.0f, 3);
-        agent.mAgent.isStopped = false;
         agent.mAgent.speed = agent.mSpeed;
         agent.mAgent.SetDestination(mNavHit.position);
         dest = agent.mAgent.destination;

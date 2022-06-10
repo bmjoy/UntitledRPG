@@ -47,8 +47,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2.5, z: 1}
-  m_Center: {x: 0, y: -0.1, z: 0}
+  m_Size: {x: 2, y: 2.8, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7780718595994995615
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -112,7 +112,6 @@ MonoBehaviour:
   mAttackTime: 0.3
   mDefendTime: 1
   mAttackDistance: 2
-  mRunningSpeed: 9
   mMagicDistance: 5
   mRunClips: []
   mAttackClips: []

@@ -221,7 +221,6 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
         GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
 GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = PlayerController.Instance.transform;
         GameManager.Instance.IsCinematicEvent = false;
-        GameManager.Instance.ControlAllProwlers(false);
         mTarget = null;
         isMove = false;
         yield return null;
@@ -233,7 +232,6 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
         {
             GetComponent<BoxCollider>().isTrigger = GetComponent<BoxCollider>().enabled = false;
             GameManager.Instance.IsCinematicEvent = true;
-            GameManager.Instance.ControlAllProwlers(true);
             PlayerController.Instance.mState = new IdleState();
             PlayerController.Instance.transform.GetComponentInChildren<Animator>().SetFloat("Speed", 0.0f);
             AudioManager.FadeOutMusic();

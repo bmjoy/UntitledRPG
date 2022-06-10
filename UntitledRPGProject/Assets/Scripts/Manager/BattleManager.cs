@@ -130,7 +130,7 @@ public class BattleManager : MonoBehaviour
 
                     if (mCurrentUnit.mConditions.isDied)
                     {
-                        mCurrentUnit.mAiBuild.stateMachine.ChangeState("Waiting");
+                        mCurrentUnit.mAiBuild.ChangeState("Waiting");
                         mCurrentUnit.mField.GetComponent<Field>().Picked(false);
                         UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                         onDequeuingOrderEvent?.Invoke(mCurrentUnit);
@@ -139,12 +139,12 @@ public class BattleManager : MonoBehaviour
                     }
                     else
                     {
-                        mCurrentUnit.mAiBuild.stateMachine.ChangeState("Standby");
+                        mCurrentUnit.mAiBuild.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
                         UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                         var data = mCurrentUnit.GetComponent<Skill_DataBase>();
                         if (data != null)
-                            UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty","Skill");
+                            UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.ToString() + "</color></b>: " + data.Description : "Empty","Skill");
                         UIManager.Instance.ChangeHoverTip("This unit can give <b><color=red>" + mCurrentUnit.mStatus.mDamage + "</color>(<color=green>+" + mCurrentUnit.mBonusStatus.mDamage + "</color>)Damage</b>!", "Attack");
                         UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b>(<color=green>+" + mCurrentUnit.mBonusStatus.mArmor+ "</color>) and " +
                             "<b>" + "Defend <color=green>" + mCurrentUnit.mStatus.mDefend + "%</color></b> can block damages", "Defend");
@@ -206,6 +206,7 @@ public class BattleManager : MonoBehaviour
                         unit.GetComponent<BuffAndNerfEntity>().Stop();
                     UIManager.Instance.DisplayHealthBar(false);
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
+                    CameraSwitcher.StopShakeCamera();
                     onReward = false;
                     mCurrentUnit = null;
                     _AvailableSkip = false;
@@ -231,30 +232,30 @@ public class BattleManager : MonoBehaviour
     {
         enemyList.Clear();
         enemyItemList.Clear();
-        foreach(GameObject unit in mUnits.Where(x => x.GetComponent<Enemy>()).ToList())
+        for (int i = 0; i < mEnemies.Count; ++i)
         {
+            var unit = mEnemies[i];
             enemyList.Add(unit.GetComponent<Enemy>());
         }
-        foreach (Enemy enemy in enemyList)
+
+        for (int y = 0; y < enemyList.Count; ++y)
         {
-            foreach (ItemDrop obj in enemy.mSetting.Item)
+            Enemy enemy = enemyList[y];
+            for (int x = 0; x < enemy.mSetting.Item.Count; ++x)
             {
+                ItemDrop obj = enemy.mSetting.Item[x];
                 if (UnityEngine.Random.Range(0, 100) <= obj.mRate)
-                {
                     enemyItemList.Add(obj.mItem);
-                }
             }
         }
 
         UIManager.Instance.mVictoryScreen.UpdateItemList(enemyItemList);
-
-        foreach(var item in enemyItemList)
+        for (int i = 0; i < enemyItemList.Count; ++i)
         {
-            GameObject i = Instantiate(item);
-            i.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
-            PlayerController.Instance.mInventory.Add(i.GetComponent<Item>());
+            GameObject item = Instantiate(enemyItemList[i]);
+            item.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
+            PlayerController.Instance.mInventory.Add(item.GetComponent<Item>());
         }
-
     }
 
     bool _AvailableSkip = false;
@@ -313,12 +314,15 @@ public class BattleManager : MonoBehaviour
         playerCenter = playerFieldParent.position;
         enemyCenter = enemyFieldParent.position;
 
-        foreach (Transform playerField in playerFieldParent)
+        for (int i = 0; i < playerFieldParent.childCount; i++)
         {
+            var playerField = playerFieldParent.GetChild(i);
             playerField.GetComponent<Field>().Initialize();
-        }
-        foreach (Transform enemyField in enemyFieldParent)
+        }        
+
+        for (int i = 0; i < enemyFieldParent.childCount; i++)
         {
+            var enemyField = enemyFieldParent.GetChild(i);
             enemyField.GetComponent<Field>().Initialize();
         }
 
@@ -328,16 +332,16 @@ public class BattleManager : MonoBehaviour
 
     public void ResetField()
     {
-        for (int i = 0; i < Instance.mCurrentField.transform.Find("PlayerFields").childCount; ++i)
+        for (int i = 0; i < playerFieldParent.childCount; ++i)
         {
-            Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i];
-            Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).GetComponent<Field>().IsExist = false;
+            playerFieldParent.GetChild(i).transform.localPosition = mOriginalFieldPos[i];
+            playerFieldParent.GetChild(i).GetComponent<Field>().IsExist = false;
         }
 
-        for (int i = 0; i < Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
+        for (int i = 0; i < enemyFieldParent.childCount; ++i)
         {
-            Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
-            Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).GetComponent<Field>().IsExist = false;
+            enemyFieldParent.GetChild(i).transform.localPosition = mOriginalFieldPos[i + 4];
+            enemyFieldParent.GetChild(i).GetComponent<Field>().IsExist = false;
         }
         Instance.mCurrentField.SetActive(false);
     }

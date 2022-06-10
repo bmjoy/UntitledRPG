@@ -107,7 +107,7 @@ public class SelfAbility : DamagableAbility
                 
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mStatus.mMana -= mManaCost;
-                mOwner.PlayAnimation((hasState) ? mAnimationName : "Attack");
+                mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                 if (mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f,mOwner.transform.position));
 
@@ -115,15 +115,15 @@ public class SelfAbility : DamagableAbility
                 {
                     mActionTrigger?.Invoke();
                     yield return new WaitForSeconds(mEffectTime);
-                    if (mOwner.GetComponent<Unit>().mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.GetComponent<Unit>().mSkillClips[UnityEngine.Random.Range(0, mOwner.GetComponent<Unit>().mSkillClips.Count - 1)].Clip);
+                    if (mOwner.mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip);
                     DoBuff();
                     DoNerf();
                 }
                 else
                 {
-                    if (mOwner.GetComponent<Unit>().mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.GetComponent<Unit>().mSkillClips[UnityEngine.Random.Range(0, mOwner.GetComponent<Unit>().mSkillClips.Count - 1)].Clip);
+                    if (mOwner.mSkillClips.Count > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }
