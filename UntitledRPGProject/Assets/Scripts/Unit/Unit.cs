@@ -60,6 +60,7 @@ public class Unit : MonoBehaviour, IUnit
 
     [SerializeField]
     protected float mAttackDistance= 0.0f;
+
     [HideInInspector]
     public float mMagicDistance = 0.0f;
 
@@ -185,9 +186,13 @@ public class Unit : MonoBehaviour, IUnit
 
     protected virtual void Update()
     {
-        if(mConditions.isDied == false)
+        if (mConditions.isDied == false)
             mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-        mHealthBar.mCurrentMana = mStatus.mMana;
+
+        mHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
+        mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
+        mHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
+        mHealthBar.mMaxMana = mStatus.mMaxMana + mBonusStatus.mMana;
 
         switch (mAiBuild.actionEvent)
         {
@@ -235,7 +240,7 @@ public class Unit : MonoBehaviour, IUnit
 
     protected ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
     {
-        transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * 7.0f);
+        transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * BattleManager.Instance.mRunningSpeed);
         mAnimator.SetFloat("Speed", 1.0f);
         return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
     }
@@ -346,6 +351,7 @@ public class Unit : MonoBehaviour, IUnit
                 }
                 yield return new WaitForSeconds(1.0f);
                 mAiBuild.actionEvent = ((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy;
+                TurnEnded();
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
 
             }
@@ -359,7 +365,7 @@ public class Unit : MonoBehaviour, IUnit
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
                 bullet.Initialize(mTarget, mStatus.mDamage);
-
+                TurnEnded();
                 yield return new WaitUntil(() => bullet.isDamaged == true);
             }
             else if(mType == AttackType.Instant)
@@ -372,12 +378,13 @@ public class Unit : MonoBehaviour, IUnit
                 Vector3 pos = new Vector3(mTarget.transform.position.x + 5.0f, mTarget.transform.position.y, mTarget.transform.position.z);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), pos, Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
-
                 Destroy(go, 1.0f);
+                TurnEnded();
                 yield return new WaitUntil(() => go == null);
-            }
 
-            TurnEnded();
+            }
+            mAiBuild.actionEvent = ActionEvent.None;
+            mAiBuild.stateMachine.ChangeState("Waiting");
         }
         else
             UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
@@ -407,8 +414,10 @@ public class Unit : MonoBehaviour, IUnit
             BattleManager.Instance.Cancel();
         else
         {
-            yield return new WaitForSeconds(0.25f);
             TurnEnded();
+            yield return new WaitForSeconds(0.25f);
+            mAiBuild.actionEvent = ActionEvent.None;
+            mAiBuild.stateMachine.ChangeState("Waiting");
         }
     }
 
@@ -470,7 +479,7 @@ public class Unit : MonoBehaviour, IUnit
         else
             value = (value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance) <= 0.0f) ? 1.0f : value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance);
         mStatus.mHealth -= value;
-        mHealthBar.mCurrentHealth = mStatus.mHealth;
+        mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
         mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
 
         if (mStatus.mHealth <= 0.0f)
@@ -485,18 +494,16 @@ public class Unit : MonoBehaviour, IUnit
             mHealthBar.mCurrentHealth = 0.0f;
             if (mFlag == Flag.Enemy)
             {
-                Destroy(mHealthBar.gameObject, 3.0f);
                 GameManager.s_TotalExp += mStatus.mEXP;
                 GameManager.s_TotalGold += mStatus.mGold;
                 GameManager.s_TotalSoul += GameManager.Instance.mAmountofSoul;
             }
             mAnimator.SetBool("Death",true);
             mHealthBar.ActiveDeathAnimation(true);
-            GetComponent<BoxCollider>().enabled = false;
+            GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = false;
             UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
             mBuffNerfController.Stop();
             mField.GetComponent<Field>().Picked(false);
-            mField.GetComponent<Field>().IsExist = false;
         }
         mAnimator.SetTrigger("Hit");
     }
@@ -504,22 +511,21 @@ public class Unit : MonoBehaviour, IUnit
     virtual public void TakeRecover(float val)
     {
         mStatus.mHealth += val;
-        if (mStatus.mHealth >= mStatus.mMaxHealth)
-            mStatus.mHealth = mStatus.mMaxHealth;
-        mHealthBar.mCurrentHealth = mStatus.mHealth;
+        if (mStatus.mHealth >= mStatus.mMaxHealth + mBonusStatus.mHealth)
+            mStatus.mHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
+        mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
     }
 
     virtual public void TakeRecoverMana(float val)
     {
         mStatus.mMana += val;
-        if (mStatus.mMana >= mStatus.mMaxMana)
-            mStatus.mMana = mStatus.mMaxMana;
-        mHealthBar.mCurrentMana = mStatus.mMana;
+        if (mStatus.mMana >= mStatus.mMaxMana + mBonusStatus.mMana)
+            mStatus.mMana = mStatus.mMaxMana + mBonusStatus.mMana;
+        mHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
     }
     virtual public void TurnEnded()
     {
         mConditions.isPicked = false;
-        mAiBuild.actionEvent = ActionEvent.None;
         if(mTarget != null)
         {
             mTarget.mSelected.SetActive(false);
@@ -527,7 +533,6 @@ public class Unit : MonoBehaviour, IUnit
         }
         mTarget = null;
         mOrder = Order.TurnEnd;
-        mAiBuild.stateMachine.ChangeState("Waiting");
     }
 
     virtual public void SetBuff(TimedBuff buff)
@@ -551,6 +556,13 @@ public class Unit : MonoBehaviour, IUnit
     {
         transform.position = pos;
         mHealthBar.Active(false);
+
+        mStatus.mHealth -= mBonusStatus.mHealth;
+        mStatus.mMaxHealth -= mBonusStatus.mHealth;
+
+        mStatus.mMana -= mBonusStatus.mMana;
+        mStatus.mMaxMana -= mBonusStatus.mMana;
+
         GetComponent<BuffAndNerfEntity>().Stop();
         gameObject.SetActive(false);
     }
@@ -569,9 +581,25 @@ public class Unit : MonoBehaviour, IUnit
             mField = BattleManager.enemyFieldParent.GetChild(index).GetComponent<Field>();
             BattleManager.enemyFieldParent.GetChild(index).GetComponent<Field>().IsExist = true;
         }
+        mStatus.mHealth += mBonusStatus.mHealth;
+        mStatus.mMaxHealth += mBonusStatus.mHealth;
+
+        mStatus.mMana += mBonusStatus.mMana;
+        mStatus.mMaxMana += mBonusStatus.mMana;
 
         mAiBuild.actionEvent = ActionEvent.IntroWalk;
         gameObject.SetActive(true);
     }
 
+    public void Revive(float val)
+    {
+        mAnimator.SetBool("Death", false);
+        mHealthBar.ActiveDeathAnimation(false);
+        mLevelText.gameObject.SetActive(true);
+        mConditions.isDied = false;
+        GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = true;
+        TakeRecover(Mathf.RoundToInt((val * mStatus.mMaxHealth) / (mStatus.mMaxHealth + mBonusStatus.mHealth)));
+        TakeRecoverMana(Mathf.RoundToInt((val * mStatus.mMaxMana) / (mStatus.mMaxMana + mBonusStatus.mMana)));
+        UIManager.Instance.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(this);
+    }
 }

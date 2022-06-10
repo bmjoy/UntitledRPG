@@ -168,6 +168,7 @@ MonoBehaviour:
   mSelected: {fileID: 0}
   mType: 0
   mFlag: 2
+  mCanvas: {fileID: 0}
   mAnimator: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 0688ee1bd6ba8c84394cf80c2ff2f2b6, type: 2}
   mFireLocation: {x: 0, y: 0}
@@ -177,12 +178,12 @@ MonoBehaviour:
   mAttackTime: 0.1
   mDefendTime: 1
   mAttackDistance: 4
+  mRunningSpeed: 9
   mMagicDistance: 0
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
   mDeathClips: []
-  mItemDropRate: 20
   _magicWhenHalfHealth: 0
   mMyHealthBar: {fileID: 0}
   mHealthTriggerPercentage:
@@ -203,6 +204,7 @@ MonoBehaviour:
   mTime: 0
   _isUltimate: 0
   mAttackTriggerPercentage: 50
+  mShakeTime: 1
 --- !u!114 &-4975865343632171896
 MonoBehaviour:
   m_ObjectHideFlags: 0

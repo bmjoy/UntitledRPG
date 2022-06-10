@@ -7,6 +7,7 @@ public abstract class InteractableEnvironment : Environment, IInteractiveObject
     private GameObject mCanvas;
     [HideInInspector]
     public GameObject mInteraction;
+    public bool _Completed = false;
 
     public virtual void Canvas_Initialize()
     {
@@ -26,6 +27,11 @@ public abstract class InteractableEnvironment : Environment, IInteractiveObject
     public void React(bool active)
     {
         mInteraction.SetActive(active);
+    }
+
+    public bool GetComplete()
+    {
+        return _Completed;
     }
 
     public Vector3 GetPosition()

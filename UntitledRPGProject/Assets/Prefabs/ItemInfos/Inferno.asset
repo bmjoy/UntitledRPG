@@ -25,4 +25,10 @@ MonoBehaviour:
   - Type: 3
     Value: 25
     Skill: {fileID: 0}
+  - Type: 0
+    Value: 250
+    Skill: {fileID: 0}
+  - Type: 7
+    Value: 250
+    Skill: {fileID: 0}
   mWeaponType: 1

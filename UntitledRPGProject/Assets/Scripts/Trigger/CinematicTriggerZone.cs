@@ -10,12 +10,14 @@ public class CinematicTriggerZone : MonoBehaviour
     private GameObject mTarget;
     private Transform mPosition;
     private bool isMove = false;
-
+    private float _Speed = 0.0f;
+    private Vector3 vel = Vector3.zero;
+    private bool isAnotherSide = false;
     private void Update()
     {
         if(isMove)
         {
-            mTarget.transform.position = Vector3.MoveTowards(mTarget.transform.position, mPosition.position, Time.deltaTime * 3.0f);
+            mTarget.transform.position = Vector3.MoveTowards(mTarget.transform.position, mPosition.position, Time.deltaTime * _Speed);
         }
     }
 
@@ -24,27 +26,36 @@ public class CinematicTriggerZone : MonoBehaviour
         foreach(var e in events)
         {
             mTarget = null;
+            mPosition = e.Position;
             if (e.Target && e.Type != CinematicEventMethod.CinematicEventType.None)
             {
                 mTarget = e.Target.GetComponent<Spawner>().mObject;
                 GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
 GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mTarget.transform;
+                vel = Vector3.Normalize(mPosition.position - mTarget.transform.position);
+                isAnotherSide = (vel.x > 0.0f);
             }
-            mPosition = e.Position;
+            _Speed = e.Speed;
             isMove = false;
 
             switch(e.Type)
             {
                 case CinematicEventMethod.CinematicEventType.FadeIn:
+                    if (e.Clip)
+                        AudioManager.PlaySfx(e.Clip);
                     UIManager.Instance.FadeInScreen();
                     yield return new WaitForSeconds(e.Time);
                     break;
                 case CinematicEventMethod.CinematicEventType.FadeOut:
+                    if (e.Clip)
+                        AudioManager.PlaySfx(e.Clip);
                     UIManager.Instance.FadeOutScreen();
                     yield return new WaitForSeconds(e.Time);
                     break;
                 case CinematicEventMethod.CinematicEventType.Dialogue:
                     {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
                         if (mTarget.GetComponent<EnemyProwler>())
                         {
                             EnemyProwler prowler = mTarget.GetComponent<EnemyProwler>();
@@ -64,6 +75,8 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                     break;                
                 case CinematicEventMethod.CinematicEventType.Animation:
                     {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
                         if (mTarget.GetComponent<EnemyProwler>())
                         {
                             Prowler prowler = mTarget.GetComponent<EnemyProwler>();
@@ -77,11 +90,14 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                     break;
                 case CinematicEventMethod.CinematicEventType.Move:
                     {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
                         isMove = true;
                         if (mTarget.GetComponent<EnemyProwler>())
                         {
                             EnemyProwler prowler = mTarget.GetComponent<EnemyProwler>();
                             prowler.mModel.GetComponent<Animator>().SetFloat("Speed", 1.0f);
+                            prowler.mModel.GetComponent<SpriteRenderer>().flipX = !isAnotherSide;
                             yield return new WaitUntil(() => Vector3.Distance(mTarget.transform.position,
                                 mPosition.position) <= 0.5f);
                             prowler.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
@@ -89,6 +105,7 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                         else if (mTarget.GetComponent<PlayerController>())
                         {
                             PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 1.0f);
+                            PlayerController.Instance.mModel.GetComponent<SpriteRenderer>().flipX = !isAnotherSide;
                             yield return new WaitUntil(() => Vector3.Distance(mTarget.transform.position,
     mPosition.position) <= 0.5f);
                             PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
@@ -98,11 +115,14 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                     break;
                 case CinematicEventMethod.CinematicEventType.MoveAndDialogue:
                     {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
                         isMove = true;
                         if (mTarget.GetComponent<EnemyProwler>())
                         {
                             EnemyProwler prowler = mTarget.GetComponent<EnemyProwler>();
                             prowler.mModel.GetComponent<Animator>().SetFloat("Speed", 1.0f);
+                            prowler.mModel.GetComponent<SpriteRenderer>().flipX = !isAnotherSide;
                             prowler.mTextCanvas.SetActive(true);
                             prowler.mTextCanvas.transform.Find("Borader").Find("Dialogue").GetComponent<TextMeshProUGUI>().text
                                 = e.Dialogue;
@@ -113,6 +133,7 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                         else if (mTarget.GetComponent<PlayerController>())
                         {
                             PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 1.0f);
+                            PlayerController.Instance.mModel.GetComponent<SpriteRenderer>().flipX = !isAnotherSide;
                             PlayerController.Instance.mCanvas.SetActive(true);
                             PlayerController.Instance.mCanvas.transform.Find("Borader").
                                 Find("Dialogue").GetComponent<TextMeshProUGUI>().text
@@ -122,11 +143,13 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                             PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
                             PlayerController.Instance.mCanvas.SetActive(false);
                         }
+                        yield return new WaitForSeconds(e.Time);
                     }
-                    yield return new WaitForSeconds(e.Time);
                     break;
                 case CinematicEventMethod.CinematicEventType.Teleport:
                     {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
                         if (mTarget.GetComponent<Prowler>())
                         {
                             Prowler prowler = mTarget.GetComponent<Prowler>();
@@ -136,10 +159,62 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                             mTarget.transform.position = e.Position.position;
                         yield return new WaitForSeconds(e.Time);
                     }
-
+                    break;
+                case CinematicEventMethod.CinematicEventType.PlayCameraShake:
+                    {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
+                        StartCoroutine(CameraSwitcher.Instance.PlayShakeCameraGameWorld());
+                        yield return new WaitForSeconds(e.Time);
+                    }
+                    break;
+                case CinematicEventMethod.CinematicEventType.StopCameraShake:
+                    {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
+                        StartCoroutine(CameraSwitcher.Instance.StopShakeCameraGameWorld());
+                        yield return new WaitForSeconds(e.Time);
+                    }
+                    break;
+                case CinematicEventMethod.CinematicEventType.CameraZoom:
+                    {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
+                        StartCoroutine(CameraSwitcher.Instance.ZoomCameraGameWorld(e.Time, e.MaxZoom, mTarget.transform.position));
+                    }
+                    break;
+                case CinematicEventMethod.CinematicEventType.PlayMusic:
+                    {
+                        AudioManager.Instance.musicSource.clip = e.Clip;
+                        AudioManager.Instance.musicSource.volume = 0.5f;
+                        AudioManager.Instance.musicSource.Play();
+                        yield return new WaitForSeconds(e.Time);
+                    }
+                    break;
+                case CinematicEventMethod.CinematicEventType.TargetEffect:
+                    {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
+                        GameObject effect = Instantiate(e.Effect, mTarget.transform.position, Quaternion.identity);
+                        Destroy(effect, e.Time);
+                        yield return new WaitForSeconds(e.Time);
+                    }
+                    break;
+                case CinematicEventMethod.CinematicEventType.PositionEffect:
+                    {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
+                        GameObject effect = Instantiate(e.Effect, e.Position.position, Quaternion.identity);
+                        Destroy(effect, e.Time);
+                        yield return new WaitForSeconds(e.Time);
+                    }
                     break;
                 case CinematicEventMethod.CinematicEventType.None:
-                    yield return new WaitForSeconds(e.Time);
+                    {
+                        if (e.Clip)
+                            AudioManager.PlaySfx(e.Clip);
+                        yield return new WaitForSeconds(e.Time);
+                    }
                     break;
             }
         }
@@ -161,6 +236,7 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
             GameManager.Instance.ControlAllProwlers(true);
             PlayerController.Instance.mState = new IdleState();
             PlayerController.Instance.transform.GetComponentInChildren<Animator>().SetFloat("Speed", 0.0f);
+            AudioManager.FadeOutMusic();
             StartCoroutine(Trigger());
         }
     }

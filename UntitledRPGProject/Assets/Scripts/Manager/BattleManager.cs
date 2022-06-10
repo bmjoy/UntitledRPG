@@ -39,6 +39,7 @@ public class BattleManager : MonoBehaviour
     public Queue<Unit> mOrders = new Queue<Unit>();
     public Vector3 playerCenter = Vector3.zero;
     public Vector3 enemyCenter = Vector3.zero;
+    public float mRunningSpeed = 9.0f;
 
     private List<Vector3> mOriginalFieldPos = new List<Vector3>(8)
     {
@@ -53,7 +54,6 @@ public class BattleManager : MonoBehaviour
     };
 
     public Unit mCurrentUnit = null;
-    public float mPercentageHP = 30.0f;
     private bool isWin = false;
     private bool onReward = false;
     public GameStatus status = GameStatus.None;
@@ -79,6 +79,7 @@ public class BattleManager : MonoBehaviour
     {
         if(UIManager.Instance.mInventoryUI.transform.gameObject.activeSelf)
             UIManager.Instance.mInventoryUI.Active(false);
+
         StartCoroutine(Wait());
     }
 
@@ -91,6 +92,11 @@ public class BattleManager : MonoBehaviour
         mEnemies.Clear();
         mUnits.AddRange(PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mEnemies = GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
+        if (!mEnemies.Exists(s => s.GetComponent<Boss>()))
+        {
+            AudioManager.Instance.mAudioStorage.ChangeMusic("Battle");
+            AudioManager.Instance.musicSource.loop = true;
+        }
         mUnits.AddRange(GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false));
         mUnits.Sort((a, b) => ((b.GetComponent<Unit>().mStatus.mAgility + b.GetComponent<Unit>().mBonusStatus.mAgility).CompareTo(
             a.GetComponent<Unit>().mStatus.mAgility + a.GetComponent<Unit>().mBonusStatus.mAgility)));
@@ -139,8 +145,8 @@ public class BattleManager : MonoBehaviour
                         var data = mCurrentUnit.GetComponent<Skill_DataBase>();
                         if (data != null)
                             UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.Name + "</color></b>: " + data.Description : "Empty","Skill");
-                        UIManager.Instance.ChangeHoverTip("This unit can give <b><color=red>" + mCurrentUnit.mStatus.mDamage + "</color>Damage</b>!", "Attack");
-                        UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b> and " +
+                        UIManager.Instance.ChangeHoverTip("This unit can give <b><color=red>" + mCurrentUnit.mStatus.mDamage + "</color>(<color=green>+" + mCurrentUnit.mBonusStatus.mDamage + "</color>)Damage</b>!", "Attack");
+                        UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b>(<color=green>+" + mCurrentUnit.mBonusStatus.mArmor+ "</color>) and " +
                             "<b>" + "Defend <color=green>" + mCurrentUnit.mStatus.mDefend + "%</color></b> can block damages", "Defend");
                         status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
                         UIManager.Instance.ChangeOrderBarText("Waiting for Order...");

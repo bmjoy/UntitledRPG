@@ -88,7 +88,7 @@ public class TargetAbility : DamagableAbility
             {
                 UIManager.Instance.ChangeOrderBarText("<color=red>"+ mName + "!</color>");
                 mOwner.mTarget = mTarget;
-                
+                mTarget?.mSelected.SetActive(false);
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mMagicDistance = mRange;
                 mOwner.mAiBuild.actionEvent = ActionEvent.MagicWalk;

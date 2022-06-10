@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -33,23 +34,36 @@ public class Slot : MonoBehaviour
         ResetItem();
         if (myItem == null)
             return;
-        EquipmentItem equipment = myItem.GetComponent<EquipmentItem>();
-        if (equipment.isSold)
-            return;
 
-        mMyItem = myItem;
-
-        EquipmentInfo equipmentInfo = equipment.Info as EquipmentInfo;
-        mName.text = equipmentInfo.mName;
-        mCost.text = equipmentInfo.mCost.ToString();
-        mItemImage.sprite = equipmentInfo.mSprite;
-        foreach(var ability in equipmentInfo.mBonusAbilities)
+        Type type = myItem.GetComponent<Item>().GetType();
+        if(type.IsSubclassOf(typeof(EquipmentItem)))
         {
-            mDescription.text += ((ability.Type != BonusAbility.AbilityType.Magic)) ?
-                ability.Type.ToString() + ": " + ability.Value + "\n"
-                : ability.Skill.mName + "\n";
+            EquipmentItem equipment = myItem.GetComponent<EquipmentItem>();
+            if (equipment.isSold) return;
+            mMyItem = myItem;
+            InputInfo(equipment);
         }
+
         mButton.onClick.AddListener(Buy);
+    }
+
+    private void InputInfo(Item item)
+    {
+        mName.text = item.Info.mName;
+        mCost.text = item.Info.mCost.ToString();
+        mItemImage.sprite = item.Info.mSprite;
+
+        object info_Object = item.Info;
+        if (info_Object.GetType().IsSubclassOf((typeof(EquipmentInfo))))
+        {
+            EquipmentInfo info = (EquipmentInfo)info_Object;
+            foreach (var ability in info.mBonusAbilities)
+            {
+                mDescription.text += ((ability.Type != BonusAbility.AbilityType.Magic)) ?
+                    ability.Type.ToString() + ": " + ability.Value + "\n"
+                    : ability.Skill.mName + "\n";
+            }
+        }
     }
 
     private void ResetItem()
@@ -77,7 +91,6 @@ public class Slot : MonoBehaviour
             mMyItem.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
             PlayerController.Instance.mInventory.Add(mMyItem.GetComponent<Item>());
             mMyItem.GetComponent<Item>().isSold = true;
-            mButton.onClick.RemoveAllListeners();
             mBoarder.transform.Find("Money").Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
             ResetItem();
         }

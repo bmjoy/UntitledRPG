@@ -27,6 +27,8 @@ public class InteractSystem : MonoBehaviour
         for (int i = 0; i < colliders.Length; ++i)
         {
             var hit = colliders[i];
+            if (hit.transform.GetComponent<IInteractiveObject>().GetComplete())
+                continue;
             if(Vector3.Distance(hit.transform.position, transform.position) < mRadius)
             {
                 mClosestNPC = hit.transform.GetComponent<IInteractiveObject>();

@@ -7,7 +7,6 @@ public class RecoverPlace : InteractableEnvironment
 {
     [SerializeField]
     private float _RecoverPercentage = 50.0f;
-    private bool _Recovered = false;
 
     public override void Initialize(int id)
     {
@@ -17,15 +16,17 @@ public class RecoverPlace : InteractableEnvironment
 
     public override IEnumerator Interact(Action action = null)
     {
-        if(!_Recovered)
+        if(!_Completed)
         {
             foreach(GameObject go in PlayerController.Instance.mHeroes)
             {
                 var status = go.GetComponent<Unit>().mStatus;
-                go.GetComponent<Unit>().TakeRecover((_RecoverPercentage * status.mHealth) / status.mMaxHealth);
-                go.GetComponent<Unit>().TakeRecoverMana((_RecoverPercentage * status.mMana) / status.mMaxMana);
+                var bonusstatus = go.GetComponent<Unit>().mBonusStatus;
+                go.GetComponent<Unit>().TakeRecover((_RecoverPercentage * status.mHealth) / status.mMaxHealth + bonusstatus.mHealth);
+                go.GetComponent<Unit>().TakeRecoverMana((_RecoverPercentage * status.mMana) / status.mMaxMana + bonusstatus.mMana);
             }
-            _Recovered = true;
+            _Completed = true;
+            mInteraction.SetActive(false);
             action?.Invoke();
         }
         yield return null;
@@ -33,6 +34,6 @@ public class RecoverPlace : InteractableEnvironment
 
     public override void Reset()
     {
-        _Recovered = false;
+        _Completed = false;
     }
 }

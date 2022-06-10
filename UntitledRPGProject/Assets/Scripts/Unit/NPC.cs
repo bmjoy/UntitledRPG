@@ -142,4 +142,9 @@ public class NPC : MonoBehaviour, IInteractiveObject
     {
         return transform.position;
     }
+
+    public bool GetComplete()
+    {
+        return mComplete;
+    }
 }

@@ -68,23 +68,30 @@ public class BKActionTrigger : ActionTrigger
     private IEnumerator Slash()
     {
         yield return new WaitForSeconds(0.75f);
-        StartCoroutine(OneShot(0.05f));
-        StartCoroutine(OneShot(0.22f));
-        StartCoroutine(OneShot(0.05f));
+        yield return new WaitForSeconds(0.05f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.22f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.05f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
         for (int i = 0; i < 6; ++i)
         {
-            StartCoroutine(OneShot(0.12f));
+            yield return new WaitForSeconds(0.12f);
+            if (GetComponent<Unit>().mAttackClips.Count > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
         }
 
-        StartCoroutine(OneShot(0.25f));
+        yield return new WaitForSeconds(0.25f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
 
-        StartCoroutine(OneShot(0.2f));
-        StartCoroutine(OneShot(0.5f));
-    }
-
-    private IEnumerator OneShot(float time)
-    {
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(0.25f);
+        if (GetComponent<Unit>().mAttackClips.Count > 0)
+            AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
+        yield return new WaitForSeconds(0.5f);
         if (GetComponent<Unit>().mAttackClips.Count > 0)
             AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count - 1)].Clip);
     }
