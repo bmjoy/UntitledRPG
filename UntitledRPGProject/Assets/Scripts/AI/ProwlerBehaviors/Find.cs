@@ -13,7 +13,7 @@ public class Find : P_State
 
     public override void Enter(Prowler agent)
     {
-        if(player == null)
+        if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").gameObject;
         mTime = mFacedTime = 0.0f;
         isFound = false;
@@ -34,7 +34,7 @@ public class Find : P_State
         if (Vector3.Dot(dir, agent.transform.position) > Mathf.Cos(agent.mAngle) && isFound == false)
         {
             float dist = Vector3.Distance(agent.transform.position, player.transform.position);
-            if (dist <= agent.mRadius )
+            if (dist <= agent.mRadius)
             {
                 EnemyProwler enemyProwler = (EnemyProwler)agent;
                 enemyProwler.mExclamation.SetActive(true);
@@ -51,7 +51,7 @@ public class Find : P_State
             mFacedTime += Time.deltaTime;
         else
         {
-            if (mTime > agent.mStandbyTime || Vector3.Distance(agent.transform.position, dest) < 1.1f)
+            if (mTime > agent.mStandbyTime || Vector3.Distance(agent.transform.position, dest) < 0.5f)
                 agent.ChangeBehavior("Idle");
         }
     }

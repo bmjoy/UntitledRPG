@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public GameObject mCamera;
     [HideInInspector]
     public EnemyProwler mEnemyProwler;
+    [HideInInspector]
+    public bool[] CompanionCharacters = new bool[4];
 
     public int mRequiredEXP = 100;
     public int mAmountofSoul = 20;

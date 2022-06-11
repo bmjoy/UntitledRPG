@@ -7,8 +7,8 @@ using UnityEngine.AI;
 public class Prowler : MonoBehaviour
 {
     public GameObject mModel;
-    public NavMeshAgent mAgent;
     public Animator mAnimator;
+    public NavMeshAgent mAgent;
     protected BoxCollider mCollider;
     protected ProwlerStateMachine mStateMachine;
     protected SpriteRenderer mSpriteRenderer;
@@ -50,7 +50,7 @@ public class Prowler : MonoBehaviour
         mCollider.isTrigger = true;
         mAgent = gameObject.AddComponent<NavMeshAgent>();
         mAgent.baseOffset = 2.0f;
-        
+
         mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
         mAnimator = mModel.GetComponent<Animator>();
         mSpriteRenderer = mModel.GetComponent<SpriteRenderer>();
@@ -58,9 +58,10 @@ public class Prowler : MonoBehaviour
 
         mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();
         mStateMachine.mAgent = this;
-        mStateMachine.AddState<Idle>(new Idle(), "Idle");
-        mStateMachine.AddState<Find>(new Find(), "Find");
-        mStateMachine.AddState<Pursuit>(new Pursuit(), "Pursuit");
+        mStateMachine.AddState<P_State>(new Idle(), "Idle");
+        mStateMachine.AddState<P_State>(new Find(), "Find");
+        mStateMachine.AddState<P_State>(new Stop(), "Stop");
+        mStateMachine.AddState<P_State>(new Pursuit(), "Pursuit");
         mStateMachine.ChangeState("Idle");
     }
 
@@ -69,15 +70,11 @@ public class Prowler : MonoBehaviour
         if (LevelManager.Instance.isNext || GameManager.Instance.IsCinematicEvent || BattleManager.Instance.status != BattleManager.GameStatus.None
     || PlayerController.Instance.Interaction)
         {
-            mStateMachine.ChangeState("Idle");
-            if (mAgent)
-                mAgent.isStopped = true;
+            mStateMachine.ChangeState("Stop");
             return;
         }
         else
         {
-            if (mAgent)
-                mAgent.isStopped = false;
             mStateMachine.ActivateState();
         }
         mSpriteRenderer.flipX = (mVelocity.x < -0.1f) ? true : false;

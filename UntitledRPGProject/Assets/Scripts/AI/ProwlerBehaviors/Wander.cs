@@ -16,7 +16,7 @@ public class Wander : P_State
         mTime = 0.0f;
         agent.mAnimator.SetFloat("Speed", agent.mAgent.speed);
 
-        if(Vector3.Distance(agent.transform.position, agent.mLastPos) > 5.0f)
+        if (Vector3.Distance(agent.transform.position, agent.mLastPos) > 5.0f)
         {
             agent.mAgent.SetDestination(agent.mLastPos);
             dest = agent.mAgent.destination;

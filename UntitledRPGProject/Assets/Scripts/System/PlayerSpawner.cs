@@ -8,6 +8,7 @@ public class PlayerSpawner : Spawner
     public string mName;
     public override void Spawn()
     {
+
         if (mInitialized)
             return;
 
@@ -20,15 +21,16 @@ public class PlayerSpawner : Spawner
                 PlayerController.Instance.OnBattleEnd();
                 mObject = PlayerController.Instance.gameObject;
                 PlayerController.Instance.transform.GetComponent<CharacterController>().enabled = false;
-                PlayerController.Instance.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                PlayerController.Instance.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
                 PlayerController.Instance.transform.GetComponent<CharacterController>().enabled = true;
                 mObject.GetComponent<PlayerController>().mModel.GetComponent<Billboard>().Initialize();
             }
             else
             {
+                Debug.Log("Hi" + mInitialized.ToString());
                 mObject = PlayerController.Instance.gameObject;
                 PlayerController.Instance.transform.GetComponent<CharacterController>().enabled = false;
-                PlayerController.Instance.transform.localPosition = transform.localPosition;
+                PlayerController.Instance.transform.position = transform.position;
                 PlayerController.Instance.transform.GetComponent<CharacterController>().enabled = true;
                 PlayerController.Instance.GetComponent<PlayerController>().mModel.GetComponent<Billboard>().Initialize();
             }
@@ -58,5 +60,11 @@ public class PlayerSpawner : Spawner
             GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
     GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = mObject.transform;
         return mObject;
+    }
+
+    public override void ResetSpawn()
+    {
+        mInitialized = false;
+        Spawn();
     }
 }

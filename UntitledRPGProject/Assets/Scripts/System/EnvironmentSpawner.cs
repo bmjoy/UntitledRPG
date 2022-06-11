@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnvironmentSpawner : Spawner
 {
     [SerializeField]
-    private EnvironmentObject type;
+    public EnvironmentObject type;
 
     protected override GameObject CreateNewObject()
     {
