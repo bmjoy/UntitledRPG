@@ -22,10 +22,8 @@ public class Pursuit : P_State
             agent.mAgent.velocity = Vector3.zero;
             agent.mAgent.SetDestination(agent.transform.position);
             agent.ChangeBehavior("Idle");
-
         }
     }
-
     public override void Exit(Prowler agent)
     {
         agent.mAgent.speed = agent.mOriginalSpeed;
