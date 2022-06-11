@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemySpawner : Spawner
 {
     [SerializeField]
-    private List<EnemyUnit> mEnemyList = new List<EnemyUnit>();
+    public List<EnemyUnit> mEnemyList = new List<EnemyUnit>();
 
     [SerializeField]
     private float mRadius = 5.0f;
@@ -23,7 +23,7 @@ public class EnemySpawner : Spawner
         {
             GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
             newEnemyProwler.transform.position = new Vector3(transform.position.x,
-                transform.position.y + 2.5f,
+                transform.position.y + 1.3f,
                 transform.position.z);
 
             int LeaderCount = 0;
@@ -35,8 +35,7 @@ public class EnemySpawner : Spawner
                     break;
             }
 
-            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity);
-            newModel.transform.SetParent(newEnemyProwler.transform);
+            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
             newEnemyProwler.tag = "EnemyProwler";
             newEnemyProwler.layer = 6;
             newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, mSpeed, ID, newModel.gameObject);
@@ -45,9 +44,8 @@ public class EnemySpawner : Spawner
             {
                 if (mEnemyList[i] == EnemyUnit.None)
                     continue;
-                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity);
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity, newEnemyProwler.transform);
                 newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
-                obj.transform.SetParent(newEnemyProwler.transform);
                 obj.SetActive(false);
             }
 

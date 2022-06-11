@@ -22,8 +22,8 @@ public class RecoverPlace : InteractableEnvironment
             {
                 var status = go.GetComponent<Unit>().mStatus;
                 var bonusstatus = go.GetComponent<Unit>().mBonusStatus;
-                go.GetComponent<Unit>().TakeRecover((_RecoverPercentage * status.mHealth) / status.mMaxHealth + bonusstatus.mHealth);
-                go.GetComponent<Unit>().TakeRecoverMana((_RecoverPercentage * status.mMana) / status.mMaxMana + bonusstatus.mMana);
+                go.GetComponent<Unit>().TakeRecover((100 * _RecoverPercentage) / status.mMaxHealth + bonusstatus.mHealth);
+                go.GetComponent<Unit>().TakeRecoverMana((100 * _RecoverPercentage) / status.mMaxMana + bonusstatus.mMana);
             }
             _Completed = true;
             mInteraction.SetActive(false);

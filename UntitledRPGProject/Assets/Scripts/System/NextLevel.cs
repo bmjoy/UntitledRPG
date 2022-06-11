@@ -18,9 +18,9 @@ public class NextLevel : MonoBehaviour
                 return;
             LevelManager.Instance.isNext = true;
             if (!_isBackLevel)
-                LevelManager.Instance.GoNextLevel();
+                StartCoroutine(LevelManager.Instance.GoNextLevel());
             else
-                LevelManager.Instance.GoBackLevel();
+                StartCoroutine(LevelManager.Instance.GoBackLevel());
         }
     }
 

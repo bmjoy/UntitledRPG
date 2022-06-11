@@ -14,9 +14,13 @@ public class Field : MonoBehaviour
     public void Initialize()
     {
         transform.GetComponent<ParticleSystem>()?.Stop();
+        NavMeshHit navMesh = new NavMeshHit();
         if (!Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Ground")))
         {
-            NavMeshHit navMesh = new NavMeshHit();
+            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 100.0f, -1)) ? navMesh.position : transform.position;
+        }
+        if (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Obstacle")))
+        {
             transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 100.0f, -1)) ? navMesh.position : transform.position;
         }
         transform.position += new Vector3(0.0f, 1.5f, 0.0f);

@@ -23,26 +23,31 @@ public class LevelManager : MonoBehaviour
     }
 
     public int mCurrentLevel = 0;
+    private PlayerSpawner spawner;
     public void RespawnEntities()
     {
         var obj = GameObject.FindObjectOfType<UnitSpawnManager>();
+        
         obj.ResetSpawnAll();
     }
 
-    public void GoNextLevel()
+    public IEnumerator GoNextLevel()
     {
         mCurrentLevel++;
         SceneLoader.Instance._sceneIndex += 1;
         SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
         SceneLoader.Instance.StartGame();
+        yield return new WaitForSeconds(2.5f);
+        RespawnEntities();
     }
 
-    public void GoBackLevel()
+    public IEnumerator GoBackLevel()
     {
         mCurrentLevel--;
         SceneLoader.Instance._sceneIndex -= 1;
         SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
         SceneLoader.Instance.StartGame();
+        yield return new WaitForSeconds(2.5f);
     }
 
     public void RestartGame()

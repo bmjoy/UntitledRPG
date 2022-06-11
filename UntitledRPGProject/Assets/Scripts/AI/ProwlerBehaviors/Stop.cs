@@ -5,21 +5,23 @@ using UnityEngine;
 public class Stop : P_State
 {
     float mTime = 0.0f;
-    GameObject player;
     public override void Enter(Prowler agent)
     {
-        agent.mAnimator.SetFloat("Speed", 0.0f);
-        if (player == null)
-            player = GameObject.FindGameObjectWithTag("Player").gameObject;
     }
 
     public override void Execute(Prowler agent)
     {
+        agent.mAgent.velocity = Vector3.zero;
+        if (LevelManager.Instance.isNext)
+            return;
         mTime += Time.deltaTime;
-        if (mTime > agent.mStandbyTime * 2.0f || 
-            (Vector3.Distance(player.transform.position, agent.transform.position) > 4.0f))
-            agent.ChangeBehavior("Idle");
-
+        if (mTime > agent.mStandbyTime * 2.0f)
+        {
+            if ((agent.GetType().IsAssignableFrom(typeof(EnemyProwler))))
+            {
+                agent.ChangeBehavior("Find");
+            }
+        }
     }
 
     public override void Exit(Prowler agent)

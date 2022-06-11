@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Spawner : MonoBehaviour
 {
     public GameObject mObject;
-    protected bool mInitialized = false;
+    public bool mInitialized = false;
     protected int ID = 0;
     public Color mGizmoColor;
     protected abstract GameObject CreateNewObject();
