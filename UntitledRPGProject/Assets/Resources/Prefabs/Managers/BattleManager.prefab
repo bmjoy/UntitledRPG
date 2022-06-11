@@ -48,9 +48,8 @@ MonoBehaviour:
   mEnemies: []
   playerCenter: {x: 0, y: 0, z: 0}
   enemyCenter: {x: 0, y: 0, z: 0}
-  mRunningSpeed: 20
+  mRunningSpeed: 15
   mCurrentUnit: {fileID: 0}
-  mPercentageHP: 30
   status: 0
   mWaitTime: 4
   _TransitionTime: 2.1
