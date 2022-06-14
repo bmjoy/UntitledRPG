@@ -17,19 +17,17 @@ public class Find : P_State
             player = GameObject.FindGameObjectWithTag("Player").gameObject;
         mTime = mFacedTime = 0.0f;
         isFound = false;
-        agent.mAnimator.SetFloat("Speed", agent.mAgent.speed);
+        agent.mAnimator.SetFloat("Speed", agent.mSpeed);
         NavMeshHit mNavHit;
-        NavMesh.SamplePosition(agent.transform.position + new Vector3((float)Random.Range(-3, 3), 0.0f, (float)Random.Range(-3, 3)),
-            out mNavHit, 3.0f, 3);
-        agent.mAgent.speed = agent.mSpeed;
-        agent.mAgent.SetDestination(mNavHit.position);
-        dest = agent.mAgent.destination;
-    }
 
+        bool found = NavMesh.SamplePosition(agent.transform.position + new Vector3((float)Random.Range(-3, 3), 0.0f, (float)Random.Range(-3, 3)),
+            out mNavHit, 3.0f, 3);
+        dest = (found) ? mNavHit.position : agent.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0.0f, Random.Range(-0.5f, 0.5f)); ;
+    }
     public override void Execute(Prowler agent)
     {
         mTime += Time.deltaTime;
-        agent.mVelocity = agent.mAgent.velocity;
+        agent.transform.position = Vector3.MoveTowards(agent.transform.position, dest + new Vector3(0.0f,1.0f,0.0f), Time.deltaTime * agent.mSpeed);
         Vector3 dir = (player.transform.position - agent.transform.position).normalized;
         if (Vector3.Dot(dir, agent.transform.position) > Mathf.Cos(agent.mAngle) && isFound == false)
         {

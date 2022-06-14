@@ -8,10 +8,14 @@ public class Idle : P_State
     public override void Enter(Prowler agent)
     {
         mTime = 0.0f;
+        agent.mRigidbody.velocity = Vector3.zero;
+        agent.mRigidbody.angularVelocity = Vector3.zero;
     }
 
     public override void Execute(Prowler agent)
     {
+        agent.mRigidbody.velocity = Vector3.zero;
+        agent.mRigidbody.angularVelocity = Vector3.zero;
         if (LevelManager.Instance.isNext)
             return;
         mTime += Time.deltaTime;

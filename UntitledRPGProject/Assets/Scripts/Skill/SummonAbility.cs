@@ -121,7 +121,7 @@ public class SummonAbility : Skill_Setting
         {
             if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForAccpet);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -171,7 +171,7 @@ public class SummonAbility : Skill_Setting
                     unit.transform.SetParent(mOwner.transform.parent);
                     BattleManager.Instance.mOrders.Enqueue(unit.GetComponent<Unit>());
                     BattleManager.Instance.mUnits.Add(unit);
-                    UIManager.Instance.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(unit.GetComponent<Unit>());
+                    UIManager.Instance.mOrderBar.EnqueueSignleOrder(unit.GetComponent<Unit>());
                 }
 
             }

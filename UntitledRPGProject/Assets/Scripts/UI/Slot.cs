@@ -78,6 +78,8 @@ public class Slot : MonoBehaviour
 
     private void Buy()
     {
+        if (mMyItem == null)
+            return;
         int result = 0;
         if (!int.TryParse(mCost.text.ToString(), out result))
         {

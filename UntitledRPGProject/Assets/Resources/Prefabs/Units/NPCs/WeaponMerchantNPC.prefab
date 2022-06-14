@@ -167,6 +167,12 @@ MonoBehaviour:
   - Text: It seems you don't have enough coins!
     Trigger: 0
   mInteraction: {fileID: 0}
+  m_DialogueBuyCase:
+    Text: Thank you for buying!
+    Trigger: 1
+  m_DialogueSellCase:
+    Text: Take a look.
+    Trigger: 1
 --- !u!114 &4164070528283239420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,4 +208,4 @@ NavMeshAgent:
   m_Height: 3.412506
   m_BaseOffset: 2
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0

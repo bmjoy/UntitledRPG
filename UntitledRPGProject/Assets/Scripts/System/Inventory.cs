@@ -51,6 +51,16 @@ public class Inventory
         Remove(item);
     }
 
+    public void AllDelete()
+    {
+        foreach (Transform it in PlayerController.Instance.transform.Find("Bag"))
+        {
+            Remove(it.GetComponent<Item>());
+            GameObject.Destroy(it.gameObject);
+        }
+
+    }
+
     public Item Get(string name)
     {
         foreach(var item in myInventory)

@@ -186,7 +186,6 @@ GameManager.Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cine
                 case CinematicEventMethod.CinematicEventType.PlayMusic:
                     {
                         AudioManager.Instance.musicSource.clip = e.Clip;
-                        AudioManager.Instance.musicSource.volume = 0.5f;
                         AudioManager.Instance.musicSource.Play();
                         yield return new WaitForSeconds(e.Time);
                     }

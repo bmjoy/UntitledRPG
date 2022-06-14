@@ -25,16 +25,23 @@ public class SlotManager : MonoBehaviour
         }
     }
 
-    public void StartTrade()
+    public void StartBuyTrade()
     {
         UIManager.Instance.mMerchantScreen.gameObject.SetActive(true);
-        UIManager.Instance.mMerchantScreen.Active(true);
-        UIManager.Instance.mMerchantScreen.InitializeALL(ref myItem);
+        UIManager.Instance.mMerchantScreen.BuyActive(true);
+        UIManager.Instance.mMerchantScreen.InitializeBuy(ref myItem);
+    }
+    public void StartSellTrade()
+    {
+        UIManager.Instance.mMerchantScreen.gameObject.SetActive(true);
+        UIManager.Instance.mMerchantScreen.SellActive(true);
+        UIManager.Instance.mMerchantScreen.InitializeSell();
     }
 
     public void EndTrade()
     {
-        UIManager.Instance.mMerchantScreen.Active(false);
+        UIManager.Instance.mMerchantScreen.BuyActive(false);
+        UIManager.Instance.mMerchantScreen.SellActive(false);
         UIManager.Instance.mMerchantScreen.gameObject.SetActive(false);
     }
 

@@ -16,13 +16,12 @@ public class TGActionTrigger : ActionTrigger
     {
         var boss = GetComponent<Boss>();
         GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Temple_Guardian_Slash"), mPos, Quaternion.identity);
-
         if (mTriggered)
         {
             
-            yield return new WaitForSeconds(mTime / 3.0f);
-            DamageState();
             yield return new WaitForSeconds(mTime / 2.0f);
+            DamageState();
+            yield return new WaitForSeconds(mTime / 1.5f);
             slash.GetComponent<Animator>().SetTrigger("Second");
             DamageState();
         }
@@ -57,12 +56,12 @@ public class TGActionTrigger : ActionTrigger
         {
             mTriggered = true;
             boss.mAnimator.SetBool("Attack2", true);
-            mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime - 0.2f);
+            mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f);
         }
         else
         {
             mTriggered = false;
-            mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime - 0.2f) / 2.0f;
+            mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f) / 2.0f;
         }
         mPos = boss.mTarget.transform.position;
         boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
