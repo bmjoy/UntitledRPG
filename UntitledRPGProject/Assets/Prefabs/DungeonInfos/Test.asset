@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   Population: 100
-  Column: 6
-  Row: 6
+  Column: 2
+  Row: 2
+  MerchantAmount: 2
+  CompanionAmount: 2
+  RecoverAmount: 2
   Offset: {x: 35, y: 35}
   Rooms:
   - {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}

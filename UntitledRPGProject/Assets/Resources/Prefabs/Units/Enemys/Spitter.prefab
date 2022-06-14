@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7706372842410862644}
   - component: {fileID: 8313394582854172929}
   - component: {fileID: 6903037460306441850}
+  - component: {fileID: 472688469681298457}
   m_Layer: 0
   m_Name: Spitter
   m_TagString: Untagged
@@ -116,3 +117,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &472688469681298457
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2224704230529896569}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8888888, y: 2.7777777, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}

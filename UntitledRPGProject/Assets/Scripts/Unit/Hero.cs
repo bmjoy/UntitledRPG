@@ -47,12 +47,14 @@ public class Hero : NPC
     public override IEnumerator Event()
     {
         mTrigger = null;
-        UIManager.Instance.AddListenerNoButton(() => {
+        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.YesButtonImage,
+UIManager.Instance.mStorage.NoButtonImage);
+        UIManager.Instance.AddListenerRightButton(() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        UIManager.Instance.AddListenerYesButton(() => {
+        UIManager.Instance.AddListenerLeftButton(() => {
             if(PlayerController.Instance.mHeroes.Count >= 4)
             {
                 Dialogue dialogue = new Dialogue();

@@ -87,7 +87,7 @@ public class Standby : State
                     if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[0]))
                         behavior = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
                     else
-                        behavior = (UnityEngine.Random.Range(0, 100) >= 50) ? "Defend" : "Attack";
+                        behavior = "Attack";
                 }
             }
 

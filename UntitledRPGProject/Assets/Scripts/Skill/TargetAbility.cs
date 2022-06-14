@@ -30,7 +30,7 @@ public class TargetAbility : DamagableAbility
         {
             if (mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForTarget);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForTarget);
                 mTarget = null;
 
                 foreach (GameObject unit in (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies)
@@ -60,7 +60,7 @@ public class TargetAbility : DamagableAbility
                     unit.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
                 }
 
-                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForAccpet);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))

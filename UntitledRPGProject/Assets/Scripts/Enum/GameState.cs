@@ -4,7 +4,6 @@ public enum GameState
     Initialize,
     GamePlay,
     GamePause,
-    Busy,
     Victory,
     GameOver
 }

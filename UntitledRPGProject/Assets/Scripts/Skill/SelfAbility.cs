@@ -80,7 +80,7 @@ public class SelfAbility : DamagableAbility
         {
             if(mOwner.mAiBuild.type == AIType.Manual)
             {
-                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForAccpet);
+                UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
                 while (true)
                 {
                     if (Input.GetMouseButtonDown(0))

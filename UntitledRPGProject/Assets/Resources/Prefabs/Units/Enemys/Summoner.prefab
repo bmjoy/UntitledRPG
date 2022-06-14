@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 299265072251665221}
   - component: {fileID: 2128697297487139440}
   - component: {fileID: 3537921952056845579}
+  - component: {fileID: 5112324520378168337}
   m_Layer: 0
   m_Name: Summoner
   m_TagString: Untagged
@@ -116,3 +117,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &5112324520378168337
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8073271946339091208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.875, y: 5.5, z: 0.2}
+  m_Center: {x: 0, y: 1.375, z: 0}

@@ -185,7 +185,8 @@ public class InventoryUI : MonoBehaviour
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
             EquipmentItem equipment = (EquipmentItem)item.Value;
-            if(equipment.GetType() == typeof(Weapon))
+
+            if (equipment.GetType() == typeof(Weapon))
             {
                 var unit = PlayerController.Instance.mHeroes[mIndex].GetComponent<Player>();
                 WeaponInfo weapon = (WeaponInfo)item.Value.Info;
@@ -193,37 +194,26 @@ public class InventoryUI : MonoBehaviour
             }
 
             if (equipment.IsEquipped) continue;
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity);
-            go.transform.SetParent(mItemsGroup.transform);
-
-            go.GetComponent<SetItemUI>().mItem = item.Value;
-            go.GetComponent<SetItemUI>().ID = item.Key;
-            go.GetComponent<SetItemUI>().Initialize();
-
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
+            go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Equip);
             items.Add(go);
-
-            if (item.Value is Weapon)
-                mEquipmentImageGroup.transform.Find("Weapon").GetComponent<UnSetItemUI>().Initialize();
+            string part = string.Empty;
+            if (item.Value is Weapon) part = "Weapon";
             else if (item.Value is Armor)
             {
                 var i = (Armor)item.Value;
                 switch (i.armorType)
                 {
-                    case ArmorType.Bracer:
-                        mEquipmentImageGroup.transform.Find("Arm").GetComponent<UnSetItemUI>().Initialize();
-                        break;
-                    case ArmorType.BodyArmor:
-                        mEquipmentImageGroup.transform.Find("Body").GetComponent<UnSetItemUI>().Initialize();
-                        break;
-                    case ArmorType.LegArmor:
-                        mEquipmentImageGroup.transform.Find("Leg").GetComponent<UnSetItemUI>().Initialize();
-                        break;
-                    case ArmorType.Helmet:
-                        mEquipmentImageGroup.transform.Find("Head").GetComponent<UnSetItemUI>().Initialize();
-                        break;
+                    case ArmorType.Bracer: part = "Arm"; break;
+                    case ArmorType.BodyArmor: part = "Body"; break;
+                    case ArmorType.LegArmor: part = "Leg"; break;
+                    case ArmorType.Helmet: part = "Head"; break;
                 }
             }
-
+            else
+                continue;
+            if(part != string.Empty)
+                mEquipmentImageGroup.transform.Find(part).GetComponent<ItemUI>().Initialize(item.Key,item.Value,ItemUI.ItemUIType.Unequip);
         }
         _intialized = true;
     }

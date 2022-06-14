@@ -285,25 +285,36 @@ public class Unit : MonoBehaviour, IUnit
         
         if (mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
         {
-            UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mTextForTarget);
+            UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForTarget);
             foreach (GameObject enemy in BattleManager.Instance.mEnemies)
             {
                 if (!enemy.GetComponent<Unit>().mConditions.isDied)
                     enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(true);
             }
+            float maxDist = 0.0f;
+            bool selected = false;
             while (true)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 500, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
                 {
-                    mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
-                    mTarget?.mSelected.SetActive(true);
+                    if(maxDist < hit.distance && !selected)
+                    {
+                        mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                        mTarget?.mSelected.SetActive(true);
+                        selected = true;
+                    }
+
                     if (mTarget && Input.GetMouseButtonDown(0))
                         break;
                 }
                 else
+                {
+                    maxDist = 0.0f;
+                    selected = false;
                     mTarget?.mSelected.SetActive(false);
+                }
                 if (Input.GetMouseButtonDown(1))
                 {
                     BattleManager.Instance.Cancel();
@@ -493,7 +504,7 @@ public class Unit : MonoBehaviour, IUnit
             mAnimator.SetBool("Death",true);
             mHealthBar.ActiveDeathAnimation(true);
             GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = false;
-            UIManager.Instance.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
+            UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
             mBuffNerfController.Stop();
             mField.GetComponent<Field>().Picked(false);
         }
@@ -592,6 +603,6 @@ public class Unit : MonoBehaviour, IUnit
         GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = true;
         TakeRecover(Mathf.RoundToInt((val * mStatus.mMaxHealth) / (mStatus.mMaxHealth + mBonusStatus.mHealth)));
         TakeRecoverMana(Mathf.RoundToInt((val * mStatus.mMaxMana) / (mStatus.mMaxMana + mBonusStatus.mMana)));
-        UIManager.Instance.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(this);
+        UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(this);
     }
 }

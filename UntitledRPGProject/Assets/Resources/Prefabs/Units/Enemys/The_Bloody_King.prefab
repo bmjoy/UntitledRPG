@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3612854867850382963}
   - component: {fileID: 8724793631746519936}
   - component: {fileID: 7167874380601418741}
+  - component: {fileID: 9020786159809757465}
   m_Layer: 0
   m_Name: The_Bloody_King
   m_TagString: Untagged
@@ -117,6 +118,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mUseStaticBillboard: 0
+--- !u!65 &9020786159809757465
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3612854867850382965}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 4, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3108667849339347368
 PrefabInstance:
   m_ObjectHideFlags: 0

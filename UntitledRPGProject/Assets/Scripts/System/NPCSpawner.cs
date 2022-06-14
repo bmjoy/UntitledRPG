@@ -30,9 +30,19 @@ public class NPCSpawner : Spawner
     {
         if (mInitialized)
             return;
-        if(mType < (NPCUnit)5 && PlayerController.Instance.mHeroes.Exists(s=>s.GetComponent<Unit>().mSetting.Name == mType.ToString()))
-            return;
+        if(PlayerController.Instance)
+        {
+            if (mType < (NPCUnit)5 && PlayerController.Instance.mHeroes.Exists(s => s.GetComponent<Unit>().mSetting.Name == mType.ToString()))
+                return;
+        }
+
         ID = GameManager.s_ID++;
+        StartCoroutine(Wait());
+        mObject = CreateNewObject();
+    }
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1.0f);
         mObject = CreateNewObject();
         if (mObject == null)
         {

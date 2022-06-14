@@ -10,6 +10,11 @@ public class Field : MonoBehaviour
     {
         if(transform.GetComponent<ParticleSystem>())
             transform.GetComponent<ParticleSystem>().Stop();
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 5.0f, LayerMask.GetMask("Field"));
+        for(int i = 0; i < colliders.Length; ++i)
+        {
+            colliders[i].GetComponent<Field>().Initialize();
+        }
     }
     public void Initialize()
     {
@@ -17,13 +22,17 @@ public class Field : MonoBehaviour
         NavMeshHit navMesh = new NavMeshHit();
         if (!Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Ground")))
         {
-            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 100.0f, -1)) ? navMesh.position : transform.position;
+            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
         }
         if (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Obstacle")))
         {
-            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 100.0f, -1)) ? navMesh.position : transform.position;
+            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
         }
-        transform.position += new Vector3(0.0f, 1.5f, 0.0f);
+        if (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Field")))
+        {
+            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
+        }
+        transform.position += new Vector3(Random.Range(-0.5f,0.5f), 1.5f, Random.Range(-0.5f, 0.5f));
     }
 
     public void Picked(bool active)

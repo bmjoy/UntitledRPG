@@ -190,6 +190,8 @@ public class PlayerController : MonoBehaviour
             if (finish == exist)
                 break;
         }
+        
+        mInventory?.AllDelete();
 
         Destroy(go);
 

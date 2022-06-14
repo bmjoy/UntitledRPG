@@ -13,21 +13,22 @@ public class Room : Environment
         WeaponMerchant,
         Companion,
         LowTierMonster,
-        HighTierMonster,
-        Player
+        HighTierMonster
     }
     
     public GameObject[] mWalls;
     public GameObject[] mConnectors;
     public NavMeshSurface meshSurface;
-    
+
     public void ConstructRoom(bool[] status, RoomType type)
     {
         for (int i = 0; i < status.Length; ++i)
         {
             mWalls[i].SetActive(!status[i]);
             if(mConnectors.Length > 0)
+            {
                 mConnectors[i].SetActive(status[i]);
+            }
         }
 
         Vector3 pos = transform.position + new Vector3(Random.Range(-0.5f,0.5f), 0.5f, Random.Range(-0.5f, 0.5f));
@@ -62,12 +63,8 @@ public class Room : Environment
                 randomAmount = Random.Range(1, 4);
                 for (int i = 0; i < randomAmount; ++i)
                 {
-                    spawner.GetComponent<EnemySpawner>().mEnemyList.Add((EnemyUnit)Random.Range(3, 5));
+                    spawner.GetComponent<EnemySpawner>().mEnemyList.Add((EnemyUnit)Random.Range(3, 6));
                 }
-                break;
-            case RoomType.Player:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/PlayerSpawner"), pos, Quaternion.identity).GetComponent<Spawner>();
-                spawner.GetComponent<PlayerSpawner>().mName = "Jimmy";
                 break;
             case RoomType.Companion:
                 int index = Random.Range(0, 3);
