@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3a3b30d1f70d34892ec47ed510dfd6, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  Population: 100
+  Population: 1000
   Column: 2
   Row: 2
   MerchantAmount: 2
