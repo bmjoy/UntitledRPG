@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3a3b30d1f70d34892ec47ed510dfd6, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  Population: 100
-  Column: 6
-  Row: 6
+  Population: 1000
+  Column: 5
+  Row: 5
   Offset: {x: 35, y: 35}
   Rooms:
-  - {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
+  - {fileID: 6763987648887041700, guid: 2a82ba272f6ffee4aa17349c6991ab1b, type: 3}
   - {fileID: 4171566842334870531, guid: f14db990a11812744a2fc6ff56ff936c, type: 3}
   - {fileID: 4454274137241353100, guid: e327ea7c9c7deb24f9bd3da961fc6aae, type: 3}
   PlayerRoom: {fileID: 4368484331024628079, guid: b48d904a8dc114d4da1d3efbb0b4cd46, type: 3}
