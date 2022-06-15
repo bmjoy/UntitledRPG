@@ -27,7 +27,6 @@ public class PlayerSpawner : Spawner
             }
             else
             {
-                Debug.Log("Hi" + mInitialized.ToString());
                 mObject = PlayerController.Instance.gameObject;
                 PlayerController.Instance.transform.GetComponent<CharacterController>().enabled = false;
                 PlayerController.Instance.transform.position = transform.position;

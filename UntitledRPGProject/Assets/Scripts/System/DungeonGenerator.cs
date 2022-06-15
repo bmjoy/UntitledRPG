@@ -9,6 +9,15 @@ public class DungeonGenerator : MonoBehaviour
     private DungeonGeneratorInfo _Info;
     private List<Cell> _Borad;
 
+    [SerializeField]
+    private float HighTierMonsterChance = 40.0f;
+    [SerializeField]
+    private float LowTierMonsterChance = 40.0f;
+    int _CurrentWeaponMerchant = 0;
+    int _CurrentArmorMerchant = 0;
+    int _CurrentCompanion = 0;
+    int _CurrentRecover = 0;
+
     private int _StartIndex = 0;
 
     void Start()
@@ -18,76 +27,102 @@ public class DungeonGenerator : MonoBehaviour
 
     void Generate()
     {
+        _CurrentWeaponMerchant = 0;
+        _CurrentArmorMerchant = 0;
+        _CurrentCompanion = 0;
+        _CurrentRecover = 0;
+
+        Room room;
+        Room.RoomType type = Room.RoomType.None;
         for (int y = 0; y < _Info.Row; y++)
         {
             for (int x = 0; x < _Info.Column; x++)
             {
                 Cell cell = _Borad[Mathf.FloorToInt(y + x * _Info.Column)];
-                Room room;
-                Room.RoomType type;
+                
                 if (cell.GetVisited())
                 {
-                    if (y == _Info.Row - 1 && x == _Info.Column - 1)
-                    {
-                        room = Instantiate(_Info.BossRoom
-        , new Vector3(y * (_Info.Offset.x), 0.0f, -x * (_Info.Offset.y))
-        , Quaternion.identity, transform).GetComponent<Room>();
-                        type = Room.RoomType.None;
-                    }
-                    else if (y == Mathf.FloorToInt((float)_Info.Row / 2) && x ==
-                        Mathf.FloorToInt((float)_Info.Column / 2))
-                    {
-                        room = Instantiate(_Info.MiniBossRoom
-    , new Vector3(y * _Info.Offset.x, 0.0f, -x * _Info.Offset.y)
-    , Quaternion.identity, transform).GetComponent<Room>();
-                        type = Room.RoomType.None;
-                    }
-                    else if(y == 0 && x == 0)
-                    {
-                        room = Instantiate(_Info.PlayerRoom
-, new Vector3(y * _Info.Offset.x, 0.0f, -x * _Info.Offset.y)
-, Quaternion.identity, transform).GetComponent<Room>();
-                        type = Room.RoomType.Player;
-                    }
-                    else if(y >= Mathf.FloorToInt((float)_Info.Row / 2)
-                        && x >= Mathf.FloorToInt((float)_Info.Column / 2))
-                    {
-                        room = Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count - 1)]
-, new Vector3(y * _Info.Offset.x, 0.0f, -x * _Info.Offset.y)
-, Quaternion.identity, transform).GetComponent<Room>();
-                        if (UnityEngine.Random.Range(0, 100) >= 30)
-                            type = Room.RoomType.HighTierMonster;
-                        else
-                            type = (Room.RoomType)UnityEngine.Random.Range(1, 4);
-                    }
-                    else
-                    {
-                        room = Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count - 1)]
-    , new Vector3(y * _Info.Offset.x, 0.0f, -x * _Info.Offset.y)
-    , Quaternion.identity, transform).GetComponent<Room>();
-                        if(UnityEngine.Random.Range(0,100) >= 30)
-                            type = Room.RoomType.LowTierMonster;
-                        else
-                            type = (Room.RoomType)UnityEngine.Random.Range(1, 4);
-                    }
+                    room = GetRoom(y, x, ref type);
                     room.ConstructRoom(cell.isOpened,type);
 
                     room.name += " " + type.ToString();
                 }
             }
         }
-        GameObject manager = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/UnitSpawnManager"), transform);
+        Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/UnitSpawnManager"), transform);
     }
 
+    private Room GetRoom(int row, int col, ref Room.RoomType type)
+    {
+        Vector3 pos = new Vector3(row * _Info.Offset.x, 0.0f, -col * _Info.Offset.y);
+        type = Room.RoomType.None;
+        if (row == 0 && col == 0)
+        {
+            return Instantiate(_Info.PlayerRoom, pos, Quaternion.identity, transform).GetComponent<Room>();
+        }
+        else if(row == _Info.Row - 1 && col == _Info.Column - 1)
+        {
+            return Instantiate(_Info.BossRoom, pos, Quaternion.identity, transform).GetComponent<Room>();
+        }
+        else if(row == Mathf.FloorToInt((float)_Info.Row / 2) && col == Mathf.FloorToInt((float)_Info.Column / 2))
+        {
+            return Instantiate(_Info.MiniBossRoom, pos, Quaternion.identity, transform).GetComponent<Room>();
+        }        
+        else if(row > Mathf.FloorToInt((float)_Info.Row / 2) && col > Mathf.FloorToInt((float)_Info.Column / 2))
+        {
+            type = GetRoomType(HighTierMonsterChance, Room.RoomType.HighTierMonster);
+            return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count - 1)], pos, Quaternion.identity, transform).GetComponent<Room>();
+        }
+        else
+        {
+            type = GetRoomType(LowTierMonsterChance, Room.RoomType.LowTierMonster);
+            return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count - 1)], pos, Quaternion.identity, transform).GetComponent<Room>();
+        }
+    }
+
+    private Room.RoomType GetRoomType(float Chance, Room.RoomType defaultType)
+    {
+        Room.RoomType type = (Room.RoomType)UnityEngine.Random.Range(1, 5);
+
+        if (UnityEngine.Random.Range(0, 100) >= Chance)
+            return defaultType;
+
+        switch (type)
+        {
+            case Room.RoomType.Recover:
+                if (_CurrentRecover < _Info.RecoverAmount)
+                    _CurrentRecover++;
+                else
+                    type = defaultType;
+                break;
+            case Room.RoomType.ArmorMerchant:
+                if (_CurrentArmorMerchant < _Info.MerchantAmount)
+                    _CurrentArmorMerchant++;
+                else
+                    type = defaultType;
+                break;
+            case Room.RoomType.WeaponMerchant:
+                if (_CurrentWeaponMerchant < _Info.MerchantAmount)
+                    _CurrentWeaponMerchant++;
+                else
+                    type = defaultType;
+                break;
+            case Room.RoomType.Companion:
+                if (_CurrentCompanion < _Info.CompanionAmount)
+                    _CurrentCompanion++;
+                else
+                    type = defaultType;
+                break;
+        }
+        return type;
+    }
     void Populate()
     {
         _Borad = new List<Cell>();
         for (int y = 0; y < _Info.Row; ++y)
         {
             for (int x = 0; x < _Info.Column; ++x)
-            {
                 _Borad.Add(new Cell());
-            }
         }
         int currentIndex = _StartIndex;
         Stack<int> path = new Stack<int>();
@@ -95,62 +130,54 @@ public class DungeonGenerator : MonoBehaviour
 
         while (k < _Info.Population)
         {
-            try
+            k++;
+            _Borad[currentIndex].Visit();
+            if (currentIndex == _Borad.Count - 1)
+                break;
+            List<int> neighbors = CheckNeighbors(currentIndex);
+            if (neighbors.Count == 0)
             {
-                k++;
-                _Borad[currentIndex].Visit();
-                if (currentIndex == _Borad.Count - 1)
+                if (path.Count == 0)
                     break;
-                List<int> neighbors = CheckNeighbors(currentIndex);
-                if (neighbors.Count == 0)
+                else
+                    currentIndex = path.Pop();
+            }
+            else
+            {
+                path.Push(currentIndex);
+                int newIndex = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
+                if (newIndex > currentIndex)
                 {
-                    if (path.Count == 0)
-                        break;
+                    if (newIndex - 1 == currentIndex)
+                    {
+                        _Borad[currentIndex].Open(2);
+                        currentIndex = newIndex;
+                        _Borad[currentIndex].Open(3);
+                    }
                     else
-                        currentIndex = path.Pop();
+                    {
+                        _Borad[currentIndex].Open(1);
+                        currentIndex = newIndex;
+                        _Borad[currentIndex].Open(0);
+
+                    }
                 }
                 else
                 {
-                    path.Push(currentIndex);
-                    int newIndex = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
-                    if (newIndex > currentIndex)
+                    if (newIndex + 1 == currentIndex)
                     {
-                        if (newIndex - 1 == currentIndex)
-                        {
-                            _Borad[currentIndex].Open(2);
-                            currentIndex = newIndex;
-                            _Borad[currentIndex].Open(3);
-                        }
-                        else
-                        {
-                            _Borad[currentIndex].Open(1);
-                            currentIndex = newIndex;
-                            _Borad[currentIndex].Open(0);
-
-                        }
+                        _Borad[currentIndex].Open(3);
+                        currentIndex = newIndex;
+                        _Borad[currentIndex].Open(2);
                     }
                     else
                     {
-                        if (newIndex + 1 == currentIndex)
-                        {
-                            _Borad[currentIndex].Open(3);
-                            currentIndex = newIndex;
-                            _Borad[currentIndex].Open(2);
-                        }
-                        else
-                        {
-                            _Borad[currentIndex].Open(0);
-                            currentIndex = newIndex;
-                            _Borad[currentIndex].Open(1);
-                        }
+                        _Borad[currentIndex].Open(0);
+                        currentIndex = newIndex;
+                        _Borad[currentIndex].Open(1);
                     }
                 }
             }
-            catch(Exception ex)
-            {
-                Debug.Log(ex.StackTrace);
-            }
-            
         }
 
         Generate();

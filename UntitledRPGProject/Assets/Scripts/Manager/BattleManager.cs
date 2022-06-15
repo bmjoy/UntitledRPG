@@ -348,6 +348,8 @@ public class BattleManager : MonoBehaviour
 
     public void Attack()
     {
+        if (GameManager.Instance.mGameState == GameState.GamePause)
+            return;
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
@@ -357,7 +359,9 @@ public class BattleManager : MonoBehaviour
 
     public void Defend()
     {
-        if(status == GameStatus.WaitForOrder)
+        if (GameManager.Instance.mGameState == GameState.GamePause)
+            return;
+        if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
             StartCoroutine(mCurrentUnit.DefendAction(() => EndAction()));
@@ -366,7 +370,9 @@ public class BattleManager : MonoBehaviour
 
     public void Magic()
     {
-        if(status == GameStatus.WaitForOrder)
+        if (GameManager.Instance.mGameState == GameState.GamePause)
+            return;
+        if (status == GameStatus.WaitForOrder)
         {
             if(mCurrentUnit.GetComponent<Skill_DataBase>().Skill == null)
             {

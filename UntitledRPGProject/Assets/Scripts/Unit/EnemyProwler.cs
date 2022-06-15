@@ -30,8 +30,7 @@ public class EnemyProwler : Prowler
 
         base.Initialize();
         mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForEnemyProwler"), transform.position
-+ new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity);
-        mCanvas.transform.SetParent(transform);
++ new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.0f, 0.0f), Quaternion.identity, mModel.transform);
 
         if(mModel.transform.Find("Canvas") != null)
         {
@@ -86,6 +85,7 @@ public class EnemyProwler : Prowler
         if (id == this.id)
         {
             mCollider.enabled = false;
+            mRigidbody.isKinematic = true;
             mModel.SetActive(false);
             StartCoroutine(WaitForSpawn());
         }

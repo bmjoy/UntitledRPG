@@ -19,49 +19,35 @@ public class UIManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
     }
-    [TextArea]
-    public string mTextForTarget;
-    [TextArea]
-    public string mTextForAccpet;
-    [TextArea]
-    public string mTextForGameOver = "Wasted!";
-
+    
+    public UIStorage mStorage;
     public Canvas mCanvas;
-    public GameObject mBattleUI;
-    public GameObject mSkillDescription;
-    public GameObject mAttackDescription;
-    public GameObject mDefendDescription;
-    public GameObject mBasicText;
-    public GameObject mFadeScreen;
-    public GameObject mDialogueBox;
-    public GameObject mScreenTransition;
-    private Animator mTransitionAnimator;      
-    public GameObject mVictoryScreenTransition;
+
+    // ----- Animator -----
     private Animator mVictoryTransitionAnimator;
+    private Animator mTransitionAnimator;
+    private Animator mTextAnimator;
+    private Animator mFadeAnimator;
 
     private List<BigHealthBar> mHealthBarList = new List<BigHealthBar>();
-
-    private TextMeshProUGUI mDialogueText;
-
-    private Button mYesButton;
-    private Button mNoButton;
-    private Button mExitButton;
-    private Image mEKeyButton;
-
-    public GameObject mOrderbar;
     private BossHealthBar mBossHealthBar;
 
+    public OrderBar mOrderBar;
+
     public InventoryUI mInventoryUI;
+    // ----- Screen -----
     public OptionScreen mOptionScreenUI;
     public VictoryScreen mVictoryScreen;
     public MerchantScreen mMerchantScreen;
+
+    private bool switchOfInventory = false;
+    private float mTime = 0.0f;
+    private float mCoolTime = 1.0f;
 
     void Start()
     {
         mCanvas = transform.Find("Canvas").GetComponent<Canvas>();
         mCanvas.overrideSorting = true;
-        mOrderbar.GetComponent<OrderBar>().Initialize();
-
         mHealthBarList = mCanvas.transform.Find("HealthBarInBattleGroundGroup").GetComponentsInChildren<BigHealthBar>().ToList();
         mBossHealthBar = mCanvas.transform.Find("BossBorader").Find("HealthBarInBattleGround").GetComponent<BossHealthBar>();
 
@@ -74,28 +60,19 @@ public class UIManager : MonoBehaviour
 
         BattleManager.Instance.onEnqueuingOrderEvent += BattleStart;
         BattleManager.Instance.onFinishOrderEvent += BattleEnd;
-        mFadeScreen.SetActive(false);
+        mStorage.Initialize();
         mInventoryUI = mCanvas.transform.Find("Inventory").GetComponent<InventoryUI>();
-        mDialogueText = mDialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>();
-        mYesButton = mDialogueBox.transform.Find("YesButton").GetComponent<Button>();
-        mNoButton = mDialogueBox.transform.Find("NoButton").GetComponent<Button>();
-        mExitButton = mDialogueBox.transform.Find("ExitButton").GetComponent<Button>();
-        mEKeyButton = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
         mVictoryScreen = mCanvas.transform.Find("VictoryScreen").GetComponent<VictoryScreen>();
         mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
         mOptionScreenUI = mCanvas.transform.Find("OptionScreen").GetComponent<OptionScreen>();
-
-        mScreenTransition = mCanvas.transform.Find("ScreenTransition").gameObject;
-        mTransitionAnimator = mScreenTransition.GetComponent<Animator>();                
-        mVictoryScreenTransition = mCanvas.transform.Find("ScreenTransitionVictory").gameObject;
-        mVictoryTransitionAnimator = mVictoryScreenTransition.GetComponent<Animator>();
-        mScreenTransition.SetActive(false);
-        mVictoryScreenTransition.SetActive(false);
-
+        mTransitionAnimator = mStorage.mScreenTransition.GetComponent<Animator>();
+        mTextAnimator = mStorage.mBasicText.GetComponent<Animator>();
+        mFadeAnimator = mStorage.mFadeScreen.GetComponent<Animator>();
+        mVictoryTransitionAnimator = mStorage.mVictoryScreenTransition.GetComponent<Animator>();
+        mOrderBar = mStorage.mOrderbar.GetComponent<OrderBar>();
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize();
-        mYesButton.onClick.RemoveAllListeners();
-        mNoButton.onClick.RemoveAllListeners();
+
         DisplayBattleInterface(false);
         DisplayText(false);
         DisplayDialogueBox(false);
@@ -106,10 +83,6 @@ public class UIManager : MonoBehaviour
     {
         mInventoryUI.gameObject.SetActive(false);
     }
-
-    bool switchOfInventory = false;
-    float mTime = 0.0f;
-    float mCoolTime = 1.0f;
 
     private void Update()
     {
@@ -126,16 +99,16 @@ public class UIManager : MonoBehaviour
   
     public IEnumerator VictoryTransition()
     {
-        mVictoryScreenTransition.SetActive(true);
+        mStorage.mVictoryScreenTransition.SetActive(true);
         mVictoryTransitionAnimator.Play("Expand");
         yield return new WaitForSeconds(3.0f);
-        mVictoryScreenTransition.SetActive(false);
+        mStorage.mVictoryScreenTransition.SetActive(false);
     }
 
     public static void ResetUI()
     {
-        Instance.mYesButton.onClick.RemoveAllListeners();
-        Instance.mNoButton.onClick.RemoveAllListeners();
+        Instance.mStorage.mLeftButton.onClick.RemoveAllListeners();
+        Instance.mStorage.mRightButton.onClick.RemoveAllListeners();
         Instance.DisplayBattleInterface(false);
         Instance.DisplayDialogueBox(false);
     }
@@ -143,7 +116,7 @@ public class UIManager : MonoBehaviour
     public void BattleStart()
     {
         FadeInScreen(() => { StopFade(); });
-        mScreenTransition.SetActive(true);
+        mStorage.mScreenTransition.SetActive(true);
         mTransitionAnimator.Play("Expand");
     }
 
@@ -151,26 +124,26 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < mHealthBarList.Count; i++)
             mHealthBarList[i].Active(false);
-        mOrderbar.GetComponent<OrderBar>().Clear();
-        mOrderbar.gameObject.SetActive(false);
-        mScreenTransition.SetActive(false);
+        mOrderBar.Clear();
+        mOrderBar.gameObject.SetActive(false);
+        mStorage.mScreenTransition.SetActive(false);
     }
 
     public void DisplayBattleInterface(bool display)
     {
-        mBattleUI.SetActive(display);
+        mStorage.mBattleUI.SetActive(display);
     }
 
     public void DisplayText(bool display)
     {
-        mBasicText.SetActive(display);
+        mStorage.mBasicText.SetActive(display);
     }    
     public void DisplayOrderBarText(bool display)
     {
-        mOrderbar.GetComponent<OrderBar>().mText.gameObject.SetActive(display);
+        mOrderBar.mText.gameObject.SetActive(display);
         if (display)
         {
-            mOrderbar.GetComponent<OrderBar>().mText.transform.localPosition = new Vector3(Screen.width / 3.0f, 0, 0);
+            mOrderBar.mText.transform.localPosition = new Vector3(Screen.width / 3.0f, 0, 0);
             ChangeOrderBarText("");
         }
     }
@@ -184,9 +157,9 @@ public class UIManager : MonoBehaviour
     {
         if (display)
         {
-            mDialogueText.gameObject.SetActive(display);
-            mEKeyButton.gameObject.SetActive(display);
-            mDialogueBox.SetActive(display);
+            mStorage.mDialogueText.gameObject.SetActive(display);
+            mStorage.EKeyImage.gameObject.SetActive(display);
+            mStorage.mDialogueBox.SetActive(display);
         }
         else
             StartCoroutine(EndOfDialogueBox());
@@ -194,14 +167,14 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator EndOfDialogueBox()
     {
-        if(mDialogueBox.activeSelf)
-            mDialogueBox.GetComponent<Animator>().Play("Outro");
+        if(mStorage.mDialogueBox.activeSelf)
+            mStorage.mDialogueBox.GetComponent<Animator>().Play("Outro");
         yield return new WaitForSeconds(1.0f);
-        mDialogueText.gameObject.SetActive(false);
-        mEKeyButton.gameObject.SetActive(false);
-        mDialogueBox.transform.Find("YesButton").gameObject.SetActive(false);
-        mDialogueBox.transform.Find("NoButton").gameObject.SetActive(false);
-        mDialogueBox.SetActive(false);
+        mStorage.mDialogueText.gameObject.SetActive(false);
+        mStorage.EKeyImage.gameObject.SetActive(false);
+        mStorage.mLeftButton.gameObject.SetActive(false);
+        mStorage.mRightButton.gameObject.SetActive(false);
+        mStorage.mDialogueBox.SetActive(false);
     }
 
     public void DisplayHealthBar(bool display)
@@ -244,27 +217,27 @@ public class UIManager : MonoBehaviour
     public void ChangeHoverTip(string text, string action)
     {
         if (action == "Skill")
-            mSkillDescription.GetComponent<HoverTip>().mTipToShow = text;
+            mStorage.mSkillDescription.GetComponent<HoverTip>().mTipToShow = text;
         else if (action == "Attack")
-            mAttackDescription.GetComponent<HoverTip>().mTipToShow = text;
+            mStorage.mAttackDescription.GetComponent<HoverTip>().mTipToShow = text;
         else if (action == "Defend")
-            mDefendDescription.GetComponent<HoverTip>().mTipToShow = text;
+            mStorage.mDefendDescription.GetComponent<HoverTip>().mTipToShow = text;
         else
             Debug.LogWarning("<color=yellow>Warning! " + "</color>" + action + " doesn't exist!");
     }
 
     public void ChangeText(string text)
     {
-        mBasicText.GetComponent<TextMeshProUGUI>().text = text;
+        mStorage.mBasicText.GetComponent<TextMeshProUGUI>().text = text;
     }    
     public void ChangeOrderBarText(string text)
     {
-        mOrderbar.GetComponent<OrderBar>().ChangeText(text);
+        mOrderBar.ChangeText(text);
     }
 
     public void ChangeDialogueText(string text)
     {
-        mDialogueText.GetComponent<TextMeshProUGUI>().text = text;
+        mStorage.mDialogueText.text = text;
     }
 
     public void StopFade()
@@ -279,65 +252,71 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         UIManager.Instance.DisplayHealthBar(true);
-        mOrderbar.gameObject.SetActive(true);
+        mStorage.mOrderbar.gameObject.SetActive(true);
     }
 
     public void FadeInScreen(Action action = null)
     {
-        mFadeScreen.SetActive(true);
-        mFadeScreen.GetComponent<Animator>().SetBool("FadeIn",true);
-        mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", false);
+        mStorage.mFadeScreen.SetActive(true);
+        mFadeAnimator.SetBool("FadeIn",true);
+        mFadeAnimator.SetBool("FadeOut", false);
         action?.Invoke();
     }
 
     public void FadeInWord(Action action = null)
     {
         DisplayText(true);
-        mBasicText.GetComponent<Animator>().SetBool("FadeIn", true);
-        mBasicText.GetComponent<Animator>().SetBool("FadeOut", false);
+        mTextAnimator.SetBool("FadeIn", true);
+        mTextAnimator.SetBool("FadeOut", false);
         action?.Invoke();
     }
 
     public void FadeOutScreen()
     {
-        mFadeScreen.GetComponent<Animator>().SetBool("FadeOut", true);
-        mFadeScreen.GetComponent<Animator>().SetBool("FadeIn", false);
+        mFadeAnimator.SetBool("FadeOut", true);
+        mFadeAnimator.SetBool("FadeIn", false);
     }
 
     public void FadeOutWord()
     {
-        mBasicText.GetComponent<Animator>().SetBool("FadeIn", false);
-        mBasicText.GetComponent<Animator>().SetBool("FadeOut", true);
+        mTextAnimator.SetBool("FadeIn", false);
+        mTextAnimator.SetBool("FadeOut", true);
     }
 
-    public void AddListenerYesButton(UnityAction action = null)
+    public void AddListenerLeftButton(UnityAction action = null)
     {
-        mYesButton.onClick.RemoveAllListeners();
-        mYesButton.onClick.AddListener(action);
+        mStorage.mLeftButton.onClick.RemoveAllListeners();
+        mStorage.mLeftButton.onClick.AddListener(action);
     }
 
-    public void AddListenerNoButton(UnityAction action = null)
+    public void AddListenerRightButton(UnityAction action = null)
     {
-        mNoButton.onClick.RemoveAllListeners();
-        mNoButton.onClick.AddListener(action);
+        mStorage.mRightButton.onClick.RemoveAllListeners();
+        mStorage.mRightButton.onClick.AddListener(action);
     }    
     
     public void AddListenerExitButton(UnityAction action = null)
     {
-        mExitButton.onClick.RemoveAllListeners();
-        mExitButton.onClick.AddListener(action);
+        mStorage.mExitButton.onClick.RemoveAllListeners();
+        mStorage.mExitButton.onClick.AddListener(action);
     }
 
     public void DisplayButtonsInDialogue(bool action)
     {
-        mEKeyButton.gameObject.SetActive(!action);
-        mYesButton.gameObject.SetActive(action);
-        mNoButton.gameObject.SetActive(action);
+        mStorage.EKeyImage.gameObject.SetActive(!action);
+        mStorage.mLeftButton.gameObject.SetActive(action);
+        mStorage.mRightButton.gameObject.SetActive(action);
     }
 
     public void DisplayExitButtonInDialogue(bool action)
     {
-        mEKeyButton.gameObject.SetActive(!action);
-        mExitButton.gameObject.SetActive(action);
+        mStorage.EKeyImage.gameObject.SetActive(!action);
+        mStorage.mExitButton.gameObject.SetActive(action);
+    }
+
+    public void ChangeTwoButtons(Sprite left, Sprite right)
+    {
+        mStorage.mLeftButton.image.sprite = left;
+        mStorage.mRightButton.image.sprite = right;
     }
 }

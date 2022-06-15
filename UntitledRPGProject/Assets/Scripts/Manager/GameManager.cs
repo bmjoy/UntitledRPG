@@ -77,11 +77,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GamePlay:
             case GameState.GamePause:Pause(); break;
-            case GameState.Busy:break;
             case GameState.Victory: OnBattleEnd(); break;
             case GameState.GameOver: GameOver(); break;
         }
-
     }
 
     private void Pause()
@@ -107,7 +105,7 @@ public class GameManager : MonoBehaviour
             Instance.mEnemyProwler.isWin = true;
             mGameState = GameState.GamePlay;
         });
-        UIManager.Instance.mOrderbar.GetComponent<OrderBar>().Clear();
+        UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().Clear();
         CameraSwitcher.Instance.mBloom.intensity.value = 0.0f;
         ResetObjects();
         PlayerController.Instance.IsDied = true;
@@ -117,7 +115,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator Restart()
     {
         onFadeGameOverScreenEvent?.Invoke(null);
-        UIManager.Instance.ChangeText("<color=red>" + UIManager.Instance.mTextForGameOver + "</color>");
+        UIManager.Instance.ChangeText("<color=red>" + UIManager.Instance.mStorage.mTextForGameOver + "</color>");
         yield return new WaitForSeconds(mWaitForRestart);
         onGameOverToReset?.Invoke();
         s_ID = 0;
@@ -151,7 +149,7 @@ public class GameManager : MonoBehaviour
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
         NPCProwlers = GameObject.FindGameObjectsWithTag("Neutral");
         ActiveAllProwlers(false);
-        mGameState = GameState.Busy;
+        //mGameState = GameState.Busy;
     }
 
 
@@ -166,7 +164,6 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
         AudioManager.Instance.musicSource.loop = true;
         CameraSwitcher.SwitchCamera();
-        Debug.Log(EnemyProwlers.Length);
         ResetObjects();
         UIManager.Instance.DisplayBattleInterface(false);
         onPlayerBattleEnd?.Invoke();

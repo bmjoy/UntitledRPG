@@ -7,8 +7,10 @@ using UnityEngine.AI;
 public class Prowler : MonoBehaviour
 {
     public GameObject mModel;
+    public GameObject mGroundCheck;
     public Animator mAnimator;
     public NavMeshAgent mAgent;
+    public Rigidbody mRigidbody;
     protected BoxCollider mCollider;
     protected ProwlerStateMachine mStateMachine;
     protected SpriteRenderer mSpriteRenderer;
@@ -26,6 +28,7 @@ public class Prowler : MonoBehaviour
 
     public float mWalkTime = 0.0f;
     public float mMaxWalkTime = 0.3f;
+    private bool isGrounded = false;
 
 
     public List<SoundClip> _RunClip = new List<SoundClip>();
@@ -47,14 +50,23 @@ public class Prowler : MonoBehaviour
     public virtual void Initialize()
     {
         mCollider = gameObject.AddComponent<BoxCollider>();
+        mCollider.size = mModel.GetComponent<BoxCollider>().size;
         mCollider.isTrigger = true;
-        mAgent = gameObject.AddComponent<NavMeshAgent>();
-        mAgent.baseOffset = 2.0f;
 
-        mAgent.speed = (mOriginalSpeed == 0.0f) ? 1.5f : mOriginalSpeed;
+        if (mGroundCheck == null)
+        {
+            GameObject groundCheck = Instantiate(Resources.Load<GameObject>("Prefabs/UnitGroundCheck"), (
+             new Vector3(transform.position.x,
+                transform.position.y - (transform.GetComponent<BoxCollider>().size.y / 2.0f), transform.position.z)), Quaternion.identity);
+            groundCheck.transform.parent = transform;
+            mGroundCheck = groundCheck;
+        }
+
+        mRigidbody = gameObject.AddComponent<Rigidbody>();
+        mRigidbody.detectCollisions = true;
         mAnimator = mModel.GetComponent<Animator>();
         mSpriteRenderer = mModel.GetComponent<SpriteRenderer>();
-        mOriginalSpeed = mAgent.speed;
+        mOriginalSpeed = mSpeed;
 
         mStateMachine = gameObject.AddComponent<ProwlerStateMachine>();
         mStateMachine.mAgent = this;
@@ -67,6 +79,7 @@ public class Prowler : MonoBehaviour
 
     protected virtual void Update()
     {
+        CheckGround();
         if (LevelManager.Instance.isNext || GameManager.Instance.IsCinematicEvent || BattleManager.Instance.status != BattleManager.GameStatus.None
     || PlayerController.Instance.Interaction)
         {
@@ -80,7 +93,14 @@ public class Prowler : MonoBehaviour
         mSpriteRenderer.flipX = (mVelocity.x < -0.1f) ? true : false;
 
     }
-
+    protected void CheckGround()
+    {
+        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, 2.0f, LayerMask.GetMask("Ground"));
+        if (isGrounded && mVelocity.y < 0.0f)
+            mVelocity.y = 0.0f;
+        mVelocity.y += -9.8f * Time.deltaTime;
+        mRigidbody.AddForce(mVelocity * Time.deltaTime);
+    }
     public virtual void ChangeBehavior(string name)
     {
         mStateMachine.ChangeState(name);

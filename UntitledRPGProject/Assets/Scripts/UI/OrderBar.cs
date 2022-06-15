@@ -103,7 +103,7 @@ public class OrderBar : MonoBehaviour
     private GameObject CreateObject()
     {
         GameObject go = new GameObject("Sprite");
-        go.transform.parent = UIManager.Instance.mOrderbar.transform;
+        go.transform.parent = UIManager.Instance.mStorage.mOrderbar.transform;
         go.transform.localPosition = new Vector3(halfWidth, Ypos);
         go.transform.localScale = new Vector3(mSpriteLocalScale, mSpriteLocalScale, mSpriteLocalScale);
         go.transform.localRotation = Quaternion.Euler(0, 180, 0);

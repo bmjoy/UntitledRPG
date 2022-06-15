@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1343711022056874774}
   - component: {fileID: 794963505459087907}
   - component: {fileID: 2854113056611401048}
+  - component: {fileID: 5373599526554572745}
   m_Layer: 0
   m_Name: Temple_Guardian
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7388410270767176539}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1116905848893301953}
@@ -117,6 +118,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &5373599526554572745
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388410270767176539}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.5, y: 3.5, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &7619781422966636499
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -211,6 +225,10 @@ PrefabInstance:
     - target: {fileID: 7367586790118300434, guid: 7da923855bef4fc418d626ead4b9badf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385403594097874866, guid: 7da923855bef4fc418d626ead4b9badf, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7da923855bef4fc418d626ead4b9badf, type: 3}

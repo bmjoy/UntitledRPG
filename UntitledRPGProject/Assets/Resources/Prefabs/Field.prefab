@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!1 &879301231013147481
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +60,8 @@ GameObject:
   - component: {fileID: 6232600372250110796}
   - component: {fileID: 5478839521114521787}
   - component: {fileID: 40383373870281296}
-  m_Layer: 0
+  - component: {fileID: 6219460682155937458}
+  m_Layer: 12
   m_Name: PlayerField (3)
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -92,6 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &5478839521114521787
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4864,6 +4867,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &6219460682155937458
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879301231013147481}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1517004827819384214
 GameObject:
   m_ObjectHideFlags: 0
@@ -4876,7 +4892,8 @@ GameObject:
   - component: {fileID: 932654645651226321}
   - component: {fileID: 132535201172270072}
   - component: {fileID: 3182285487591556466}
-  m_Layer: 0
+  - component: {fileID: 8847702220979693321}
+  m_Layer: 12
   m_Name: EnemyField (1)
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -4909,6 +4926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &132535201172270072
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9681,6 +9699,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &8847702220979693321
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517004827819384214}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2585459172087724838
 GameObject:
   m_ObjectHideFlags: 0
@@ -9693,7 +9724,8 @@ GameObject:
   - component: {fileID: 6016787128620424843}
   - component: {fileID: 6370531616692230062}
   - component: {fileID: 633365735899952805}
-  m_Layer: 0
+  - component: {fileID: 6008813109126293349}
+  m_Layer: 12
   m_Name: EnemyField (3)
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -9726,6 +9758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &6370531616692230062
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -14498,6 +14531,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &6008813109126293349
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585459172087724838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3916382707018923236
 GameObject:
   m_ObjectHideFlags: 0
@@ -14542,7 +14588,8 @@ GameObject:
   - component: {fileID: 8642054980068642138}
   - component: {fileID: 7125081581750453958}
   - component: {fileID: 6064770361717145285}
-  m_Layer: 0
+  - component: {fileID: 1161334163674590446}
+  m_Layer: 12
   m_Name: PlayerField (1)
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -14575,6 +14622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &7125081581750453958
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -19347,6 +19395,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &1161334163674590446
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466263048690837588}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4762760633955144308
 GameObject:
   m_ObjectHideFlags: 0
@@ -19394,6 +19455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!1 &5303955581738882421
 GameObject:
   m_ObjectHideFlags: 0
@@ -19406,7 +19468,8 @@ GameObject:
   - component: {fileID: 2268932948594685999}
   - component: {fileID: 7658340955642975837}
   - component: {fileID: 7231354681805380137}
-  m_Layer: 0
+  - component: {fileID: 6931267296107731606}
+  m_Layer: 12
   m_Name: EnemyField (2)
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -19439,6 +19502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &7658340955642975837
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -24211,6 +24275,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &6931267296107731606
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5303955581738882421}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5665574416039020892
 GameObject:
   m_ObjectHideFlags: 0
@@ -24223,7 +24300,8 @@ GameObject:
   - component: {fileID: 5725352187733280902}
   - component: {fileID: 2727193292100096347}
   - component: {fileID: 7790741714331910556}
-  m_Layer: 0
+  - component: {fileID: 4189963833254978498}
+  m_Layer: 12
   m_Name: EnemyField
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -24256,6 +24334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &2727193292100096347
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -29028,6 +29107,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &4189963833254978498
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5665574416039020892}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6721613200121631161
 GameObject:
   m_ObjectHideFlags: 0
@@ -29040,7 +29132,8 @@ GameObject:
   - component: {fileID: 1053685563989064143}
   - component: {fileID: 1783263999926128420}
   - component: {fileID: 1894225874761032483}
-  m_Layer: 0
+  - component: {fileID: 7329685599465987423}
+  m_Layer: 12
   m_Name: PlayerField
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -29073,6 +29166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &1783263999926128420
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -33845,6 +33939,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &7329685599465987423
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6721613200121631161}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8339984067523232642
 GameObject:
   m_ObjectHideFlags: 0
@@ -33857,7 +33964,8 @@ GameObject:
   - component: {fileID: 8467603853136347049}
   - component: {fileID: 432752615815546886}
   - component: {fileID: 1353314481330320722}
-  m_Layer: 0
+  - component: {fileID: 8428206656415278888}
+  m_Layer: 12
   m_Name: PlayerField (2)
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -33890,6 +33998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd022f8f58872f240936aed56fd23409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsExist: 0
 --- !u!198 &432752615815546886
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -38662,3 +38771,16 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!65 &8428206656415278888
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339984067523232642}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
