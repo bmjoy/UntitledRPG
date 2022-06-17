@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BKActionTrigger : ActionTrigger
+public class BKActionTrigger : BossActionTrigger
 {   
     bool _isRed = false;
     List<GameObject> _mirrors = new List<GameObject>();
@@ -162,6 +162,7 @@ public class BKActionTrigger : ActionTrigger
         boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
         mTime = boss.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         boss.mAnimator.SetBool("Attack2", (boss.mBuffNerfController.GetBuffCount() > 0));
+        Debug.Log("Hi");
         StartCoroutine(AttackAction());
     }
 

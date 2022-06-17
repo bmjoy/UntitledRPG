@@ -54,12 +54,13 @@ public class BattleManager : MonoBehaviour
     };
 
     public Unit mCurrentUnit = null;
-    private bool isWin = false;
-    private bool onReward = false;
-    public GameStatus status = GameStatus.None;
 
     [SerializeField]
-    private float mWaitTime;
+    private float _TransitionTime = 2.1f;
+    private bool isWin = false;
+    private bool onReward = false;
+    private bool _AvailableSkip = false;
+    public GameStatus status = GameStatus.None;
 
     public event Action onEnqueuingOrderEvent;
     public event Action<Unit> onDequeuingOrderEvent;
@@ -78,7 +79,7 @@ public class BattleManager : MonoBehaviour
     public void Initialize()
     {
         if(UIManager.Instance.mInventoryUI.transform.gameObject.activeSelf)
-            UIManager.Instance.mInventoryUI.Active(false);
+            UIManager.Instance.DisplayInventory(false);
 
         StartCoroutine(Wait());
     }
@@ -207,9 +208,8 @@ public class BattleManager : MonoBehaviour
                     UIManager.Instance.DisplayHealthBar(false);
                     GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     CameraSwitcher.StopShakeCamera();
-                    onReward = false;
                     mCurrentUnit = null;
-                    _AvailableSkip = false;
+                    _AvailableSkip = onReward = false;
                     mTime = 0.0f;
                     status = GameStatus.None;
                 }
@@ -244,8 +244,7 @@ public class BattleManager : MonoBehaviour
             for (int x = 0; x < enemy.mSetting.Item.Count; ++x)
             {
                 ItemDrop obj = enemy.mSetting.Item[x];
-                if (UnityEngine.Random.Range(0, 100) <= obj.mRate)
-                    enemyItemList.Add(obj.mItem);
+                if (UnityEngine.Random.Range(0, 100) <= obj.mRate) enemyItemList.Add(obj.mItem);
             }
         }
 
@@ -258,9 +257,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    bool _AvailableSkip = false;
-    [SerializeField]
-    float _TransitionTime = 2.1f;
 
     private IEnumerator RewardTime()
     {
@@ -289,8 +285,7 @@ public class BattleManager : MonoBehaviour
             isWin = false;
             return true;
         }
-        else
-            return false;
+        else return false;
     }
 
     public void SetBattleField()
@@ -348,8 +343,7 @@ public class BattleManager : MonoBehaviour
 
     public void Attack()
     {
-        if (GameManager.Instance.mGameState == GameState.GamePause)
-            return;
+        if (GameManager.Instance.mGameState == GameState.GamePause) return;
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
@@ -359,8 +353,7 @@ public class BattleManager : MonoBehaviour
 
     public void Defend()
     {
-        if (GameManager.Instance.mGameState == GameState.GamePause)
-            return;
+        if (GameManager.Instance.mGameState == GameState.GamePause) return;
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
@@ -370,8 +363,7 @@ public class BattleManager : MonoBehaviour
 
     public void Magic()
     {
-        if (GameManager.Instance.mGameState == GameState.GamePause)
-            return;
+        if (GameManager.Instance.mGameState == GameState.GamePause) return;
         if (status == GameStatus.WaitForOrder)
         {
             if(mCurrentUnit.GetComponent<Skill_DataBase>().Skill == null)

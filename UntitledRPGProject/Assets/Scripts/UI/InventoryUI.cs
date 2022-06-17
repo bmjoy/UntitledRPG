@@ -20,6 +20,11 @@ public class InventoryUI : MonoBehaviour
     private bool mInitialized = false;
     public int mIndex = 0;
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void Initialize()
     {
         mBonusValuesGroup = transform.Find("Bonus").gameObject;
@@ -104,11 +109,7 @@ public class InventoryUI : MonoBehaviour
 
     public void Display(int num)
     {
-        if(PlayerController.Instance.mHeroes.Count <= num)
-        {
-            Debug.Log("Number " + num + " Hero doesn't exist!");
-            return;
-        }
+        if(PlayerController.Instance.mHeroes.Count <= num) return;
 
         mIndex = num;
         PrintStatus(num);
@@ -118,8 +119,7 @@ public class InventoryUI : MonoBehaviour
 
     private void ChangeHeroSprite(int num)
     {
-        if (num >= PlayerController.Instance.mHeroes.Count)
-            return;
+        if (num >= PlayerController.Instance.mHeroes.Count) return;
 
         var unit = PlayerController.Instance.mHeroes[num].GetComponent<Player>();
         GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/" + unit.mSetting.Name + "_UI"), transform.position, Quaternion.identity);
@@ -135,8 +135,7 @@ public class InventoryUI : MonoBehaviour
 
     private void PrintStatus(int num)
     {
-        if (num >= PlayerController.Instance.mHeroes.Count)
-            return;
+        if (num >= PlayerController.Instance.mHeroes.Count) return;
         var unit = PlayerController.Instance.mHeroes[num].GetComponent<Player>();
 
         mTextAreaGroup.transform.Find("Level").GetComponent<TextMeshProUGUI>().text = unit.mStatus.mLevel.ToString();
@@ -150,8 +149,7 @@ public class InventoryUI : MonoBehaviour
     }  
     private void PrintStatusBonus(int num)
     {
-        if (num >= PlayerController.Instance.mHeroes.Count)
-            return;
+        if (num >= PlayerController.Instance.mHeroes.Count) return;
         var unit = PlayerController.Instance.mHeroes[num].GetComponent<Player>();
 
         mBonusValuesGroup.transform.Find("Health").GetComponent<TextMeshProUGUI>().text = "+" + unit.mBonusStatus.mHealth.ToString();

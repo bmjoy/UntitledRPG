@@ -5,7 +5,7 @@ using UnityEngine;
 // Temple Guardian's action trigger
 // Content: The trigger includes Temple Guardian's double attacks
 
-public class TGActionTrigger : ActionTrigger
+public class TGActionTrigger : BossActionTrigger
 {
     [SerializeField]
     private float mAttackTriggerPercentage = 50.0f;
@@ -21,7 +21,7 @@ public class TGActionTrigger : ActionTrigger
             
             yield return new WaitForSeconds(mTime / 2.0f);
             DamageState();
-            yield return new WaitForSeconds(mTime / 1.5f);
+            yield return new WaitForSeconds(mTime);
             slash.GetComponent<Animator>().SetTrigger("Second");
             DamageState();
         }
@@ -52,6 +52,7 @@ public class TGActionTrigger : ActionTrigger
     protected override void StartActionTrigger()
     {
         var boss = GetComponent<Boss>();
+        boss.mAnimator.Play("Attack");
         if (UnityEngine.Random.Range(0, 100) >= mAttackTriggerPercentage)
         {
             mTriggered = true;
@@ -65,7 +66,6 @@ public class TGActionTrigger : ActionTrigger
         }
         mPos = boss.mTarget.transform.position;
         boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
-        boss.mAnimator.Play("Attack");
         StartCoroutine(Action());
     }
 

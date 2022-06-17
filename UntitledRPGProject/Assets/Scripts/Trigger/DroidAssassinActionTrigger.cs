@@ -8,7 +8,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override IEnumerator Action()
     {
         var unit = GetComponent<Unit>();
-        unit.mAnimator.Play("Attack");
+
         yield return new WaitForSeconds(0.3f);
         StartCoroutine(Slash());
         for (int i = 0; i < 2; ++i)
@@ -31,7 +31,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
             Destroy(mirror2, 0.8f);
             yield return new WaitForSeconds(mTime / 4.0f);
         }
-        yield return new WaitForSeconds(mTime / 1.7f);
+        yield return new WaitForSeconds(mTime / 1.5f);
         unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
         StartCoroutine(unit.CounterState(unit.mTarget.mStatus.mDamage));
 
@@ -55,10 +55,13 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override void StartActionTrigger()
     {
         var unit = GetComponent<Unit>();
+        Find();
         mPos = unit.mTarget.transform.position;
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
-        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.5f;
-        Find();
+
+        unit.mAnimator.Play("Attack");
+        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 1.3f;
+
         StartCoroutine(Action());
     }
 

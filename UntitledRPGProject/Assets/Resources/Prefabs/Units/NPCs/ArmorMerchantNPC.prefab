@@ -173,6 +173,9 @@ MonoBehaviour:
   m_DialogueSellCase:
     Text: Take a look.
     Trigger: 1
+  m_DialogueAskAgainCase:
+    Text: Do you need something more?
+    Trigger: 2
 --- !u!114 &-3195471757453502611
 MonoBehaviour:
   m_ObjectHideFlags: 0

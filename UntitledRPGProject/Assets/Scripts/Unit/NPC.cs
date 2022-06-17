@@ -15,21 +15,6 @@ public class NPC : MonoBehaviour, IInteractiveObject
     protected delegate IEnumerator TriggerEvent();
     protected TriggerEvent mTrigger;
 
-    [Serializable]
-    public class Dialogue
-    {
-        public enum TriggerType
-        {
-            None,
-            Trade,
-            Event,
-            Fight
-        }
-        [TextArea]
-        public string Text = string.Empty;
-        public TriggerType Trigger = TriggerType.None;
-    }
-
     [SerializeField]
     protected List<Dialogue> m_DialogueList = new List<Dialogue>();
     protected Queue<Dialogue> m_DialogueQueue = new Queue<Dialogue>();
@@ -74,6 +59,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
                 case Dialogue.TriggerType.None:
                     yield return new WaitForSeconds(0.5f);
                     UIManager.Instance.DisplayButtonsInDialogue(false);
+                    UIManager.Instance.DisplayEKeyInDialogue(true);
                     yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     break;
                 case Dialogue.TriggerType.Trade:
@@ -84,7 +70,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
                     mComplete = false;
                     mTrigger = Event;
                     break;
-                case Dialogue.TriggerType.Fight:
+                default:
                     break;
             }
             yield return (mTrigger != null) ? StartCoroutine(mTrigger()) : null;
@@ -93,6 +79,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.ChangeDialogueText("");
         UIManager.Instance.DisplayDialogueBox(false);
+        UIManager.Instance.DisplayEKeyInDialogue(false);
         Callback?.Invoke();
         mComplete = false;
         mTrigger = null;
@@ -110,7 +97,6 @@ public class NPC : MonoBehaviour, IInteractiveObject
             mComplete = true;
         });
         UIManager.Instance.AddListenerLeftButton(() => {
-            // Input quest?
             mComplete = true;
         });
         UIManager.Instance.DisplayButtonsInDialogue(true);

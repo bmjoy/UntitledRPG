@@ -46,6 +46,7 @@ public enum EnemyUnit
     Ghoul,
     Spitter,
     Summoner,
+    Dagger_Mush,
     Spirit_Boxer,
     Droid_Assassin,
     Temple_Guardian,
@@ -66,7 +67,9 @@ public enum NPCUnit
 public enum EnvironmentObject
 {
     None,
-    Well
+    Well,
+    Rock,
+    Chest
 }
 
 [Serializable]
@@ -120,4 +123,20 @@ public class CinematicEventMethod
     public GameObject Target = null;
     public AudioClip Clip = null;
     public GameObject Effect = null;
+}
+
+[Serializable]
+public class Dialogue
+{
+    public enum TriggerType
+    {
+        None,
+        Trade,
+        Event,
+        Fail,
+        Success
+    }
+    [TextArea]
+    public string Text = string.Empty;
+    public TriggerType Trigger = TriggerType.None;
 }

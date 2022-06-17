@@ -22,7 +22,9 @@ public enum ActionEvent
     AttackWalk,
     MagicWalk,
     Busy,
-    BackWalk
+    BackWalk,
+    DodgeWalk,
+    DodgeBack
 }
 
 public struct AIBuild

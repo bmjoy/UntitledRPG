@@ -13,12 +13,12 @@ public class Boss : Enemy
     public BossHealthBar mMyHealthBar;
     public float[] mHealthTriggerPercentage;
     [HideInInspector]
-    public ActionTrigger mActionTriggerComponent;
+    public BossActionTrigger mActionTriggerComponent;
 
     protected override void Start()
     {
         base.Start();
-        mActionTriggerComponent = GetComponent<ActionTrigger>();
+        mActionTriggerComponent = GetComponent<BossActionTrigger>();
     }
 
     protected override void Update()

@@ -118,8 +118,9 @@ MonoBehaviour:
   mAttackTime: 0.1
   mDefendTime: 1
   mAttackDistance: 2
-  mRunningSpeed: 9
   mMagicDistance: 8
+  mCurrentSpeed: 1
+  dodgePos: {x: 0, y: 0, z: 0}
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
