@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
+  m_Name: Dagger Mush
+  m_EditorClassIdentifier: 
+  Name: Dagger Mush
+  Level: 6
+  EXP: 200
+  MaxHealth: 160
+  MaxMana: 0
+  Magic_Resistance: 11
+  Attack: 15
+  Defend: 10
+  MagicPower: 0
+  Armor: 15
+  Agility: 10
+  Gold: 225
+  WeaponType: 5
+  BasicSprite: {fileID: 8793639957104055765, guid: 51c41010d3a605a4aa024cfd8351743c, type: 3}
+  Clips:
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 311d21e8c849c0a49add03b385effe59, type: 3}
+  - Type: 0
+    Clip: {fileID: 8300000, guid: 5f5726c1ea4ab224694f34b4a20d70d6, type: 3}
+  Item: []

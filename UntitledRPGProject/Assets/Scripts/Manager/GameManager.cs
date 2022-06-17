@@ -149,7 +149,6 @@ public class GameManager : MonoBehaviour
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
         NPCProwlers = GameObject.FindGameObjectsWithTag("Neutral");
         ActiveAllProwlers(false);
-        //mGameState = GameState.Busy;
     }
 
 

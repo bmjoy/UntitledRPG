@@ -23,7 +23,7 @@ public class EnemySpawner : Spawner
         {
             GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
             newEnemyProwler.transform.position = new Vector3(transform.position.x,
-                transform.position.y + 2.5f,
+                transform.position.y + 1.0f,
                 transform.position.z);
 
             int LeaderCount = 0;

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class InteractableEnvironment : Environment, IInteractiveObject
 {
+    [SerializeField]
+    protected List<Dialogue> mDialogue = new List<Dialogue>();
+
     private GameObject mCanvas;
     [HideInInspector]
     public GameObject mInteraction;
@@ -24,18 +27,7 @@ public abstract class InteractableEnvironment : Environment, IInteractiveObject
 
     public abstract IEnumerator Interact(System.Action action = null);
 
-    public void React(bool active)
-    {
-        mInteraction.SetActive(active);
-    }
-
-    public bool GetComplete()
-    {
-        return _Completed;
-    }
-
-    public Vector3 GetPosition()
-    {
-        return transform.position;
-    }
+    public void React(bool active){mInteraction.SetActive(active);}
+    public bool GetComplete() {return _Completed;}
+    public Vector3 GetPosition(){return transform.position;}
 }

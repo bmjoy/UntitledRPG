@@ -117,6 +117,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -124,12 +136,12 @@ TextureImporter:
       name: Idle_0
       rect:
         serializedVersion: 2
-        x: 7
+        x: 6
         y: 160
-        width: 13
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -145,12 +157,12 @@ TextureImporter:
       name: Idle_1
       rect:
         serializedVersion: 2
-        x: 7
+        x: 6
         y: 128
-        width: 13
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -166,12 +178,12 @@ TextureImporter:
       name: Idle_2
       rect:
         serializedVersion: 2
-        x: 7
+        x: 6
         y: 96
-        width: 13
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -187,12 +199,12 @@ TextureImporter:
       name: Idle_3
       rect:
         serializedVersion: 2
-        x: 7
+        x: 6
         y: 64
-        width: 13
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -208,12 +220,12 @@ TextureImporter:
       name: Idle_4
       rect:
         serializedVersion: 2
-        x: 7
+        x: 6
         y: 32
-        width: 13
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -229,12 +241,12 @@ TextureImporter:
       name: Idle_5
       rect:
         serializedVersion: 2
-        x: 7
+        x: 6
         y: 0
-        width: 13
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

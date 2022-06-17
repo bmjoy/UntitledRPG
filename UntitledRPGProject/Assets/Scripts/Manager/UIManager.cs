@@ -72,7 +72,8 @@ public class UIManager : MonoBehaviour
         mOrderBar = mStorage.mOrderbar.GetComponent<OrderBar>();
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize();
-
+        DisplayExitButtonInDialogue(false);
+        DisplayBackButtonInDialogue(false);
         DisplayBattleInterface(false);
         DisplayText(false);
         DisplayDialogueBox(false);
@@ -81,15 +82,15 @@ public class UIManager : MonoBehaviour
 
     public void DisplayInventory(bool active)
     {
-        mInventoryUI.gameObject.SetActive(false);
+        mInventoryUI.Active(active);
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f)
+        if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f && GameManager.Instance.mGameState == GameState.GamePlay)
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mOpenInventorySFX);
-            mInventoryUI.Active(!switchOfInventory);
+            DisplayInventory(!switchOfInventory);
             switchOfInventory = !switchOfInventory;
             mTime += mCoolTime;
         }
@@ -300,18 +301,32 @@ public class UIManager : MonoBehaviour
         mStorage.mExitButton.onClick.RemoveAllListeners();
         mStorage.mExitButton.onClick.AddListener(action);
     }
+    
+    public void AddListenerBackButton(UnityAction action = null)
+    {
+        mStorage.mBackButton.onClick.RemoveAllListeners();
+        mStorage.mBackButton.onClick.AddListener(action);
+    }
 
     public void DisplayButtonsInDialogue(bool action)
     {
-        mStorage.EKeyImage.gameObject.SetActive(!action);
         mStorage.mLeftButton.gameObject.SetActive(action);
         mStorage.mRightButton.gameObject.SetActive(action);
     }
 
     public void DisplayExitButtonInDialogue(bool action)
     {
-        mStorage.EKeyImage.gameObject.SetActive(!action);
         mStorage.mExitButton.gameObject.SetActive(action);
+    }
+    
+    public void DisplayEKeyInDialogue(bool action)
+    {
+        mStorage.EKeyImage.gameObject.SetActive(action);
+    }
+    
+    public void DisplayBackButtonInDialogue(bool action)
+    {
+        mStorage.mBackButton.gameObject.SetActive(action);
     }
 
     public void ChangeTwoButtons(Sprite left, Sprite right)

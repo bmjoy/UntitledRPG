@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 7780718595994995609}
   - component: {fileID: 2363663712266155629}
   - component: {fileID: -4998786888843958760}
-  - component: {fileID: 4258030688599214101}
   m_Layer: 6
   m_Name: Ghoul_Unit
   m_TagString: Enemy
@@ -114,6 +113,7 @@ MonoBehaviour:
   mDefendTime: 1
   mAttackDistance: 2
   mMagicDistance: 5
+  mCurrentSpeed: 1
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
@@ -182,17 +182,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mUseStaticBillboard: 0
---- !u!114 &4258030688599214101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7780718595994995608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 683a73d42a0e517499238e0bd2754fed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mSkillData: {fileID: 11400000, guid: b289131d2ae392c4798663ff4f7b4890, type: 2}
-  mSkill: {fileID: 0}

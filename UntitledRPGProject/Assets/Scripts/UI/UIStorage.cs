@@ -26,6 +26,7 @@ public class UIStorage : MonoBehaviour
     public Button mLeftButton;
     public Button mRightButton;
     public Button mExitButton;
+    public Button mBackButton;
     public GameObject mBattleUI;
     public GameObject mBasicText;
     public GameObject mDialogueBox;

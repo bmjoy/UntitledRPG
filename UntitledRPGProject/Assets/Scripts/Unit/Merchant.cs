@@ -10,11 +10,14 @@ public class Merchant : NPC
     private Dialogue m_DialogueBuyCase = new Dialogue();
     [SerializeField]
     private Dialogue m_DialogueSellCase = new Dialogue();
+    [SerializeField]
+    private Dialogue m_DialogueAskAgainCase = new Dialogue();
 
     protected override void Start()
     {
         base.Start();
         mSlotManager = GetComponent<SlotManager>();
+        m_DialogueAskAgainCase.Trigger = Dialogue.TriggerType.Event;
     }
 
     private void Update()
@@ -44,6 +47,7 @@ public class Merchant : NPC
             mComplete = true;
         });
         UIManager.Instance.DisplayButtonsInDialogue(true);
+        UIManager.Instance.DisplayEKeyInDialogue(false);
         UIManager.Instance.DisplayExitButtonInDialogue(true);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);
@@ -57,17 +61,19 @@ public class Merchant : NPC
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
+        UIManager.Instance.AddListenerBackButton(() => {
+            m_DialogueQueue.Enqueue(m_DialogueAskAgainCase);
+            mComplete = true;
+        });
         UIManager.Instance.DisplayExitButtonInDialogue(true);
+        UIManager.Instance.DisplayBackButtonInDialogue(true);
         if (isBuy)
-        {
             mSlotManager.StartBuyTrade();
-        }
         else
-        {
             mSlotManager.StartSellTrade();
-        }
         yield return new WaitUntil(() => mComplete);
         mSlotManager.EndTrade();
         UIManager.Instance.DisplayExitButtonInDialogue(false);
+        UIManager.Instance.DisplayBackButtonInDialogue(false);
     }
 }

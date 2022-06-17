@@ -68,6 +68,10 @@ public class Unit : MonoBehaviour, IUnit
     public Action mStartActionTrigger = null;
     private float mWalkTime = 0.0f;
     private float mMaxWalkTime = 0.3f;
+    [HideInInspector]
+    public float mCurrentSpeed = 1.0f;
+    public Vector3 dodgePos = Vector3.zero;
+    Vector3 dodgeCurrentPos = Vector3.zero;
 
     [HideInInspector]
     public List<SoundClip> mRunClips = new List<SoundClip>();
@@ -200,14 +204,15 @@ public class Unit : MonoBehaviour, IUnit
                 {
                     mAnimator.SetBool("Death", (mConditions.isDied) ? true : false);
                     mAiBuild.Update((mAiBuild.type == AIType.Auto));
-                    transform.position = (Vector3.Distance(transform.position, mField.transform.position) > 0.5f) ?
-    Vector3.MoveTowards(transform.position, mField.transform.position, Time.deltaTime * 7.0f) : transform.position;
-                    mAnimator.SetFloat("Speed", Vector3.Distance(transform.position, mField.transform.position) > 0.5f ? 1.0f : 0.0f);
+                    mAnimator.SetFloat("Speed", 0.0f);
+                    dodgeCurrentPos = transform.position;
+                    dodgePos = (mFlag == Flag.Player) ? transform.position - new Vector3(0.0f,0.0f, 2.5f)
+            : transform.position + new Vector3(0.0f, 0.0f, 2.5f);
                 }
                 break;
             case ActionEvent.IntroWalk:
                 {
-                    mAiBuild.SetActionEvent(Run(mField.transform.position - new Vector3(0.0f,0.5f,0.0f), 0.1f, ActionEvent.None, ActionEvent.IntroWalk));
+                    mAiBuild.SetActionEvent(Run(mField.transform.position, 0.1f, ActionEvent.None, ActionEvent.IntroWalk));
                     mHealthBar.Active((mAiBuild.actionEvent == ActionEvent.None));
                 }
                 break;
@@ -218,14 +223,24 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.SetActionEvent(Run(mTarget.transform.position, mMagicDistance, ActionEvent.Busy, ActionEvent.MagicWalk));
                 break;
             case ActionEvent.BackWalk:
-                mAiBuild.SetActionEvent(Run(mField.transform.position - new Vector3(0.0f, 0.5f, 0.0f), 0.1f, ActionEvent.Busy, ActionEvent.BackWalk));
+                mAiBuild.SetActionEvent(Run(mField.transform.position, 0.1f, ActionEvent.Busy, ActionEvent.BackWalk));
                 break;
             case ActionEvent.Busy:
-                mAnimator.SetFloat("Speed", 0.0f);
+                {
+                    mAnimator.SetFloat("Speed", 0.0f);
+                    dodgeCurrentPos = transform.position;
+                    dodgePos = (mFlag == Flag.Player) ? transform.position - new Vector3(0.0f, 0.0f, 2.5f)
+: transform.position + new Vector3(0.0f, -0.5f, 2.5f);
+                }
+                break;
+            case ActionEvent.DodgeWalk:
+                mAiBuild.SetActionEvent(Run(dodgePos, 0.1f, ActionEvent.DodgeBack, ActionEvent.DodgeWalk));
+                break;
+            case ActionEvent.DodgeBack:
+                mAiBuild.SetActionEvent(Run(dodgeCurrentPos, 0.1f, ActionEvent.None, ActionEvent.DodgeBack));
                 break;
         }
         CheckGround();
-        
         if(mAnimator.GetFloat("Speed") > 0.1f && mRunClips.Count > 0)
         {
             mWalkTime += Time.deltaTime;
@@ -240,7 +255,7 @@ public class Unit : MonoBehaviour, IUnit
     protected ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
     {
         transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * BattleManager.Instance.mRunningSpeed);
-        mAnimator.SetFloat("Speed", 1.0f);
+        mAnimator.SetFloat("Speed", (mCurrentSpeed < 4.9f) ? 1.0f : mCurrentSpeed);
         return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
     }
 
@@ -283,7 +298,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         mConditions.isCancel = false;
         
-        if (mAiBuild.type == AIType.Manual && mFlag == Flag.Player)
+        if (mAiBuild.type == AIType.Manual)
         {
             UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForTarget);
             foreach (GameObject enemy in BattleManager.Instance.mEnemies)
@@ -326,6 +341,8 @@ public class Unit : MonoBehaviour, IUnit
             foreach (GameObject enemy in BattleManager.Instance.mEnemies)
                 enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
         }
+        else
+            yield return new WaitForSeconds(0.4f);
 
         if (mConditions.isCancel == false && mTarget)
         {
@@ -432,9 +449,7 @@ public class Unit : MonoBehaviour, IUnit
     public IEnumerator CounterState(float dmg)
     {
         bool exist = (mTarget.GetComponent<Animator>().parameters.Where(s => s.name == "Melee").ToList().Count > 0);
-
-        if (exist)
-            mTarget.GetComponent<Animator>().SetBool("Melee", false);
+        if (exist) mTarget.GetComponent<Animator>().SetBool("Melee", false);
         if (mTarget.mBuffNerfController.SearchBuff("Counter"))
         {
             Counter counter = mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
@@ -463,52 +478,68 @@ public class Unit : MonoBehaviour, IUnit
             Dodge dodge = mBuffNerfController.GetBuff("Dodge") as Dodge;
             return (dodge.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f));
         }
-        return false;
+        else
+        {
+            float myChanceRate = (float)Math.Round(Mathf.Sqrt(mStatus.mAgility + mBonusStatus.mAgility) / 10, 2);
+            float random = UnityEngine.Random.Range(0.00f, 1.00f);
+            return myChanceRate >= random;
+        }
     }
 
     virtual public void TakeDamage(float dmg, DamageType type)
     {
-        if (mConditions.isDied)
-            return;
-
+        bool isDodge = DodgeState();
+        if (mConditions.isDied) return;
+        if (isDodge)
+        {
+            mAiBuild.actionEvent = ActionEvent.DodgeWalk;
+            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDodgeSFX);
+        }
         float value = dmg;
         if (type == DamageType.Physical)
         {
-            if (DodgeState())
-                return;
             value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
             value = (value - (mStatus.mArmor + mBonusStatus.mArmor) <= 0.0f) ? 1.0f : value - (mStatus.mArmor + mBonusStatus.mArmor);
         }
         else
             value = (value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance) <= 0.0f) ? 1.0f : value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance);
-        mStatus.mHealth -= value;
-        mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
-        mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
-
-        if (mStatus.mHealth <= 0.0f)
+        GameObject damage = Instantiate(mCanvas.transform.Find("DamageValue").gameObject
+            , mCanvas.transform.position - new Vector3(0.0f,1.0f,0.0f), Quaternion.identity, mCanvas.transform);
+        damage.SetActive(true);
+        damage.GetComponent<TextMeshProUGUI>().text = (isDodge) ? "Miss!" : value.ToString();
+        Destroy(damage, 1.1f);
+        if(!isDodge)
         {
-            if(mDeathClips.Count > 0)
-                AudioManager.PlaySfx(mDeathClips[Random.Range(0, mDeathClips.Count - 1)].Clip, 0.6f);
+            mStatus.mHealth -= value;
+            mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
+            mHealthBar.StartCoroutine(mHealthBar.PlayBleed());
 
-            mSelected.SetActive(false);
-            mConditions.isDied = true;
-            mLevelText.gameObject.SetActive(false);
-            mStatus.mHealth = 0.0f;
-            mHealthBar.mCurrentHealth = 0.0f;
-            if (mFlag == Flag.Enemy)
+            if (mStatus.mHealth <= 0.0f)
             {
-                GameManager.s_TotalExp += mStatus.mEXP;
-                GameManager.s_TotalGold += mStatus.mGold;
-                GameManager.s_TotalSoul += GameManager.Instance.mAmountofSoul;
+                if (mDeathClips.Count > 0)
+                    AudioManager.PlaySfx(mDeathClips[Random.Range(0, mDeathClips.Count - 1)].Clip, 0.6f);
+
+                mSelected.SetActive(false);
+                mConditions.isDied = true;
+                mLevelText.gameObject.SetActive(false);
+                mStatus.mHealth = 0.0f;
+                mHealthBar.mCurrentHealth = 0.0f;
+                if (mFlag == Flag.Enemy)
+                {
+                    GameManager.s_TotalExp += mStatus.mEXP;
+                    GameManager.s_TotalGold += mStatus.mGold;
+                    GameManager.s_TotalSoul += GameManager.Instance.mAmountofSoul;
+                }
+                mAnimator.SetBool("Death", true);
+                mHealthBar.ActiveDeathAnimation(true);
+                GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = false;
+                UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
+                mBuffNerfController.Stop();
+                mField.GetComponent<Field>().Picked(false);
             }
-            mAnimator.SetBool("Death",true);
-            mHealthBar.ActiveDeathAnimation(true);
-            GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = false;
-            UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
-            mBuffNerfController.Stop();
-            mField.GetComponent<Field>().Picked(false);
+            mAnimator.SetTrigger("Hit");
         }
-        mAnimator.SetTrigger("Hit");
+
     }
 
     virtual public void TakeRecover(float val)
@@ -589,7 +620,7 @@ public class Unit : MonoBehaviour, IUnit
 
         mStatus.mMana += mBonusStatus.mMana;
         mStatus.mMaxMana += mBonusStatus.mMana;
-
+        
         mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
         gameObject.SetActive(true);
     }

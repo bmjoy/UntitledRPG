@@ -63,6 +63,8 @@ public class InteractSystem : MonoBehaviour
         }
         if (mClosestNPC != null && !IsInteracting && Input.GetKeyDown(KeyCode.E))
         {
+            if (UIManager.Instance.mInventoryUI.transform.gameObject.activeSelf)
+                UIManager.Instance.DisplayInventory(false);
             IsInteracting = true;
             PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
             PlayerController.Instance.mState = new IdleState();

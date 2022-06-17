@@ -53,6 +53,7 @@ public class SceneLoader : MonoBehaviour
     IEnumerator StartLoad()
     {
         mLoadingScreen.SetActive(true);
+        mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0.0f;
         yield return StartCoroutine(FadeLoadingScreen(1, 2));
         AsyncOperation operation = null;
         operation = SceneManager.LoadSceneAsync(_sceneIndex);
