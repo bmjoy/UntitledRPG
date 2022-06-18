@@ -114,7 +114,7 @@ MonoBehaviour:
   mItemEquipSFX: {fileID: 8300000, guid: 8c7037a9d262efd47ba8e9f748c4e061, type: 3}
   mOpenInventorySFX: {fileID: 8300000, guid: c07a3fa0d83d92244a03b14fd402e78c, type: 3}
   mExclamationSFX: {fileID: 8300000, guid: 86803015242b0314d9f2ed57cba0d711, type: 3}
-  mMainMenuButtonSFX: {fileID: 8300000, guid: bdbc530505552de4ba6636f19f27b19b, type: 3}
+  mMainMenuButtonSFX: {fileID: 8300000, guid: 3391c5cd3b8ccc44cb7fa2702e7ac343, type: 3}
   mDefendSFX: {fileID: 8300000, guid: 0553908956f1b5444ace312e90bb5dcb, type: 3}
   mDodgeSFX: {fileID: 8300000, guid: 1c283335784cd1740b1a38f17438cb30, type: 3}
   mBreakSFX: {fileID: 8300000, guid: f873cc8d0f014f442a45a2974abc103c, type: 3}
