@@ -173,9 +173,8 @@ public class BKActionTrigger : BossActionTrigger
     {
         var boss = GetComponent<Boss>();
         boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
-        mTime = boss.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         boss.mAnimator.SetBool("Attack2", (boss.mBuffNerfController.GetBuffCount() > 0));
-        Debug.Log("Hi");
+        mTime = boss.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         StartCoroutine(AttackAction());
     }
 
