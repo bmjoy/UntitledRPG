@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Boss_Level.unity
     guid: e70e5a68e263fca468f48c50f931185e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Sandbox.unity
     guid: 280dffa5be8a05441bade0c240a5bfbf
   - enabled: 1
