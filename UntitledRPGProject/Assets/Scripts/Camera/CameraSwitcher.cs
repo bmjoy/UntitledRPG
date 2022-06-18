@@ -44,9 +44,8 @@ public class CameraSwitcher : MonoBehaviour
         GameManager.Instance.onPlayerBattleStart += SwitchCamera;
         if (GameObject.Find("PostProcessing") == null)
         {
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/PostProcessing"));
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/PostProcessing"), transform);
             mPostProcessing = go.GetComponent<Volume>().profile;
-            go.transform.SetParent(transform);
         }
         else
             mPostProcessing = GameObject.Find("PostProcessing").GetComponent<Volume>().profile;

@@ -34,6 +34,5 @@ public class Skill_Setting : ScriptableObject
     public List<Nerf> mNerfList = new List<Nerf>();
     public virtual void Initialize(Unit owner) { }
     public virtual void Activate(MonoBehaviour parent) { }
-    public virtual IEnumerator Effect() { yield return null; }
     public virtual IEnumerator WaitforDecision() { yield return null; }
 }

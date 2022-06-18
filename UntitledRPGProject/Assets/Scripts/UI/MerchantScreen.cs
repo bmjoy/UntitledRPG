@@ -52,9 +52,7 @@ public class MerchantScreen : MonoBehaviour
             EquipmentItem equipment = (EquipmentItem)item.Value;
 
             if (equipment.IsEquipped) continue;
-
             if (!equipment.isSold) continue;
-
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
             go.GetComponent<ItemUI>().Initialize(item.Key ,item.Value, ItemUI.ItemUIType.Sell);
         }

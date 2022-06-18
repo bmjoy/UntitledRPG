@@ -5,22 +5,6 @@ using UnityEngine;
 
 public class Hero : NPC
 {
-    [Serializable]
-    public class NeedsInfo
-    {
-        public string Name = string.Empty;
-        public int Value = 0;
-        public int Amount = 0;
-        [HideInInspector]
-        public bool onComplete = false;
-        public NeedsInfo(string n, int v, int a, bool complete = false)
-        {
-            Name = n;
-            Value = v;
-            Amount = a;
-        }
-    }
-
     [SerializeField]
     List<NeedsInfo> m_NeedsList = new List<NeedsInfo>();
 
@@ -103,6 +87,7 @@ UIManager.Instance.mStorage.NoButtonImage);
             }
 
         });
+        UIManager.Instance.DisplayEKeyInDialogue(false);
         UIManager.Instance.DisplayButtonsInDialogue(true);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);

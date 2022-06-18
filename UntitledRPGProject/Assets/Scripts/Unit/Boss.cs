@@ -26,12 +26,14 @@ public class Boss : Enemy
         base.Update();
     }
 
-    public override void TakeDamage(float dmg, DamageType type)
+    public override bool TakeDamage(float dmg, DamageType type)
     {
-        base.TakeDamage(dmg, type);
+        bool isHit = true;
+        isHit = base.TakeDamage(dmg, type);
         mMyHealthBar.mCurrentHealth = (mStatus.mHealth > 0.0f) ? mStatus.mHealth : 0.0f;
         if(mMyHealthBar.mCurrentHealth > 0.0f)
             mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
+        return isHit;
     }
 
     public override void TakeRecover(float val)

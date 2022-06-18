@@ -50,8 +50,7 @@ public class PlayerSpawner : Spawner
     protected override GameObject CreateNewObject()
     {
         mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Player"), transform.position, Quaternion.identity);
-        GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Allys/" + mName), transform.position, Quaternion.identity);
-        unit.transform.SetParent(mObject.transform);
+        GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Allys/" + mName), transform.position, Quaternion.identity, mObject.transform);
         mObject.GetComponent<PlayerController>().mHeroes.Add(unit);
         unit.SetActive(false);
         mObject.GetComponent<PlayerController>().ResetPlayerUnit();

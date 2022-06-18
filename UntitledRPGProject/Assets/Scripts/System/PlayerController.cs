@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     public Inventory mInventory;
     public GameObject mCanvas;
-    private GameObject mBag;
+    public GameObject mBag;
 
     private bool isLeft = false;
     public bool onBattle = false;
@@ -60,12 +60,12 @@ public class PlayerController : MonoBehaviour
             if (mInteractSystem == null)
                 return false;
             return mInteractSystem.IsInteracting; 
-        } }
-
-    // Start is called before the first frame update
+        } 
+    }
     void Start()
     {
-        Instance.mInventory = new Inventory();
+        if (Instance.mInventory == null)
+            Instance.mInventory = new Inventory();
         if (transform.Find("GroundCheck") == null)
         {
             GameObject groundCheck = new GameObject("GroundCheck");
@@ -91,26 +91,17 @@ public class PlayerController : MonoBehaviour
         mSpriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
         mCollider = GetComponent<BoxCollider>();
         mInteractSystem = GetComponent<InteractSystem>();
-        for (int i = 0; i < mHeroes.Count; ++i)
-            mHeroes[i].GetComponent<Player>().Initialize();
 
         if (mCamera == null)
             mCamera = CameraSwitcher.Instance.transform.Find("GameWorldCamera");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (mModel.activeInHierarchy == false)
-            return;
-        if (Interaction)
-            return;
-        if (GameManager.Instance.IsCinematicEvent)
+        if (mModel.activeInHierarchy == false || GameManager.Instance.IsCinematicEvent || Interaction)
             return;
         mState = mState.Handle();
         StateControl();
-
-
         isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
         if(mState.ToString() != "BattleState")
         {
@@ -135,11 +126,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (isGrounded && mVelocity.y <= 0.0f)
-            mVelocity.y = -2.0f;
-
+        if (isGrounded && mVelocity.y <= 0.0f) mVelocity.y = -2.0f;
         mVelocity.y += -9.8f * Time.deltaTime;
-
         mCharacterController.Move(mVelocity * Time.deltaTime);
     }
 
@@ -168,8 +156,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private GameObject[] fields;
-
     public void ResetPlayerUnit()
     {
         mHeroes.Clear();
@@ -187,10 +173,8 @@ public class PlayerController : MonoBehaviour
                     exist = true;
                 }
             }
-            if (finish == exist)
-                break;
+            if (finish == exist) break;
         }
-        
         mInventory?.AllDelete();
 
         Destroy(go);
@@ -215,6 +199,7 @@ public class PlayerController : MonoBehaviour
         mModel.SetActive(false);
         StartCoroutine(WaitForSpawn());
     }
+
     private IEnumerator WaitForSpawn()
     {
         for (int i = 0; i < mHeroes.Count; ++i)
@@ -239,7 +224,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (onBattle)
+        if (onBattle || LevelManager.Instance.isNext)
             return;
 
         var unit = other.GetComponent<EnemyProwler>();

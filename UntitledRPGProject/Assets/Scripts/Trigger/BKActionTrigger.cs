@@ -19,6 +19,8 @@ public class BKActionTrigger : BossActionTrigger
     {
         var boss = GetComponent<Boss>();
         var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        bool isHit = true;
+
         boss.mAnimator.SetTrigger("Skill2");
         yield return new WaitForSeconds(mTime / 6.9f);
         transform.position = BattleManager.playerFieldParent.position + new Vector3(0.0f,0.0f,-2.0f);
@@ -51,6 +53,9 @@ public class BKActionTrigger : BossActionTrigger
         {
             var i = unit.GetComponent<Unit>();
             i.TakeDamage((damagable.mValue + boss.mStatus.mMagicPower + boss.mBonusStatus.mMagicPower), DamageType.Magical);
+            if(isHit)
+                foreach (var nerf in boss_Skill.Skill.mNerfList)
+                    i.SetNerf(nerf.Initialize(boss, i));
         }
 
         boss.mAnimator.ResetTrigger("Skill2");
@@ -115,6 +120,14 @@ public class BKActionTrigger : BossActionTrigger
         originalClip = boss.mSkillClips[0].Clip;
         boss.mSkillClips[0].Clip = clip;
         _isUltimate = true;
+        _isRed = true;
+        StartCoroutine(wait());
+    }
+
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(2.0f);
+        _isRed = false;
     }
 
     private IEnumerator AttackAction()

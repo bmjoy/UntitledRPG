@@ -19,52 +19,6 @@ public class SelfAbility : DamagableAbility
         parent.StartCoroutine(WaitforDecision());
     }
 
-    public override IEnumerator Effect()
-    {
-        var colorParameter = new UnityEngine.Rendering.VolumeParameter<Color>();
-        switch (mElement)
-        {
-            case SkillElement.Normal:
-                break;
-            case SkillElement.Holy:
-                colorParameter.value = Color.white;
-                break;
-            case SkillElement.Shadow:
-                colorParameter.value = Color.green;
-                break;
-            case SkillElement.Water:
-                colorParameter.value = Color.cyan;
-                break;
-            case SkillElement.Fire:
-                colorParameter.value = Color.red;
-                break;
-            case SkillElement.Undead:
-                colorParameter.value = Color.magenta;
-                break;
-        }
-        if(mElement == SkillElement.Normal)
-        {
-            yield return null;
-        }
-        else
-        {
-            CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
-            while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)
-            {
-                CameraSwitcher.Instance.mBloom.intensity.value += Time.deltaTime * 2.0f;
-                yield return null;
-            }
-            yield return new WaitForSeconds(mEffectTime);
-
-            while (CameraSwitcher.Instance.mBloom.intensity.value != 0.0f)
-            {
-                CameraSwitcher.Instance.mBloom.intensity.value -= Time.deltaTime * 2.0f;
-                yield return null;
-            }
-        }
-
-    }
-
     public override void Initialize(Unit owner)
     {
         mOwner = owner;
@@ -103,7 +57,6 @@ public class SelfAbility : DamagableAbility
             if (isActive)
             {
                 UIManager.Instance.ChangeOrderBarText("<color=red>" + mName + "!</color>");
-                mOwner.StartCoroutine(Effect());
                 
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mStatus.mMana -= mManaCost;
@@ -132,8 +85,9 @@ public class SelfAbility : DamagableAbility
                 {
                     GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
     , mOwner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-                    Destroy(go, go.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+                    Destroy(go, 3.0f);
                 }
+                yield return new WaitForSeconds(1.0f);
             }
             else
                 BattleManager.Instance.Cancel();
@@ -147,6 +101,7 @@ public class SelfAbility : DamagableAbility
     {
         float newValue_M = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
         float newValue_P = mValue + mOwner.mStatus.mDamage + mOwner.mBonusStatus.mDamage;
+        bool isHit = true;
         switch (mSkillType)
         {
             case SkillType.Attack:
@@ -157,11 +112,14 @@ public class SelfAbility : DamagableAbility
                     foreach (GameObject unit in group)
                     {
                         var i = unit.GetComponent<Unit>();
-                        i.TakeDamage((mDamageType == DamageType.Physical) ? (newValue_P) : (newValue_M), mDamageType);
+                        isHit = i.TakeDamage((mDamageType == DamageType.Physical) ? (newValue_P) : (newValue_M), mDamageType);
+                        if(isHit)
+                        {
+                            foreach (var nerf in mNerfList)
+                                i.SetNerf(nerf.Initialize(mOwner, i));
+                        }
                     }
-
                     DoBuff();
-                    DoNerf();
                 }
                 break;
             case SkillType.Buff:

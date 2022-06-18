@@ -15,15 +15,11 @@ public class NPCSpawner : Spawner
             Destroy(mObject);
             mObject = null;
         }
-        if (mType == NPCUnit.None)
-            return null;
+        if (mType == NPCUnit.None) return null;
         mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity);
-
         mObject.transform.position = new Vector3(transform.position.x,transform.position.y + 1.5f, transform.position.z);
         mObject.tag = "Neutral";
         mObject.layer = 9;
-        //mObject.AddComponent<Prowler>().Setup(10.0f, 0.0f, 0.0f, ID, mObject);
-        //mObject.GetComponent<Prowler>().Initialize();
         return mObject;
     }
     public override void Spawn()

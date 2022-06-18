@@ -33,5 +33,7 @@ public class Pursuit : P_State
         EnemyProwler enemyProwler = (EnemyProwler)agent;
         enemyProwler.mExclamation.SetActive(false);
         enemyProwler.mParticles.SetActive(false);
+        agent.mRigidbody.velocity = Vector3.zero;
+        agent.mRigidbody.angularVelocity = Vector3.zero;
     }
 }

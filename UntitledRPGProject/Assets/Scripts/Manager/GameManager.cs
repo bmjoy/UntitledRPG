@@ -16,14 +16,13 @@ public class GameManager : MonoBehaviour
         else
             mInstance = this;
         DontDestroyOnLoad(gameObject);
-        mUnitData.Clear();
         mCamera = Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
     }
 
     public GameState mGameState = GameState.MainMenu;
     private GameObject[] EnemyProwlers;
     private GameObject[] NPCProwlers;
-    public Dictionary<string, UnitDataStorage> mUnitData = new Dictionary<string, UnitDataStorage>();
+   
     public GameObject[] mArmorPool;
     public GameObject[] mWeaponPool;
     public static int s_ID = 0;
@@ -45,8 +44,6 @@ public class GameManager : MonoBehaviour
     public bool IsCinematicEvent = false;
     private void Start()
     {
-        mUnitData.Clear();
-        
         Initialize();
     }
 
@@ -106,7 +103,6 @@ public class GameManager : MonoBehaviour
             mGameState = GameState.GamePlay;
         });
         UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().Clear();
-        CameraSwitcher.Instance.mBloom.intensity.value = 0.0f;
         ResetObjects();
         PlayerController.Instance.IsDied = true;
         StartCoroutine(Restart());
@@ -179,6 +175,7 @@ public class GameManager : MonoBehaviour
                 Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().mParticles.SetActive(false);
                 if (Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().id == Instance.mEnemyProwler.id)
                     continue;
+                Instance.EnemyProwlers[i].GetComponent<EnemyProwler>().ChangeBehavior("Stop");
                 Instance.EnemyProwlers[i].SetActive(active);
                 Instance.EnemyProwlers[i].GetComponent<BoxCollider>().enabled = active;
             }

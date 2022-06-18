@@ -61,52 +61,6 @@ public class SummonAbility : Skill_Setting
         }
     }
 
-    public override IEnumerator Effect()
-    {
-        var colorParameter = new UnityEngine.Rendering.VolumeParameter<Color>();
-        switch (mElement)
-        {
-            case SkillElement.Normal:
-                break;
-            case SkillElement.Holy:
-                colorParameter.value = Color.white;
-                break;
-            case SkillElement.Shadow:
-                colorParameter.value = Color.green;
-                break;
-            case SkillElement.Water:
-                colorParameter.value = Color.cyan;
-                break;
-            case SkillElement.Fire:
-                colorParameter.value = Color.red;
-                break;
-            case SkillElement.Undead:
-                colorParameter.value = Color.magenta;
-                break;
-        }
-        if (mElement == SkillElement.Normal)
-        {
-            yield return null;
-        }
-        else
-        {
-            CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
-            while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)
-            {
-                CameraSwitcher.Instance.mBloom.intensity.value += Time.deltaTime * 2.0f;
-                yield return null;
-            }
-            yield return new WaitForSeconds(mEffectTime);
-
-            while (CameraSwitcher.Instance.mBloom.intensity.value != 0.0f)
-            {
-                CameraSwitcher.Instance.mBloom.intensity.value -= Time.deltaTime * 2.0f;
-                yield return null;
-            }
-        }
-
-    }
-
     public override void Initialize(Unit owner)
     {
         mOwner = owner;
@@ -144,7 +98,6 @@ public class SummonAbility : Skill_Setting
             if (isActive)
             {
                 UIManager.Instance.ChangeOrderBarText("<color=red>" + mName + "!</color>");
-                mOwner.StartCoroutine(Effect());
                 bool hasState = mOwner.mAnimator.HasState(0, Animator.StringToHash("Skill"));
                 mOwner.mAnimator.Play((hasState) ? "Skill" : "Attack");
                 CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f, Vector3.Lerp(mOwner.transform.position, mSelectedField.transform.position, 0.5f)));
@@ -162,13 +115,12 @@ public class SummonAbility : Skill_Setting
 
                 if (mSelectedField)
                 {
-                    GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity);
+                    GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity, mOwner.transform.parent);
                     unit.GetComponent<Animator>().SetTrigger("Spawn");
                     unit.GetComponent<Unit>().mField = mSelectedField.GetComponent<Field>();
                     unit.GetComponent<Unit>().ResetUnit();
                     unit.GetComponent<Unit>().mOrder = Order.Standby;
                     unit.GetComponent<Unit>().mFlag = mOwner.mFlag;
-                    unit.transform.SetParent(mOwner.transform.parent);
                     BattleManager.Instance.mOrders.Enqueue(unit.GetComponent<Unit>());
                     BattleManager.Instance.mUnits.Add(unit);
                     UIManager.Instance.mOrderBar.EnqueueSignleOrder(unit.GetComponent<Unit>());

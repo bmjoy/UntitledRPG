@@ -15,6 +15,7 @@ public class JimmyActionTrigger : ActionTrigger
 
         mPos = GetComponent<Unit>().mTarget.transform.position;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+        GetComponent<Unit>().mAnimator.Play("Attack");
         mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         StartCoroutine(Action());
     }

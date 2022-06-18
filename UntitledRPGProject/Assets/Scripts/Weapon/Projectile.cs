@@ -24,21 +24,26 @@ public class Projectile : MonoBehaviour
 
     protected virtual void Start()
     {
-        mAnimationCount = GetComponent<Animator>().runtimeAnimatorController.animationClips.Length;
+        if(GetComponent<Animator>() != null)
+            mAnimationCount = GetComponent<Animator>().runtimeAnimatorController.animationClips.Length;
         mEffect = transform.GetChild(0).transform.gameObject;
         if (mEffect)
         {
             mEffect.transform.position = transform.position;
-            if (mTarget.mFlag == Flag.Player)
+            if(transform.GetComponent<SpriteRenderer>()!= null)
             {
-                mEffect.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
-                transform.GetComponent<SpriteRenderer>().flipX = true;
+                if (mTarget.mFlag == Flag.Player)
+                {
+                    mEffect.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
+                    transform.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else
+                {
+                    mEffect.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+                    transform.GetComponent<SpriteRenderer>().flipX = false;
+                }
             }
-            else
-            {
-                mEffect.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
-                transform.GetComponent<SpriteRenderer>().flipX = false;
-            }
+
             isEffect = true;
             StartCoroutine(WaitforSecond());
             mEffect.SetActive(true);
@@ -61,7 +66,8 @@ public class Projectile : MonoBehaviour
             {
                 isCollide = true;
                 int random = UnityEngine.Random.Range(1, 2);
-                GetComponent<Animator>().Play((mAnimationCount >= 3) ? "Burst" + UnityEngine.Random.Range(1, 2) : "Burst");
+                if(GetComponent<Animator>() != null)
+                    GetComponent<Animator>().Play((mAnimationCount >= 3) ? "Burst" + UnityEngine.Random.Range(1, 2) : "Burst");
                 mActionEvent?.Invoke();
                 if(clip.Length > 0)
                     AudioManager.PlaySfx(clip[UnityEngine.Random.Range(0,clip.Length-1)]);
