@@ -9,8 +9,6 @@ using UnityEngine.UI;
 public class Player : Unit
 {
     [HideInInspector]
-    public UnitDataStorage mStorage;
-    [HideInInspector]
     public BigHealthBar mMyHealthBar;
 
     public WeaponType mWeaponType;
@@ -28,21 +26,6 @@ public class Player : Unit
         mTarget = null;
     }
 
-    public void Initialize()
-    {
-        if (!GameManager.Instance.mUnitData.ContainsKey(mSetting.Name))
-        {
-            GameManager.Instance.mUnitData.Add(mSetting.Name, new UnitDataStorage());
-            mStorage = GameManager.Instance.mUnitData[mSetting.Name];
-            mStorage.SaveData(ref mStatus);
-        }
-        else
-        {
-            mStorage = GameManager.Instance.mUnitData[mSetting.Name];
-            mStorage.LoadData(ref mStatus);
-        }
-    }
-
     protected override void Update()
     {
         base.Update();
@@ -50,17 +33,14 @@ public class Player : Unit
             mMyHealthBar.mCurrentMana = mStatus.mMana;
     }
 
-    public override void TakeDamage(float dmg, DamageType type)
+    public override bool TakeDamage(float dmg, DamageType type)
     {
-        base.TakeDamage(dmg, type);
+        bool isHit = true;
+        isHit = base.TakeDamage(dmg, type);
         mMyHealthBar.mCurrentHealth = (mStatus.mHealth > 0.0f) ? mStatus.mHealth : 0.0f;
-        if(mMyHealthBar.mCurrentHealth > 0.0f)
+        if(isHit && mMyHealthBar.mCurrentHealth > 0.0f)
             mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
-        if (mConditions.isDied)
-        {
-            GameManager.Instance.mUnitData.Remove(mSetting.Name);
-            mStorage = null;
-        }
+        return isHit;
     }
 
     public override void TakeRecover(float val)
@@ -75,12 +55,5 @@ public class Player : Unit
         base.TakeRecoverMana(val);
         if (mMyHealthBar)
             mMyHealthBar.mCurrentMana = mStatus.mMana;
-    }
-
-    private void OnDisable()
-    {
-        if(mStorage != null)
-            GameManager.Instance.mUnitData[mSetting.Name] = mStorage;
-        mStorage?.SaveData(ref mStatus);
     }
 }

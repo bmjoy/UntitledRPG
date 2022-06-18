@@ -7,7 +7,6 @@ public class MiniHealthBar : HealthBar
     public override void Initialize(float currHP, float maxHP, float currMP, float maxMP)
     {
         base.Initialize(currHP, maxHP, currMP, maxMP);
-        ActiveDeathAnimation(false);
     }
     public void ActiveDeathAnimation(bool active)
     {

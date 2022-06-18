@@ -44,7 +44,7 @@ public class Inventory
         {
             if(it.GetComponent<Item>() == Get(item.Name))
             {
-                GameObject.Destroy(it.gameObject);
+                Object.Destroy(it.gameObject);
                 break;
             }
         }
@@ -56,7 +56,7 @@ public class Inventory
         foreach (Transform it in PlayerController.Instance.transform.Find("Bag"))
         {
             Remove(it.GetComponent<Item>());
-            GameObject.Destroy(it.gameObject);
+            Object.Destroy(it.gameObject);
         }
 
     }
@@ -68,7 +68,6 @@ public class Inventory
             if(item.Value.Name == name)
                 return item.Value;
         }
-
         return null;
     }
 }

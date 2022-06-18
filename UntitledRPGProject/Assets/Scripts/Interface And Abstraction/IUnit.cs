@@ -7,7 +7,7 @@ public interface IUnit
 {
     void SetBuff(TimedBuff buff);
     void SetNerf(TimedNerf nerf);
-    void TakeDamage(float dmg, DamageType type);
+    bool TakeDamage(float dmg, DamageType type);
     void TakeRecover(float val);
     void TakeRecoverMana(float val);
     KeyValuePair<bool, BonusStatus> LevelUP();

@@ -94,7 +94,6 @@ public class TargetAbility : DamagableAbility
                 mOwner.mAiBuild.SetActionEvent(ActionEvent.MagicWalk);
                 if(mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f, Vector3.Lerp(mOwner.transform.position, mTarget.transform.position, 0.5f)));
-                mOwner.StartCoroutine(Effect());
                 yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
                 mOwner.mStatus.mMana -= mManaCost;
 
@@ -109,7 +108,6 @@ public class TargetAbility : DamagableAbility
                 }
                 else if (mShootType == SKillShootType.Melee)
                 {
-                    
                     yield return new WaitForSeconds(mEffectTime);
                     mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
 
@@ -120,7 +118,7 @@ public class TargetAbility : DamagableAbility
                         if (mOwner.mSkillClips.Count > 0 && !projectile)
                             AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     CommonState();
-                    yield return new WaitForSeconds(0.15f);
+                    yield return new WaitForSeconds(0.2f);
                 }
                 else if(mShootType == SKillShootType.Instant)
                 {
@@ -130,14 +128,16 @@ public class TargetAbility : DamagableAbility
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }    
-                mOwner.mAiBuild.SetActionEvent(ActionEvent.BackWalk);
+
 
                 if(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
                 {
                     GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
     , mTarget.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-                    Destroy(go, go.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+                    Destroy(go, 1.1f);
                 }
+                yield return new WaitForSeconds(0.5f);
+                mOwner.mAiBuild.SetActionEvent(ActionEvent.BackWalk);
             }
             else
                 BattleManager.Instance.Cancel();
@@ -153,16 +153,20 @@ public class TargetAbility : DamagableAbility
     private void CommonState()
     {
         float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
+        bool isHit = true;
         switch (mSkillType)
         {
             case SkillType.Attack:
                 {
-                    mTarget.TakeDamage(newValue, DamageType.Magical);
-
+                    isHit = mTarget.TakeDamage(newValue, DamageType.Magical);
                     foreach (var buff in mBuffList)
                         mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
-                    foreach (var nerf in mNerfList)
-                        mTarget.SetNerf(nerf.Initialize(mOwner, mTarget));
+                    if (isHit)
+                    {
+                        foreach (var nerf in mNerfList)
+                            mTarget.SetNerf(nerf.Initialize(mOwner, mTarget));
+                    }
+
                 }
                 break;
             case SkillType.Buff:
@@ -205,11 +209,15 @@ public class TargetAbility : DamagableAbility
 
         mProjectile.GetComponent<Projectile>().Initialize(mTarget,
     () => {
-        mTarget.TakeDamage(newValue, DamageType.Magical);
+        bool isHit = true;
+        isHit = mTarget.TakeDamage(newValue, DamageType.Magical);
         foreach (var buff in mBuffList)
             mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
-        foreach (var nerf in mNerfList)
-            mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
+        if (isHit)
+        {
+            foreach (var nerf in mNerfList)
+                mOwner.SetNerf(nerf.Initialize(mOwner, mTarget));
+        }
     });
 
     }
@@ -263,53 +271,5 @@ public class TargetAbility : DamagableAbility
         mOwner = owner;
         if (mValue <= 0.0f)
             mValue = owner.mStatus.mMagicPower;
-    }
-
-    public override IEnumerator Effect()
-    {
-        var colorParameter = new UnityEngine.Rendering.VolumeParameter<Color>();
-        switch (mElement)
-        {
-            case SkillElement.Normal:
-                break;
-            case SkillElement.Holy:
-                colorParameter.value = Color.white;
-                break;
-            case SkillElement.Shadow:
-                colorParameter.value = Color.green;
-                break;
-            case SkillElement.Water:
-                colorParameter.value = Color.cyan;
-                break;
-            case SkillElement.Fire:
-                colorParameter.value = Color.red;
-                break;
-            case SkillElement.Undead:
-                colorParameter.value = Color.black;
-                break;
-        }
-        if (mElement == SkillElement.Normal)
-        {
-            yield return null;
-        }
-        else
-        {
-            CameraSwitcher.Instance.mBloom.tint.SetValue(colorParameter);
-
-            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
-            while (CameraSwitcher.Instance.mBloom.intensity.value < 2.0f)
-            {
-                CameraSwitcher.Instance.mBloom.intensity.value += Time.deltaTime * 2.0f;
-                yield return null;
-            }
-            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent != ActionEvent.Busy);
-
-            while (CameraSwitcher.Instance.mBloom.intensity.value != 0.0f)
-            {
-                CameraSwitcher.Instance.mBloom.intensity.value -= Time.deltaTime * 2.0f;
-                yield return null;
-            }
-        }
-
     }
 }

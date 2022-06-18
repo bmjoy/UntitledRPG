@@ -16,50 +16,45 @@ public class EnemySpawner : Spawner
     private float mSpeed = 3.0f;
     protected override GameObject CreateNewObject()
     {
-        if (mEnemyList.Count == 1 && mEnemyList[0] == EnemyUnit.None)
+        if (mEnemyList.Count == 0)
             return null;
 
-        if (mEnemyList.Count > 0)
+        GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
+        newEnemyProwler.transform.position = new Vector3(transform.position.x,
+            transform.position.y + 1.0f,
+            transform.position.z);
+
+        int LeaderCount = 0;
+        for (int i = 0; i < mEnemyList.Count; ++i)
         {
-            GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
-            newEnemyProwler.transform.position = new Vector3(transform.position.x,
-                transform.position.y + 1.0f,
-                transform.position.z);
-
-            int LeaderCount = 0;
-            for (int i = 0; i < mEnemyList.Count; ++i)
-            {
-                if (mEnemyList[i] == EnemyUnit.None)
-                    LeaderCount++;
-                else
-                    break;
-            }
-
-            GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
-            newEnemyProwler.tag = "EnemyProwler";
-            newEnemyProwler.layer = 6;
-            newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, mSpeed, ID, newModel.gameObject);
-
-            for (int i = 0; i < mEnemyList.Count; i++)
-            {
-                if (mEnemyList[i] == EnemyUnit.None)
-                    continue;
-                GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity, newEnemyProwler.transform);
-                newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
-                obj.SetActive(false);
-            }
-
-            newEnemyProwler.GetComponent<EnemyProwler>()._RunClip = newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup[0].GetComponent<Unit>().mSetting.Clips.FindAll(
-                delegate (SoundClip s)
-                {
-                    return s.Type == SoundClip.SoundType.Run;
-                });
-
-            newEnemyProwler.GetComponent<EnemyProwler>().Initialize();
-            return newEnemyProwler;
+            if (mEnemyList[i] == EnemyUnit.None)
+                LeaderCount++;
+            else
+                break;
         }
-        else
-            return null;
+
+        GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
+        newEnemyProwler.tag = "EnemyProwler";
+        newEnemyProwler.layer = 6;
+        newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, mSpeed, ID, newModel.gameObject);
+
+        for (int i = 0; i < mEnemyList.Count; i++)
+        {
+            if (mEnemyList[i] == EnemyUnit.None)
+                continue;
+            GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity, newEnemyProwler.transform);
+            newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
+            obj.SetActive(false);
+        }
+
+        newEnemyProwler.GetComponent<EnemyProwler>()._RunClip = newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup[0].GetComponent<Unit>().mSetting.Clips.FindAll(
+            delegate (SoundClip s)
+            {
+                return s.Type == SoundClip.SoundType.Run;
+            });
+
+        newEnemyProwler.GetComponent<EnemyProwler>().Initialize();
+        return newEnemyProwler;
     }
 
     public override void Spawn()

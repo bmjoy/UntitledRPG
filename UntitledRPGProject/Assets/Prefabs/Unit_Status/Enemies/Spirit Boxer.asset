@@ -34,5 +34,7 @@ MonoBehaviour:
   - Type: 2
     Clip: {fileID: 8300000, guid: 9cb8156193b499f4e86b318332104b9a, type: 3}
   Item:
-  - {fileID: 3519973982565569764, guid: acad645e5905cc6448aec18464bd1aed, type: 3}
-  - {fileID: 6884613172769436045, guid: c40c9ca9ae014ee41ad14d91dde649d2, type: 3}
+  - mRate: 0
+    mItem: {fileID: 0}
+  - mRate: 0
+    mItem: {fileID: 0}

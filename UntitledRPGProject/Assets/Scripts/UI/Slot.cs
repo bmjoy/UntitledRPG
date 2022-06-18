@@ -90,9 +90,10 @@ public class Slot : MonoBehaviour
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
             PlayerController.Instance.mGold -= result;
-            mMyItem.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
-            PlayerController.Instance.mInventory.Add(mMyItem.GetComponent<Item>());
-            mMyItem.GetComponent<Item>().isSold = true;
+            GameObject newItem = Instantiate(mMyItem);
+            newItem.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
+            PlayerController.Instance.mInventory.Add(newItem.GetComponent<Item>());
+            newItem.GetComponent<Item>().isSold = true;
             mBoarder.transform.Find("Money").Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
             ResetItem();
         }

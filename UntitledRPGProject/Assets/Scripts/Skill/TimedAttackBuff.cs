@@ -12,7 +12,10 @@ public class TimedAttackBuff : TimedBuff
             return;
         if (mTarget.transform.Find(Buff.name + "(Clone)") == null && mTarget.mStatus.mHealth > 0.0f)
         {
-            GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Buff.name), new Vector3(mTarget.transform.position.x, mTarget.transform.position.y + 0.5f, mTarget.transform.position.z + 0.2f), Quaternion.identity);
+            GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Buff.name), new Vector3(mTarget.transform.position.x, mTarget.transform.position.y + 0.5f, mTarget.transform.position.z),
+                new Quaternion(0.0f,0.0f,0.0f,1.0f));
+            go.GetComponent<Renderer>().sortingLayerName = "Foreground";
+            go.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
             go.transform.parent = mTarget.transform;
             effectObject = go;
         }

@@ -7,6 +7,8 @@ public class Stop : P_State
     float mTime = 0.0f;
     public override void Enter(Prowler agent)
     {
+        agent.mRigidbody.velocity = Vector3.zero;
+        agent.mRigidbody.angularVelocity = Vector3.zero;
     }
 
     public override void Execute(Prowler agent)

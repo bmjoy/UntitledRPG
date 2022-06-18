@@ -32,8 +32,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
     protected virtual void Start()
     {
         mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForNPC"), transform.position
-    + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity);
-        mCanvas.transform.SetParent(transform);
+    + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity, transform);
         if(!GetComponent<Billboard>().mUseStaticBillboard)
             mCanvas.transform.localRotation = new Quaternion(0.0f, 180.0f, 0.0f, 1.0f);
         else
@@ -70,6 +69,24 @@ public class NPC : MonoBehaviour, IInteractiveObject
                     mComplete = false;
                     mTrigger = Event;
                     break;
+                case Dialogue.TriggerType.Fail:
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        UIManager.Instance.DisplayButtonsInDialogue(false);
+                        UIManager.Instance.DisplayEKeyInDialogue(true);
+                        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
+                        // Spawn Enemy
+                    }
+                    break;
+                case Dialogue.TriggerType.Success:
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        UIManager.Instance.DisplayButtonsInDialogue(false);
+                        UIManager.Instance.DisplayEKeyInDialogue(true);
+                        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
+                    }
+                    // Give something
+                    break;
                 default:
                     break;
             }
@@ -97,9 +114,12 @@ public class NPC : MonoBehaviour, IInteractiveObject
             mComplete = true;
         });
         UIManager.Instance.AddListenerLeftButton(() => {
+            foreach (var dialogue in m_DialogueYesCase)
+                m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
         UIManager.Instance.DisplayButtonsInDialogue(true);
+        UIManager.Instance.DisplayEKeyInDialogue(false);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);
     }
@@ -117,6 +137,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
             mComplete = true;
         });
         UIManager.Instance.DisplayButtonsInDialogue(true);
+        UIManager.Instance.DisplayEKeyInDialogue(false);
         yield return new WaitUntil(() => mComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);
     }

@@ -15,8 +15,7 @@ public abstract class InteractableEnvironment : Environment, IInteractiveObject
     public virtual void Canvas_Initialize()
     {
         mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForNPC"), transform.position
-+ new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 5.0f, 0.0f), Quaternion.identity);
-        mCanvas.transform.SetParent(transform);
++ new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 5.0f, 0.0f), Quaternion.identity, transform);
         mCanvas.transform.localRotation = new Quaternion(0.0f, 260.0f, 0.0f, 1.0f);
         mCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.125f, 0.125f, 0.125f);
         mInteraction = mCanvas.transform.Find("Interaction").gameObject;

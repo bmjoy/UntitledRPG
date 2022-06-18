@@ -244,6 +244,8 @@ public class BattleManager : MonoBehaviour
             for (int x = 0; x < enemy.mSetting.Item.Count; ++x)
             {
                 ItemDrop obj = enemy.mSetting.Item[x];
+                if (obj == null)
+                    continue;
                 if (UnityEngine.Random.Range(0, 100) <= obj.mRate) enemyItemList.Add(obj.mItem);
             }
         }
@@ -251,8 +253,7 @@ public class BattleManager : MonoBehaviour
         UIManager.Instance.mVictoryScreen.UpdateItemList(enemyItemList);
         for (int i = 0; i < enemyItemList.Count; ++i)
         {
-            GameObject item = Instantiate(enemyItemList[i]);
-            item.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
+            GameObject item = Instantiate(enemyItemList[i], PlayerController.Instance.transform.Find("Bag"));
             PlayerController.Instance.mInventory.Add(item.GetComponent<Item>());
         }
     }
