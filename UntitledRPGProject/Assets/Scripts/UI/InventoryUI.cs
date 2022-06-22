@@ -84,7 +84,7 @@ public class InventoryUI : MonoBehaviour
         {
             transform.gameObject.SetActive(true);
             InventorySetup();
-            _intialized = false;
+            _Initialized = false;
         }
 
         StartCoroutine(Wait(active));
@@ -172,48 +172,58 @@ public class InventoryUI : MonoBehaviour
     unit.GetComponent<InventroySystem>().mInventoryInfo.Arm.Info.mSprite : mEmptyImage;
     }
 
-    bool _intialized = false;
+    bool _Initialized = false;
     List<GameObject> items = new List<GameObject>();
     private void InventorySetup()
     {
-        if (_intialized)
+        if (_Initialized)
             return;
         items.Clear();
 
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
-            EquipmentItem equipment = (EquipmentItem)item.Value;
-
-            if (equipment.GetType() == typeof(Weapon))
+            if (item.Value.GetType().IsSubclassOf(typeof(Expendables)))
             {
-                var unit = PlayerController.Instance.mHeroes[mIndex].GetComponent<Player>();
-                WeaponInfo weapon = (WeaponInfo)item.Value.Info;
-                if (weapon.mWeaponType != unit.mWeaponType) continue;
-            }
-
-            if (equipment.IsEquipped) continue;
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
-            go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Equip);
-            items.Add(go);
-            string part = string.Empty;
-            if (item.Value is Weapon) part = "Weapon";
-            else if (item.Value is Armor)
-            {
-                var i = (Armor)item.Value;
-                switch (i.armorType)
-                {
-                    case ArmorType.Bracer: part = "Arm"; break;
-                    case ArmorType.BodyArmor: part = "Body"; break;
-                    case ArmorType.LegArmor: part = "Leg"; break;
-                    case ArmorType.Helmet: part = "Head"; break;
-                }
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
+                go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Non_Activate);
+                items.Add(go);
             }
             else
-                continue;
-            if(part != string.Empty)
-                mEquipmentImageGroup.transform.Find(part).GetComponent<ItemUI>().Initialize(item.Key,item.Value,ItemUI.ItemUIType.Unequip);
+            {
+                EquipmentItem equipment = (EquipmentItem)item.Value;
+
+                if (equipment.GetType() == typeof(Weapon))
+                {
+                    var unit = PlayerController.Instance.mHeroes[mIndex].GetComponent<Player>();
+                    WeaponInfo weapon = (WeaponInfo)item.Value.Info;
+                    if (weapon.mWeaponType != unit.mWeaponType) continue;
+                }
+
+                if (equipment.IsEquipped) continue;
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
+                go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Equip);
+                items.Add(go);
+                string part = string.Empty;
+                if (item.Value is Weapon) part = "Weapon";
+                else if (item.Value is Armor)
+                {
+                    var i = (Armor)item.Value;
+                    switch (i.armorType)
+                    {
+                        case ArmorType.Bracer: part = "Arm"; break;
+                        case ArmorType.BodyArmor: part = "Body"; break;
+                        case ArmorType.LegArmor: part = "Leg"; break;
+                        case ArmorType.Helmet: part = "Head"; break;
+                    }
+                }
+                else
+                    continue;
+                if (part != string.Empty)
+                    mEquipmentImageGroup.transform.Find(part).GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Unequip);
+            }
+
         }
-        _intialized = true;
+        _Initialized = true;
     }
 
     public void InventoryUpdate()
@@ -227,7 +237,7 @@ public class InventoryUI : MonoBehaviour
         {
             Destroy(item.gameObject);
         }
-        _intialized = false;
+        _Initialized = false;
         InventorySetup();
         mMoneyGroup.transform.Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
     }

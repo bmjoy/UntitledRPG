@@ -13,6 +13,12 @@ public class BreakableObject : InteractableEnvironment
     private BoxCollider mCollider;
     [SerializeField]
     public List<GameObject> mCollectObjects = new List<GameObject>();
+
+
+    private void Start()
+    {
+        transform.Rotate(new Vector3(0.0f, Random.Range(-360.0f, 360.0f), 0.0f));
+    }
     public override IEnumerator Interact(Action action = null)
     {
         PlayerController.Instance.mModel.GetComponent<Animator>().Play("Attack");
@@ -88,6 +94,7 @@ public class BreakableObject : InteractableEnvironment
                 if(!key)
                 {
                     key = true;
+                    NewKey();
                 }
                 else
                     NewCoin();
@@ -100,5 +107,11 @@ public class BreakableObject : InteractableEnvironment
         GameObject coin = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/Coin"), transform.position, Quaternion.identity, transform);
         coin.SetActive(false);
         mCollectObjects.Add(coin);
+    }
+    private void NewKey()
+    {
+        GameObject key = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/Key"), transform.position, Quaternion.identity, transform);
+        key.SetActive(false);
+        mCollectObjects.Add(key);
     }
 }

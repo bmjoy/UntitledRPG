@@ -58,33 +58,37 @@ public class DungeonGenerator : MonoBehaviour
         type = Room.RoomType.None;
         if (row == 0 && col == 0)
         {
+            type = Room.RoomType.Player;
             return Instantiate(_Info.PlayerRoom, pos, Quaternion.identity, transform).GetComponent<Room>();
         }
         else if(row == _Info.Row - 1 && col == _Info.Column - 1)
         {
+            type = Room.RoomType.Boss;
             return Instantiate(_Info.BossRoom, pos, Quaternion.identity, transform).GetComponent<Room>();
         }
         else if(row == Mathf.FloorToInt((float)_Info.Row / 2) && col == Mathf.FloorToInt((float)_Info.Column / 2))
         {
+            type = Room.RoomType.MiniBoss;
             return Instantiate(_Info.MiniBossRoom, pos, Quaternion.identity, transform).GetComponent<Room>();
         }        
         else if(row > Mathf.FloorToInt((float)_Info.Row / 2) && col > Mathf.FloorToInt((float)_Info.Column / 2))
         {
-            type = GetRoomType(HighTierMonsterChance, Room.RoomType.HighTierMonster);
-            return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count - 1)], pos, Quaternion.identity, transform).GetComponent<Room>();
+            type = (UnityEngine.Random.Range(0.0f, 100.0f) <= _Info.SecretRate) ? 
+                Room.RoomType.Secret : GetRoomType(HighTierMonsterChance, Room.RoomType.HighTierMonster);
+            return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count)], pos, Quaternion.identity, transform).GetComponent<Room>();
         }
         else
         {
-            type = GetRoomType(LowTierMonsterChance, Room.RoomType.LowTierMonster);
-            return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count - 1)], pos, Quaternion.identity, transform).GetComponent<Room>();
+            type = (UnityEngine.Random.Range(0.0f, 100.0f) <= _Info.SecretRate) ?
+                Room.RoomType.Secret : GetRoomType(LowTierMonsterChance, Room.RoomType.LowTierMonster);
+            return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count)], pos, Quaternion.identity, transform).GetComponent<Room>();
         }
     }
 
     private Room.RoomType GetRoomType(float Chance, Room.RoomType defaultType)
     {
         Room.RoomType type = (Room.RoomType)UnityEngine.Random.Range(1, 5);
-
-        if (UnityEngine.Random.Range(0, 100) >= Chance)
+        if (UnityEngine.Random.Range(0, 100) <= Chance)
             return defaultType;
 
         switch (type)

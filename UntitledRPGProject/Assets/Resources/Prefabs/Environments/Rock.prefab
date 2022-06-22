@@ -110,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mID: 0
   mName: Rock
+  mDialogue: []
   mInteraction: {fileID: 0}
   _Completed: 0
   mAmount: 5

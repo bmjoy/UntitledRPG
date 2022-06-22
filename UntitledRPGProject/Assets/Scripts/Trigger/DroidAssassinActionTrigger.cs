@@ -60,7 +60,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
 
         unit.mAnimator.Play("Attack");
-        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 1.3f;
+        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 1.3f;
 
         StartCoroutine(Action());
     }

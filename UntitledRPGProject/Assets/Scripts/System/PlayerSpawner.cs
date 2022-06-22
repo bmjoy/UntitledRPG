@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 public class PlayerSpawner : Spawner
 {
     public string mName;
+    private void Start()
+    {
+        GameManager.Instance.AssignCharacter(mName);
+    }
     public override void Spawn()
     {
 
@@ -51,6 +55,7 @@ public class PlayerSpawner : Spawner
     {
         mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Player"), transform.position, Quaternion.identity);
         GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Allys/" + mName), transform.position, Quaternion.identity, mObject.transform);
+        unit.GetComponent<Player>().tag = "PlayerUnit";
         mObject.GetComponent<PlayerController>().mHeroes.Add(unit);
         unit.SetActive(false);
         mObject.GetComponent<PlayerController>().ResetPlayerUnit();

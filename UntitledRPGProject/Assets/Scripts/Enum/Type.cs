@@ -61,7 +61,8 @@ public enum NPCUnit
     Vin,
     Eleven,
     ArmorMerchant,
-    WeaponMerchant
+    WeaponMerchant,
+    Jimmy
 }
 
 public enum EnvironmentObject
@@ -69,7 +70,8 @@ public enum EnvironmentObject
     None,
     Well,
     Rock,
-    Chest
+    Chest,
+    Door
 }
 
 [Serializable]

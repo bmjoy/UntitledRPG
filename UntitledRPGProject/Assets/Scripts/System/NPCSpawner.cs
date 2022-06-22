@@ -16,25 +16,57 @@ public class NPCSpawner : Spawner
             mObject = null;
         }
         if (mType == NPCUnit.None) return null;
-        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity);
-        mObject.transform.position = new Vector3(transform.position.x,transform.position.y + 1.5f, transform.position.z);
-        mObject.tag = "Neutral";
-        mObject.layer = 9;
+        switch(mType)
+        {
+            case NPCUnit.Eleven:
+            case NPCUnit.Roger:
+            case NPCUnit.Victor:
+            case NPCUnit.Vin:
+                if (GameManager.Instance.IsExist(mType.ToString()))
+                {
+                    for (int i = 0; i < GameManager.Instance.characterExists.Count; ++i)
+                    {
+                        var exist = GameManager.Instance.characterExists[i];
+                        if (exist.mUnit == NPCUnit.Jimmy)
+                            continue;
+                        if (exist.isExist == false)
+                        {
+                            mType = exist.mUnit;
+                            GameManager.Instance.AssignCharacter(mType.ToString());
+                            break;
+                        }
+                        else
+                            mType = NPCUnit.None;
+                    }
+                    if (mType == NPCUnit.None)
+                    {
+                        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/Rock"), transform.position, Quaternion.identity);
+                        mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
+                        mObject.GetComponent<Environment>().Initialize(ID);
+                        mObject.transform.Rotate(new Vector3(0.0f, Random.Range(-360.0f, 360.0f), 0.0f));
+                    }
+                }
+                else
+                    GameManager.Instance.AssignCharacter(mType.ToString());
+                break;
+            default:
+                break;
+        }
+        if(mType != NPCUnit.None)
+        {
+            mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity);
+            mObject.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+            mObject.tag = "Neutral";
+            mObject.layer = 9;
+        }
+
         return mObject;
     }
     public override void Spawn()
     {
-        if (mInitialized)
-            return;
-        if(PlayerController.Instance)
-        {
-            if (mType < (NPCUnit)5 && PlayerController.Instance.mHeroes.Exists(s => s.GetComponent<Unit>().mSetting.Name == mType.ToString()))
-                return;
-        }
-
+        if (mInitialized) return;
         ID = GameManager.s_ID++;
         StartCoroutine(Wait());
-        mObject = CreateNewObject();
     }
     private IEnumerator Wait()
     {
@@ -42,7 +74,7 @@ public class NPCSpawner : Spawner
         mObject = CreateNewObject();
         if (mObject == null)
         {
-            Debug.Log("Failed to create");
+            Debug.Log($"{mType.ToString()} Failed to create");
             mInitialized = false;
         }
         else

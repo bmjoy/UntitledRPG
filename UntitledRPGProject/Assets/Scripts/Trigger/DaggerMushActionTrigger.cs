@@ -26,7 +26,7 @@ public class DaggerMushActionTrigger : ActionTrigger
     {
         var unit = GetComponent<Unit>();
         unit.mAnimator.Play("Attack");
-        mTime = (unit.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.5f);
+        mTime = (unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 0.5f);
         mPos = unit.mTarget.transform.position;
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
         StartCoroutine(Action());

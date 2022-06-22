@@ -7,13 +7,15 @@ public class EnvironmentSpawner : Spawner
 {
     [SerializeField]
     public EnvironmentObject type;
-
     protected override GameObject CreateNewObject()
     {
         if (type == EnvironmentObject.None)
             return null;
-        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, Quaternion.identity);
-        mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
+        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, transform.rotation);
+        if (mObject.GetComponent<BoxCollider>())
+            mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
+        else
+            mObject.AddComponent<NavMeshObstacle>();
         mObject.GetComponent<Environment>().Initialize(ID);
         return mObject;
     }

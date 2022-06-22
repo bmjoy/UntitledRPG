@@ -8,18 +8,25 @@ public class Expendables : Item
     public override void Initialize(int id)
     {
         base.Initialize(id);
-        Amount = 1;
     }
 
     public override void Apply()
     {
         Amount++;
+        Debug.Log($"Use {Name}: {Amount}");
+        UIManager.Instance.mInventoryUI.InventoryUpdate();
     }
 
     public override void End()
     {
         // Use
-        if(Amount > 0)
-            Amount--;
+        Amount--;
+        UIManager.Instance.mInventoryUI.InventoryUpdate();
+        if(Amount <= 0)
+        {
+            PlayerController.Instance.mInventory.Remove(this);
+            UIManager.Instance.mInventoryUI.InventoryUpdate();
+            Destroy(gameObject,3.0f);
+        }
     }
 }

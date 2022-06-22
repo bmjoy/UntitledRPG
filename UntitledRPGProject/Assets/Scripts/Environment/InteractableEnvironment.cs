@@ -6,8 +6,10 @@ public abstract class InteractableEnvironment : Environment, IInteractiveObject
 {
     [SerializeField]
     protected List<Dialogue> mDialogue = new List<Dialogue>();
-
-    private GameObject mCanvas;
+    protected Queue<Dialogue> m_DialogueQueue = new Queue<Dialogue>();
+    [SerializeField]
+    protected Dialogue m_DialogueFailCase = new Dialogue();
+    protected GameObject mCanvas;
     [HideInInspector]
     public GameObject mInteraction;
     public bool _Completed = false;

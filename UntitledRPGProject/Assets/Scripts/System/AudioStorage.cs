@@ -20,6 +20,7 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mDefendSFX;
     public AudioClip mDodgeSFX;
     public AudioClip mBreakSFX;
+    public AudioClip mDoorSFX;
 
     public void ChangeMusic(string name)
     {

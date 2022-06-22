@@ -134,7 +134,7 @@ public class BKActionTrigger : BossActionTrigger
     {
         var boss = GetComponent<Boss>();
         boss.mAnimator.Play("Attack");
-        mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length);
 
         yield return new WaitForSeconds(mTime / 3.0f);
         GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position, Quaternion.identity);

@@ -49,10 +49,13 @@ public class MerchantScreen : MonoBehaviour
     {
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
-            EquipmentItem equipment = (EquipmentItem)item.Value;
+            if(item.GetType().IsAssignableFrom(typeof(EquipmentItem)))
+            {
+                EquipmentItem equipment = (EquipmentItem)item.Value;
 
-            if (equipment.IsEquipped) continue;
-            if (!equipment.isSold) continue;
+                if (equipment.IsEquipped) continue;
+                if (!equipment.isSold) continue;
+            }
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
             go.GetComponent<ItemUI>().Initialize(item.Key ,item.Value, ItemUI.ItemUIType.Sell);
         }

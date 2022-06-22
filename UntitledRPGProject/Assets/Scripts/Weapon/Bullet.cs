@@ -36,14 +36,17 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (isDamaged)
+            return;
         if (collision.collider.GetComponent<Unit>() == mTarget)
         {
+            isDamaged = true;
             mTarget.transform.GetComponent<Rigidbody>().velocity = mTarget.transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             mTarget.TakeDamage(mPower, DamageType.Physical);
 
             int random = Random.Range(1, 2);
             mAnimator.Play((mCount >= 3) ? "Burst" + Random.Range(1, 2) : "Burst");
-            isDamaged = true;
+
             AudioManager.PlaySfx(clip);
             Destroy(this.gameObject, 2.5f);
         }
