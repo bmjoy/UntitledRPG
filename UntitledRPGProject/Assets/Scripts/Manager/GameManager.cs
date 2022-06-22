@@ -33,18 +33,25 @@ public class GameManager : MonoBehaviour
     public GameObject mCamera;
     [HideInInspector]
     public EnemyProwler mEnemyProwler;
-    [HideInInspector]
-    public bool[] CompanionCharacters = new bool[4];
-
     public int mRequiredEXP = 100;
     public int mAmountofSoul = 20;
     [SerializeField]
     private float mWaitForRestart = 3.0f;
 
+    public List<CharacterExist> characterExists;
+
     public bool IsCinematicEvent = false;
     private void Start()
     {
         Initialize();
+        characterExists = new List<CharacterExist>(5)
+    {
+        new CharacterExist(NPCUnit.Vin, false),
+        new CharacterExist(NPCUnit.Eleven, false),
+        new CharacterExist(NPCUnit.Roger, false),
+        new CharacterExist(NPCUnit.Victor, false),
+        new CharacterExist(NPCUnit.Jimmy, false)
+    };
     }
 
     private void Initialize()
@@ -61,6 +68,17 @@ public class GameManager : MonoBehaviour
     {
         UpdateGameState();
     }
+
+    public void AssignCharacter(string unit)
+    {
+        characterExists.Find(x => x.mUnit.ToString() == unit).isExist = true;
+    }
+
+    public bool IsExist(string unit)
+    {
+        return characterExists.Find(x => x.mUnit.ToString() == unit).isExist;
+    }
+
     private void UpdateGameState()
     {
         switch (mGameState)

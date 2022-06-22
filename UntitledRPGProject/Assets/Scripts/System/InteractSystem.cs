@@ -70,7 +70,6 @@ public class InteractSystem : MonoBehaviour
             PlayerController.Instance.mState = new IdleState();
             StartCoroutine(
                 mClosestNPC.Interact(() => { IsInteracting = false; mCurrentCoolTime += mCoolTime;
-                    Debug.Log(mClosestNPC.ToString());
                     mClosestNPC.React(false);
                     mClosestNPC = null;
                 }));

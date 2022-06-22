@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -5730775287088283106}
   m_Layer: 11
   m_Name: Jimmy
-  m_TagString: PlayerUnit
+  m_TagString: PlayerCompanion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,8 +119,9 @@ MonoBehaviour:
   mAttackTime: 0.1
   mDefendTime: 1
   mAttackDistance: 2
-  mRunningSpeed: 9
   mMagicDistance: 4.5
+  mCurrentSpeed: 1
+  dodgePos: {x: 0, y: 0, z: 0}
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
@@ -218,5 +219,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mTime: 0
-  _isUltimate: 0
   mCombo: 10

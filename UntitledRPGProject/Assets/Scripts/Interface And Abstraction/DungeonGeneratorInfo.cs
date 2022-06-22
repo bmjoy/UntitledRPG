@@ -13,6 +13,8 @@ public class DungeonGeneratorInfo : ScriptableObject
     public int CompanionAmount = 2;
     public int RecoverAmount = 2;
 
+    public float SecretRate = 20.0f;
+
     public Vector2 Offset;
 
     public List<GameObject> Rooms;

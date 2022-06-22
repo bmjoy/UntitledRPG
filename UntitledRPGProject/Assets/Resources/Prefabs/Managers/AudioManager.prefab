@@ -118,6 +118,7 @@ MonoBehaviour:
   mDefendSFX: {fileID: 8300000, guid: 0553908956f1b5444ace312e90bb5dcb, type: 3}
   mDodgeSFX: {fileID: 8300000, guid: 1c283335784cd1740b1a38f17438cb30, type: 3}
   mBreakSFX: {fileID: 8300000, guid: f873cc8d0f014f442a45a2974abc103c, type: 3}
+  mDoorSFX: {fileID: 8300000, guid: f6d74fac1a0f774478de0fff79268cf1, type: 3}
 --- !u!1 &4890134167232618478
 GameObject:
   m_ObjectHideFlags: 0

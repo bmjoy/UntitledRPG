@@ -59,6 +59,10 @@ MonoBehaviour:
   m_DialogueNoCase:
   - Text: Hmm I will be back
     Trigger: 0
+  m_DialogueFailCase:
+    Text: Ouch! This chest is locked!
+    Trigger: 3
+  isLock: 0
 --- !u!65 &7701012370008644741
 BoxCollider:
   m_ObjectHideFlags: 0

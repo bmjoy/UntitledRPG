@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chest : InteractableEnvironment
+public class Chest : InteractableEnvironment, ILockable
 {
     [SerializeField]
     private List<ItemDrop> mItems = new List<ItemDrop>();
-
-    Queue<Dialogue> m_DialogueQueue = new Queue<Dialogue>();
     [SerializeField]
     protected List<Dialogue> m_DialogueYesCase = new List<Dialogue>();
     [SerializeField]
@@ -16,12 +14,14 @@ public class Chest : InteractableEnvironment
     protected delegate IEnumerator TriggerEvent();
     protected TriggerEvent mTrigger;
     private bool _DialogueComplete = false;
+    public bool isLock = false;
     private Animator mAnimator;
 
     public override void Initialize(int id)
     {
         base.Initialize(id);
         Canvas_Initialize();
+        isLock = (UnityEngine.Random.Range(0,100) <= 40) ? true : false;
     }
 
     public override IEnumerator Interact(Action action = null)
@@ -36,13 +36,12 @@ public class Chest : InteractableEnvironment
         {
             var dialogue = m_DialogueQueue.Dequeue();
             UIManager.Instance.ChangeDialogueText("Jimmy" + ": " + dialogue.Text);
+            yield return new WaitForSeconds(0.5f);
             switch (dialogue.Trigger)
             {
                 case Dialogue.TriggerType.None:
                     {
-                        yield return new WaitForSeconds(0.5f);
-                        UIManager.Instance.DisplayButtonsInDialogue(false);
-                        UIManager.Instance.DisplayEKeyInDialogue(true);
+                        EnableIcon();
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     }
                     break;
@@ -53,9 +52,7 @@ public class Chest : InteractableEnvironment
                     break;
                 case Dialogue.TriggerType.Success:
                     {
-                        yield return new WaitForSeconds(0.5f);
-                        UIManager.Instance.DisplayButtonsInDialogue(false);
-                        UIManager.Instance.DisplayEKeyInDialogue(true);
+                        EnableIcon();
                         // Give the item
                         mAnimator.SetBool("IsOpen", true);
                         AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
@@ -67,12 +64,8 @@ public class Chest : InteractableEnvironment
                     break;
                 case Dialogue.TriggerType.Fail:
                     {
-                        yield return new WaitForSeconds(0.5f);
-                        UIManager.Instance.DisplayButtonsInDialogue(false);
-                        UIManager.Instance.DisplayEKeyInDialogue(true);
-                        // Give the item
+                        EnableIcon();
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
-                        _Completed = true;
                     }
                     break;
             }
@@ -87,6 +80,12 @@ public class Chest : InteractableEnvironment
         {
             mAnimator.SetBool("IsOpen", false);
         }
+    }
+
+    private void EnableIcon()
+    {
+        UIManager.Instance.DisplayButtonsInDialogue(false);
+        UIManager.Instance.DisplayEKeyInDialogue(true);
     }
 
     public override void Reset()
@@ -105,13 +104,48 @@ public class Chest : InteractableEnvironment
                 m_DialogueQueue.Enqueue(dialogue);
             _DialogueComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
-            foreach (var dialogue in m_DialogueYesCase)
-                m_DialogueQueue.Enqueue(dialogue);
-            _DialogueComplete = true;
-        });
+        if(IsLocked())
+        {
+            Key key = PlayerController.Instance.mInventory.Get("Key") as Key;
+            if (key != null)
+            {
+                key.End();
+                UnLock();
+                UIManager.Instance.AddListenerLeftButton(() => {
+                    foreach (var dialogue in m_DialogueYesCase)
+                        m_DialogueQueue.Enqueue(dialogue);
+                    _DialogueComplete = true;
+                });
+            }
+            else
+            {
+                UIManager.Instance.AddListenerLeftButton(() => {
+                    m_DialogueQueue.Enqueue(m_DialogueFailCase);
+                    _DialogueComplete = true;
+                });
+            }
+        }
+        else
+        {
+            UIManager.Instance.AddListenerLeftButton(() => {
+                foreach (var dialogue in m_DialogueYesCase)
+                    m_DialogueQueue.Enqueue(dialogue);
+                _DialogueComplete = true;
+            });
+        }
+
         UIManager.Instance.DisplayButtonsInDialogue(true);
         yield return new WaitUntil(() => _DialogueComplete);
         UIManager.Instance.DisplayButtonsInDialogue(false);
+    }
+
+    public void UnLock()
+    {
+        isLock = true;
+    }
+
+    public bool IsLocked()
+    {
+        return isLock;
     }
 }

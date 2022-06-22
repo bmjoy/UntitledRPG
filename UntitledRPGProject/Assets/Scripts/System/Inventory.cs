@@ -14,9 +14,10 @@ public class Inventory
             myInventory.Add(new KeyValuePair<int, Item>(myIndex, item));
             myIndex++;
         }
-        else if(item.GetType() == typeof(Expendables))
+        else if(item.GetType().IsSubclassOf(typeof(Expendables)))
         {
-            if(!myInventory.Contains(new KeyValuePair<int, Item>(item.ID, item)))
+            Debug.Log("Hi");
+            if (!myInventory.Contains(new KeyValuePair<int, Item>(item.ID, item)))
             {
                 item.Initialize(myIndex);
                 myInventory.Add(new KeyValuePair<int, Item>(item.ID, item));
@@ -26,7 +27,7 @@ public class Inventory
             {
                 var it = (Expendables)Get(item.Name);
                 if(it.Amount < 50)
-                    Get(item.Name).Apply();
+                    it.Apply();
                 else
                     Debug.LogWarning("<color=yellow>Warning!</color> expendables are reached to maximum!");
             }

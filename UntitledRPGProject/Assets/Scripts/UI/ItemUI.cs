@@ -11,7 +11,8 @@ public class ItemUI : MonoBehaviour
         Equip,
         Unequip,
         Sell,
-        Buy
+        Buy,
+        Non_Activate
     }
 
     public Button mButton;
@@ -76,7 +77,13 @@ public class ItemUI : MonoBehaviour
                     mSprite = transform.Find("ItemSprite").GetComponent<Image>();
                     mSprite.sprite = mItem.Info.mSprite;
                     mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-                    mName.text = mItem.Name + $" <color=yellow>({mItem.Value})</color>";
+                    if (mItem.GetType().IsSubclassOf(typeof(Expendables)))
+                    {
+                        ExpendablesInfo info = (ExpendablesInfo)mItem.Info;
+                        mName.text = $"{mItem.Name} ({info.mAmount})<color=yellow>({mItem.Value})</color>";
+                    }
+                    else
+                        mName.text = $"{mItem.Name} <color=yellow>({mItem.Value})</color>";
                     ID = mItem.ID;
                     mButton.onClick.AddListener(() => Sell());
                 }
@@ -84,6 +91,24 @@ public class ItemUI : MonoBehaviour
             case ItemUIType.Buy:
                 {
                     mButton.onClick.AddListener(() => Buy());
+                }
+                break;
+            case ItemUIType.Non_Activate:
+                {
+                    mSprite = transform.Find("ItemSprite").GetComponent<Image>();
+                    mSprite.sprite = mItem.Info.mSprite;
+                    mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+                    if(mItem.GetType().IsSubclassOf(typeof(Expendables)))
+                    {
+                        ExpendablesInfo info = (ExpendablesInfo)mItem.Info;
+                        mName.text = $"{mItem.Name} ({info.mAmount})";
+                    }
+                    else
+                    {
+                        mName.text = $"{mItem.Name}";
+                    }
+
+                    GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + "</color>";
                 }
                 break;
             default:
@@ -139,25 +164,56 @@ public class ItemUI : MonoBehaviour
 
     public void Sell()
     {
-        mItem.isSold = false;
         AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
-        PlayerController.Instance.mGold += mItem.Value;
-        PlayerController.Instance.mInventory.Remove(mItem);
-        mItem.gameObject.transform.SetParent(UIManager.Instance.mMerchantScreen.mSoldItemsGroup.Find("Objects"));
+        if (mItem.GetType().IsSubclassOf(typeof(Expendables)))
+        {
+            Expendables expendables = (Expendables)mItem;
+            mItem.isSold = false;
+            PlayerController.Instance.mInventory.Remove(mItem);
+            mItem.gameObject.transform.SetParent(UIManager.Instance.mMerchantScreen.mSoldItemsGroup.Find("Objects"));
+            PlayerController.Instance.mGold += mItem.Value * expendables.Amount;
+            UIManager.Instance.mMerchantScreen.EnqueueSoldItem(ID, mItem, gameObject);
+        }
+        else
+        {
+            mItem.isSold = false;
+            PlayerController.Instance.mGold += mItem.Value;
+            PlayerController.Instance.mInventory.Remove(mItem);
+            mItem.gameObject.transform.SetParent(UIManager.Instance.mMerchantScreen.mSoldItemsGroup.Find("Objects"));
+            UIManager.Instance.mMerchantScreen.EnqueueSoldItem(ID, mItem, gameObject);
+        }
         UIManager.Instance.mInventoryUI.InventoryUpdate();
-        UIManager.Instance.mMerchantScreen.EnqueueSoldItem(ID, mItem, gameObject);
+
     }
 
     public void Buy()
     {
-        if (PlayerController.Instance.mGold >= mItem.Value)
+        if (mItem.GetType().IsSubclassOf(typeof(Expendables)))
         {
-            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
-            PlayerController.Instance.mGold -= mItem.Value;
-            mItem.gameObject.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
-            PlayerController.Instance.mInventory.Add(mItem.gameObject.GetComponent<Item>());
-            mItem.isSold = true;
-            UIManager.Instance.mMerchantScreen.EnqueueItem(ID,mItem, gameObject);
+            Expendables expendables = (Expendables)mItem;
+            if (PlayerController.Instance.mGold >= mItem.Value * expendables.Amount)
+            {
+                AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
+                PlayerController.Instance.mGold -= mItem.Value * expendables.Amount;
+                mItem.gameObject.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
+                PlayerController.Instance.mInventory.Add(mItem.gameObject.GetComponent<Item>());
+                mItem.isSold = true;
+                UIManager.Instance.mMerchantScreen.EnqueueItem(ID, mItem, gameObject);
+            }
         }
+        else
+        {
+            if (PlayerController.Instance.mGold >= mItem.Value)
+            {
+                AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
+
+                PlayerController.Instance.mGold -= mItem.Value;
+                mItem.gameObject.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
+                PlayerController.Instance.mInventory.Add(mItem.gameObject.GetComponent<Item>());
+                mItem.isSold = true;
+                UIManager.Instance.mMerchantScreen.EnqueueItem(ID, mItem, gameObject);
+            }
+        }
+
     }
 }

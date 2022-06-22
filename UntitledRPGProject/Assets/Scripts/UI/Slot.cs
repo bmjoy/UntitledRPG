@@ -95,6 +95,7 @@ public class Slot : MonoBehaviour
             PlayerController.Instance.mInventory.Add(newItem.GetComponent<Item>());
             newItem.GetComponent<Item>().isSold = true;
             mBoarder.transform.Find("Money").Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
+            Destroy(mMyItem);
             ResetItem();
         }
     }
