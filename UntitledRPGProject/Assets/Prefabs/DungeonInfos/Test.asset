@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   Population: 1000
-  Column: 5
-  Row: 5
+  Column: 2
+  Row: 2
   MerchantAmount: 2
-  CompanionAmount: 1
+  CompanionAmount: 2
   RecoverAmount: 2
   Offset: {x: 35, y: 35}
   Rooms:
