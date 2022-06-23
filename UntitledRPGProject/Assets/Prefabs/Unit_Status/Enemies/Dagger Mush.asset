@@ -22,7 +22,7 @@ MonoBehaviour:
   Defend: 10
   MagicPower: 0
   Armor: 15
-  Agility: 10
+  Agility: 0
   Gold: 225
   WeaponType: 5
   BasicSprite: {fileID: 8793639957104055765, guid: 51c41010d3a605a4aa024cfd8351743c, type: 3}
