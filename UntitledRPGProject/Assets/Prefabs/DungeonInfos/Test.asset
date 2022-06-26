@@ -21,7 +21,7 @@ MonoBehaviour:
   SecretRate: 20
   Offset: {x: 60, y: 60}
   Rooms:
-  - {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
+  - {fileID: 8497998057232989250, guid: b9271d72f5f2cb34187d64c158ed1f2f, type: 3}
   - {fileID: 4171566842334870531, guid: f14db990a11812744a2fc6ff56ff936c, type: 3}
   - {fileID: 4454274137241353100, guid: e327ea7c9c7deb24f9bd3da961fc6aae, type: 3}
   - {fileID: 4465560321431692542, guid: fc281e1345fa77240bb9944f7604267f, type: 3}
