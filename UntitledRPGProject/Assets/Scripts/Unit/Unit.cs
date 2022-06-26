@@ -388,7 +388,7 @@ public class Unit : MonoBehaviour, IUnit
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 Bullet bullet = go.GetComponent<Bullet>();
-                bullet.Initialize(mTarget, mStatus.mDamage + mBonusStatus.mDamage);
+                bullet.Initialize(mTarget.transform, mStatus.mDamage + mBonusStatus.mDamage);
 
                 yield return new WaitUntil(() => bullet.isDamaged == true);
                 TurnEnded();
@@ -513,7 +513,7 @@ public class Unit : MonoBehaviour, IUnit
         if(!isDodge)
         {
             GameObject go = Instantiate(Resources.Load<GameObject>
-                ("Prefabs/Effects/Combat/Sword/SwordImpact/SwordImpactRed"), transform.position + new Vector3(Random.Range(-1.0f,1.0f), Random.Range(0.5f, 1.2f), Random.Range(-1.0f, 1.0f)), Quaternion.identity,transform);
+                ("Prefabs/Effects/Hit"), transform.position + new Vector3(Random.Range(-1.0f,1.0f), Random.Range(0.5f, 1.2f), Random.Range(-1.0f, 1.0f)), Quaternion.identity,transform);
             go.GetComponent<Renderer>().sortingLayerName = "Foreground";
             Destroy(go, 1.1f);
             mStatus.mHealth -= value;
@@ -548,6 +548,17 @@ public class Unit : MonoBehaviour, IUnit
         return !isDodge;
     }
 
+    virtual public void TakeDamageByTrap(float dmg)
+    {
+        if (mConditions.isDied) return;
+        mStatus.mHealth -= dmg;
+        if (mStatus.mHealth <= 0.0f)
+        {
+            mConditions.isDied = true;
+            mStatus.mHealth = 0.0f;
+            mHealthBar.mCurrentHealth = 0.0f;
+        }
+    }
     virtual public void TakeRecover(float val)
     {
         mStatus.mHealth += val;
@@ -628,7 +639,14 @@ public class Unit : MonoBehaviour, IUnit
         mStatus.mMaxMana += mBonusStatus.mMana;
         
         mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
+
         gameObject.SetActive(true);
+        if (mConditions.isDied == true)
+        {
+            mHealthBar?.ActiveDeathAnimation(true);
+            mLevelText.gameObject.SetActive(false);
+            mAnimator.SetBool("Death", true);
+        }
     }
 
     public void Revive(float val)
@@ -642,4 +660,6 @@ public class Unit : MonoBehaviour, IUnit
         TakeRecoverMana(Mathf.RoundToInt((val * mStatus.mMaxMana) / (mStatus.mMaxMana + mBonusStatus.mMana)));
         UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(this);
     }
+
+
 }

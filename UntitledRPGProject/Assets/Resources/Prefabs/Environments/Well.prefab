@@ -563,7 +563,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mID: 0
   mName: Well
+  mDialogue: []
+  m_DialogueFailCase:
+    Text: 
+    Trigger: 0
+  mSFX: {fileID: 8300000, guid: 2f34eff2a43c32c46aab0b61e0c25236, type: 3}
   mInteraction: {fileID: 0}
+  _Completed: 0
   _RecoverPercentage: 50
 --- !u!1 &2644505227914507632
 GameObject:

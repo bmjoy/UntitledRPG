@@ -80,13 +80,6 @@ public class SelfAbility : DamagableAbility
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }
-
-                if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
-                {
-                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
-    , mOwner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-                    Destroy(go, 3.0f);
-                }
                 yield return new WaitForSeconds(1.0f);
             }
             else
@@ -117,6 +110,12 @@ public class SelfAbility : DamagableAbility
                         {
                             foreach (var nerf in mNerfList)
                                 i.SetNerf(nerf.Initialize(mOwner, i));
+                            if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                            {
+                                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+                , i.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                                Destroy(go, 3.0f);
+                            }
                         }
                     }
                     DoBuff();
@@ -143,6 +142,12 @@ public class SelfAbility : DamagableAbility
                     mOwner.TakeRecover(newValue_M);
                     DoBuff();
                     DoNerf();
+                    if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                    {
+                        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+        , mOwner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                        Destroy(go, 3.0f);
+                    }
                     break;
                 }
             default:
@@ -160,6 +165,12 @@ public class SelfAbility : DamagableAbility
                 var i = unit.GetComponent<Unit>();
                 foreach (var buff in mBuffList)
                     i.SetBuff(buff.Initialize(mOwner, i));
+                if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                {
+                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+    , i.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                    Destroy(go, 3.0f);
+                }
             }
         }
         else if (mSkillBuffTarget == SkillTarget.Random)
@@ -173,12 +184,24 @@ public class SelfAbility : DamagableAbility
                     continue;
                 foreach (var buff in mBuffList)
                     i.SetBuff(buff.Initialize(mOwner, i));
+                if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                {
+                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+    , i.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                    Destroy(go, 3.0f);
+                }
             }
         }
         else if (mSkillBuffTarget == SkillTarget.Self)
         {
             foreach (var buff in mBuffList)
                 mOwner.SetBuff(buff.Initialize(mOwner, mOwner));
+            if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+            {
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+, mOwner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                Destroy(go, 3.0f);
+            }
         }
         else
         {
@@ -197,6 +220,12 @@ public class SelfAbility : DamagableAbility
                 var i = unit.GetComponent<Unit>();
                 foreach (var nerf in mNerfList)
                     i.SetNerf(nerf.Initialize(mOwner, i));
+                if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                {
+                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+    , i.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                    Destroy(go, 3.0f);
+                }
             }
         }
         else if (mSkillNerfTarget == SkillTarget.Random)
@@ -210,12 +239,24 @@ public class SelfAbility : DamagableAbility
                     continue;
                 foreach (var nerf in mNerfList)
                     i.SetNerf(nerf.Initialize(mOwner, i));
+                if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                {
+                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+    , i.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                    Destroy(go, 3.0f);
+                }
             }
         }
         else if (mSkillNerfTarget == SkillTarget.Self)
         {
             foreach (var nerf in mNerfList)
                 mOwner.SetNerf(nerf.Initialize(mOwner, mOwner));
+            if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+            {
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+, mOwner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                Destroy(go, 3.0f);
+            }
         }
         else
         {

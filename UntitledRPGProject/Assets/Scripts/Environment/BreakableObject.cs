@@ -23,7 +23,7 @@ public class BreakableObject : InteractableEnvironment
     {
         PlayerController.Instance.mModel.GetComponent<Animator>().Play("Attack");
         yield return new WaitForSeconds(0.5f);
-        AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mBreakSFX);
+        AudioManager.PlaySfx(mSFX);
         Material mat = transform.GetComponent<Renderer>().material;
         Color color = mat.color;
         if (!_Completed)

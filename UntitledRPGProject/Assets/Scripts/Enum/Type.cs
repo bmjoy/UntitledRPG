@@ -49,6 +49,7 @@ public enum EnemyUnit
     Dagger_Mush,
     Spirit_Boxer,
     Droid_Assassin,
+    Cyber_Shielder,
     Temple_Guardian,
     The_Bloody_King
 }
@@ -71,7 +72,12 @@ public enum EnvironmentObject
     Well,
     Rock,
     Chest,
-    Door
+    Door,
+    GroundFireTrap,
+    WallFireTrap,
+    ProjectileTrap,
+    SwitchFireTrap,
+    FireOrb
 }
 
 [Serializable]

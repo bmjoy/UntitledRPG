@@ -8,6 +8,7 @@ public class Prowler : MonoBehaviour
 {
     public GameObject mModel;
     public GameObject mGroundCheck;
+    public Spawner mySpawner;
     public Animator mAnimator;
     public NavMeshAgent mAgent;
     public Rigidbody mRigidbody;
@@ -47,11 +48,13 @@ public class Prowler : MonoBehaviour
         mModel = model;
     }
 
-    public virtual void Initialize()
+    public virtual void Initialize(Spawner spawner = null)
     {
         mCollider = gameObject.AddComponent<BoxCollider>();
         mCollider.size = mModel.GetComponent<BoxCollider>().size;
         mCollider.isTrigger = true;
+
+        mySpawner = spawner;
 
         if (mGroundCheck == null)
         {

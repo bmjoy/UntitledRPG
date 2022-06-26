@@ -19,7 +19,6 @@ public class DaggerMushActionTrigger : ActionTrigger
             if (unit.mAttackClips.Count > 0)
                 AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip, 0.6f);
             unit.mTarget.TakeDamage(unit.mStatus.mDamage + unit.mBonusStatus.mDamage, DamageType.Physical);
-            StartCoroutine(unit.CounterState(unit.mTarget.mStatus.mDamage));
         }
     }
     protected override void StartActionTrigger()

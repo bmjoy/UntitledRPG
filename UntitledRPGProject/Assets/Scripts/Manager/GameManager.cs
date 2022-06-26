@@ -114,15 +114,23 @@ public class GameManager : MonoBehaviour
         // TODO: Gameover music
         AudioManager.Instance.mAudioStorage.ChangeMusic("Defeat");
         AudioManager.Instance.musicSource.loop = false;
-        CameraSwitcher.SwitchCamera();
-        onEnemyWin(Instance.mEnemyProwler.id, () =>
+
+        if(mEnemyProwler != null)
         {
-            Instance.mEnemyProwler.isWin = true;
-            mGameState = GameState.GamePlay;
-        });
-        UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().Clear();
+            CameraSwitcher.SwitchCamera();
+            onEnemyWin(Instance.mEnemyProwler.id, () =>
+            {
+                Instance.mEnemyProwler.isWin = true;
+                mGameState = GameState.GamePlay;
+            });
+            UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().Clear();
+        }
+        if(UIManager.Instance.mInventoryUI.gameObject.activeSelf)
+            UIManager.Instance.mInventoryUI.Active(false);
+        
         ResetObjects();
         PlayerController.Instance.IsDied = true;
+        mGameState = GameState.GamePlay;
         StartCoroutine(Restart());
     }
 
@@ -137,14 +145,19 @@ public class GameManager : MonoBehaviour
         s_TotalGold = 0;
         AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
         AudioManager.Instance.musicSource.loop = true;
+        Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
+            Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = PlayerController.Instance.transform;
     }
 
     private void ResetObjects()
     {
-        ActiveAllProwlers(true);
+        if(EnemyProwlers != null)
+            ActiveAllProwlers(true);
         BattleManager.Instance.StopAllCoroutines();
-        BattleManager.Instance.ResetField();
-        Destroy(mEnemyProwler.gameObject);
+        if(BattleManager.Instance.mCurrentField.activeSelf)
+            BattleManager.Instance.ResetField();
+        if(mEnemyProwler)
+            Destroy(mEnemyProwler.gameObject);
         EnemyProwlers = null;
         mEnemyProwler = null;
     }

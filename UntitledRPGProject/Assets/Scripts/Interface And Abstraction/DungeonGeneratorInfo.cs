@@ -5,17 +5,26 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Dungeon Info")]
 public class DungeonGeneratorInfo : ScriptableObject
 {
-    public int Population = 1000;
+    public readonly int Population = 1000;
+    [Tooltip("Length")]
     public int Column;
+    [Tooltip("Length")]
     public int Row;
-
-    public int MerchantAmount = 2;
-    public int CompanionAmount = 2;
-    public int RecoverAmount = 2;
-
-    public float SecretRate = 20.0f;
-
+    [Tooltip("Offset is a length between rooms")]
     public Vector2 Offset;
+    [Header("Special Room Amount")]
+    [Range(0, 10)] public int SecretRoomAmount = 4;
+    [Range(0, 10)] public int MerchantAmount = 2;
+    [Range(0, 10)] public int CompanionAmount = 2;
+    [Range(0, 10)] public int RecoverAmount = 2;
+    [Header("Spawn Chance Rate")]
+    [Range(0.0f, 100.0f)] public float NoneRoomRate = 35.0f;
+    [Range(0.0f, 100.0f)] public float SecretRate = 20.0f;
+    [Range(0.0f, 100.0f)] public float WallTrapRate = 50.0f;
+    [Range(0.0f, 100.0f)] public float GroundTrapRate = 50.0f;
+    [Range(0.0f, 100.0f)] public float ProjectileTrapRate = 40.0f;
+    [Range(0.0f, 100.0f)] public float SwitchTrapRate = 40.0f;
+    [Range(0.0f, 100.0f)] public float FireOrbRate = 20.0f;
 
     public List<GameObject> Rooms;
     public GameObject PlayerRoom;

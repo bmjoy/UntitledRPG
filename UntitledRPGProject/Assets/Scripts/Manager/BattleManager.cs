@@ -133,7 +133,6 @@ public class BattleManager : MonoBehaviour
                     {
                         mCurrentUnit.mAiBuild.ChangeState("Waiting");
                         mCurrentUnit.mField.GetComponent<Field>().Picked(false);
-                        UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                         onDequeuingOrderEvent?.Invoke(mCurrentUnit);
                         mCurrentUnit = null;
                         return;
@@ -142,13 +141,16 @@ public class BattleManager : MonoBehaviour
                     {
                         mCurrentUnit.mAiBuild.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
-                        UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
-                        var data = mCurrentUnit.GetComponent<Skill_DataBase>();
-                        if (data != null)
-                            UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.ToString() + "</color></b>: " + data.Description : "Empty","Skill");
-                        UIManager.Instance.ChangeHoverTip("This unit can give <b><color=red>" + mCurrentUnit.mStatus.mDamage + "</color>(<color=green>+" + mCurrentUnit.mBonusStatus.mDamage + "</color>)Damage</b>!", "Attack");
-                        UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b>(<color=green>+" + mCurrentUnit.mBonusStatus.mArmor+ "</color>) and " +
-                            "<b>" + "Defend <color=green>" + mCurrentUnit.mStatus.mDefend + "%</color></b> can block damages", "Defend");
+                        if(mCurrentUnit.mAiBuild.type == AIType.Manual)
+                        {
+                            UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
+                            var data = mCurrentUnit.GetComponent<Skill_DataBase>();
+                            if (data != null)
+                                UIManager.Instance.ChangeHoverTip((data.Skill) ? "<b><color=red>" + data.ToString() + "</color></b>: " + data.Description : "Empty", "Skill");
+                            UIManager.Instance.ChangeHoverTip("This unit can give <b><color=red>" + mCurrentUnit.mStatus.mDamage + "</color>(<color=green>+" + mCurrentUnit.mBonusStatus.mDamage + "</color>)Damage</b>!", "Attack");
+                            UIManager.Instance.ChangeHoverTip("This unit has <b>" + mCurrentUnit.mStatus.mArmor + " Armors </b>(<color=green>+" + mCurrentUnit.mBonusStatus.mArmor + "</color>) and " +
+                                "<b>" + "Defend <color=green>" + mCurrentUnit.mStatus.mDefend + "%</color></b> can block damages", "Defend");
+                        }
                         status = (BattleResult() == true) ? GameStatus.Reward : GameStatus.WaitForOrder;
                         UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                     }
@@ -293,11 +295,7 @@ public class BattleManager : MonoBehaviour
 
     public void SetBattleField()
     {
-        Vector3 mOffset = PlayerController.Instance.transform.localPosition;
-        Vector3 mTargetOffset = GameManager.Instance.mEnemyProwler.transform.localPosition;
-        Vector3 point = mOffset + 0.5f * (mTargetOffset - mOffset);
-
-        Instance.mCurrentField.transform.localPosition = point;
+        Instance.mCurrentField.transform.localPosition = GameManager.Instance.mEnemyProwler.mySpawner.transform.position;
         AdjustBattleField();
     }
 

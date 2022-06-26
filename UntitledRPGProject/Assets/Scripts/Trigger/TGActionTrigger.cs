@@ -45,7 +45,6 @@ public class TGActionTrigger : BossActionTrigger
             if(boss.mAttackClips.Count > 0)
                 AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip,0.6f);
             boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
-            StartCoroutine(boss.CounterState(boss.mTarget.mStatus.mDamage));
         }
     }
 

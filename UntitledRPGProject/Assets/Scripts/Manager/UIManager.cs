@@ -90,14 +90,19 @@ public class UIManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f && GameManager.Instance.mGameState == GameState.GamePlay)
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mOpenInventorySFX);
-            DisplayInventory(!switchOfInventory);
-            switchOfInventory = !switchOfInventory;
+            DisplayInventory();
             mTime += mCoolTime;
         }
         if (mTime >= 0.0f)
             mTime -= Time.deltaTime;
     }
-  
+
+    public void DisplayInventory()
+    {
+        DisplayInventory(!switchOfInventory);
+        switchOfInventory = !switchOfInventory;
+    }
+
     public IEnumerator VictoryTransition()
     {
         mStorage.mVictoryScreenTransition.SetActive(true);

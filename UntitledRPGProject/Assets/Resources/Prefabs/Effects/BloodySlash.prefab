@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1694637838253430737}
   - component: {fileID: 1694637838253430749}
   - component: {fileID: 1694637838253430748}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: BloodySlash
-  m_TagString: PlayerUnit
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

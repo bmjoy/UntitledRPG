@@ -17,6 +17,7 @@ public class DungeonGenerator : MonoBehaviour
     int _CurrentArmorMerchant = 0;
     int _CurrentCompanion = 0;
     int _CurrentRecover = 0;
+    int _CurrentSecret = 0;
 
     private int _StartIndex = 0;
 
@@ -43,7 +44,7 @@ public class DungeonGenerator : MonoBehaviour
                 if (cell.GetVisited())
                 {
                     room = GetRoom(y, x, ref type);
-                    room.ConstructRoom(cell.isOpened,type);
+                    room.ConstructRoom(cell.isOpened,type, _Info);
 
                     room.name += " " + type.ToString();
                 }
@@ -73,13 +74,13 @@ public class DungeonGenerator : MonoBehaviour
         }        
         else if(row > Mathf.FloorToInt((float)_Info.Row / 2) && col > Mathf.FloorToInt((float)_Info.Column / 2))
         {
-            type = (UnityEngine.Random.Range(0.0f, 100.0f) <= _Info.SecretRate) ? 
+            type = (UnityEngine.Random.Range(0.0f, 100.0f) <= _Info.SecretRate && _CurrentSecret < _Info.SecretRoomAmount) ? 
                 Room.RoomType.Secret : GetRoomType(HighTierMonsterChance, Room.RoomType.HighTierMonster);
             return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count)], pos, Quaternion.identity, transform).GetComponent<Room>();
         }
         else
         {
-            type = (UnityEngine.Random.Range(0.0f, 100.0f) <= _Info.SecretRate) ?
+            type = (UnityEngine.Random.Range(0.0f, 100.0f) <= _Info.SecretRate && _CurrentSecret < _Info.SecretRoomAmount) ?
                 Room.RoomType.Secret : GetRoomType(LowTierMonsterChance, Room.RoomType.LowTierMonster);
             return Instantiate(_Info.Rooms[UnityEngine.Random.Range(0, _Info.Rooms.Count)], pos, Quaternion.identity, transform).GetComponent<Room>();
         }
@@ -87,7 +88,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private Room.RoomType GetRoomType(float Chance, Room.RoomType defaultType)
     {
-        Room.RoomType type = (Room.RoomType)UnityEngine.Random.Range(1, 5);
+        Room.RoomType type = (Room.RoomType)UnityEngine.Random.Range(0, 5);
         if (UnityEngine.Random.Range(0, 100) <= Chance)
             return defaultType;
 
@@ -97,25 +98,27 @@ public class DungeonGenerator : MonoBehaviour
                 if (_CurrentRecover < _Info.RecoverAmount)
                     _CurrentRecover++;
                 else
-                    type = defaultType;
+                    type = (UnityEngine.Random.Range(0, 100) <= _Info.NoneRoomRate) ? Room.RoomType.None : defaultType;
                 break;
             case Room.RoomType.ArmorMerchant:
                 if (_CurrentArmorMerchant < _Info.MerchantAmount)
                     _CurrentArmorMerchant++;
                 else
-                    type = defaultType;
+                    type = (UnityEngine.Random.Range(0, 100) <= _Info.NoneRoomRate) ? Room.RoomType.None : defaultType;
                 break;
             case Room.RoomType.WeaponMerchant:
                 if (_CurrentWeaponMerchant < _Info.MerchantAmount)
                     _CurrentWeaponMerchant++;
                 else
-                    type = defaultType;
+                    type = (UnityEngine.Random.Range(0, 100) <= _Info.NoneRoomRate) ? Room.RoomType.None : defaultType;
                 break;
             case Room.RoomType.Companion:
                 if (_CurrentCompanion < _Info.CompanionAmount)
                     _CurrentCompanion++;
                 else
-                    type = defaultType;
+                    type = (UnityEngine.Random.Range(0, 100) <= _Info.NoneRoomRate) ? Room.RoomType.None : defaultType;
+                break;
+            case Room.RoomType.None:
                 break;
         }
         return type;

@@ -9,14 +9,23 @@ public class Door : InteractableEnvironment, ILockable
     private bool isOpen = false;
     private MeshRenderer mRenderer;
     private Animator mDoorAnimator;
+    private string mOpenDirection = string.Empty;
     public GameObject mGate;
+
+    public GateDetector[] mDetectors = new GateDetector[2];
+
     private void Start()
     {
         Transform doorObject = transform.Find("DoorObject");
+        for (int i = 0; i < mDetectors.Length; ++i)
+        {
+            mDetectors[i].Initialize(this);
+        }
         mDoorAnimator = doorObject.GetComponent<Animator>();
         doorObject.GetComponent<MeshRenderer>().sortingOrder = 20;
         mRenderer = mGate.GetComponent<MeshRenderer>();
         mRenderer.sortingOrder = 20;
+        mOpenDirection = "IsFrontOpen";
     }
 
     public override void Initialize(int id)
@@ -24,6 +33,11 @@ public class Door : InteractableEnvironment, ILockable
         base.Initialize(id);
         Canvas_Initialize();
         //isLock = (UnityEngine.Random.Range(0, 100) <= 40) ? true : false;
+    }
+
+    public void SetDirection(string str)
+    {
+        mOpenDirection = str;
     }
 
     public override IEnumerator Interact(Action action = null)
@@ -35,7 +49,6 @@ public class Door : InteractableEnvironment, ILockable
         }
         else
         {
-            yield return new WaitForSeconds(0.5f);
             Key key = PlayerController.Instance.mInventory.Get("Key") as Key;
             foreach (Dialogue dialogue in mDialogue)
             {
@@ -47,9 +60,7 @@ public class Door : InteractableEnvironment, ILockable
                 {
                     key.End();
                     UnLock();
-                    isOpen = true;
-                    mDoorAnimator.SetBool("IsOpen", true);
-                    AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDoorSFX);
+                    Open();
                 }
                 else
                 {
@@ -64,15 +75,20 @@ public class Door : InteractableEnvironment, ILockable
                 }
             }
             else
-            {
-                isOpen = true;
-                mDoorAnimator.SetBool("IsOpen", true);
-                AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDoorSFX);
-            }
+                Open();
 
         }
-
+        yield break;
     }
+
+    private void Open()
+    {
+        isOpen = true;
+        _Completed = true;
+        mDoorAnimator.SetBool(mOpenDirection, true);
+        AudioManager.PlaySfx(mSFX);
+    }
+
     private void EnableIcon()
     {
         UIManager.Instance.DisplayButtonsInDialogue(false);
@@ -90,7 +106,7 @@ public class Door : InteractableEnvironment, ILockable
     public override void Reset()
     {
         _Completed = false;
-        // TODO: Close the gate
+        isOpen = false;
     }
 
 }
