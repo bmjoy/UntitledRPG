@@ -478,7 +478,7 @@ public class Unit : MonoBehaviour, IUnit
         }
         else
         {
-            float myChanceRate = (float)Math.Round(Mathf.Sqrt(mStatus.mAgility + mBonusStatus.mAgility) / 10, 2);
+            float myChanceRate = (float)Math.Round(Mathf.Sqrt(mStatus.mAgility + mBonusStatus.mAgility) / 100, 2);
             float random = UnityEngine.Random.Range(0.00f, 1.00f);
             return myChanceRate >= random;
         }
@@ -660,6 +660,4 @@ public class Unit : MonoBehaviour, IUnit
         TakeRecoverMana(Mathf.RoundToInt((val * mStatus.mMaxMana) / (mStatus.mMaxMana + mBonusStatus.mMana)));
         UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(this);
     }
-
-
 }

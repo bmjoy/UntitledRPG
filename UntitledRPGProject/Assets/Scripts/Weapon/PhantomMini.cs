@@ -58,8 +58,7 @@ Quaternion.identity, mTarget.transform);
     IEnumerator GO()
     {
         yield return new WaitForSeconds(0.2f);
-        GameObject Effect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Combat/Explosions/Spiky/SpikyExplosionGreen")
-, transform.position, Quaternion.identity);
+        GameObject Effect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PhantomExp"), transform.position, Quaternion.identity);
         Destroy(Effect, 1.0f);
         go = true;
     }

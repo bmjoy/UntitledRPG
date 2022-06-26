@@ -106,6 +106,7 @@ public class BattleManager : MonoBehaviour
             mUnits[i].GetComponent<Unit>().mOrder = Order.Standby;
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
+        UIManager.Instance.DisplayHealthBar(true);
         onEnqueuingOrderEvent?.Invoke();
         status = GameStatus.Start;
     }
@@ -186,11 +187,6 @@ public class BattleManager : MonoBehaviour
                         StartCoroutine(RewardTime());
                         onReward = true;
                     }
-                    if (!isWin)
-                    {
-                        status = GameStatus.Finish;
-                        UIManager.Instance.BattleEnd();
-                    }
                     if((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && _AvailableSkip)
                     {
                         StopCoroutine(RewardTime());
@@ -198,6 +194,7 @@ public class BattleManager : MonoBehaviour
                         UIManager.Instance.FadeOutScreen();
                         GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
                         UIManager.Instance.mVictoryScreen.StartCoroutine(UIManager.Instance.mVictoryScreen.WaitForEnd());
+                        GameManager.Instance.mGameState = GameState.Victory;
                         status = GameStatus.Finish;
                         _AvailableSkip = false;
                     }
@@ -206,9 +203,8 @@ public class BattleManager : MonoBehaviour
             case GameStatus.Finish:
                 {
                     foreach (GameObject unit in mUnits)
-                        unit.GetComponent<BuffAndNerfEntity>().Stop();
+                        unit?.GetComponent<BuffAndNerfEntity>().Stop();
                     UIManager.Instance.DisplayHealthBar(false);
-                    GameManager.Instance.mGameState = (isWin) ? GameState.Victory : GameState.GameOver;
                     CameraSwitcher.StopShakeCamera();
                     mCurrentUnit = null;
                     _AvailableSkip = onReward = false;
@@ -246,8 +242,7 @@ public class BattleManager : MonoBehaviour
             for (int x = 0; x < enemy.mSetting.Item.Count; ++x)
             {
                 ItemDrop obj = enemy.mSetting.Item[x];
-                if (obj == null)
-                    continue;
+                if (obj == null) continue;
                 if (UnityEngine.Random.Range(0, 100) <= obj.mRate) 
                     enemyItemList.Add(obj.mItem);
             }

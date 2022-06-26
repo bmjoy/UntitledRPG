@@ -64,7 +64,6 @@ public class DroidAssassinActionTrigger : ActionTrigger
         StartCoroutine(Action());
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
@@ -77,6 +76,12 @@ public class DroidAssassinActionTrigger : ActionTrigger
 
     private void Find(ref Unit target)
     {
+        if (GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget)
+        {
+            target = GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget;
+            return;
+        }
+
         var unit = GetComponent<Unit>();
         List<GameObject> list = new List<GameObject>((unit.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
             : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList());

@@ -187,7 +187,9 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
         {
-            if(display)
+            mHealthBarList[i].gameObject.SetActive(display);
+            mHealthBarList[i].Active(display);
+            if (display)
             {
                 var unit = PlayerController.Instance.mHeroes[i].GetComponent<Player>();
                 mHealthBarList[i].Initialize(unit.mSetting.Name,
@@ -197,27 +199,30 @@ public class UIManager : MonoBehaviour
                     unit.mStatus.mMaxMana); 
                 unit.mMyHealthBar = mHealthBarList[i];
             }
-            mHealthBarList[i].gameObject.SetActive(display);
-            mHealthBarList[i].Active(display);
+
         }
-        for (int i = 0; i < BattleManager.Instance.mUnits.Count; ++i)
+
+        mBossHealthBar.gameObject.SetActive(display);
+        mBossHealthBar.Active(display);
+        if(GameManager.Instance.mEnemyProwler)
         {
-            if (BattleManager.Instance.mUnits[i].GetComponent<Unit>().GetType() == typeof(Boss))
+            for (int i = 0; i < GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Count; ++i)
             {
-                if(display)
+                if (display)
                 {
-                    mBossHealthBar.Initialize(
-    BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mHealth,
-    BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mMaxHealth);
-                    BattleManager.Instance.mUnits[i].GetComponent<Boss>().mMyHealthBar = mBossHealthBar;
+                    if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Unit>().GetType() == typeof(Boss))
+                    {
+                        mBossHealthBar.Initialize(
+        BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mHealth,
+        BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mMaxHealth);
+                        GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Boss>().mMyHealthBar = mBossHealthBar;
+                    }
                 }
 
-                mBossHealthBar.gameObject.SetActive(display);
-                mBossHealthBar.Active(display);
-
-                break;
             }
         }
+
+
     }
 
     public void ChangeHoverTip(string text, string action)
@@ -257,7 +262,7 @@ public class UIManager : MonoBehaviour
         FadeOutScreen();
         yield return new WaitForSeconds(0.5f);
 
-        UIManager.Instance.DisplayHealthBar(true);
+        DisplayHealthBar(true);
         mStorage.mOrderbar.gameObject.SetActive(true);
     }
 
