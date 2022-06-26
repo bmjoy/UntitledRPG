@@ -138,7 +138,7 @@ public class Room : Environment
                 randomAmount = Random.Range(1, 4);
                 for (int i = 0; i < randomAmount; ++i)
                 {
-                    spawner.GetComponent<EnemySpawner>().mEnemyList.Add((EnemyUnit)Random.Range(3, 7));
+                    spawner.GetComponent<EnemySpawner>().mEnemyList.Add((EnemyUnit)Random.Range(3, 8));
                 }
                 break;
             case RoomType.Companion:

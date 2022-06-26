@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         new CharacterExist(NPCUnit.Eleven, false),
         new CharacterExist(NPCUnit.Roger, false),
         new CharacterExist(NPCUnit.Victor, false),
-        new CharacterExist(NPCUnit.Jimmy, false)
+        new CharacterExist(NPCUnit.Jimmy, true)
     };
     }
 
@@ -93,7 +93,11 @@ public class GameManager : MonoBehaviour
             case GameState.GamePlay:
             case GameState.GamePause:Pause(); break;
             case GameState.Victory: OnBattleEnd(); break;
-            case GameState.GameOver: GameOver(); break;
+            case GameState.GameOver:
+                {
+                    GameOver();
+                    break;
+                }
         }
     }
 
@@ -112,6 +116,8 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         // TODO: Gameover music
+        BattleManager.Instance.status = BattleManager.GameStatus.Finish;
+        UIManager.Instance.BattleEnd();
         AudioManager.Instance.mAudioStorage.ChangeMusic("Defeat");
         AudioManager.Instance.musicSource.loop = false;
 
@@ -131,6 +137,14 @@ public class GameManager : MonoBehaviour
         ResetObjects();
         PlayerController.Instance.IsDied = true;
         mGameState = GameState.GamePlay;
+        characterExists = new List<CharacterExist>(5)
+    {
+        new CharacterExist(NPCUnit.Vin, false),
+        new CharacterExist(NPCUnit.Eleven, false),
+        new CharacterExist(NPCUnit.Roger, false),
+        new CharacterExist(NPCUnit.Victor, false),
+        new CharacterExist(NPCUnit.Jimmy, true)
+    };
         StartCoroutine(Restart());
     }
 
