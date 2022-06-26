@@ -22,7 +22,7 @@ MonoBehaviour:
   Defend: 25
   MagicPower: 25
   Armor: 10
-  Agility: 3
+  Agility: 0
   Gold: 100
   WeaponType: 0
   BasicSprite: {fileID: -6356620016437325989, guid: a6097a492d2c5ad4d801242d81ed371f, type: 3}
@@ -36,5 +36,7 @@ MonoBehaviour:
   - Type: 1
     Clip: {fileID: 8300000, guid: 8a78e3239878d2f4c83c3075be35224f, type: 3}
   Item:
-  - {fileID: 4264239816355072542, guid: 6dff5798c19961a4e80432dac0f96f93, type: 3}
-  - {fileID: 6884613172769436045, guid: 3ec7df7fbac291c41afb9494f7ec470d, type: 3}
+  - mRate: 0
+    mItem: {fileID: 0}
+  - mRate: 0
+    mItem: {fileID: 0}
