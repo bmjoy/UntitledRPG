@@ -83,7 +83,8 @@ public class InventoryUI : MonoBehaviour
         if(active == true)
         {
             transform.gameObject.SetActive(true);
-            InventorySetup();
+            mIndex = 0;
+            Display(0);
             _Initialized = false;
         }
 
@@ -115,6 +116,7 @@ public class InventoryUI : MonoBehaviour
         PrintStatus(num);
         PrintStatusBonus(num);
         ChangeHeroSprite(num);
+        InventorySetup();
     }
 
     private void ChangeHeroSprite(int num)
@@ -247,10 +249,6 @@ public class InventoryUI : MonoBehaviour
     {
         if (mInitialized == false)
             return;
-        PrintStatus(0);
-        PrintStatusBonus(0);
-        ChangeHeroSprite(0);
-        mIndex = 0;
         for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
             mButtonGroup.transform.GetChild(i).GetComponent<Button>().image.sprite = PlayerController.Instance.mHeroes[i].GetComponent<Unit>().mSetting.BasicSprite;
     }
@@ -261,5 +259,6 @@ public class InventoryUI : MonoBehaviour
         {
             Destroy(obj.gameObject);
         }
+        mIndex = 0;
     }
 }

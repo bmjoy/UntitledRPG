@@ -16,7 +16,6 @@ public class Inventory
         }
         else if(item.GetType().IsSubclassOf(typeof(Expendables)))
         {
-            Debug.Log("Hi");
             if (!myInventory.Contains(new KeyValuePair<int, Item>(item.ID, item)))
             {
                 item.Initialize(myIndex);

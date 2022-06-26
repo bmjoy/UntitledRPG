@@ -30,7 +30,6 @@ public class JimmyActionTrigger : ActionTrigger
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunch"), new Vector3(mPos.x, mPos.y + h, mPos.z + Random.Range(-h, h)), Quaternion.identity);
 
             GetComponent<Unit>().mTarget?.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage) / mCombo, DamageType.Physical);
-            StartCoroutine(GetComponent<Unit>().CounterState(GetComponent<Unit>().mTarget.mStatus.mDamage / mCombo));
             Destroy(go, 0.5f);
             Destroy(gofire, 0.3f);
             

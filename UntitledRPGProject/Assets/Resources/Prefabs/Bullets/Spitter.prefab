@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6296281572082947580}
   - component: {fileID: 2616826984534924725}
   - component: {fileID: 8320706316220761513}
-  - component: {fileID: 5940445007204845122}
+  - component: {fileID: 953360936756800567}
   m_Layer: 0
   m_Name: Spitter
   m_TagString: Untagged
@@ -148,7 +148,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5940445007204845122
+--- !u!114 &953360936756800567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2537584241560755892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b54acf360ce61eb4fa09f71f9a5abc31, type: 3}
+  m_Script: {fileID: 11500000, guid: f66fd54cbf6196448a9eeb614bf176b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mSpeed: 20

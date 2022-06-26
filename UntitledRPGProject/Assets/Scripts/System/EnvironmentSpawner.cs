@@ -38,6 +38,9 @@ public class EnvironmentSpawner : Spawner
             mInitialized = false;
         }
         else
+        {
             mInitialized = true;
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -21,6 +21,7 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mDodgeSFX;
     public AudioClip mBreakSFX;
     public AudioClip mDoorSFX;
+    public AudioClip mHealingSFX; 
 
     public void ChangeMusic(string name)
     {

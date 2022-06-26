@@ -13,6 +13,7 @@ public class EnemyProwler : Prowler
     [HideInInspector]
     public GameObject mParticles;
     public List<GameObject> mEnemySpawnGroup;
+ 
     public bool isWin = false;
 
     private float maxDistance = 10.0f;
@@ -23,12 +24,12 @@ public class EnemyProwler : Prowler
         mEnemySpawnGroup = new List<GameObject>();
     }
 
-    public override void Initialize()
+    public override void Initialize(Spawner spawner = null)
     {
         GameManager.Instance.onBattle += EnemySpawn;
         GameManager.Instance.onEnemyWin += Win;
 
-        base.Initialize();
+        base.Initialize(spawner);
         mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForEnemyProwler"), transform.position
 + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.0f, 0.0f), Quaternion.identity, mModel.transform);
 

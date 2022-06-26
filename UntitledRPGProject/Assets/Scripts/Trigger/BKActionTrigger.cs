@@ -165,7 +165,6 @@ public class BKActionTrigger : BossActionTrigger
             boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
             if (boss.mAttackClips.Count > 0)
                 AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip, 0.6f);
-            StartCoroutine(boss.CounterState(boss.mTarget.mStatus.mDamage));
         }
     }
 

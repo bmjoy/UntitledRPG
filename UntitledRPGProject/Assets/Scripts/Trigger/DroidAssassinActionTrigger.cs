@@ -31,10 +31,9 @@ public class DroidAssassinActionTrigger : ActionTrigger
             Destroy(mirror2, 0.8f);
             yield return new WaitForSeconds(mTime / 4.0f);
         }
-        yield return new WaitForSeconds(mTime / 1.5f);
+        yield return new WaitForSeconds(mTime / 2.25f);
         unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
-        StartCoroutine(unit.CounterState(unit.mTarget.mStatus.mDamage));
-
+        yield break;
     }
 
     private IEnumerator Slash()
@@ -55,12 +54,12 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override void StartActionTrigger()
     {
         var unit = GetComponent<Unit>();
-        Find();
+        Find(ref unit.mTarget);
         mPos = unit.mTarget.transform.position;
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
 
         unit.mAnimator.Play("Attack");
-        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 1.3f;
+        mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 0.75f;
 
         StartCoroutine(Action());
     }
@@ -76,7 +75,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
         GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
     }
 
-    private void Find()
+    private void Find(ref Unit target)
     {
         var unit = GetComponent<Unit>();
         List<GameObject> list = new List<GameObject>((unit.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()

@@ -53,7 +53,7 @@ public class EnemySpawner : Spawner
                 return s.Type == SoundClip.SoundType.Run;
             });
 
-        newEnemyProwler.GetComponent<EnemyProwler>().Initialize();
+        newEnemyProwler.GetComponent<EnemyProwler>().Initialize(this);
         return newEnemyProwler;
     }
 

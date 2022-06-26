@@ -55,7 +55,7 @@ public class Chest : InteractableEnvironment, ILockable
                         EnableIcon();
                         // Give the item
                         mAnimator.SetBool("IsOpen", true);
-                        AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
+                        AudioManager.PlaySfx(mSFX);
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                         _Completed = true;
                     }

@@ -54,7 +54,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2.1, z: 1}
+  m_Size: {x: 2, y: 2.1, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7125354674289496326
 Rigidbody:
@@ -119,8 +119,9 @@ MonoBehaviour:
   mAttackTime: 0.1
   mDefendTime: 1
   mAttackDistance: 2
-  mRunningSpeed: 9
   mMagicDistance: 8
+  mCurrentSpeed: 1
+  dodgePos: {x: 0, y: 0, z: 0}
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
@@ -218,7 +219,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mTime: 0
-  _isUltimate: 0
   mSlashAmount: 5
   mEverySlashTime: 0.2
   mCriticalChance: 0.6

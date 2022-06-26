@@ -98,6 +98,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!IsDied && PlayerController.Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        {
+            if(!IsDied)
+                GameManager.Instance.mGameState = GameState.GameOver;
+            IsDied = true;
+            return;
+        }
         if (mModel.activeInHierarchy == false || GameManager.Instance.IsCinematicEvent || Interaction)
             return;
         mState = mState.Handle();
@@ -154,6 +161,10 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
+        if(PlayerController.Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        {
+            mAnimator.SetBool("Death", true);
+        }
     }
 
     public void ResetPlayerUnit()
@@ -190,6 +201,7 @@ public class PlayerController : MonoBehaviour
             mHeroes[i].GetComponent<Billboard>().Initialize();
             mHeroes[i].SetActive(false);
         }
+        mAnimator?.SetBool("Death", false);
     }
 
     public void OnBattleStart()
