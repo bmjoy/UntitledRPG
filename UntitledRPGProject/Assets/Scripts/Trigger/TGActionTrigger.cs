@@ -33,6 +33,7 @@ public class TGActionTrigger : BossActionTrigger
         yield return new WaitForSeconds(1.0f);
         Destroy(slash);
         boss.mAnimator.SetBool("Attack2", false);
+        isCompleted = true;
     }
 
     void DamageState()
@@ -65,6 +66,7 @@ public class TGActionTrigger : BossActionTrigger
         }
         mPos = boss.mTarget.transform.position;
         boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        isCompleted = false;
         StartCoroutine(Action());
     }
 

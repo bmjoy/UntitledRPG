@@ -62,11 +62,12 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
-
+        if (LevelManager.Instance)
+        {
+            LevelManager.Instance.isNext = false;
+        }
         yield return StartCoroutine(FadeLoadingScreen(0, 3));
         mLoadingScreen.SetActive(false);
-        if(LevelManager.Instance)
-            LevelManager.Instance.isNext = false;
     }
 
     IEnumerator FadeLoadingScreen(float val, float duration)

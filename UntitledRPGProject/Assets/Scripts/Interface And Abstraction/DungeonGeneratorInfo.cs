@@ -19,12 +19,20 @@ public class DungeonGeneratorInfo : ScriptableObject
     [Range(0, 10)] public int RecoverAmount = 2;
     [Header("Spawn Chance Rate")]
     [Range(0.0f, 100.0f)] public float NoneRoomRate = 35.0f;
+    [Range(0.0f, 100.0f)] public float HighTierMonsterChance = 40.0f;
+    [Range(0.0f, 100.0f)] public float MiddleTierMonsterChance = 40.0f;
+    [Range(0.0f, 100.0f)] public float LowTierMonsterChance = 40.0f;
     [Range(0.0f, 100.0f)] public float SecretRate = 20.0f;
     [Range(0.0f, 100.0f)] public float WallTrapRate = 50.0f;
     [Range(0.0f, 100.0f)] public float GroundTrapRate = 50.0f;
     [Range(0.0f, 100.0f)] public float ProjectileTrapRate = 40.0f;
     [Range(0.0f, 100.0f)] public float SwitchTrapRate = 40.0f;
     [Range(0.0f, 100.0f)] public float FireOrbRate = 20.0f;
+    public bool GenerateTrapsRandom = false;
+
+    public List<EnemyUnit> _1TierUnit = new List<EnemyUnit>(3);
+    public List<EnemyUnit> _2TierUnit = new List<EnemyUnit>(3);
+    public List<EnemyUnit> _3TierUnit = new List<EnemyUnit>(3);
 
     public List<GameObject> Rooms;
     public GameObject PlayerRoom;

@@ -9,6 +9,13 @@ public abstract class Spawner : MonoBehaviour
     protected int ID = 0;
     public Color mGizmoColor;
     protected abstract GameObject CreateNewObject();
+
+    protected virtual void Start()
+    {
+        GameObject manager = FindObjectOfType<UnitSpawnManager>().gameObject;
+        transform.SetParent(manager.transform);
+    }
+
     public virtual void Spawn()
     {
         if (mInitialized)

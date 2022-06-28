@@ -24,6 +24,9 @@ public class CameraSwitcher : MonoBehaviour
     [SerializeField]
     private CinemachineVirtualCamera mGameWorldCam;
 
+    private CinemachineCollider mGameWorldCollider;
+    private CinemachineCollider mBattleWorldCollider;
+
     [SerializeField] private float mShakeAmount; 
     [SerializeField] private float mFrequency;
 
@@ -39,6 +42,8 @@ public class CameraSwitcher : MonoBehaviour
     private void Start()
     {
         mCamera = this.GetComponent<CinemachineStateDrivenCamera>();
+        mGameWorldCollider = mGameWorldCam.GetComponent<CinemachineCollider>();
+        mBattleWorldCollider = mBattleWorldCam.GetComponent<CinemachineCollider>();
         mCurrentFOV = mBattleWorldCam.m_Lens.FieldOfView;
         mCurrentGameWorldFOV = mGameWorldCam.m_Lens.FieldOfView;
         GameManager.Instance.onPlayerBattleStart += SwitchCamera;
@@ -51,24 +56,69 @@ public class CameraSwitcher : MonoBehaviour
             mPostProcessing = GameObject.Find("PostProcessing").GetComponent<Volume>().profile;
         mPostProcessing.TryGet(out mBloom);
         mPostProcessing.TryGet(out mLiftGammaGain);
-        
+        isInitialized = false;
+        isCollided = false;
+        mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
     }
     private Animator mAnimator;
     private bool isGameWorld = true;
+    public static bool isCollided = false;
+    public static bool isInitialized = false;
+
+    public static void CollideCheck()
+    {
+        if (Instance.mBattleWorldCollider.IsTargetObscured(Instance.mBattleWorldCam))
+        {
+            isCollided = true;
+        }
+        else
+        {
+            isCollided = false;
+        }
+        Instance.mBattleWorldCollider.m_AvoidObstacles = true;
+    }
+    float distance = 0.0f;
+
+    private void FixedUpdate()
+    {
+        
+        if (isInitialized)
+        {
+            GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+            distance = Vector3.Distance(camera.transform.position, BattleManager.Instance.mCurrentField.transform.position);
+            if (isCollided)
+            {
+                Instance.mBattleWorldCam.m_Lens.FieldOfView = (distance > 25.0f) ? Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 20.0f, Time.deltaTime * 3.0f) : Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 45.0f, Time.deltaTime * 3.0f);
+                Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, new Vector3(-90.0f, 25.0f, 0.0f), -Time.deltaTime * 3.0f);
+            }
+            else
+            {
+                Instance.mBattleWorldCam.m_Lens.FieldOfView = Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 10.0f, Time.deltaTime * 3.0f);
+                Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, new Vector3(90.0f, 25.0f, 0.0f), Time.deltaTime * 3.0f);
+            }
+        }
+
+    }
 
     public static void SwitchCamera()
     {
         if (Instance.isGameWorld)
         {
+            isInitialized = false;
+            Instance.mBattleWorldCollider.m_AvoidObstacles = false;
             Instance.mAnimator.Play("BattleWorld");
         }
         else
         {
             Instance.mAnimator.Play("GameWorld");
+            Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(90.0f, 25.0f, 0.0f);
+            isInitialized = false;
+            isCollided = false;
+            Instance.mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
+            Instance.mBattleWorldCollider.m_AvoidObstacles = false;
         }
         Instance.isGameWorld = !Instance.isGameWorld;
     }
-
     public static void UpdateCamera(Transform transform)
     {
         Instance.mBattleWorldCam.m_Follow = Instance.mBattleWorldCam.m_LookAt = transform;
@@ -179,5 +229,13 @@ public class CameraSwitcher : MonoBehaviour
             Destroy(fov);
             _isCameraUsing = false;
         }
+    }
+
+    private void Reset()
+    {
+        isInitialized = false;
+        isCollided = false;
+        mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
+        mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(90.0f, 25.0f, 0.0f);
     }
 }

@@ -6,29 +6,30 @@ using UnityEngine.AI;
 
 public class Prowler : MonoBehaviour
 {
-    public GameObject mModel;
-    public GameObject mGroundCheck;
-    public Spawner mySpawner;
-    public Animator mAnimator;
-    public NavMeshAgent mAgent;
-    public Rigidbody mRigidbody;
+    [HideInInspector] public GameObject mModel;
+    [HideInInspector] public GameObject mGroundCheck;
+    [HideInInspector] public Spawner mySpawner;
+    [HideInInspector] public Animator mAnimator;
+    [HideInInspector] public NavMeshAgent mAgent;
+    [HideInInspector] public Rigidbody mRigidbody;
     protected BoxCollider mCollider;
     protected ProwlerStateMachine mStateMachine;
     protected SpriteRenderer mSpriteRenderer;
-    public int id = 0;
-    public bool onBattle = false;
+    [HideInInspector] public int id = 0;
+    [HideInInspector] public bool onBattle = false;
 
     public float mRadius = 5.0f;
     public float mAngle = 60.0f;
     public float mSpeed = 1.0f;
     public float mStandbyTime = 3.0f;
 
-    public Vector3 mLastPos = Vector3.zero;
-    public Vector3 mVelocity = Vector3.zero;
-    public float mOriginalSpeed = 0.0f;
 
-    public float mWalkTime = 0.0f;
-    public float mMaxWalkTime = 0.3f;
+    [HideInInspector] public Vector3 mLastPos = Vector3.zero;
+    [HideInInspector] public Vector3 mVelocity = Vector3.zero;
+    [HideInInspector] public float mOriginalSpeed = 0.0f;
+
+    [HideInInspector] public float mWalkTime = 0.0f;
+    [HideInInspector] public float mMaxWalkTime = 0.3f;
     private bool isGrounded = false;
 
 

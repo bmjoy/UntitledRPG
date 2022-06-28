@@ -14,6 +14,7 @@ public class Companion : Item
         go.GetComponent<Unit>().ResetUnit();
         go.SetActive(false);
         PlayerController.Instance.mHeroes.Add(go);
+        GameManager.Instance.AssignCharacter(Name);
         isSuccess = true;
     }
 

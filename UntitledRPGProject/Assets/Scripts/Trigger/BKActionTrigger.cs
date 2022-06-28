@@ -27,6 +27,7 @@ public class BKActionTrigger : BossActionTrigger
         foreach (Transform t in BattleManager.playerFieldParent)
         {
             GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorBlood"), t.position + new Vector3(0.0f, 0.0f, -0.5f), Quaternion.identity);
+            mirror.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
             mirror.GetComponent<Animator>().speed = 0.4f;
             _mirrors.Add(mirror);
 
@@ -60,8 +61,8 @@ public class BKActionTrigger : BossActionTrigger
 
         boss.mAnimator.ResetTrigger("Skill2");
         yield return new WaitForSeconds(0.5f);
-        _isRed = false;
-        _isUltimate = false;
+        _isRed = _isUltimate = false;
+        isCompleted = true;
         foreach (GameObject mirror in _mirrors)
         {
             Destroy(mirror);
@@ -110,7 +111,7 @@ public class BKActionTrigger : BossActionTrigger
         mTime = boss_Skill.mSkillDatas[2].mEffectTime;
         mPos = transform.position;
         _isRed = true;
-
+        isCompleted = false;
         StartCoroutine(Action());
     }
 
@@ -121,12 +122,17 @@ public class BKActionTrigger : BossActionTrigger
         boss.mSkillClips[0].Clip = clip;
         _isUltimate = true;
         _isRed = true;
+        isCompleted = false;
         StartCoroutine(wait());
     }
 
     IEnumerator wait()
     {
-        yield return new WaitForSeconds(2.0f);
+        var boss = GetComponent<Boss>().GetComponent<Boss_Skill_DataBase>();
+        yield return new WaitForSeconds(boss.mSkillDatas[1].mEffectTime);
+
+        isCompleted = true;
+        yield return new WaitForSeconds(1.0f);
         _isRed = false;
     }
 
@@ -138,6 +144,7 @@ public class BKActionTrigger : BossActionTrigger
 
         yield return new WaitForSeconds(mTime / 3.0f);
         GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position, Quaternion.identity);
+        slash.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
         slash.GetComponent<Animator>().Play("Slash1");
         Destroy(slash, 1.0f);
         DamageState();
@@ -145,6 +152,7 @@ public class BKActionTrigger : BossActionTrigger
         mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
         DamageState();
         GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position + new Vector3(0.0f,1.5f,0.0f), Quaternion.identity);
+        slash2.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
         slash2.GetComponent<Animator>().Play("Slash2");
         Destroy(slash2, 1.0f);
         yield return new WaitForSeconds(mTime);
@@ -155,6 +163,8 @@ public class BKActionTrigger : BossActionTrigger
             DamageState();
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
         }
+        yield return new WaitForSeconds(0.3f);
+        isCompleted = true;
     }
 
     private void DamageState()
@@ -174,6 +184,7 @@ public class BKActionTrigger : BossActionTrigger
         boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
         boss.mAnimator.SetBool("Attack2", (boss.mBuffNerfController.GetBuffCount() > 0));
         mTime = boss.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+        isCompleted = false;
         StartCoroutine(AttackAction());
     }
 

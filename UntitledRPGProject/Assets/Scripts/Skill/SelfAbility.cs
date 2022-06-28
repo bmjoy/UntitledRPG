@@ -60,6 +60,7 @@ public class SelfAbility : DamagableAbility
                 
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mStatus.mMana -= mManaCost;
+                mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
                 mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                 if (mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f,mOwner.transform.position));
@@ -67,7 +68,7 @@ public class SelfAbility : DamagableAbility
                 if (mActionTrigger != null)
                 {
                     mActionTrigger?.Invoke();
-                    yield return new WaitForSeconds(mEffectTime);
+                    yield return new WaitUntil(()=> mOwner.GetComponent<ActionTrigger>().isCompleted);
                     if (mOwner.mSkillClips.Count > 0)
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip);
                     DoBuff();

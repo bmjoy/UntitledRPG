@@ -32,7 +32,6 @@ public class NPCSpawner : Spawner
                         if (exist.isExist == false)
                         {
                             mType = exist.mUnit;
-                            GameManager.Instance.AssignCharacter(mType.ToString());
                             break;
                         }
                         else
@@ -46,15 +45,14 @@ public class NPCSpawner : Spawner
                         mObject.transform.Rotate(new Vector3(0.0f, Random.Range(-360.0f, 360.0f), 0.0f));
                     }
                 }
-                else
-                    GameManager.Instance.AssignCharacter(mType.ToString());
                 break;
             default:
                 break;
         }
         if(mType != NPCUnit.None)
         {
-            mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity);
+            GameObject group = (GameObject.Find("NPCs")) ? GameObject.Find("NPCs").gameObject : new GameObject("NPCs");
+            mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity,group.transform);
             mObject.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
             mObject.tag = "Neutral";
             mObject.layer = 9;

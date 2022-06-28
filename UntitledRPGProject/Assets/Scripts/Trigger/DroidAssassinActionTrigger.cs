@@ -16,7 +16,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
             float firstMirror = Random.Range(-3.5f, 3.5f);
             GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f, firstMirror), Quaternion.identity);
             if(firstMirror < 0.0f)
-                mirror.GetComponent<SpriteRenderer>().flipX = true;
+                mirror.GetComponent<SpriteRenderer>().flipX = (CameraSwitcher.isCollided)? false : true;
 
             mirror.GetComponent<Animator>().SetTrigger("Attack1");
             mirror.GetComponent<Animator>().speed = 0.8f;
@@ -25,7 +25,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
 
             GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f,secondMirror), Quaternion.identity);
             if (secondMirror < 0.0f)
-                mirror2.GetComponent<SpriteRenderer>().flipX = true;
+                mirror2.GetComponent<SpriteRenderer>().flipX = (CameraSwitcher.isCollided) ? false : true;
             mirror2.GetComponent<Animator>().SetTrigger("Attack2");
             mirror2.GetComponent<Animator>().speed = 0.8f;
             Destroy(mirror2, 0.8f);
@@ -33,6 +33,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
         }
         yield return new WaitForSeconds(mTime / 2.25f);
         unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
+        isCompleted = true;
         yield break;
     }
 
@@ -60,7 +61,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
 
         unit.mAnimator.Play("Attack");
         mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 0.75f;
-
+        isCompleted = false;
         StartCoroutine(Action());
     }
 

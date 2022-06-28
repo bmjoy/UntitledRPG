@@ -10,6 +10,8 @@ public class DaggerMushActionTrigger : ActionTrigger
         DamageState();
         yield return new WaitForSeconds(mTime/ 2.5f);
         DamageState();
+        isCompleted = true;
+        yield break;
     }
     void DamageState()
     {
@@ -28,6 +30,7 @@ public class DaggerMushActionTrigger : ActionTrigger
         mTime = (unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 0.5f);
         mPos = unit.mTarget.transform.position;
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        isCompleted = false;
         StartCoroutine(Action());
     }
 

@@ -15,6 +15,7 @@ public class Room : Environment
         WeaponMerchant,
         Companion,
         LowTierMonster,
+        MiddleTierMonster,
         HighTierMonster,
         Secret,
         Player,
@@ -31,32 +32,38 @@ public class Room : Environment
     private DungeonGeneratorInfo _info;
     private Spawner spawner;
     private int randomAmount = 0;
+    private GameObject mMainIcon = null;
+    private GameObject mRoomIcon = null;
+    private GameObject mUnknown = null;
+    private RoomDetector mDetector;
+
+    private void Awake()
+    {
+        mDetector = transform.Find("Detector").GetComponent<RoomDetector>();
+        mUnknown = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/UnknownIcon"), transform.position, Quaternion.identity);
+        mUnknown.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+        mDetector.Initialize(this);
+    }
 
     public void ConstructRoom(bool[] status, RoomType type, DungeonGeneratorInfo info)
     {
+        mRoomIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/RoomIcon"), transform.position, Quaternion.identity);
+        mRoomIcon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
         _type = type;
         _info = info;
-
         mDirection = transform.Find("Direction");
         List<Transform> transforms = mDirection.Cast<Transform>().ToList();
         for (int i = 0; i < status.Length; ++i)
         {
             mWalls[i].SetActive(!status[i]);
-            if (mConnectors.Length > 0)
+            if (status[i])
             {
-                if (status[i])
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), transforms[i].transform.position, Quaternion.identity);
+                go.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Door;
+                go.transform.Rotate((mConnectors[i].name.Contains("Up") || mConnectors[i].name.Contains("Down")) ? new Vector3(0.0f, 90.0f, 0.0f) : new Vector3(0.0f, 180.0f, 0.0f));
+                if (_info.GenerateTrapsRandom)
                 {
-                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), transforms[i].transform.position, Quaternion.identity);
-                    go.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Door;
-                    if (mConnectors[i].name.Contains("Up") || mConnectors[i].name.Contains("Down"))
-                    {
-                        go.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
-                    }
-                    else
-                    {
-                        go.transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
-                    }
-                    if(Random.Range(0,100) <= info.WallTrapRate)
+                    if (Random.Range(0, 100) <= info.WallTrapRate)
                     {
                         Transform t = mConnectors[i].transform;
                         List<Transform> C_Walls = t.Cast<Transform>().ToList();
@@ -85,11 +92,12 @@ public class Room : Environment
                         }
                     }
                 }
-                mConnectors[i].SetActive(status[i]);
+
             }
+            mConnectors[i].SetActive(status[i]);
         }
         GenerateInterior();
-        GenerateTraps();
+        if(_info.GenerateTrapsRandom) GenerateTraps();
 
         meshSurface = GetComponent<NavMeshSurface>();
         meshSurface.BuildNavMesh();
@@ -99,7 +107,7 @@ public class Room : Environment
     {
         pos = transform.position + new Vector3(Random.Range(-GetComponent<Renderer>().bounds.size.x / 5.0f, GetComponent<Renderer>().bounds.size.x / 5.0f),
     0.5f, Random.Range(-GetComponent<Renderer>().bounds.size.z / 5.0f, GetComponent<Renderer>().bounds.size.z / 5.0f));
-
+        randomAmount = Random.Range(1, 4);
         switch (_type)
         {
             case RoomType.None:
@@ -116,30 +124,65 @@ public class Room : Environment
             case RoomType.Recover:
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<EnvironmentSpawner>();
                 spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Well;
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/RecoverIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.ArmorMerchant:
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), pos, Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.ArmorMerchant;
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.WeaponMerchant:
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), pos, Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.WeaponMerchant;
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.LowTierMonster:
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), pos, Quaternion.identity).GetComponent<EnemySpawner>();
-                randomAmount = Random.Range(1, 4);
                 for (int i = 0; i < randomAmount; ++i)
                 {
-                    spawner.GetComponent<EnemySpawner>().mEnemyList.Add((EnemyUnit)Random.Range(1, 3));
+                    if(_info._3TierUnit.Count == 0)
+                        spawner.GetComponent<EnemySpawner>().mEnemyList.Add(EnemyUnit.Ghoul);
+                    else
+                    {
+                        EnemyUnit randomUnit = _info._3TierUnit[Random.Range(0, _info._3TierUnit.Count)];
+                        randomUnit = ((randomUnit == EnemyUnit.Summoner || randomUnit == EnemyUnit.Cyber_Shielder) && spawner.GetComponent<EnemySpawner>().mEnemyList.Contains(randomUnit)) ? EnemyUnit.Ghoul : randomUnit;
+                        spawner.GetComponent<EnemySpawner>().mEnemyList.Add(randomUnit);
+                    }
                 }
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
+                spawner.name = "3-Tier Enemy";
+                break;
+            case RoomType.MiddleTierMonster:
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), pos, Quaternion.identity).GetComponent<EnemySpawner>();
+                for (int i = 0; i < randomAmount; ++i)
+                {
+                    if(_info._2TierUnit.Count == 0)
+                        spawner.GetComponent<EnemySpawner>().mEnemyList.Add(EnemyUnit.Dagger_Mush);
+                    else
+                    {
+                        EnemyUnit randomUnit = _info._2TierUnit[Random.Range(0, _info._2TierUnit.Count)];
+                        randomUnit = ((randomUnit == EnemyUnit.Summoner || randomUnit == EnemyUnit.Cyber_Shielder) && spawner.GetComponent<EnemySpawner>().mEnemyList.Contains(randomUnit)) ? EnemyUnit.Dagger_Mush : randomUnit;
+                        spawner.GetComponent<EnemySpawner>().mEnemyList.Add(randomUnit);
+                    }
+                }
+                spawner.name = "2-Tier Enemy";
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.HighTierMonster:
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), pos, Quaternion.identity).GetComponent<EnemySpawner>();
-                randomAmount = Random.Range(1, 4);
                 for (int i = 0; i < randomAmount; ++i)
                 {
-                    spawner.GetComponent<EnemySpawner>().mEnemyList.Add((EnemyUnit)Random.Range(3, 8));
+                    if(_info._1TierUnit.Count == 0)
+                        spawner.GetComponent<EnemySpawner>().mEnemyList.Add(EnemyUnit.Droid_Assassin);
+                    else
+                    {
+                        EnemyUnit randomUnit = _info._1TierUnit[Random.Range(0, _info._1TierUnit.Count)];
+                        randomUnit = ((randomUnit == EnemyUnit.Summoner || randomUnit == EnemyUnit.Cyber_Shielder) && spawner.GetComponent<EnemySpawner>().mEnemyList.Contains(randomUnit)) ? EnemyUnit.Droid_Assassin : randomUnit;
+                        spawner.GetComponent<EnemySpawner>().mEnemyList.Add(randomUnit);
+                    }
                 }
+                spawner.name = "1-Tier Enemy";
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.Companion:
                 randomAmount = Random.Range(1, 5);
@@ -148,6 +191,7 @@ public class Room : Environment
                 {
                     spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), pos, Quaternion.identity).GetComponent<NPCSpawner>();
                     spawner.GetComponent<NPCSpawner>().mType = (NPCUnit)(randomAmount);
+                    mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/CompanionIcon"), transform.position, Quaternion.identity);
                 }
                 else
                 {
@@ -159,10 +203,19 @@ public class Room : Environment
                 {
                     spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<EnvironmentSpawner>();
                     spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Chest;
+                    mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ScreatIcon"), transform.position, Quaternion.identity);
                 }
+                break;
+            case RoomType.MiniBoss:
+            case RoomType.Boss:
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/BossEnemyIcon"), transform.position, Quaternion.identity);
                 break;
             default:
                 break;
+        }
+        if(mMainIcon != null)
+        {
+            mMainIcon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
         }
     }
 
@@ -206,5 +259,10 @@ public class Room : Environment
                 TrapSpawner.transform.Rotate(new Vector3(90.0f, 0.0f, Random.Range(-360.0f, 360.0f)));
             }
         }
+    }
+
+    public void Display()
+    {
+        Destroy(mUnknown);
     }
 }

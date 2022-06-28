@@ -81,7 +81,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: a0ff16968ea558f47b80bca53b4b2ec1, type: 2}
   musicSource: {fileID: 6063149805716921882}
   sfxSource: {fileID: 8701343731707656903}
-  mAudioStorage: {fileID: 0}
+  mAudioStorage: {fileID: 276421049703403807}
   mFadeTime: 1
 --- !u!81 &1796929566426921100
 AudioListener:
@@ -117,10 +117,6 @@ MonoBehaviour:
   mMainMenuButtonSFX: {fileID: 8300000, guid: 3391c5cd3b8ccc44cb7fa2702e7ac343, type: 3}
   mDefendSFX: {fileID: 8300000, guid: 0553908956f1b5444ace312e90bb5dcb, type: 3}
   mDodgeSFX: {fileID: 8300000, guid: 1c283335784cd1740b1a38f17438cb30, type: 3}
-  mBreakSFX: {fileID: 8300000, guid: f873cc8d0f014f442a45a2974abc103c, type: 3}
-  mDoorSFX: {fileID: 8300000, guid: f6d74fac1a0f774478de0fff79268cf1, type: 3}
-  mFireTrapSFX: {fileID: 8300000, guid: 8354c32bbbf591d4a915fe8d51a3e5d7, type: 3}
-  mHealingSFX: {fileID: 8300000, guid: 2f34eff2a43c32c46aab0b61e0c25236, type: 3}
 --- !u!1 &4890134167232618478
 GameObject:
   m_ObjectHideFlags: 0
