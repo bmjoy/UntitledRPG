@@ -89,7 +89,7 @@ public class TargetAbility : DamagableAbility
                 UIManager.Instance.ChangeOrderBarText("<color=red>"+ mName + "!</color>");
                 mOwner.mTarget = mTarget;
                 mTarget?.mSelected.SetActive(false);
-                bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));
+                bool hasState = mOwner.mAnimator.HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mMagicDistance = mRange;
                 mOwner.mAiBuild.SetActionEvent(ActionEvent.MagicWalk);
                 if(mProperty == SkillProperty.Friendly)
@@ -99,6 +99,7 @@ public class TargetAbility : DamagableAbility
 
                 if (mShootType == SKillShootType.Range)
                 {
+                    mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
                     mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
                     if(mOwner.mSkillClips.Count > 0)
@@ -109,19 +110,25 @@ public class TargetAbility : DamagableAbility
                 else if (mShootType == SKillShootType.Melee)
                 {
                     yield return new WaitForSeconds(mEffectTime);
-                    mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
-
-                    bool projectile = Melee();
-                    if (mOwner.mSkillClips.Count > 0 && projectile)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
-                    yield return new WaitForSeconds(mOwner.mAnimator.GetCurrentAnimatorStateInfo(0).length + mEffectTime);
-                        if (mOwner.mSkillClips.Count > 0 && !projectile)
+                    mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
+                    if (mActionTrigger != null)
+                    {
+                        mActionTrigger.Invoke();
+                        yield return new WaitUntil(()=> mOwner.GetComponent<ActionTrigger>().isCompleted);
+                    }
+                    else
+                    {
+                        mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
+                        yield return new WaitForSeconds(mOwner.mAnimator.GetCurrentAnimatorStateInfo(0).length + mEffectTime);
+                        if (mOwner.mSkillClips.Count > 0)
                             AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
-                    CommonState();
+                        CommonState();
+                    }
                     yield return new WaitForSeconds(0.2f);
                 }
                 else if(mShootType == SKillShootType.Instant)
                 {
+                    mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
                     mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                     if (mOwner.mSkillClips.Count > 0)
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
@@ -220,21 +227,6 @@ public class TargetAbility : DamagableAbility
         }
     });
 
-    }
-
-    private bool Melee()
-    {
-        Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        if(Resources.Load<GameObject>("Prefabs/Skills/" + mName))
-        {
-            mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Skills/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
-            mProjectile.transform.localPosition += new Vector3(3.0f, mOwner.transform.GetComponent<BoxCollider>().size.y + mStartPosition.y);
-            mProjectile.GetComponent<SpriteRenderer>().sortingOrder = mOwner.GetComponent<SpriteRenderer>().sortingOrder;
-            mProjectile.GetComponent<SpriteRenderer>().flipX = (mTarget.mFlag != Flag.Player);
-            Destroy(mProjectile.gameObject, mOwner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + 0.3f);
-            return true;
-        }
-        return false;
     }
 
     private void Raycasting()

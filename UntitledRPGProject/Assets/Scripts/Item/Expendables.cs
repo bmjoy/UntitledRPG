@@ -13,7 +13,6 @@ public class Expendables : Item
     public override void Apply()
     {
         Amount++;
-        Debug.Log($"Use {Name}: {Amount}");
         UIManager.Instance.mInventoryUI.InventoryUpdate();
     }
 

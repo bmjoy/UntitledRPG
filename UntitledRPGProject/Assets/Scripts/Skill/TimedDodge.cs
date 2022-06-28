@@ -10,20 +10,11 @@ public class TimedDodge : TimedBuff
     public TimedDodge(Buff buff, Unit owner, Unit target) : base(buff, owner, target)
     {  
         mirror = new GameObject("Mirror");
-        mirror.transform.position = mOwner.transform.position;
-        mirror.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
-        mirror.transform.SetParent(mOwner.transform);
-        mirror.AddComponent<SpriteRenderer>().sprite = mOwner.GetComponent<SpriteRenderer>().sprite;
-        mirror.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.35f);
-        mirror.AddComponent<Billboard>();
+        mirror.AddComponent<Mirror>().Initialize(mOwner, new Vector3(0.0f, 0.0f, 0.6f));
 
         mirror2 = new GameObject("Mirror");
-        mirror2.transform.position = mOwner.transform.position;
-        mirror2.transform.position += new Vector3(0.0f, 0.0f, 0.4f);
-        mirror2.transform.SetParent(mOwner.transform);
-        mirror2.AddComponent<SpriteRenderer>().sprite = mOwner.GetComponent<SpriteRenderer>().sprite;
-        mirror2.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.35f);
-        mirror2.AddComponent<Billboard>();
+        mirror2.AddComponent<Mirror>().Initialize(mOwner, new Vector3(0.0f, 0.0f, -0.6f));
+        mirror.GetComponent<Mirror>().Link(mirror2.GetComponent<Mirror>());
     }
 
     public override void End()

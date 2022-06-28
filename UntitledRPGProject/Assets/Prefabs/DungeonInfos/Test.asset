@@ -12,20 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3a3b30d1f70d34892ec47ed510dfd6, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  Column: 5
-  Row: 5
+  Column: 8
+  Row: 8
   Offset: {x: 60, y: 60}
   SecretRoomAmount: 4
   MerchantAmount: 2
   CompanionAmount: 2
   RecoverAmount: 2
   NoneRoomRate: 35
+  HighTierMonsterChance: 40
+  MiddleTierMonsterChance: 40
+  LowTierMonsterChance: 40
   SecretRate: 20
   WallTrapRate: 50
   GroundTrapRate: 70
   ProjectileTrapRate: 79
   SwitchTrapRate: 40
   FireOrbRate: 80
+  GenerateTrapsRandom: 0
+  _1TierUnit: 0700000006000000
+  _2TierUnit: 050000000400000003000000
+  _3TierUnit: 0200000001000000
   Rooms:
   - {fileID: 8497998057232989250, guid: b9271d72f5f2cb34187d64c158ed1f2f, type: 3}
   - {fileID: 4171566842334870531, guid: f14db990a11812744a2fc6ff56ff936c, type: 3}

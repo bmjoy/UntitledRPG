@@ -103,6 +103,11 @@ public class UIManager : MonoBehaviour
         switchOfInventory = !switchOfInventory;
     }
 
+    public void DisplayMiniMap(bool active)
+    {
+        mStorage.mMinimap.SetActive(active);
+    }
+
     public IEnumerator VictoryTransition()
     {
         mStorage.mVictoryScreenTransition.SetActive(true);
@@ -202,8 +207,6 @@ public class UIManager : MonoBehaviour
 
         }
 
-        mBossHealthBar.gameObject.SetActive(display);
-        mBossHealthBar.Active(display);
         if(GameManager.Instance.mEnemyProwler)
         {
             for (int i = 0; i < GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Count; ++i)
@@ -218,11 +221,18 @@ public class UIManager : MonoBehaviour
                         GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Boss>().mMyHealthBar = mBossHealthBar;
                     }
                 }
-
+                if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Unit>().GetType() == typeof(Boss))
+                {
+                    mBossHealthBar.gameObject.SetActive(display);
+                    mBossHealthBar.Active(display);
+                }
             }
         }
-
-
+        if(!display)
+        {
+            mBossHealthBar.gameObject.SetActive(false);
+            mBossHealthBar.Active(false);
+        }
     }
 
     public void ChangeHoverTip(string text, string action)

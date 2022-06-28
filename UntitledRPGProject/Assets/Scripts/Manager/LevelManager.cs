@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour
     }
 
     public int mCurrentLevel = 0;
-    private PlayerSpawner spawner;
+
     public void RespawnEntities()
     {
         var obj = GameObject.FindObjectOfType<UnitSpawnManager>();

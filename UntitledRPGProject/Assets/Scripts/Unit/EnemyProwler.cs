@@ -6,14 +6,17 @@ using UnityEngine.AI;
 
 public class EnemyProwler : Prowler
 {
+    [HideInInspector]
     public GameObject mCanvas;
+    [HideInInspector]
     public GameObject mTextCanvas;
     [HideInInspector]
     public GameObject mExclamation;
     [HideInInspector]
     public GameObject mParticles;
+    [HideInInspector]
     public List<GameObject> mEnemySpawnGroup;
- 
+    [HideInInspector]
     public bool isWin = false;
 
     private float maxDistance = 10.0f;

@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class PlayerSpawner : Spawner
 {
     public string mName;
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         GameManager.Instance.AssignCharacter(mName);
     }
     public override void Spawn()

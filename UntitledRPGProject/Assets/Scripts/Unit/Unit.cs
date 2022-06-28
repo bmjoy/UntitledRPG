@@ -81,6 +81,8 @@ public class Unit : MonoBehaviour, IUnit
     public List<SoundClip> mSkillClips = new List<SoundClip>();    
     [HideInInspector]
     public List<SoundClip> mDeathClips = new List<SoundClip>();
+
+    public Mirror mirror;
     protected virtual void Start()
     {
     }
@@ -164,7 +166,6 @@ public class Unit : MonoBehaviour, IUnit
             mAttackClips = mSetting.Clips.FindAll(s => s.Type == SoundClip.SoundType.Attack);
             mSkillClips = mSetting.Clips.FindAll(s => s.Type == SoundClip.SoundType.Skill);
         }
-
     }
 
     public void AI_Initialize()
@@ -191,7 +192,10 @@ public class Unit : MonoBehaviour, IUnit
     {
         if (mConditions.isDied == false)
             mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-
+        if (CameraSwitcher.isCollided)
+        {
+            GetComponent<SpriteRenderer>().flipX = (mFlag == Flag.Player) ? true : false;
+        }
         mHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
         mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
         mHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
@@ -201,6 +205,8 @@ public class Unit : MonoBehaviour, IUnit
         {
             case ActionEvent.None:
                 {
+                    mirror?.SetFloat("Speed", 0.0f);
+                    mirror?.SetBool("Death", (mConditions.isDied) ? true : false);
                     mAnimator.SetFloat("Speed", 0.0f);
                     mAnimator.SetBool("Death", (mConditions.isDied) ? true : false);
                     mAiBuild.Update((mAiBuild.type == AIType.Auto));
@@ -226,6 +232,7 @@ public class Unit : MonoBehaviour, IUnit
                 break;
             case ActionEvent.Busy:
                 {
+                    mirror?.SetFloat("Speed", 0.0f);
                     mAnimator.SetFloat("Speed", 0.0f);
                     dodgeCurrentPos = transform.position;
                     dodgePos = (mFlag == Flag.Player) ? transform.position - new Vector3(0.0f, 0.0f, 2.5f)
@@ -255,6 +262,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * BattleManager.Instance.mRunningSpeed);
         mAnimator.SetFloat("Speed", (mCurrentSpeed < 4.9f) ? 1.0f : mCurrentSpeed);
+        mirror?.SetFloat("Speed", (mCurrentSpeed < 4.9f) ? 1.0f : mCurrentSpeed);
         return ((Vector3.Distance(transform.position, to) < maxDist)) ? actionEvent1 : actionEvent2;
     }
 
@@ -355,12 +363,13 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.SetActionEvent(ActionEvent.AttackWalk);
                 yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+                mirror?.Play("Attack");
                 if (mTarget)
                 {
-                    if(mActionTrigger != null)
+                    if (mActionTrigger != null)
                     {
                         mActionTrigger?.Invoke();
-                        yield return new WaitForSeconds(GetComponent<ActionTrigger>().mTime);
+                        yield return new WaitUntil(()=> GetComponent<ActionTrigger>().isCompleted);
                     }
                     else
                     {
@@ -383,10 +392,13 @@ public class Unit : MonoBehaviour, IUnit
             {
                 mAiBuild.SetActionEvent(ActionEvent.Busy);
                 mAnimator.Play("Attack");
+                mirror?.Play("Attack");
                 if (mAttackClips.Count > 0)
                     AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
+                if(go.GetComponent<SpriteRenderer>())
+                    go.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
                 Bullet bullet = go.GetComponent<Bullet>();
                 bullet.Initialize(mTarget.transform, mStatus.mDamage + mBonusStatus.mDamage);
 
@@ -395,6 +407,7 @@ public class Unit : MonoBehaviour, IUnit
             }
             else if(mType == AttackType.Instant)
             {
+                mirror?.Play("Attack");
                 mAiBuild.SetActionEvent(ActionEvent.Busy);
                 mAnimator.Play("Attack");
                 if (mAttackClips.Count > 0)
@@ -535,6 +548,7 @@ public class Unit : MonoBehaviour, IUnit
                     GameManager.s_TotalGold += mStatus.mGold;
                     GameManager.s_TotalSoul += GameManager.Instance.mAmountofSoul;
                 }
+                mirror?.SetBool("Death", true);
                 mAnimator.SetBool("Death", true);
                 mHealthBar.ActiveDeathAnimation(true);
                 GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = false;
@@ -542,6 +556,7 @@ public class Unit : MonoBehaviour, IUnit
                 mBuffNerfController.Stop();
                 mField.GetComponent<Field>().Picked(false);
             }
+            mirror?.SetTrigger("Hit");
             mAnimator.SetTrigger("Hit");
         }
 
@@ -647,6 +662,7 @@ public class Unit : MonoBehaviour, IUnit
             mLevelText.gameObject.SetActive(false);
             mAnimator.SetBool("Death", true);
         }
+        mirror = null;
     }
 
     public void Revive(float val)

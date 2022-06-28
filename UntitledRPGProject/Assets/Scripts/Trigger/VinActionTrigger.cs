@@ -26,6 +26,7 @@ public class VinActionTrigger : ActionTrigger
         mPos = transform.position;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
         _isShadow = true;
+        isCompleted = false;
         StartCoroutine(Action());
     }
 
@@ -51,6 +52,10 @@ public class VinActionTrigger : ActionTrigger
         GameObject mirror3 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);
         GameObject mirror4 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);        
 
+        mirror.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
+        mirror2.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
+        mirror3.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
+        mirror4.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
         mirror.GetComponent<Animator>().SetTrigger("Skill");
         mirror2.GetComponent<Animator>().SetTrigger("Skill");
         mirror3.GetComponent<Animator>().SetTrigger("Skill");
@@ -76,8 +81,6 @@ public class VinActionTrigger : ActionTrigger
         mirror4.GetComponent<Rigidbody>().AddForce(Vector3.forward * 1.5f, ForceMode.Impulse);
 
         yield return new WaitForSeconds(mTime / 6.0f);
-
-        
 
         mirror.GetComponent<Animator>().speed = 0.75f;
         mirror2.GetComponent<Animator>().speed = 0.95f;
@@ -106,8 +109,10 @@ public class VinActionTrigger : ActionTrigger
             mirror4.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
 
             GameObject mirrors = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"), transform.position, Quaternion.identity);
+            mirrors.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
             mirrors.GetComponent<Animator>().SetTrigger("Skill");
             GameObject mirrors2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"), transform.position, Quaternion.identity);
+            mirrors2.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
             mirrors2.GetComponent<Animator>().SetTrigger("Skill");
             mirrors.GetComponent<Animator>().speed = 1.25f + i;
             Destroy(mirrors, 5.0f - (i + 1.25f));
@@ -136,6 +141,7 @@ public class VinActionTrigger : ActionTrigger
                 u.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage), DamageType.Physical);
         }
         _isShadow = false;
+        isCompleted = true;
     }
 
     private void OnDestroy()

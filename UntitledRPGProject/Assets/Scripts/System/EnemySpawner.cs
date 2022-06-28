@@ -18,8 +18,9 @@ public class EnemySpawner : Spawner
     {
         if (mEnemyList.Count == 0)
             return null;
-
+        GameObject group = (GameObject.Find("Enemies")) ? GameObject.Find("Enemies").gameObject : new GameObject("Enemies");
         GameObject newEnemyProwler = new GameObject("Enemy" + " " + ID);
+        newEnemyProwler.transform.SetParent(group.transform);
         newEnemyProwler.transform.position = new Vector3(transform.position.x,
             transform.position.y + 1.0f,
             transform.position.z);

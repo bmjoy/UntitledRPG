@@ -19,13 +19,9 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mMainMenuButtonSFX;
     public AudioClip mDefendSFX;
     public AudioClip mDodgeSFX;
-    public AudioClip mBreakSFX;
-    public AudioClip mDoorSFX;
-    public AudioClip mHealingSFX; 
 
     public void ChangeMusic(string name)
     {
-
         AudioManager.Instance.musicSource.Stop();
 
         switch(name)

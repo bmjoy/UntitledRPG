@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
                 {
                     AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
                     mGameState = GameState.GamePlay;
+                    UIManager.Instance.DisplayMiniMap(true);
                 }
                 break;
             case GameState.GamePlay:
@@ -118,6 +119,7 @@ public class GameManager : MonoBehaviour
         // TODO: Gameover music
         BattleManager.Instance.status = BattleManager.GameStatus.Finish;
         UIManager.Instance.BattleEnd();
+        UIManager.Instance.DisplayMiniMap(false);
         AudioManager.Instance.mAudioStorage.ChangeMusic("Defeat");
         AudioManager.Instance.musicSource.loop = false;
 
@@ -189,6 +191,7 @@ public class GameManager : MonoBehaviour
         onPlayerBattleStart?.Invoke(); // Player preparation and camera switch
         EnemyProwlers = GameObject.FindGameObjectsWithTag("EnemyProwler");
         NPCProwlers = GameObject.FindGameObjectsWithTag("Neutral");
+        UIManager.Instance.DisplayMiniMap(false);
         ActiveAllProwlers(false);
     }
 
@@ -203,6 +206,7 @@ public class GameManager : MonoBehaviour
     {
         AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
         AudioManager.Instance.musicSource.loop = true;
+        UIManager.Instance.DisplayMiniMap(true);
         CameraSwitcher.SwitchCamera();
         ResetObjects();
         UIManager.Instance.DisplayBattleInterface(false);

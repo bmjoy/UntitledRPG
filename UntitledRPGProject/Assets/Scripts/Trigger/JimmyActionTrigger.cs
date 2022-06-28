@@ -9,44 +9,79 @@ public class JimmyActionTrigger : ActionTrigger
     void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+        GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartSkillActionTrigger;
     }
     protected override void StartActionTrigger()
     {
-
         mPos = GetComponent<Unit>().mTarget.transform.position;
+        isCompleted = false;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
         GetComponent<Unit>().mAnimator.Play("Attack");
         mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         StartCoroutine(Action());
     }
+    private void StartSkillActionTrigger()
+    {
+        mPos = transform.position;
+        isCompleted = false;
+        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+        GetComponent<Unit>().mAnimator.Play("Skill");
+        mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+        StartCoroutine(SkillAction());
+    }
+
+    private IEnumerator SkillAction()
+    {
+        var unit = GetComponent<Unit>();
+        var skill = GetComponent<Skill_DataBase>().mSkill;
+        Vector3 dir = (unit.mTarget.transform.position - transform.position).normalized;
+        GameObject mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HellFire"), transform.position + dir * 6.0f, Quaternion.identity);
+        mProjectile.transform.localPosition += new Vector3(3.0f, transform.GetComponent<BoxCollider>().size.y + 1.0f);
+        mProjectile.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
+        mProjectile.GetComponent<SpriteRenderer>().flipX = unit.GetComponent<SpriteRenderer>().flipX;
+        Destroy(mProjectile.gameObject, unit.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + skill.mEffectTime);
+        if (unit.mSkillClips.Count > 0)
+            AudioManager.PlaySfx(unit.mSkillClips[UnityEngine.Random.Range(0, unit.mSkillClips.Count - 1)].Clip, 1.0f);
+        yield return new WaitForSeconds(unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + skill.mEffectTime);
+        unit.mTarget?.TakeDamage((unit.mStatus.mMagicPower + unit.mBonusStatus.mMagicPower), DamageType.Magical);
+        foreach (var nerf in skill.mNerfList)
+            unit.mTarget?.SetNerf(nerf.Initialize(unit, unit.mTarget));
+        isCompleted = true;
+    }
 
     protected override IEnumerator Action()
     {
         float h = -0.60f;
+        var unit = GetComponent<Unit>();
         yield return new WaitForSeconds(0.3f);
         for (int i = 0; i < mCombo; ++i)
         {
-            GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunchFire"), new Vector3(GetComponent<Unit>().transform.position.x, GetComponent<Unit>().transform.position.y + 0.4f + Random.Range(-0.3f,0.1f), GetComponent<Unit>().transform.position.z + 1.0f), Quaternion.identity);
+            GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunchFire"), unit.transform.position + new Vector3(0.0f, 0.4f + Random.Range(-0.3f, 0.1f), 1.0f), Quaternion.identity);
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunch"), new Vector3(mPos.x, mPos.y + h, mPos.z + Random.Range(-h, h)), Quaternion.identity);
 
-            GetComponent<Unit>().mTarget?.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage) / mCombo, DamageType.Physical);
+            unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage) / mCombo, DamageType.Physical);
             Destroy(go, 0.5f);
             Destroy(gofire, 0.3f);
-            
+
             transform.position += new Vector3(0.0f, 0.0f, Random.Range(-0.1f, 0.1f));
-            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorJimmy"), new Vector3(GetComponent<Unit>().transform.position.x, GetComponent<Unit>().transform.position.y, GetComponent<Unit>().transform.position.z), Quaternion.identity);
+            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorJimmy"), unit.transform.position, Quaternion.identity);
             mirror.GetComponent<Animator>().speed = Random.Range(0.7f, 1.05f);
             Destroy(mirror, 0.25f);
             yield return new WaitForSeconds(mTime / mCombo);
-            if (GetComponent<Unit>().mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, GetComponent<Unit>().mAttackClips.Count-1)].Clip);
-
+            if (unit.mAttackClips.Count > 0)
+                AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
+            if (unit.mTarget.mConditions.isDied)
+                break;
             h += 0.3f;
         }
+        isCompleted = true;
     }
 
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
-        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+        if (GetComponent<Unit>().mActionTrigger != null)
+            GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+        if (GetComponent<Skill_DataBase>().mSkill.mActionTrigger != null)
+            GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartSkillActionTrigger;
     }
 }

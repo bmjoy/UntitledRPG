@@ -88,6 +88,7 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitUntil(()=> PlayerController.Instance.onBattle == true 
         && GameManager.Instance.mEnemyProwler.onBattle == true);
+       
         mUnits.Clear();
         mOrders.Clear();
         mEnemies.Clear();
@@ -109,6 +110,9 @@ public class BattleManager : MonoBehaviour
         UIManager.Instance.DisplayHealthBar(true);
         onEnqueuingOrderEvent?.Invoke();
         status = GameStatus.Start;
+        yield return new WaitForSeconds(2.0f);
+        CameraSwitcher.CollideCheck();
+        CameraSwitcher.isInitialized = true;
     }
 
     float mTime = 0.0f;
@@ -181,6 +185,7 @@ public class BattleManager : MonoBehaviour
 
                     if (onReward == false && isWin)
                     {
+                        UIManager.Instance.DisplayHealthBar(false);
                         AudioManager.Instance.mAudioStorage.ChangeMusic("Victory");
                         AudioManager.Instance.musicSource.loop = false;
                         onFinishOrderEvent?.Invoke();

@@ -34,6 +34,7 @@ public class UIStorage : MonoBehaviour
     public GameObject mOrderbar;
     public GameObject mScreenTransition;
     public GameObject mVictoryScreenTransition;
+    public GameObject mMinimap;
 
     public TextMeshProUGUI mDialogueText;
     public void Initialize()
@@ -43,6 +44,7 @@ public class UIStorage : MonoBehaviour
         mExitButton = mDialogueBox.transform.Find("ExitButton").GetComponent<Button>();
         mDialogueText = mDialogueBox.transform.Find("DialogueText").GetComponent<TextMeshProUGUI>();
         EKeyImage = mDialogueBox.transform.Find("E_key").GetComponent<Image>();
+        mMinimap = UIManager.Instance.mCanvas.transform.Find("MinimapWindow").gameObject;
         mLeftButton.onClick.RemoveAllListeners();
         mRightButton.onClick.RemoveAllListeners();
         mOrderbar.GetComponent<OrderBar>().Initialize();
