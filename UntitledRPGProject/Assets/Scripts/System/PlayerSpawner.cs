@@ -11,9 +11,8 @@ public class PlayerSpawner : Spawner
         base.Start();
         GameManager.Instance.AssignCharacter(mName);
     }
-    public override void Spawn()
+    public override void Spawn(bool isDungeon = false)
     {
-
         if (mInitialized)
             return;
 

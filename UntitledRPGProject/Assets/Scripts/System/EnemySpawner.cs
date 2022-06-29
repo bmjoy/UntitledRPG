@@ -58,11 +58,17 @@ public class EnemySpawner : Spawner
         return newEnemyProwler;
     }
 
-    public override void Spawn()
+    public override void Spawn(bool isDungeon = false)
     {
         if (mInitialized)
             return;
         ID = GameManager.s_ID++;
+        if (isDungeon == false)
+        {
+            GameObject icon = Instantiate(Resources.Load<GameObject>((mEnemyList.Contains(EnemyUnit.Temple_Guardian) || mEnemyList.Contains(EnemyUnit.The_Bloody_King)) ? "Prefabs/UI/Icon/BossEnemyIcon" : "Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
+            if (icon != null)
+                icon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+        }
         StartCoroutine(Wait());
     }
 

@@ -26,14 +26,14 @@ public class Phantom : Projectile
         for (int i = 0; i < mCount; i++)
         {
             GameObject go = Instantiate(Resources.Load<GameObject>
-                ("Prefabs/Bullets/PhantomArrow"), transform.position + new Vector3(0.0f,0.0f,-1.0f), Quaternion.identity);
+                ("Prefabs/Bullets/PhantomArrow"), transform.position + new Vector3(UnityEngine.Random.Range(-3.0f, 3.0f), UnityEngine.Random.Range(-3.0f, 3.0f), UnityEngine.Random.Range(-3.0f, 1.0f)), Quaternion.identity);
             go.GetComponent<PhantomMini>().Initialize(mTarget, () => {
                 mTarget.TakeDamage(mDamage, DamageType.Magical); });
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (isCollide == false)
         {

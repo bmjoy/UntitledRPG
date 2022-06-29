@@ -27,8 +27,7 @@ public class LevelManager : MonoBehaviour
     public void RespawnEntities()
     {
         var obj = GameObject.FindObjectOfType<UnitSpawnManager>();
-        
-        obj.ResetSpawnAll();
+        obj.SpawnAll();
     }
 
     public IEnumerator GoNextLevel()
