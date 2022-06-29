@@ -6,38 +6,34 @@ using Random = UnityEngine.Random;
 
 public class PhantomMini : Phantom
 {
-    private float x = 0.0f;
-    private float y = 0.0f;
-    private float z = 0.0f;
-    bool go = false;
+    private Rigidbody mRigidbody;
+
     protected override void Start()
     {
         base.Start();
+        mRigidbody = GetComponent<Rigidbody>();
+        GameObject Effect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PhantomExp"), transform.position, Quaternion.identity);
+        Destroy(Effect, 1.0f);
     }
 
     public override void Initialize(Unit target, Action actionEvent)
     {
         mTarget = target;
         mActionEvent += actionEvent;
-        x = transform.position.x + UnityEngine.Random.Range(-7.0f, 7.0f);
-        y = transform.position.y + UnityEngine.Random.Range(0.5f, 2.0f);
-        z = transform.position.z + UnityEngine.Random.Range(-4.0f, 4.0f);
-
-        StartCoroutine(GO());
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (isCollide == false)
         {
             if (isEffect)
                 return;
-            if(!go)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(x,y,z), mSpeed * Time.deltaTime * 15.0f);
-            }
-            else
-                transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, mSpeed * Time.deltaTime);
+            Vector3 targetDir = (mTarget.transform.position - transform.position).normalized;
+            Vector3 cross = Vector3.Cross(targetDir, transform.forward);
+
+            mRigidbody.angularVelocity = cross * 200.0f;
+            mRigidbody.velocity = targetDir * mSpeed * Time.deltaTime * 25.0f;
+
             if (Vector3.Distance(transform.position, mTarget.transform.position) < mMaximumDistance && !isCollide)
             {
                 isCollide = true;
@@ -48,18 +44,8 @@ Quaternion.identity, mTarget.transform);
                 mActionEvent?.Invoke();
                 if (clip.Length > 0)
                     AudioManager.PlaySfx(clip[UnityEngine.Random.Range(0, clip.Length - 1)]);
-                Destroy(this.gameObject, 1.25f);
+                Destroy(this.gameObject, 1.0f);
             }
-            else
-                transform.position += new Vector3(0.0f, UnityEngine.Random.Range(-0.3f, 0.3f), 0.0f);
         }
-    }
-
-    IEnumerator GO()
-    {
-        yield return new WaitForSeconds(0.2f);
-        GameObject Effect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PhantomExp"), transform.position, Quaternion.identity);
-        Destroy(Effect, 1.0f);
-        go = true;
     }
 }

@@ -60,10 +60,36 @@ public class NPCSpawner : Spawner
 
         return mObject;
     }
-    public override void Spawn()
+    public override void Spawn(bool isDungeon = false)
     {
         if (mInitialized) return;
         ID = GameManager.s_ID++;
+
+        if (isDungeon == false)
+        {
+            GameObject icon = null;
+            switch (mType)
+            {
+                case NPCUnit.Eleven:
+                case NPCUnit.Roger:
+                case NPCUnit.Jimmy:
+                case NPCUnit.Victor:
+                case NPCUnit.Vin:
+                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/CompanionIcon"), transform.position, Quaternion.identity);
+                    break;
+                case NPCUnit.WeaponMerchant:
+                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
+                    break;
+                case NPCUnit.ArmorMerchant:
+                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
+                    break;
+                default:
+                    break;
+            }
+            if (icon != null)
+                icon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+        }
+
         StartCoroutine(Wait());
     }
     private IEnumerator Wait()

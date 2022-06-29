@@ -55,7 +55,9 @@ public class DungeonGenerator : MonoBehaviour
                 _Count++;
             }
         }
-        Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/UnitSpawnManager"), transform);
+        UnitSpawnManager unitSpawnManager = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/UnitSpawnManager"), transform).GetComponent<UnitSpawnManager>();
+        unitSpawnManager.isDungeon = true;
+        unitSpawnManager.SpawnAll();
     }
 
     private Room GetRoom(int row, int col, ref Room.RoomType type)

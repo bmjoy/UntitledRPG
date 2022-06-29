@@ -81,7 +81,8 @@ public class CameraSwitcher : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        if (_isCameraUsing)
+            return;
         if (isInitialized)
         {
             GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");

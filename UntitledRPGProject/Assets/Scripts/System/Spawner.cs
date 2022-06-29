@@ -16,7 +16,7 @@ public abstract class Spawner : MonoBehaviour
         transform.SetParent(manager.transform);
     }
 
-    public virtual void Spawn()
+    public virtual void Spawn(bool isDungeon = false)
     {
         if (mInitialized)
             return;

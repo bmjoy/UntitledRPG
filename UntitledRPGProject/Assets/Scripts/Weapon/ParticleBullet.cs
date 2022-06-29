@@ -7,7 +7,11 @@ public class ParticleBullet : Bullet
     [SerializeField]
     private GameObject mExplosion;
     private Vector3 mDirection;
-
+    private Rigidbody mRigidbody;
+    private void Start()
+    {
+        mRigidbody = GetComponent<Rigidbody>();
+    }
     public override void Initialize(Transform target, float power)
     {
         mTarget = target;
@@ -19,7 +23,13 @@ public class ParticleBullet : Bullet
     protected override void FixedUpdate()
     {
         if (mInitialize)
-            GetComponent<Rigidbody>().AddForce(mDirection * mSpeed);
+        {
+            Vector3 targetDir = (mTarget.transform.position - transform.position).normalized;
+            Vector3 cross = Vector3.Cross(targetDir, transform.forward);
+
+            mRigidbody.angularVelocity = -cross * 200.0f;
+            mRigidbody.velocity = mDirection * mSpeed * Time.deltaTime * 25.0f;
+        }
     }
 
     protected override void OnCollisionEnter(Collision collision)

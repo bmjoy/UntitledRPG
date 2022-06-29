@@ -55,7 +55,7 @@ public class Projectile : MonoBehaviour
         mActionEvent += actionEvent;
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         if(isCollide == false)
         {

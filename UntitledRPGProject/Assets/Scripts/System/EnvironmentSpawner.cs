@@ -18,10 +18,26 @@ public class EnvironmentSpawner : Spawner
         return mObject;
     }
 
-    public override void Spawn()
+    public override void Spawn(bool isDungeon = false)
     {
         if (mInitialized) return;
         ID = GameManager.s_ID++;
+
+        if(isDungeon == false)
+        {
+            GameObject icon = null;
+            switch (type)
+            {
+                case EnvironmentObject.Well:
+                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/RecoverIcon"), transform.position, Quaternion.identity);
+                    break;
+                default:
+                    break;
+            }
+            if(icon != null)
+                icon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+        }
+
         StartCoroutine(Wait());
     }
 
