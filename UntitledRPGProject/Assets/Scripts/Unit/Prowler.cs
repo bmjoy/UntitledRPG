@@ -84,6 +84,10 @@ public class Prowler : MonoBehaviour
     protected virtual void Update()
     {
         CheckGround();
+
+        if (PlayerController.Instance == false)
+            return;
+
         if (LevelManager.Instance.isNext || GameManager.Instance.IsCinematicEvent || BattleManager.Instance.status != BattleManager.GameStatus.None
     || PlayerController.Instance.Interaction)
         {
@@ -99,7 +103,7 @@ public class Prowler : MonoBehaviour
     }
     protected void CheckGround()
     {
-        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, 2.0f, LayerMask.GetMask("Ground"));
+        isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, 3.0f, LayerMask.GetMask("Ground"));
         if (isGrounded && mVelocity.y < 0.0f)
             mVelocity.y = 0.0f;
         mVelocity.y += -9.8f * Time.deltaTime;

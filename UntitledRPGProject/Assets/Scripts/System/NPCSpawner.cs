@@ -56,6 +56,16 @@ public class NPCSpawner : Spawner
             mObject.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
             mObject.tag = "Neutral";
             mObject.layer = 9;
+
+            switch (mType)
+            {
+                case NPCUnit.WeaponMerchant:
+                case NPCUnit.ArmorMerchant:
+                    mObject.GetComponent<RectTransform>().eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
+                    break;
+                default:
+                    break;
+            }
         }
 
         return mObject;

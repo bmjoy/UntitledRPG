@@ -83,21 +83,21 @@ public class CameraSwitcher : MonoBehaviour
     {
         if (_isCameraUsing)
             return;
-        if (isInitialized)
-        {
-            GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
-            distance = Vector3.Distance(camera.transform.position, BattleManager.Instance.mCurrentField.transform.position);
-            if (isCollided)
-            {
-                Instance.mBattleWorldCam.m_Lens.FieldOfView = (distance > 25.0f) ? Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 20.0f, Time.deltaTime * 3.0f) : Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 45.0f, Time.deltaTime * 3.0f);
-                Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, new Vector3(-90.0f, 25.0f, 0.0f), -Time.deltaTime * 3.0f);
-            }
-            else
-            {
-                Instance.mBattleWorldCam.m_Lens.FieldOfView = Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 10.0f, Time.deltaTime * 3.0f);
-                Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, new Vector3(90.0f, 25.0f, 0.0f), Time.deltaTime * 3.0f);
-            }
-        }
+        //if (isInitialized)
+        //{
+        //    GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+        //    distance = Vector3.Distance(camera.transform.position, BattleManager.Instance.mCurrentField.transform.position);
+        //    if (isCollided)
+        //    {
+        //        Instance.mBattleWorldCam.m_Lens.FieldOfView = (distance > 25.0f) ? Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 20.0f, Time.deltaTime * 3.0f) : Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 45.0f, Time.deltaTime * 3.0f);
+        //        Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, new Vector3(-90.0f, 25.0f, 0.0f), -Time.deltaTime * 3.0f);
+        //    }
+        //    else
+        //    {
+        //        Instance.mBattleWorldCam.m_Lens.FieldOfView = Mathf.Lerp(Instance.mBattleWorldCam.m_Lens.FieldOfView, 10.0f, Time.deltaTime * 3.0f);
+        //        Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = Vector3.Lerp(Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset, new Vector3(90.0f, 25.0f, 0.0f), Time.deltaTime * 3.0f);
+        //    }
+        //}
 
     }
 
@@ -105,18 +105,18 @@ public class CameraSwitcher : MonoBehaviour
     {
         if (Instance.isGameWorld)
         {
-            isInitialized = false;
-            Instance.mBattleWorldCollider.m_AvoidObstacles = false;
+            //isInitialized = false;
+            //Instance.mBattleWorldCollider.m_AvoidObstacles = false;
             Instance.mAnimator.Play("BattleWorld");
         }
         else
         {
             Instance.mAnimator.Play("GameWorld");
-            Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(90.0f, 25.0f, 0.0f);
-            isInitialized = false;
-            isCollided = false;
-            Instance.mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
-            Instance.mBattleWorldCollider.m_AvoidObstacles = false;
+            //Instance.mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(90.0f, 25.0f, 0.0f);
+            //isInitialized = false;
+            //isCollided = false;
+            //Instance.mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
+            //Instance.mBattleWorldCollider.m_AvoidObstacles = false;
         }
         Instance.isGameWorld = !Instance.isGameWorld;
     }

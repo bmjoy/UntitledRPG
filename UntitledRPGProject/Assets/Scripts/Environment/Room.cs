@@ -24,7 +24,6 @@ public class Room : Environment
     }
     
     public GameObject[] mWalls;
-    public GameObject[] mArcs;
     public GameObject[] mConnectors;
     public NavMeshSurface meshSurface;
     private Vector3 pos;
@@ -36,10 +35,20 @@ public class Room : Environment
     private GameObject mRoomIcon = null;
     private GameObject mUnknown = null;
     private RoomDetector mDetector;
+    [SerializeField]
+    private GameObject mSpawnPoint;
+    [SerializeField]
+    private Color mGizmoColor = Color.black;
 
     private void Awake()
     {
         mDetector = transform.Find("Detector").GetComponent<RoomDetector>();
+        if(!mSpawnPoint)
+        {
+            mSpawnPoint = new GameObject("SpawnPoint");
+            mSpawnPoint.transform.position = transform.position + new Vector3(0.0f, 0.5f, 0.0f);
+        }    
+
         mUnknown = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/UnknownIcon"), transform.position, Quaternion.identity);
         mUnknown.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
         mDetector.Initialize(this);
@@ -98,7 +107,6 @@ public class Room : Environment
         }
         GenerateInterior();
         if(_info.GenerateTrapsRandom) GenerateTraps();
-
         meshSurface = GetComponent<NavMeshSurface>();
         meshSurface.BuildNavMesh();
     }
@@ -117,27 +125,27 @@ public class Room : Environment
                         spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<Spawner>();
                         spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Rock;
                         pos = transform.position + new Vector3(Random.Range(-GetComponent<Renderer>().bounds.size.x / 2.5f, GetComponent<Renderer>().bounds.size.x / 2.5f),
-            0.5f, Random.Range(-GetComponent<Renderer>().bounds.size.z / 2.5f, GetComponent<Renderer>().bounds.size.z / 2.5f));
+            mSpawnPoint.transform.position.y + 0.25f, Random.Range(-GetComponent<Renderer>().bounds.size.z / 2.5f, GetComponent<Renderer>().bounds.size.z / 2.5f));
                     }
                 }
                 break;
             case RoomType.Recover:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<EnvironmentSpawner>();
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), mSpawnPoint.transform.position + new Vector3(0.0f, 0.25f,0.0f), Quaternion.identity).GetComponent<EnvironmentSpawner>();
                 spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Well;
                 mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/RecoverIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.ArmorMerchant:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), pos, Quaternion.identity).GetComponent<NPCSpawner>();
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.ArmorMerchant;
                 mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.WeaponMerchant:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), pos, Quaternion.identity).GetComponent<NPCSpawner>();
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.WeaponMerchant;
                 mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.LowTierMonster:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), pos, Quaternion.identity).GetComponent<EnemySpawner>();
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<EnemySpawner>();
                 for (int i = 0; i < randomAmount; ++i)
                 {
                     if(_info._3TierUnit.Count == 0)
@@ -153,7 +161,7 @@ public class Room : Environment
                 spawner.name = "3-Tier Enemy";
                 break;
             case RoomType.MiddleTierMonster:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), pos, Quaternion.identity).GetComponent<EnemySpawner>();
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<EnemySpawner>();
                 for (int i = 0; i < randomAmount; ++i)
                 {
                     if(_info._2TierUnit.Count == 0)
@@ -169,7 +177,7 @@ public class Room : Environment
                 mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.HighTierMonster:
-                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), pos, Quaternion.identity).GetComponent<EnemySpawner>();
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<EnemySpawner>();
                 for (int i = 0; i < randomAmount; ++i)
                 {
                     if(_info._1TierUnit.Count == 0)
@@ -189,19 +197,19 @@ public class Room : Environment
                 NPCUnit unit = (NPCUnit)(randomAmount);
                 if (!GameManager.Instance.IsExist(unit.ToString()))
                 {
-                    spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), pos, Quaternion.identity).GetComponent<NPCSpawner>();
+                    spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
                     spawner.GetComponent<NPCSpawner>().mType = (NPCUnit)(randomAmount);
                     mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/CompanionIcon"), transform.position, Quaternion.identity);
                 }
                 else
                 {
-                    spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<EnvironmentSpawner>();
+                    spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<EnvironmentSpawner>();
                     spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Rock;
                 }
                 break;
             case RoomType.Secret:
                 {
-                    spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<EnvironmentSpawner>();
+                    spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<EnvironmentSpawner>();
                     spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Chest;
                     mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ScreatIcon"), transform.position, Quaternion.identity);
                 }
@@ -264,5 +272,13 @@ public class Room : Environment
     public void Display()
     {
         Destroy(mUnknown);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = mGizmoColor;
+        Gizmos.color = new Color(mGizmoColor.r, mGizmoColor.g, mGizmoColor.b, 1.0f);
+        if(mSpawnPoint)
+            Gizmos.DrawCube(mSpawnPoint.transform.position, new Vector3(1.0f, 1.0f, 1.0f));
     }
 }

@@ -1372,7 +1372,6 @@ MonoBehaviour:
   - {fileID: 5951384680960802100}
   - {fileID: 5225481099195332890}
   - {fileID: 6529491753396753326}
-  mArcs: []
   mConnectors:
   - {fileID: 5777501994648630276}
   - {fileID: 8100514895416094098}
@@ -1406,7 +1405,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 1.1666666
+  m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
 --- !u!64 &7623385097832680171
@@ -3079,7 +3078,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[0]
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
