@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3a3b30d1f70d34892ec47ed510dfd6, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  Column: 8
-  Row: 8
-  Offset: {x: 60, y: 60}
+  Column: 6
+  Row: 6
+  Offset: {x: 70, y: 70}
   SecretRoomAmount: 4
   MerchantAmount: 2
   CompanionAmount: 2
@@ -38,6 +38,6 @@ MonoBehaviour:
   - {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
   - {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
   - {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
-  PlayerRoom: {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
+  PlayerRoom: {fileID: 4368484331024628079, guid: b48d904a8dc114d4da1d3efbb0b4cd46, type: 3}
   MiniBossRoom: {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}
   BossRoom: {fileID: 8497998057232989250, guid: d1fa4dad4f814e548b55815ca93dbebf, type: 3}

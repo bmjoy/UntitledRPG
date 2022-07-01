@@ -111,8 +111,8 @@ public class BattleManager : MonoBehaviour
         onEnqueuingOrderEvent?.Invoke();
         status = GameStatus.Start;
         yield return new WaitForSeconds(2.0f);
-        CameraSwitcher.CollideCheck();
-        CameraSwitcher.isInitialized = true;
+        //CameraSwitcher.CollideCheck();
+        //CameraSwitcher.isInitialized = true;
     }
 
     float mTime = 0.0f;
