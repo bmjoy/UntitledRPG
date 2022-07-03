@@ -56,28 +56,28 @@ public class CameraSwitcher : MonoBehaviour
             mPostProcessing = GameObject.Find("PostProcessing").GetComponent<Volume>().profile;
         mPostProcessing.TryGet(out mBloom);
         mPostProcessing.TryGet(out mLiftGammaGain);
-        isInitialized = false;
-        isCollided = false;
-        mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
+        //isInitialized = false;
+        //isCollided = false;
+        //mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
     }
     private Animator mAnimator;
     private bool isGameWorld = true;
     public static bool isCollided = false;
-    public static bool isInitialized = false;
+    //public static bool isInitialized = false;
 
-    public static void CollideCheck()
-    {
-        if (Instance.mBattleWorldCollider.IsTargetObscured(Instance.mBattleWorldCam))
-        {
-            isCollided = true;
-        }
-        else
-        {
-            isCollided = false;
-        }
-        Instance.mBattleWorldCollider.m_AvoidObstacles = true;
-    }
-    float distance = 0.0f;
+    //public static void CollideCheck()
+    //{
+    //    if (Instance.mBattleWorldCollider.IsTargetObscured(Instance.mBattleWorldCam))
+    //    {
+    //        isCollided = true;
+    //    }
+    //    else
+    //    {
+    //        isCollided = false;
+    //    }
+    //    Instance.mBattleWorldCollider.m_AvoidObstacles = true;
+    //}
+    //float distance = 0.0f;
 
     private void FixedUpdate()
     {
@@ -234,8 +234,8 @@ public class CameraSwitcher : MonoBehaviour
 
     private void Reset()
     {
-        isInitialized = false;
-        isCollided = false;
+        //isInitialized = false;
+        //isCollided = false;
         mBattleWorldCam.m_Lens.FieldOfView = 10.0f;
         mBattleWorldCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(90.0f, 25.0f, 0.0f);
     }

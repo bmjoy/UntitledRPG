@@ -42,11 +42,11 @@ public class TargetAbility : DamagableAbility
                 {
                     Raycasting();
                     if(Input.GetMouseButtonDown(0) && mTarget)
-                    {
                         break;
-                    }
                     if (Input.GetMouseButtonDown(1))
                     {
+                        mTarget?.mField.TargetedMagicHostile(false);
+                        mTarget?.mField.TargetedFriendly(false);
                         mTarget = null;
                         isActive = false;
                         UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
@@ -86,6 +86,8 @@ public class TargetAbility : DamagableAbility
 
             if (isActive)
             {
+                mTarget.mField.TargetedMagicHostile(false);
+                mTarget.mField.TargetedFriendly(false);
                 UIManager.Instance.ChangeOrderBarText("<color=red>"+ mName + "!</color>");
                 mOwner.mTarget = mTarget;
                 mTarget?.mSelected.SetActive(false);
@@ -134,13 +136,13 @@ public class TargetAbility : DamagableAbility
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
-                }    
+                }
 
-
-                if(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                GameObject effect = Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect");
+                if (effect != null)
                 {
-                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
-    , mTarget.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+                    GameObject go = Instantiate(effect
+    , mTarget.transform.position + effect.transform.position,Quaternion.Euler(effect.transform.eulerAngles));
                     Destroy(go, 1.1f);
                 }
                 yield return new WaitForSeconds(0.5f);
@@ -228,32 +230,77 @@ public class TargetAbility : DamagableAbility
     });
 
     }
-
+    float maxDist = 0.0f;
     private void Raycasting()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+
         if (mProperty == SkillProperty.Friendly)
         {
-            if (Physics.Raycast(ray, out hit, 500, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
+            if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
                 : LayerMask.GetMask("Enemy")))
             {
-                mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
-                mTarget?.mSelected.SetActive(true);
+                if (maxDist < hit.distance)
+                {
+                    mTarget?.mField.TargetedFriendly(false);
+                    mTarget?.mSelected.SetActive(false);
+                    mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                    mTarget?.mSelected.SetActive(true);
+                    maxDist = hit.distance;
+                }
+
+                if (mTarget.gameObject != hit.collider.gameObject)
+                {
+                    mTarget?.mField.TargetedFriendly(false);
+                    mTarget?.mSelected.SetActive(false);
+                    mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                    mTarget?.mSelected.SetActive(true);
+                    maxDist = hit.distance;
+                }
+
+                mTarget?.mField.TargetedFriendly(true);
             }
             else
+            {
+                maxDist = 0.0f;
+                mTarget?.mField.TargetedFriendly(false);
                 mTarget?.mSelected.SetActive(false);
+                mTarget = null;
+            }
         }
         else
         {
-            if (Physics.Raycast(ray, out hit, 500, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Enemy")
+            if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Enemy")
                 : LayerMask.GetMask("Ally")))
             {
-                mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
-                mTarget?.mSelected.SetActive(true);
+                if (maxDist < hit.distance)
+                {
+                    mTarget?.mField.TargetedMagicHostile(false);
+                    mTarget?.mSelected.SetActive(false);
+                    mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                    mTarget?.mSelected.SetActive(true);
+                    maxDist = hit.distance;
+                }
+
+                if (mTarget && mTarget.gameObject != hit.collider.gameObject)
+                {
+                    mTarget?.mField.TargetedMagicHostile(false);
+                    mTarget?.mSelected.SetActive(false);
+                    mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                    mTarget?.mSelected.SetActive(true);
+                    maxDist = hit.distance;
+                }
+
+                mTarget?.mField.TargetedMagicHostile(true);
             }
             else
+            {
+                maxDist = 0.0f;
+                mTarget?.mField.TargetedMagicHostile(false);
                 mTarget?.mSelected.SetActive(false);
+                mTarget = null;
+            }
         }
 
     }

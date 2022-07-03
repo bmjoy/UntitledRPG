@@ -44,7 +44,6 @@ public class DroidAssassinActionTrigger : ActionTrigger
         {
             GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Droid_Assassin_Slash"), unit.mTarget.transform.position, Quaternion.identity);
             slash.transform.Rotate(new Vector3(Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f)));
-            slash.GetComponent<SpriteRenderer>().flipX = (Random.Range(0, 1) >= 1);
             Destroy(slash, 0.5f);
             if (unit.mAttackClips.Count > 0)
                 AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
@@ -55,7 +54,6 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override void StartActionTrigger()
     {
         var unit = GetComponent<Unit>();
-        Find(ref unit.mTarget);
         mPos = unit.mTarget.transform.position;
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
 
@@ -75,7 +73,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
         GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
     }
 
-    private void Find(ref Unit target)
+    public void Find(ref Unit target)
     {
         if (GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget)
         {
@@ -84,26 +82,24 @@ public class DroidAssassinActionTrigger : ActionTrigger
         }
 
         var unit = GetComponent<Unit>();
-        List<GameObject> list = new List<GameObject>((unit.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
-            : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList());
-        if (list.Count == 0) return;
+        IEnumerable<GameObject> list = (unit.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes
+            : BattleManager.Instance.mEnemies;
         if (unit.mAiBuild.stateMachine.mPreferredTarget)
             unit.mTarget = unit.mAiBuild.stateMachine.mPreferredTarget;
         else
         {
-            int index = 0;
             float maxHealth = 0.0f;
             float currentHealth = 0.0f;
-            for (int i = 0; i < list.Count; ++i)
+
+            foreach(GameObject u in list)
             {
-                currentHealth = list[i].GetComponent<Unit>().mStatus.mHealth;
+                currentHealth = u.GetComponent<Unit>().mStatus.mHealth;
                 if (currentHealth > maxHealth)
                 {
                     maxHealth = currentHealth;
-                    index = i;
+                    unit.mTarget = u.GetComponent<Unit>();
                 }
             }
-            unit.mTarget = list[index].GetComponent<Unit>();
         }
     }
 }

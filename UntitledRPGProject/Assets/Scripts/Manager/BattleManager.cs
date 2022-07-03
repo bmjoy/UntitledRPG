@@ -146,7 +146,8 @@ public class BattleManager : MonoBehaviour
                     {
                         mCurrentUnit.mAiBuild.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
-                        if(mCurrentUnit.mAiBuild.type == AIType.Manual)
+                        mCurrentUnit.mField.GetComponent<Field>().Picked(true);
+                        if (mCurrentUnit.mAiBuild.type == AIType.Manual)
                         {
                             UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                             var data = mCurrentUnit.GetComponent<Skill_DataBase>();
@@ -389,6 +390,9 @@ public class BattleManager : MonoBehaviour
         status = GameStatus.WaitForOrder;
         UIManager.Instance.DisplayBattleInterface(true);
         mCurrentUnit.StopAllCoroutines();
+        mCurrentUnit.mTarget?.mField.TargetedHostile(false);
+        mCurrentUnit.mTarget?.mField.TargetedFriendly(false);
+        mCurrentUnit.mTarget?.mSelected.SetActive(false);
         mCurrentUnit.mTarget = null;
         mCurrentUnit.mField.GetComponent<Field>().Picked(true);
     }
