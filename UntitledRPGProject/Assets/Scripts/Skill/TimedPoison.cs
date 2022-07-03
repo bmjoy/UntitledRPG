@@ -9,13 +9,14 @@ public class TimedPoison : TimedNerf
 
     public TimedPoison(Poison nerf, Unit owner, Unit target) : base(nerf, owner, target)
     {
-        if (Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
+        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name);
+        if (obj == null)
             return;
         poison = (Poison)Nerf;
         poison.IsTurnFinished = false;
         if (target.transform.Find(Nerf.name + "(Clone)") == null)
         {
-            GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.identity);
+            GameObject go = Object.Instantiate(obj, new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.Euler(obj.transform.eulerAngles));
             go.transform.parent = target.transform;
             effectObject = go;
         }

@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 08ff6711a4c4f76479d68f8fc3b72290, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 9373527354537fa43bfe9af1c2e33fd3, type: 2}
 --- !u!1001 &11306321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2225,7 +2225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[0]
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[1]
@@ -2979,7 +2979,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[0]
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[1]

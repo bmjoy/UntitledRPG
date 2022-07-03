@@ -304,7 +304,6 @@ public class Unit : MonoBehaviour, IUnit
     virtual public IEnumerator AttackAction(DamageType type, Action onComplete)
     {
         mConditions.isCancel = false;
-        
         if (mAiBuild.type == AIType.Manual)
         {
             UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForTarget);
@@ -314,31 +313,44 @@ public class Unit : MonoBehaviour, IUnit
                     enemy.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(true);
             }
             float maxDist = 0.0f;
-            bool selected = false;
             while (true)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 500, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
+                if (Physics.Raycast(ray, out hit, 100, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
                 {
-                    if(maxDist < hit.distance && !selected)
+                    if(maxDist < hit.distance)
                     {
+                        mTarget?.mField.TargetedHostile(false);
+                        mTarget?.mSelected.SetActive(false);
                         mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
                         mTarget?.mSelected.SetActive(true);
-                        selected = true;
+                        maxDist = hit.distance;
                     }
 
-                    if (mTarget && Input.GetMouseButtonDown(0))
-                        break;
+                    if(mTarget && mTarget.gameObject != hit.collider.gameObject)
+                    {
+                        mTarget?.mField.TargetedHostile(false);
+                        mTarget?.mSelected.SetActive(false);
+                        mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+                        mTarget?.mSelected.SetActive(true);
+                        maxDist = hit.distance;
+                    }
+
+                    mTarget?.mField.TargetedHostile(true);
+
+                    if (mTarget && Input.GetMouseButtonDown(0)) break;
                 }
                 else
                 {
                     maxDist = 0.0f;
-                    selected = false;
+                    mTarget?.mField.TargetedHostile(false);
                     mTarget?.mSelected.SetActive(false);
+                    mTarget = null;
                 }
                 if (Input.GetMouseButtonDown(1))
                 {
+                    maxDist = 0.0f;
                     BattleManager.Instance.Cancel();
                     UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                     break;
@@ -353,6 +365,7 @@ public class Unit : MonoBehaviour, IUnit
 
         if (mConditions.isCancel == false && mTarget)
         {
+            mTarget.mField.TargetedHostile(false);
             UIManager.Instance.ChangeOrderBarText("Battle Start!");
             mTarget.mSelected.SetActive(false);
             mSpriteRenderer.sortingOrder = (transform.position.z < mTarget?.transform.position.z) ? 3 : 4;
@@ -596,6 +609,8 @@ public class Unit : MonoBehaviour, IUnit
             mTarget.mSelected.SetActive(false);
             mSpriteRenderer.sortingOrder = mTarget.mSpriteRenderer.sortingOrder = 4;
         }
+        mField.GetComponent<Field>().Picked(false);
+
         mTarget = null;
         mOrder = Order.TurnEnd;
     }

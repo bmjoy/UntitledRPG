@@ -108,6 +108,13 @@ public class Standby : State
 
     private bool Find(Unit agent)
     {
+        if(agent.GetComponent<ActionTrigger>() != null &&
+            agent.GetComponent<ActionTrigger>().GetType() == typeof(DroidAssassinActionTrigger))
+        {
+            agent.GetComponent<DroidAssassinActionTrigger>().Find(ref agent.mTarget);
+            return true;
+        }
+
         List<GameObject> list = new List<GameObject>((agent.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
             : GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()); 
         if (list.Count == 0) return false;

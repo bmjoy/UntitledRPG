@@ -15,7 +15,7 @@ public class VinActionTrigger : ActionTrigger
     private float mCriticalChance = 0.6f;
     [SerializeField]
     private AudioClip clip;
-
+    private int maxCount = 0;
     void Start()
     {
         GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartActionTrigger;
@@ -27,6 +27,12 @@ public class VinActionTrigger : ActionTrigger
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
         _isShadow = true;
         isCompleted = false;
+        for (int y = 0; y < 4; ++y)
+        {
+            Transform t = BattleManager.enemyFieldParent.GetChild(y);
+            if (t.GetComponent<Field>().IsExist == true)
+                maxCount++;
+        }
         StartCoroutine(Action());
     }
 
@@ -47,38 +53,25 @@ public class VinActionTrigger : ActionTrigger
     }
     protected override IEnumerator Action()
     {
-        GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);
-        GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);        
-        GameObject mirror3 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);
-        GameObject mirror4 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"),transform.position,Quaternion.identity);        
+        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/MirrorVin");
+        GameObject mirror = new GameObject("Mirror");
+        GameObject mirror2 = new GameObject("Mirror");
+        GameObject mirror3 = new GameObject("Mirror");
+        GameObject mirror4 = new GameObject("Mirror");
 
-        mirror.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-        mirror2.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-        mirror3.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-        mirror4.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-        mirror.GetComponent<Animator>().SetTrigger("Skill");
-        mirror2.GetComponent<Animator>().SetTrigger("Skill");
-        mirror3.GetComponent<Animator>().SetTrigger("Skill");
-        mirror4.GetComponent<Animator>().SetTrigger("Skill");
+        mirror.AddComponent<Mirror>().Initialize(GetComponent<Unit>(), transform.position);
+        mirror2.AddComponent<Mirror>().Initialize(GetComponent<Unit>(), transform.position);
+        mirror3.AddComponent<Mirror>().Initialize(GetComponent<Unit>(), transform.position);
+        mirror4.AddComponent<Mirror>().Initialize(GetComponent<Unit>(), transform.position);
 
+        mirror.GetComponent<Mirror>().SetTrigger("Skill");
+        mirror2.GetComponent<Mirror>().SetTrigger("Skill");
+        mirror3.GetComponent<Mirror>().SetTrigger("Skill");
+        mirror4.GetComponent<Mirror>().SetTrigger("Skill");
 
         transform.GetComponent<Rigidbody>().isKinematic = false;
-        mirror.GetComponent<Rigidbody>().isKinematic = false;
-        mirror2.GetComponent<Rigidbody>().isKinematic = false;
-        mirror3.GetComponent<Rigidbody>().isKinematic = false;
-        mirror4.GetComponent<Rigidbody>().isKinematic = false;
-
         transform.GetComponent<Rigidbody>().useGravity = false;
-        mirror.GetComponent<Rigidbody>().useGravity = false;
-        mirror2.GetComponent<Rigidbody>().useGravity = false;
-        mirror3.GetComponent<Rigidbody>().useGravity = false;
-        mirror4.GetComponent<Rigidbody>().useGravity = false;
-
         transform.GetComponent<Rigidbody>().AddForce(Vector3.forward * 8.0f,ForceMode.Impulse);
-        mirror.GetComponent<Rigidbody>().AddForce(Vector3.forward * 6.0f, ForceMode.Impulse);
-        mirror2.GetComponent<Rigidbody>().AddForce(Vector3.forward * 4.0f, ForceMode.Impulse);
-        mirror3.GetComponent<Rigidbody>().AddForce(Vector3.forward * 2.0f, ForceMode.Impulse);
-        mirror4.GetComponent<Rigidbody>().AddForce(Vector3.forward * 1.5f, ForceMode.Impulse);
 
         yield return new WaitForSeconds(mTime / 6.0f);
 
@@ -88,30 +81,25 @@ public class VinActionTrigger : ActionTrigger
         mirror4.GetComponent<Animator>().speed = 1.35f;
 
         transform.GetComponent<Rigidbody>().isKinematic = true;
-        mirror.GetComponent<Rigidbody>().isKinematic = true;
-        mirror2.GetComponent<Rigidbody>().isKinematic = true;
-        mirror3.GetComponent<Rigidbody>().isKinematic = true;
-        mirror4.GetComponent<Rigidbody>().isKinematic = true;
-
         transform.GetComponent<Rigidbody>().useGravity = true;
-        mirror.GetComponent<Rigidbody>().useGravity = true;
-        mirror2.GetComponent<Rigidbody>().useGravity = true;
-        mirror3.GetComponent<Rigidbody>().useGravity = true;
-        mirror4.GetComponent<Rigidbody>().useGravity = true;
         float i = 0.0f;
-
-        foreach (Transform t in BattleManager.enemyFieldParent)
+        int index = 0;
+        
+        for (int z = 0; z < 4; ++z)
         {
-            transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
-            mirror.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
-            mirror2.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
-            mirror3.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
-            mirror4.transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
-
-            GameObject mirrors = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"), transform.position, Quaternion.identity);
+            Transform t = BattleManager.enemyFieldParent.GetChild(z);
+            if (t.GetComponent<Field>().IsExist == false)
+            {
+                if (index == maxCount)
+                    index = 0;
+                transform.position = BattleManager.enemyFieldParent.GetChild(index).position - new Vector3(0.0f, 0.0f, 3.0f);
+            }
+            else
+                transform.position = t.position - new Vector3(0.0f, 0.0f, 3.0f);
+            GameObject mirrors = Instantiate(obj, transform.position, Quaternion.identity);
             mirrors.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
             mirrors.GetComponent<Animator>().SetTrigger("Skill");
-            GameObject mirrors2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorVin"), transform.position, Quaternion.identity);
+            GameObject mirrors2 = Instantiate(obj, transform.position, Quaternion.identity);
             mirrors2.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
             mirrors2.GetComponent<Animator>().SetTrigger("Skill");
             mirrors.GetComponent<Animator>().speed = 1.25f + i;
@@ -121,15 +109,18 @@ public class VinActionTrigger : ActionTrigger
             StartCoroutine(Slash());
             yield return new WaitForSeconds(mTime / 6.0f);
             i++;
+            index++;
         }
+
         transform.position = mPos;
         GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.None;
+
         Destroy(mirror);
         Destroy(mirror2);
         Destroy(mirror3);
         Destroy(mirror4);
-        IEnumerable<GameObject> group = group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
-: BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+
+        IEnumerable<GameObject> group = (GetComponent<Unit>().mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies;
         yield return new WaitForSeconds(0.5f);
         foreach (GameObject unit in group)
         {
@@ -140,6 +131,7 @@ public class VinActionTrigger : ActionTrigger
             else
                 u.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage), DamageType.Physical);
         }
+        yield return new WaitForSeconds(0.5f);
         _isShadow = false;
         isCompleted = true;
     }

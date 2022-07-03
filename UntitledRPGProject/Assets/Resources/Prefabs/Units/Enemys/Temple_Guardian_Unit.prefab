@@ -49,7 +49,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.5, y: 4, z: 1}
+  m_Size: {x: 3.5, y: 4, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8503835047027739708
 Rigidbody:
@@ -178,12 +178,14 @@ MonoBehaviour:
   mAttackTime: 0.1
   mDefendTime: 1
   mAttackDistance: 4
-  mRunningSpeed: 9
   mMagicDistance: 0
+  mCurrentSpeed: 1
+  dodgePos: {x: 0, y: 0, z: 0}
   mRunClips: []
   mAttackClips: []
   mSkillClips: []
   mDeathClips: []
+  mirror: {fileID: 0}
   _magicWhenHalfHealth: 0
   mMyHealthBar: {fileID: 0}
   mHealthTriggerPercentage:
@@ -202,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mTime: 0
+  isCompleted: 0
   _isUltimate: 0
   mAttackTriggerPercentage: 50
   mShakeTime: 1

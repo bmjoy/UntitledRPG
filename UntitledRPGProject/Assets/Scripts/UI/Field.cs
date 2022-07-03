@@ -5,7 +5,13 @@ using UnityEngine.AI;
 
 public class Field : MonoBehaviour
 {
+    [HideInInspector]
     public bool IsExist = false;
+
+    private GameObject mTargetFriendly;
+    private GameObject mTargetHostile;
+    private GameObject mTargetMagicHostile;
+
     private void Start()
     {
         if(transform.GetComponent<ParticleSystem>())
@@ -33,6 +39,29 @@ public class Field : MonoBehaviour
             transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
         }
         transform.position += new Vector3(Random.Range(-0.5f,0.5f), 1.5f, Random.Range(-0.5f, 0.5f));
+        if(mTargetFriendly == null)
+        {
+            mTargetFriendly = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/FriendlyField"), transform.position, Quaternion.identity, transform);
+        }
+        mTargetFriendly.transform.position = transform.position - new Vector3(0.0f,1.2f,0.0f);
+        mTargetFriendly.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+        mTargetFriendly.SetActive(false);
+
+        if(mTargetHostile == null)
+        {
+            mTargetHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileField"), transform.position, Quaternion.identity, transform);
+        }
+        mTargetHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
+        mTargetHostile.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+        mTargetHostile.SetActive(false);      
+        
+        if(mTargetMagicHostile == null)
+        {
+            mTargetMagicHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileMagicTarget"), transform.position, Quaternion.identity, transform);
+        }
+        mTargetMagicHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
+        mTargetMagicHostile.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+        mTargetMagicHostile.SetActive(false);
     }
 
     public void Picked(bool active)
@@ -41,6 +70,21 @@ public class Field : MonoBehaviour
             transform.GetComponent<ParticleSystem>()?.Play();
         else
             transform.GetComponent<ParticleSystem>()?.Stop();
+    }
+
+    public void TargetedFriendly(bool active)
+    {
+        mTargetFriendly.SetActive(active);
+    }
+
+    public void TargetedHostile(bool active)
+    {
+        mTargetHostile.SetActive(active);
+    }    
+    
+    public void TargetedMagicHostile(bool active)
+    {
+        mTargetMagicHostile.SetActive(active);
     }
 
     public void Stop()

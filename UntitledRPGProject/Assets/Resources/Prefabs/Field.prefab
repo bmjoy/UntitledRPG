@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 5478839521114521787}
   - component: {fileID: 40383373870281296}
   - component: {fileID: 6219460682155937458}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PlayerField (3)
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -4893,7 +4893,7 @@ GameObject:
   - component: {fileID: 132535201172270072}
   - component: {fileID: 3182285487591556466}
   - component: {fileID: 8847702220979693321}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: EnemyField (1)
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -9725,7 +9725,7 @@ GameObject:
   - component: {fileID: 6370531616692230062}
   - component: {fileID: 633365735899952805}
   - component: {fileID: 6008813109126293349}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: EnemyField (3)
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -14589,7 +14589,7 @@ GameObject:
   - component: {fileID: 7125081581750453958}
   - component: {fileID: 6064770361717145285}
   - component: {fileID: 1161334163674590446}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PlayerField (1)
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -19469,7 +19469,7 @@ GameObject:
   - component: {fileID: 7658340955642975837}
   - component: {fileID: 7231354681805380137}
   - component: {fileID: 6931267296107731606}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: EnemyField (2)
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -24301,7 +24301,7 @@ GameObject:
   - component: {fileID: 2727193292100096347}
   - component: {fileID: 7790741714331910556}
   - component: {fileID: 4189963833254978498}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: EnemyField
   m_TagString: EnemyField
   m_Icon: {fileID: 0}
@@ -29133,7 +29133,7 @@ GameObject:
   - component: {fileID: 1783263999926128420}
   - component: {fileID: 1894225874761032483}
   - component: {fileID: 7329685599465987423}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PlayerField
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
@@ -33965,7 +33965,7 @@ GameObject:
   - component: {fileID: 432752615815546886}
   - component: {fileID: 1353314481330320722}
   - component: {fileID: 8428206656415278888}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PlayerField (2)
   m_TagString: PlayerField
   m_Icon: {fileID: 0}
