@@ -108,10 +108,9 @@ public class SummonAbility : Skill_Setting
                 {
                     GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
     , mSelectedField.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-                    Destroy(go, go.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+                    Destroy(go, mEffectTime);
                 }
-                yield return new WaitForSeconds(mEffectTime);
-                mOwner.mStatus.mMana -= mManaCost;
+
 
                 if (mSelectedField)
                 {
@@ -126,7 +125,8 @@ public class SummonAbility : Skill_Setting
                     BattleManager.Instance.mUnits.Add(unit);
                     UIManager.Instance.mOrderBar.EnqueueSignleOrder(unit.GetComponent<Unit>());
                 }
-
+                yield return new WaitForSeconds(mEffectTime);
+                mOwner.mStatus.mMana -= mManaCost;
             }
             else
                 BattleManager.Instance.Cancel();

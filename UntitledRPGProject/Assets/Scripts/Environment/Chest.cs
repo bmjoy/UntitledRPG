@@ -6,7 +6,15 @@ using UnityEngine;
 public class Chest : InteractableEnvironment, ILockable
 {
     [SerializeField]
-    private List<ItemDrop> mItems = new List<ItemDrop>();
+    private float mItemDropRate = 30.0f;
+
+    [SerializeField]
+    [Range(10, 1000)]
+    private int mMaximumGold = 200;
+
+    private int mMoney = 0;
+
+    private List<GameObject> mItems;
     [SerializeField]
     protected List<Dialogue> m_DialogueYesCase = new List<Dialogue>();
     [SerializeField]
@@ -21,6 +29,21 @@ public class Chest : InteractableEnvironment, ILockable
     {
         base.Initialize(id);
         Canvas_Initialize();
+        if ((UnityEngine.Random.Range(0.0f, 100.0f) <= mItemDropRate))
+        {
+            int count = UnityEngine.Random.Range(1, 3);
+            mItems = new List<GameObject>();
+
+            List<GameObject> allItems = new List<GameObject>();
+            allItems.AddRange(GameManager.Instance.mWeaponPool);
+            allItems.AddRange(GameManager.Instance.mArmorPool);
+            Debug.Log(allItems.Count);
+            for (int i = 0; i < count; ++i)
+                mItems.Add(Instantiate(allItems[UnityEngine.Random.Range(0, allItems.Count)], transform));
+        }
+        else
+            mMoney = UnityEngine.Random.Range(100, mMaximumGold);
+        mInteraction.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.0f);
         isLock = (UnityEngine.Random.Range(0,100) <= 40) ? true : false;
     }
 
@@ -53,7 +76,27 @@ public class Chest : InteractableEnvironment, ILockable
                 case Dialogue.TriggerType.Success:
                     {
                         EnableIcon();
-                        // Give the item
+
+                        if(mItems == null)
+                        {
+                            PlayerController.Instance.mGold += mMoney;
+                            Debug.Log("Here");
+                        }
+                        else
+                        {
+                            for (int i = 0; i < mItems.Count; ++i)
+                            {
+                                GameObject item = Instantiate(mItems[i], PlayerController.Instance.transform.Find("Bag"));
+                                item.GetComponent<Item>().isSold = true;
+                                PlayerController.Instance.mInventory.Add(item.GetComponent<Item>());
+                            }
+                            for (int i = 0; i < mItems.Count; ++i)
+                            {
+                                Destroy(mItems[i]);
+                            }
+                            mItems.Clear();
+                        }
+
                         mAnimator.SetBool("IsOpen", true);
                         AudioManager.PlaySfx(mSFX);
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
@@ -76,7 +119,7 @@ public class Chest : InteractableEnvironment, ILockable
         UIManager.Instance.DisplayDialogueBox(false);
         UIManager.Instance.DisplayEKeyInDialogue(false);
         action?.Invoke();
-        if (mItems.Count == 0 && _Completed)
+        if (_Completed)
         {
             mAnimator.SetBool("IsOpen", false);
         }

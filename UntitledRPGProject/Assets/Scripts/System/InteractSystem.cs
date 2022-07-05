@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class InteractSystem : MonoBehaviour
 {
-    [SerializeField]
-    private float mRadius = 10.0f;
+    public float mRadius = 10.0f;
     [SerializeField]
     private float mCoolTime = 0.5f;
     private float mCurrentCoolTime = 0.0f;

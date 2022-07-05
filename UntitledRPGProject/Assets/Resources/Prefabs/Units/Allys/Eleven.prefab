@@ -125,6 +125,7 @@ MonoBehaviour:
   mAttackClips: []
   mSkillClips: []
   mDeathClips: []
+  mirror: {fileID: 0}
   mMyHealthBar: {fileID: 0}
   mWeaponType: 2
 --- !u!114 &4272213185635900015

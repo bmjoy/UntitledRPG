@@ -26,7 +26,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
     [SerializeField]
     protected List<Dialogue> m_DialogueFailToTradeCase = new List<Dialogue>();
     protected Item mProperty;
-    private GameObject mCanvas;
+    protected GameObject mCanvas;
     public GameObject mInteraction;
 
     protected virtual void Start()
@@ -39,6 +39,12 @@ public class NPC : MonoBehaviour, IInteractiveObject
             mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         mInteraction = mCanvas.transform.Find("Interaction").gameObject;
         mInteraction.SetActive(false);
+    }
+
+    protected virtual void Update()
+    {
+        if(mInteraction && mInteraction.activeSelf && Vector3.Distance(transform.position, PlayerController.Instance.transform.position) > PlayerController.Instance.GetComponent<InteractSystem>().mRadius)
+            mInteraction.SetActive(false);
     }
 
     public virtual IEnumerator Interact(Action Callback)

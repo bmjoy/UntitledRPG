@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class LevelManager : MonoBehaviour
 {
@@ -40,6 +41,16 @@ public class LevelManager : MonoBehaviour
         RespawnEntities();
     }
 
+    public void InitializeUICamera()
+    {
+        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera").gameObject;
+        if (camera == null) return;
+
+        var cameraData = camera.GetComponent<Camera>().GetUniversalAdditionalCameraData();
+        cameraData.cameraStack.Clear();
+        cameraData.cameraStack.Add(UIManager.Instance.mUICamera);
+    }
+
     public IEnumerator GoBackLevel()
     {
         mCurrentLevel--;
@@ -47,6 +58,7 @@ public class LevelManager : MonoBehaviour
         SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
         SceneLoader.Instance.StartGame();
         yield return new WaitForSeconds(2.5f);
+        RespawnEntities();
     }
 
     public void RestartGame()

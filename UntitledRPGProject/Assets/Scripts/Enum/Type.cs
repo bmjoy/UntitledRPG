@@ -136,6 +136,11 @@ public class CinematicEventMethod
 [Serializable]
 public class Dialogue
 {
+    public Dialogue(string text, TriggerType trigger)
+    {
+        Text = text;
+        Trigger = trigger;
+    }
     public enum TriggerType
     {
         None,

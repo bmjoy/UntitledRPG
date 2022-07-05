@@ -13,7 +13,7 @@ public class EquipmentItem : Item
         var obj = (EquipmentInfo)Info;
         IsEquipped = false;
         Bonus.Clear();
-        foreach(BonusAbility bonus in obj.mBonusAbilities)
+        foreach (BonusAbility bonus in obj.mBonusAbilities)
             Bonus.Add(bonus);
     }
 

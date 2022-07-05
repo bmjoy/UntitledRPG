@@ -36,21 +36,39 @@ public class Mirror : MonoBehaviour
 
     public void SetBool(string name, bool active)
     {
+        if (mAnimator.HasState(0, Animator.StringToHash(name)) == false)
+            return;
         mAnimator.SetBool(name, active);
         other?.SetBool(name, active);
     }   
     public void SetFloat(string name, float value)
     {
+        if(mAnimator.HasState(0, Animator.StringToHash(name)) == false)
+            return;
         mAnimator.SetFloat(name, value);
         other?.SetFloat(name, value);
     }
+
+    public void SetSpeed(float speed)
+    {
+        if (mAnimator.HasState(0, Animator.StringToHash(name)) == false)
+            return;
+        mAnimator.speed = speed;
+        if(other)
+            other.mAnimator.speed = speed;
+    }
+
     public void SetTrigger(string name)
     {
+        if (mAnimator.HasState(0, Animator.StringToHash(name)) == false)
+            return;
         mAnimator.SetTrigger(name);
         other?.SetTrigger(name);
     }
     public void Play(string name)
     {
+        if (mAnimator.HasState(0, Animator.StringToHash(name)) == false)
+            return;
         mAnimator.Play(name);
         other?.Play(name);
     }

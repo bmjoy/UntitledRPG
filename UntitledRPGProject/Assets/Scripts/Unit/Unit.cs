@@ -81,10 +81,11 @@ public class Unit : MonoBehaviour, IUnit
     public List<SoundClip> mSkillClips = new List<SoundClip>();    
     [HideInInspector]
     public List<SoundClip> mDeathClips = new List<SoundClip>();
-
+    public List<string> MyAttackAnim = new List<string>();
     public Mirror mirror;
     protected virtual void Start()
     {
+
     }
 
     public void Componenet_Initialize()
@@ -120,6 +121,14 @@ public class Unit : MonoBehaviour, IUnit
         mInventroySystem.Initialize();
         mSkillDataBase = GetComponent<Skill_DataBase>();
         GetComponent<BoxCollider>().enabled = true;
+
+        MyAttackAnim.Clear();
+        var animStates = mAnimator.runtimeAnimatorController.animationClips;
+        for (int i = 0; i < animStates.Length; i++)
+        {
+            if (animStates[i].name.Contains("Attack"))
+                MyAttackAnim.Add(animStates[i].name);
+        }
     }
 
     public void Prefab_Initialize()
@@ -154,7 +163,6 @@ public class Unit : MonoBehaviour, IUnit
         mLevelText = mCanvas.transform.Find("Borader").Find("Text").GetComponent<TextMeshProUGUI>();
         mLevelText.text = mStatus.mLevel.ToString();
         mLevelText.gameObject.SetActive(true);
-        mHealthBar.mCurrentHealth = mStatus.mHealth;
         mHealthBar.Active(false);
         mSelected.SetActive(false);
 
@@ -170,10 +178,9 @@ public class Unit : MonoBehaviour, IUnit
 
     public void AI_Initialize()
     {
+        mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
         if (isAIinitialized)
             return;
-        mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
-
         mAiBuild.property = (AIProperty)UnityEngine.Random.Range(0, 2);
         mAiBuild.type = AIType.None;
         mAiBuild.stateMachine = (mAiBuild.stateMachine == null) ? gameObject.AddComponent<StateMachine>()
@@ -193,9 +200,7 @@ public class Unit : MonoBehaviour, IUnit
         if (mConditions.isDied == false)
             mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
         if (CameraSwitcher.isCollided)
-        {
             GetComponent<SpriteRenderer>().flipX = (mFlag == Flag.Player) ? true : false;
-        }
         mHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
         mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
         mHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
@@ -273,7 +278,7 @@ public class Unit : MonoBehaviour, IUnit
         mVelocity.y += -9.8f * Time.deltaTime;
         mRigidbody.AddForce(mVelocity * Time.deltaTime);
         if (transform.position.y <= -50.0f)
-            transform.position = mField.transform.position + new Vector3(0.0f,5.0f,0.0f);
+            transform.position = mField.transform.position + new Vector3(0.0f,1.0f,0.0f);
     }
     virtual public KeyValuePair<bool, BonusStatus> LevelUP()
     {
@@ -386,9 +391,9 @@ public class Unit : MonoBehaviour, IUnit
                     }
                     else
                     {
-                        mAnimator.Play("Attack");
+                        mAnimator.Play(MyAttackAnim[Random.Range(0, MyAttackAnim.Count)]);
                         if (mAttackClips.Count > 0)
-                            AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+                            AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
                         yield return new WaitForSeconds(mAttackTime);
 
                         mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
@@ -407,7 +412,7 @@ public class Unit : MonoBehaviour, IUnit
                 mAnimator.Play("Attack");
                 mirror?.Play("Attack");
                 if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
                 if(go.GetComponent<SpriteRenderer>())
@@ -424,7 +429,7 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.SetActionEvent(ActionEvent.Busy);
                 mAnimator.Play("Attack");
                 if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count - 1)].Clip, 0.6f);
+                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
@@ -472,19 +477,17 @@ public class Unit : MonoBehaviour, IUnit
 
     public IEnumerator CounterState(float dmg)
     {
-        bool exist = (mTarget.GetComponent<Animator>().parameters.Where(s => s.name == "Melee").ToList().Count > 0);
-        if (exist) mTarget.GetComponent<Animator>().SetBool("Melee", false);
         if (mTarget.mBuffNerfController.SearchBuff("Counter"))
         {
             Counter counter = mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
             if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
             {
-                if (exist)
-                    mTarget.GetComponent<Animator>().SetBool("Melee", true);
                 yield return new WaitForSeconds(0.25f);
                 if (mTarget.mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mTarget.mAttackClips[Random.Range(0, mTarget.mAttackClips.Count - 1)].Clip, 0.6f);
+                    AudioManager.PlaySfx(mTarget.mAttackClips[Random.Range(0, mTarget.mAttackClips.Count)].Clip, 0.6f);
                 mTarget.mTarget = this;
+                if(mTarget.MyAttackAnim.Count > 0)
+                    mTarget.mAnimator.Play(mTarget.MyAttackAnim[Random.Range(0,mTarget.MyAttackAnim.Count)]);
                 mTarget.mTarget.TakeDamage(dmg, DamageType.Physical);
                 if (mStatus.mHealth <= 0.0f)
                 {

@@ -26,7 +26,6 @@ public class TimedCounter : TimedBuff
             mTarget.mStatus.mArmor = mTarget.mStatus.mArmor / ArmorUp.mMultiplier;
             Buff.IsTurnFinished = true;
             mReinforced = false;
-            Find(false);
         }
         GameObject.Destroy(effectObject);
     }
@@ -38,17 +37,6 @@ public class TimedCounter : TimedBuff
             var ArmorUp = (Counter)Buff;
             mReinforced = true;
             mTarget.mStatus.mArmor = mTarget.mStatus.mArmor * ArmorUp.mMultiplier;
-            Find(true);
         }
-    }
-
-    private void Find(bool active)
-    {
-        string name = string.Empty;
-        for (int i = 0; i < mOwner.GetComponent<Animator>().parameters.Length; i++)
-            if (mOwner.GetComponent<Animator>().parameters[i].name == "Counter")
-                name = "Counter";
-        if (name != string.Empty)
-            mOwner.GetComponent<Animator>().SetBool(name, active);
     }
 }

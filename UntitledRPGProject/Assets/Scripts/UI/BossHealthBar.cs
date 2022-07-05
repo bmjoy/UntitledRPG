@@ -19,13 +19,12 @@ public class BossHealthBar : HealthBar
         Active(false);
     }
 
-    public void Initialize(float currHP, float maxHP)
+    public override void Initialize(float currHP, float maxHP, float currMP, float maxMP)
     {
         mCurrentHealth = currHP;
         mMaxHealth = maxHP;
         mHPText.text = mCurrentHealth.ToString();
         mBar.fillAmount = mCurrentHealth / mMaxHealth;
-
         isInitialized = true;
         Active(true);
     }
@@ -51,6 +50,7 @@ public class BossHealthBar : HealthBar
         base.Active(active);
         mDamagedHealthBar?.gameObject.SetActive(active);
         mHPText?.gameObject.SetActive(active);
+        gameObject.SetActive(active);
     }
 
     public override IEnumerator PlayBleed()

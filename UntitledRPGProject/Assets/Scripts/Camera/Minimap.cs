@@ -13,7 +13,7 @@ public class Minimap : MonoBehaviour
             transform.position = newPos;
 
             transform.rotation = Quaternion.Euler(90.0f, PlayerController.Instance.transform.position.y
-                , 0.0f);
+                , 90.0f);
         }
     }
 }

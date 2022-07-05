@@ -223,7 +223,7 @@ public class Room : Environment
         }
         if(mMainIcon != null)
         {
-            mMainIcon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+            mMainIcon.transform.eulerAngles = new Vector3(90.0f, -90.0f, 0.0f);
         }
     }
 

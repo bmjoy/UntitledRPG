@@ -97,7 +97,7 @@ public class NPCSpawner : Spawner
                     break;
             }
             if (icon != null)
-                icon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+                icon.transform.eulerAngles = new Vector3(90.0f, -90.0f, 0.0f);
         }
 
         StartCoroutine(Wait());
