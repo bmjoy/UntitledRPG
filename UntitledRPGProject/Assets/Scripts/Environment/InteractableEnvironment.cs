@@ -8,7 +8,7 @@ public abstract class InteractableEnvironment : Environment, IInteractiveObject
     protected List<Dialogue> mDialogue = new List<Dialogue>();
     protected Queue<Dialogue> m_DialogueQueue = new Queue<Dialogue>();
     [SerializeField]
-    protected Dialogue m_DialogueFailCase = new Dialogue();
+    protected Dialogue m_DialogueFailCase;
     protected GameObject mCanvas;
     [HideInInspector]
     public GameObject mInteraction;

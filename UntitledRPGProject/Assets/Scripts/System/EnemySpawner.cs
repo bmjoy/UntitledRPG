@@ -67,7 +67,7 @@ public class EnemySpawner : Spawner
         {
             GameObject icon = Instantiate(Resources.Load<GameObject>((mEnemyList.Contains(EnemyUnit.Temple_Guardian) || mEnemyList.Contains(EnemyUnit.The_Bloody_King)) ? "Prefabs/UI/Icon/BossEnemyIcon" : "Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
             if (icon != null)
-                icon.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+                icon.transform.eulerAngles = new Vector3(90.0f, -90.0f, 0.0f);
         }
         StartCoroutine(Wait());
     }

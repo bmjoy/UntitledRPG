@@ -58,7 +58,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private float _TransitionTime = 2.1f;
     private bool isWin = false;
-    private bool onReward = false;
+    public bool onReward = false;
     private bool _AvailableSkip = false;
     public GameStatus status = GameStatus.None;
 

@@ -7,21 +7,23 @@ public class Merchant : NPC
     SlotManager mSlotManager;
     bool isBuy = false;
     [SerializeField]
-    private Dialogue m_DialogueBuyCase = new Dialogue();
+    private Dialogue m_DialogueBuyCase;
     [SerializeField]
-    private Dialogue m_DialogueSellCase = new Dialogue();
+    private Dialogue m_DialogueSellCase;
     [SerializeField]
-    private Dialogue m_DialogueAskAgainCase = new Dialogue();
+    private Dialogue m_DialogueAskAgainCase;
 
     protected override void Start()
     {
         base.Start();
         mSlotManager = GetComponent<SlotManager>();
+        Destroy(mInteraction.GetComponent<Billboard>());
         m_DialogueAskAgainCase.Trigger = Dialogue.TriggerType.Event;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         if(Input.GetKeyDown(KeyCode.Escape))
             mComplete = true;
     }

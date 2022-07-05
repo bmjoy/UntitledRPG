@@ -12,5 +12,6 @@ public class Armor : EquipmentItem
         base.Initialize(id);
         var info = (ArmorInfo)Info;
         armorType = info.mArmorType;
+
     }
 }

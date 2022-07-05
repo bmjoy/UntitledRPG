@@ -6,9 +6,9 @@ using UnityEngine;
 public class Citizen : NPC
 {
     [SerializeField]
-    protected Dialogue m_DialogueSuccessCase = new Dialogue();
+    protected Dialogue m_DialogueSuccessCase;
     [SerializeField]
-    protected Dialogue m_DialogueFailCase = new Dialogue();
+    protected Dialogue m_DialogueFailCase;
 
     // Quest
 

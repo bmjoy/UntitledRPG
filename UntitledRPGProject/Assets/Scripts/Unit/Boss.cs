@@ -23,6 +23,11 @@ public class Boss : Enemy
 
     protected override void Update()
     {
+        if(mMyHealthBar != null)
+        {
+            mMyHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
+            mMyHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
+        }
         base.Update();
     }
 
@@ -31,8 +36,9 @@ public class Boss : Enemy
         bool isHit = true;
         isHit = base.TakeDamage(dmg, type);
         mMyHealthBar.mCurrentHealth = (mStatus.mHealth > 0.0f) ? mStatus.mHealth : 0.0f;
-        if(mMyHealthBar.mCurrentHealth > 0.0f)
+        if (isHit && mMyHealthBar.mCurrentHealth > 0.0f)
             mMyHealthBar.StartCoroutine(mMyHealthBar.PlayBleed());
+
         return isHit;
     }
 

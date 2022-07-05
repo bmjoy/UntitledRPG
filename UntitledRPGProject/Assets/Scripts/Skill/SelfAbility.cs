@@ -146,13 +146,12 @@ public class SelfAbility : DamagableAbility
                         AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
-
-                    if (effect != null)
-                    {
-                        GameObject go = Instantiate(effect
-        , mOwner.transform.position + effect.transform.position, Quaternion.Euler((effect.transform.eulerAngles)));
-                        Destroy(go, 3.0f);
-                    }
+                }
+                if (effect != null)
+                {
+                    GameObject go = Instantiate(effect
+    , mOwner.transform.position + effect.transform.position, Quaternion.Euler((effect.transform.eulerAngles)));
+                    Destroy(go, 3.0f);
                 }
                 yield return new WaitForSeconds(1.0f);
             }

@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
     
     public UIStorage mStorage;
     public Canvas mCanvas;
+    public Canvas mAdditionalCanvas;
+    public Camera mUICamera;
 
     // ----- Animator -----
     private Animator mVictoryTransitionAnimator;
@@ -47,6 +49,8 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         mCanvas = transform.Find("Canvas").GetComponent<Canvas>();
+        mAdditionalCanvas = transform.Find("AdditionalCanvas").GetComponent<Canvas>();
+        mUICamera = transform.Find("UICamera").GetComponent<Camera>();
         mCanvas.overrideSorting = true;
         mHealthBarList = mCanvas.transform.Find("HealthBarInBattleGroundGroup").GetComponentsInChildren<BigHealthBar>().ToList();
         mBossHealthBar = mCanvas.transform.Find("BossBorader").Find("HealthBarInBattleGround").GetComponent<BossHealthBar>();
@@ -71,7 +75,7 @@ public class UIManager : MonoBehaviour
         mVictoryTransitionAnimator = mStorage.mVictoryScreenTransition.GetComponent<Animator>();
         mOrderBar = mStorage.mOrderbar.GetComponent<OrderBar>();
         mInventoryUI.Initialize();
-        mVictoryScreen.Initialize();
+        mVictoryScreen.Initialize(this);
         DisplayExitButtonInDialogue(false);
         DisplayBackButtonInDialogue(false);
         DisplayBattleInterface(false);
@@ -87,6 +91,8 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerController.Instance && PlayerController.Instance.onBattle)
+            return;
         if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f && GameManager.Instance.mGameState == GameState.GamePlay)
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mOpenInventorySFX);
@@ -100,6 +106,7 @@ public class UIManager : MonoBehaviour
     public void DisplayInventory()
     {
         DisplayInventory(!switchOfInventory);
+        DisplayMiniMap(switchOfInventory);
         switchOfInventory = !switchOfInventory;
     }
 
@@ -211,20 +218,15 @@ public class UIManager : MonoBehaviour
         {
             for (int i = 0; i < GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Count; ++i)
             {
-                if (display)
-                {
-                    if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Unit>().GetType() == typeof(Boss))
-                    {
-                        mBossHealthBar.Initialize(
-        BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mHealth,
-        BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mMaxHealth);
-                        GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Boss>().mMyHealthBar = mBossHealthBar;
-                    }
-                }
                 if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Unit>().GetType() == typeof(Boss))
                 {
                     mBossHealthBar.gameObject.SetActive(display);
                     mBossHealthBar.Active(display);
+                    mBossHealthBar.Initialize(
+        BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mHealth,
+        BattleManager.Instance.mUnits[i].GetComponent<Unit>().mStatus.mMaxHealth,
+        0.0f, 0.0f);
+                    GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Boss>().mMyHealthBar = mBossHealthBar;
                 }
             }
         }
@@ -233,6 +235,29 @@ public class UIManager : MonoBehaviour
             mBossHealthBar.gameObject.SetActive(false);
             mBossHealthBar.Active(false);
         }
+    }
+
+    public IEnumerator Celebration(bool isLevelUP)
+    {
+        if (isLevelUP)
+        {
+            GameObject fireworksTop = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/CelebrationEffect2"), mAdditionalCanvas.transform.localPosition + new Vector3(0.0f, 25.0f, 0.0f), Quaternion.identity, mAdditionalCanvas.transform);
+            float random = 0.0f;
+            while (true)
+            {
+                GameObject fireworks = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/CelebrationEffect1"), mAdditionalCanvas.transform.localPosition + new Vector3(UnityEngine.Random.Range(-50.0f, 50.0f), UnityEngine.Random.Range(-50.0f, 50.0f), 0.0f), Quaternion.identity, mAdditionalCanvas.transform);
+                Destroy(fireworks, 3.0f);
+                random = UnityEngine.Random.Range(0.25f, 0.7f);
+                yield return new WaitForSeconds(random);
+                if (BattleManager.Instance.status == BattleManager.GameStatus.None)
+                    break;
+            }
+            fireworksTop.GetComponent<ParticleSystem>().Stop();
+            Destroy(fireworksTop, 5.0f);
+            yield return null;
+        }
+        else
+            yield return null;
     }
 
     public void ChangeHoverTip(string text, string action)

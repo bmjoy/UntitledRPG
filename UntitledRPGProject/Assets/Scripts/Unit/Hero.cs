@@ -13,7 +13,8 @@ public class Hero : NPC
         base.Start();
         mProperty = ((Companion)mProperty != null) ? (Companion)mProperty
     : Resources.Load<Companion>("Prefabs/Items/Companions/" + mName);
-
+        Destroy(mInteraction.GetComponent<Billboard>());
+        mCanvas.transform.localRotation = new Quaternion(0.0f, 208.0f, 0.0f, 1.0f);
         mProperty.Initialize(-1);
         Companion companion = (Companion)mProperty;
         companion.mTransform = transform;
@@ -41,10 +42,7 @@ UIManager.Instance.mStorage.NoButtonImage);
         UIManager.Instance.AddListenerLeftButton(() => {
             if(PlayerController.Instance.mHeroes.Count >= 4)
             {
-                Dialogue dialogue = new Dialogue();
-                dialogue.Trigger = Dialogue.TriggerType.None;
-                dialogue.Text = "Hmm. It seems your party is full now.";
-                m_DialogueQueue.Enqueue(dialogue);
+                m_DialogueQueue.Enqueue(new Dialogue("Hmm. It seems your party is full now.", Dialogue.TriggerType.None));
                 mComplete = true;
             }
             else

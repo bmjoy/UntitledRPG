@@ -139,27 +139,28 @@ public class BKActionTrigger : BossActionTrigger
     private IEnumerator AttackAction()
     {
         var boss = GetComponent<Boss>();
-        boss.mAnimator.Play("Attack");
+        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/BloodySlash");
+        boss.mAnimator.Play(boss.MyAttackAnim[Random.Range(0,boss.MyAttackAnim.Count)]);
         mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length);
 
         yield return new WaitForSeconds(mTime / 3.0f);
-        GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position, Quaternion.identity);
-        slash.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-        slash.GetComponent<Animator>().Play("Slash1");
+        GameObject slash = Instantiate(obj, boss.mTarget.transform.position, Quaternion.Euler(obj.transform.eulerAngles));
         Destroy(slash, 1.0f);
         DamageState();
         yield return new WaitForSeconds(mTime / 3.0f);
         mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length / 5.0f) - 0.2f;
         DamageState();
-        GameObject slash2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Bloody_King_Slash"), boss.mTarget.transform.position + new Vector3(0.0f,1.5f,0.0f), Quaternion.identity);
-        slash2.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-        slash2.GetComponent<Animator>().Play("Slash2");
+        GameObject slash2 = Instantiate(obj, boss.mTarget.transform.position + obj.transform.position, Quaternion.Euler(new Vector3(-50.0f, 90.0f, -20.0f)));
         Destroy(slash2, 1.0f);
         yield return new WaitForSeconds(mTime);
 
         mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length / 3.0f) - 0.2f;
         if (boss.mBuffNerfController.GetBuffCount() > 0)
         {
+            GameObject slash3 = Instantiate(obj, boss.mTarget.transform.position, Quaternion.Euler(new Vector3(-50.0f, 90.0f, -20.0f)));
+            Destroy(slash3, 1.0f);
+            GameObject slash4 = Instantiate(obj, boss.mTarget.transform.position, Quaternion.Euler(obj.transform.eulerAngles));
+            Destroy(slash4, 1.0f);
             DamageState();
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f));
         }

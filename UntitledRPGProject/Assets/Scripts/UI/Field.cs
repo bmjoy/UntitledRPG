@@ -44,7 +44,7 @@ public class Field : MonoBehaviour
             mTargetFriendly = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/FriendlyField"), transform.position, Quaternion.identity, transform);
         }
         mTargetFriendly.transform.position = transform.position - new Vector3(0.0f,1.2f,0.0f);
-        mTargetFriendly.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+        mTargetFriendly.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetFriendly.SetActive(false);
 
         if(mTargetHostile == null)
@@ -52,7 +52,7 @@ public class Field : MonoBehaviour
             mTargetHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileField"), transform.position, Quaternion.identity, transform);
         }
         mTargetHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
-        mTargetHostile.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+        mTargetHostile.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetHostile.SetActive(false);      
         
         if(mTargetMagicHostile == null)
@@ -60,7 +60,7 @@ public class Field : MonoBehaviour
             mTargetMagicHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileMagicTarget"), transform.position, Quaternion.identity, transform);
         }
         mTargetMagicHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
-        mTargetMagicHostile.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+        mTargetMagicHostile.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetMagicHostile.SetActive(false);
     }
 

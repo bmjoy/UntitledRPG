@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -65,6 +66,7 @@ public class SceneLoader : MonoBehaviour
         if (LevelManager.Instance)
         {
             LevelManager.Instance.isNext = false;
+            LevelManager.Instance.InitializeUICamera();
         }
         yield return StartCoroutine(FadeLoadingScreen(0, 3));
         mLoadingScreen.SetActive(false);

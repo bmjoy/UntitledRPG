@@ -30,7 +30,12 @@ public class Player : Unit
     {
         base.Update();
         if(mMyHealthBar != null)
-            mMyHealthBar.mCurrentMana = mStatus.mMana;
+        {
+            mMyHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
+            mMyHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
+            mMyHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
+            mMyHealthBar.mMaxMana = mStatus.mMaxMana + mBonusStatus.mMana;
+        }
     }
 
     public override bool TakeDamage(float dmg, DamageType type)

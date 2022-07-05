@@ -10,10 +10,13 @@ public class VictoryScreen : MonoBehaviour
 {
     private Transform[] Boraders;
     private Transform mItemList;
+    private UIManager _Manager;
     private Sprite _basicSprite;
-    public void Initialize()
+    private bool isLevelUP;
+    public void Initialize(UIManager manager)
     {
         Boraders = Array.FindAll(transform.Find("Panel").Find("Characters").GetComponentsInChildren<Transform>(), x => x.name == "Borader");
+        _Manager = manager;
         mItemList = transform.Find("Panel").Find("ItemList");
         _basicSprite = Boraders[0].Find("Sprite").GetComponent<Image>().sprite;
         foreach (Transform t in Boraders)
@@ -48,11 +51,14 @@ public class VictoryScreen : MonoBehaviour
             }
         }
         gameObject.SetActive(active);
+        if(active)
+            StartCoroutine(_Manager.Celebration(isLevelUP));
     }
 
     private void UpdateCharacterList()
     {
-        for(int i=0; i < PlayerController.Instance.mHeroes.Count; ++i)
+        isLevelUP = false;
+        for (int i=0; i < PlayerController.Instance.mHeroes.Count; ++i)
         {
             var hero = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
             var levelUp = hero.LevelUP();
@@ -66,6 +72,7 @@ public class VictoryScreen : MonoBehaviour
                 borader.Find("Status").Find("Sub_Second").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mMagicPower.ToString();
                 borader.Find("Status").Find("Sub_Third").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mArmor.ToString();
                 borader.Find("Status").Find("Sub_Forth").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mMagic_Resistance.ToString();
+                isLevelUP = true;
             }
             borader.Find("Name").GetComponent<TextMeshProUGUI>().text = hero.mSetting.Name;
             borader.Find("Level").GetComponent<TextMeshProUGUI>().text = "Lv. " + hero.mStatus.mLevel.ToString();
@@ -73,6 +80,7 @@ public class VictoryScreen : MonoBehaviour
             borader.Find("Sprite").GetComponent<Image>().sprite = Resources.Load<Image>("Prefabs/UI/" + hero.mSetting.Name + "_UI").sprite;
             borader.Find("Sprite").GetComponent<Animator>().runtimeAnimatorController = Resources.Load<Animator>("Prefabs/UI/" + hero.mSetting.Name + "_UI").runtimeAnimatorController;
         }
+        
     }
     public IEnumerator WaitForEnd()
     {
