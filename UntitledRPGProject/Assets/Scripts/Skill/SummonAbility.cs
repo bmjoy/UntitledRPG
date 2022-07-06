@@ -16,10 +16,9 @@ public class SummonAbility : Skill_Setting
     {
         isActive = false;
         parent.StopAllCoroutines();
-
         if (mOwner.mFlag == Flag.Enemy)
         {
-            for (int i = 0; i < BattleManager.Instance.mCurrentField.transform.Find("EnemyFields").childCount; i++)
+            for (int i = 0; i < BattleManager.Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
             {
                 var obj = BattleManager.Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).gameObject;
                 if (obj.GetComponent<Field>().IsExist == false)
@@ -123,6 +122,8 @@ public class SummonAbility : Skill_Setting
                     unit.GetComponent<Unit>().mFlag = mOwner.mFlag;
                     BattleManager.Instance.mOrders.Enqueue(unit.GetComponent<Unit>());
                     BattleManager.Instance.mUnits.Add(unit);
+                    if(mOwner.mFlag == Flag.Enemy)
+                        BattleManager.Instance.mEnemies.Add(unit);
                     UIManager.Instance.mOrderBar.EnqueueSignleOrder(unit.GetComponent<Unit>());
                 }
                 yield return new WaitForSeconds(mEffectTime);

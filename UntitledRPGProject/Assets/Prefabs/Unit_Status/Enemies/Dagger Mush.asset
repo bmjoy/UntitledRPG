@@ -25,7 +25,7 @@ MonoBehaviour:
   Agility: 0
   Gold: 225
   WeaponType: 5
-  BasicSprite: {fileID: 8793639957104055765, guid: 51c41010d3a605a4aa024cfd8351743c, type: 3}
+  BasicSprite: {fileID: 4512633070264445626, guid: 5c6a8d642e1679448baeb6c50a7c879a, type: 3}
   Clips:
   - Type: 2
     Clip: {fileID: 8300000, guid: 311d21e8c849c0a49add03b385effe59, type: 3}

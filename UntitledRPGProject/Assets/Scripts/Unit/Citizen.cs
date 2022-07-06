@@ -53,7 +53,6 @@ public class Citizen : NPC
                             trap.Apply();
                             Destroy(this.gameObject, 1.0f);
                         }
-                        // Spawn Enemy
                     }
                     break;
                 case Dialogue.TriggerType.Success:

@@ -24,7 +24,7 @@ public class VictoryScreen : MonoBehaviour
         Active(false);
     }
 
-    void Update()
+    void LateUpdate()
     {
         for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
         {
@@ -36,8 +36,12 @@ public class VictoryScreen : MonoBehaviour
 
     public void Active(bool active)
     {
+        gameObject.SetActive(active);
         if (active)
+        {
             UpdateCharacterList();
+            StartCoroutine(_Manager.Celebration(isLevelUP));
+        }
         else
         {
             foreach (Transform t in mItemList.Find("ItemScroll").Find("Items"))
@@ -50,9 +54,6 @@ public class VictoryScreen : MonoBehaviour
                 Boraders[i].gameObject.SetActive(active);
             }
         }
-        gameObject.SetActive(active);
-        if(active)
-            StartCoroutine(_Manager.Celebration(isLevelUP));
     }
 
     private void UpdateCharacterList()

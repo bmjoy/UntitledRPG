@@ -10,9 +10,9 @@ public class MagicBehavior : State
     public override void Enter(Unit agent)
     {
         skill = agent.GetComponent<Skill_DataBase>().Skill;
-        list = (agent.mFlag == Flag.Enemy) ? GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList()
+        list = (agent.mFlag == Flag.Enemy) ? BattleManager.Instance.mEnemies
 : PlayerController.Instance.mHeroes.Where(t => t.GetComponent<Unit>().mConditions.isDied == false).ToList();
-        FindTarget(agent);
+        Find(agent);
     }
 
     public override void Execute(Unit agent)
@@ -23,9 +23,10 @@ public class MagicBehavior : State
 
     public override void Exit(Unit agent)
     {
+        agent.mAiBuild.stateMachine.mPreferredTarget = null;
     }
 
-    private void FindTarget(Unit agent)
+    public override bool Find(Unit agent)
     {
         if (skill.mProperty == SkillProperty.Friendly)
         {
@@ -37,6 +38,8 @@ public class MagicBehavior : State
                         for (int i = 0; i < list.Count; i++)
                         {
                             var unit = list[i].GetComponent<Unit>();
+                            if (unit.mConditions.isDied)
+                                continue;
                             float percent = Mathf.Round((100.0f * unit.mStatus.mHealth) / unit.mStatus.mMaxHealth);
                             if (minPercent > percent)
                             {
@@ -53,6 +56,8 @@ public class MagicBehavior : State
                         for (int i = 0; i < list.Count; i++)
                         {
                             var unit = list[i].GetComponent<Unit>();
+                            if (unit.mConditions.isDied)
+                                continue;
                             if (maxDamage > unit.mStatus.mDamage)
                             {
                                 maxDamage = unit.mStatus.mDamage;
@@ -65,5 +70,6 @@ public class MagicBehavior : State
                     break;
             }
         }
+        return agent.mTarget;
     }
 }

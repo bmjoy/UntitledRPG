@@ -54,64 +54,18 @@ public class Standby : State
         string behavior = ((condition1 || condition2 || condition3) && agent.mType != AttackType.None) ? "Attack" : "Defend";
 
         agent.mTarget?.mSelected.SetActive(true);
-
-        if(agent.GetType() == typeof(Boss))
-        {
-            Boss boss = (Boss)agent;
-            var database = boss.GetComponent<Boss_Skill_DataBase>();
-            if (boss.mHealthTriggerPercentage.Length > 1)
-            {
-                if (boss.mActionTriggerComponent._isUltimate)
-                {
-                    database.ChangeSkill(database.mUltimateSkillIndex);
-                    behavior = "Magic";
-                }
-                else
-                {
-                    for (int i = 0; i < boss.mHealthTriggerPercentage.Length; ++i)
-                    {
-                        if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[i]))
-                        {
-                            database.ChangeSkill(i);
-                            behavior = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
-                        }
-                    }
-                    if (condition3)
-                        behavior = "Attack";
-                }
-            }
-            else
-            {
-                if (database.Type == SkillType.Buff && !condition3)
-                {
-                    if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[0]))
-                        behavior = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
-                    else
-                        behavior = "Attack";
-                }
-            }
-
-        }
-        else
-        {
-            if (agent.mSkillDataBase != null)
-            {
-                behavior = ((agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
-|| (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)) ? "Magic" : behavior;
-            }
-
-        }
+        ThinkingMagic(agent, ref behavior);
+        
         if(agent.mAiBuild.stateMachine.mPreferredTarget)
             behavior = (agent.mType != AttackType.None) ? "Attack" : "Defend";
         agent.mAiBuild.stateMachine.ChangeState(behavior);
     }
 
-    private bool Find(Unit agent)
+    public override bool Find(Unit agent)
     {
-        if(agent.GetComponent<ActionTrigger>() != null &&
-            agent.GetComponent<ActionTrigger>().GetType() == typeof(DroidAssassinActionTrigger))
+        if (agent.mAiBuild.priority == AITargetPriority.AimToHighHealth)
         {
-            agent.GetComponent<DroidAssassinActionTrigger>().Find(ref agent.mTarget);
+            SeekToHighHealthCost(agent, ref agent.mTarget);
             return true;
         }
 
@@ -121,5 +75,83 @@ public class Standby : State
         agent.mTarget = (agent.mAiBuild.stateMachine.mPreferredTarget) ? agent.mAiBuild.stateMachine.mPreferredTarget
             : list[Random.Range(0, list.Count)].GetComponent<Unit>();
         return !agent.mTarget.mConditions.isDied;
+    }
+
+    private string ThinkingMagic(Unit agent, ref string current)
+    {
+        if (agent.GetType() == typeof(Boss))
+        {
+            Boss boss = (Boss)agent;
+            var database = boss.GetComponent<Boss_Skill_DataBase>();
+            if (boss.mHealthTriggerPercentage.Length > 1)
+            {
+                if (boss.mActionTriggerComponent._isUltimate)
+                {
+                    database.ChangeSkill(database.mUltimateSkillIndex);
+                    current = "Magic";
+                }
+                else
+                {
+                    for (int i = 0; i < boss.mHealthTriggerPercentage.Length; ++i)
+                    {
+                        if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[i]))
+                        {
+                            database.ChangeSkill(i);
+                            current = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
+                        }
+                    }
+                    if (agent.mBuffNerfController.GetBuffCount() > 0)
+                        current = "Attack";
+                }
+            }
+            else
+            {
+                if (database.Type == SkillType.Buff && agent.mBuffNerfController.GetBuffCount() > 0)
+                {
+                    if (boss.HalfHealthEvent(boss.mHealthTriggerPercentage[0]))
+                        current = (database.Mana <= boss.mStatus.mMana) ? "Magic" : "Attack";
+                    else
+                        current = "Attack";
+                }
+            }
+
+        }
+        else
+        {
+            if (agent.mSkillDataBase != null)
+            {
+                current = ((agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
+|| (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)) ? "Magic" : current;
+            }
+        }
+
+        return current;
+    }
+
+    private void SeekToHighHealthCost(Unit agent, ref Unit target)
+    {
+        if (agent.mAiBuild.stateMachine.mPreferredTarget)
+        {
+            target = agent.mAiBuild.stateMachine.mPreferredTarget;
+            return;
+        }
+        IEnumerable<GameObject> list = (agent.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes
+            : BattleManager.Instance.mEnemies;
+        if (agent.mAiBuild.stateMachine.mPreferredTarget)
+            target = agent.mAiBuild.stateMachine.mPreferredTarget;
+        else
+        {
+            float maxHealth = 0.0f;
+            float currentHealth = 0.0f;
+            foreach (GameObject u in list)
+            {
+                currentHealth = u.GetComponent<Unit>().mStatus.mHealth;
+                if (currentHealth > maxHealth)
+                {
+                    maxHealth = currentHealth;
+                    target = u.GetComponent<Unit>();
+                }
+            }
+        }
     }
 }

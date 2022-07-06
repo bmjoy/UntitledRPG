@@ -81,10 +81,9 @@ public class Prowler : MonoBehaviour
         mStateMachine.ChangeState("Idle");
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         CheckGround();
-
         if (PlayerController.Instance == false)
             return;
 
@@ -95,9 +94,7 @@ public class Prowler : MonoBehaviour
             return;
         }
         else
-        {
             mStateMachine.ActivateState();
-        }
         mSpriteRenderer.flipX = (mVelocity.x < -0.1f) ? true : false;
 
     }
@@ -107,7 +104,7 @@ public class Prowler : MonoBehaviour
         if (isGrounded && mVelocity.y < 0.0f)
             mVelocity.y = 0.0f;
         mVelocity.y += -9.8f * Time.deltaTime;
-        mRigidbody.AddForce(mVelocity * Time.deltaTime);
+        mRigidbody.velocity = mVelocity * Time.deltaTime;
     }
     public virtual void ChangeBehavior(string name)
     {

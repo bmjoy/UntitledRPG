@@ -23,8 +23,14 @@ public class Bullet : MonoBehaviour
 
     virtual protected void FixedUpdate()
     {
-        if(mInitialize)
+        if(mInitialize && mTarget)
             transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, Time.deltaTime * mSpeed);
+        if (mInitialize && mTarget.GetComponent<Unit>().mConditions.isDied)
+        {
+            isDamaged = true;
+            AudioManager.PlaySfx(clip);
+            Destroy(this.gameObject);
+        }
     }
 
     virtual protected void OnCollisionEnter(Collision collision)
@@ -38,7 +44,7 @@ public class Bullet : MonoBehaviour
             mTarget.GetComponent<Unit>().TakeDamage(mPower, DamageType.Physical);
 
             AudioManager.PlaySfx(clip);
-            Destroy(this.gameObject, 2.5f);
+            Destroy(this.gameObject);
         }
     }
 }

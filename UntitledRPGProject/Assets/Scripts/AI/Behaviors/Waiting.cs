@@ -15,4 +15,9 @@ public class Waiting : State
     public override void Exit(Unit agent)
     {
     }
+
+    public override bool Find(Unit agent)
+    {
+        return false;
+    }
 }

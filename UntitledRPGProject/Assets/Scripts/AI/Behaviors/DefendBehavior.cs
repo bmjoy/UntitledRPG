@@ -17,5 +17,12 @@ public class DefendBehavior : State
 
     public override void Exit(Unit agent)
     {
+        agent.mAiBuild.stateMachine.mPreferredTarget = null;
+        agent.mTarget = null;
+    }
+
+    public override bool Find(Unit agent)
+    {
+        return false;
     }
 }

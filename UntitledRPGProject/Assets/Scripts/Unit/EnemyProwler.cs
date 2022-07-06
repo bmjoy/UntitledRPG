@@ -59,9 +59,9 @@ public class EnemyProwler : Prowler
         mParticles.SetActive(false);
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
         if (BattleManager.Instance.status != BattleManager.GameStatus.None
 || PlayerController.Instance.Interaction)
         {
