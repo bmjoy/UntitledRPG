@@ -45,7 +45,7 @@ public class DungeonGenerator : MonoBehaviour
                 
                 if (cell.GetVisited())
                 {
-                    room = GetRoom(y, x, ref type);
+                    room = GetRoom(y, x, out type);
                     if (type == Room.RoomType.Secret)
                         _CurrentSecret++;
                     room.ConstructRoom(cell.isOpened,type, _Info);
@@ -60,7 +60,7 @@ public class DungeonGenerator : MonoBehaviour
         unitSpawnManager.SpawnAll();
     }
 
-    private Room GetRoom(int row, int col, ref Room.RoomType type)
+    private Room GetRoom(int row, int col, out Room.RoomType type)
     {
         Vector3 pos = new Vector3(row * _Info.Offset.x, 0.0f, -col * _Info.Offset.y);
         type = Room.RoomType.None;

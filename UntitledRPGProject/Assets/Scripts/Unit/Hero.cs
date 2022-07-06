@@ -24,8 +24,7 @@ public class Hero : NPC
     {
         yield return StartCoroutine(base.Interact(Callback));
         yield return new WaitForSeconds(0.25f);
-        if (isTrading)
-            Destroy(gameObject, 0.5f);
+        if (isTrading) Destroy(gameObject, 0.5f);
         StopAllCoroutines();
     }
 
@@ -77,10 +76,8 @@ UIManager.Instance.mStorage.NoButtonImage);
                     mProperty.Apply();
                 }
                 else
-                {
                     foreach (var dialogue in m_DialogueFailToTradeCase)
                         m_DialogueQueue.Enqueue(dialogue);
-                }
                 mComplete = true;
             }
 

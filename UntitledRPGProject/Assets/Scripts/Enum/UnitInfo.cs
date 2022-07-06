@@ -16,6 +16,12 @@ public enum AIType
     Auto
 }
 
+public enum AITargetPriority
+{
+    None,
+    AimToHighHealth
+}
+
 public enum ActionEvent
 {
     None,
@@ -32,6 +38,7 @@ public struct AIBuild
 {
     public StateMachine stateMachine;
     public AIProperty property;
+    public AITargetPriority priority;
     public AIType type;
     public ActionEvent actionEvent;
 

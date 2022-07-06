@@ -18,47 +18,33 @@ public class Field : MonoBehaviour
             transform.GetComponent<ParticleSystem>().Stop();
         Collider[] colliders = Physics.OverlapSphere(transform.position, 5.0f, LayerMask.GetMask("Field"));
         for(int i = 0; i < colliders.Length; ++i)
-        {
             colliders[i].GetComponent<Field>().Initialize();
-        }
     }
     public void Initialize()
     {
         transform.GetComponent<ParticleSystem>()?.Stop();
         NavMeshHit navMesh = new NavMeshHit();
-        if (!Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Ground")))
-        {
-            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
-        }
-        if (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Obstacle")))
-        {
-            transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
-        }
-        if (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Field")))
+        if ((!Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Ground")))
+            || (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Obstacle"))
+            || (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Field")))))
         {
             transform.position = (NavMesh.SamplePosition(transform.position, out navMesh, 30.0f, -1)) ? navMesh.position : transform.position;
         }
         transform.position += new Vector3(Random.Range(-0.5f,0.5f), 1.5f, Random.Range(-0.5f, 0.5f));
         if(mTargetFriendly == null)
-        {
             mTargetFriendly = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/FriendlyField"), transform.position, Quaternion.identity, transform);
-        }
         mTargetFriendly.transform.position = transform.position - new Vector3(0.0f,1.2f,0.0f);
         mTargetFriendly.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetFriendly.SetActive(false);
 
         if(mTargetHostile == null)
-        {
             mTargetHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileField"), transform.position, Quaternion.identity, transform);
-        }
         mTargetHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
         mTargetHostile.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetHostile.SetActive(false);      
         
         if(mTargetMagicHostile == null)
-        {
             mTargetMagicHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileMagicTarget"), transform.position, Quaternion.identity, transform);
-        }
         mTargetMagicHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
         mTargetMagicHostile.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetMagicHostile.SetActive(false);

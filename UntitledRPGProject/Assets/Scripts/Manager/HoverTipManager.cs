@@ -9,7 +9,7 @@ public class HoverTipManager : MonoBehaviour
     public TextMeshProUGUI mTipText;
     public RectTransform mTipWindow;
 
-    public static Action<string, Vector2> onMouseHover;
+    public static Action<string, Vector3> onMouseHover;
     public static Action onMouseOutside;
     [SerializeField]
     private int mWidth = 35;
@@ -34,13 +34,12 @@ public class HoverTipManager : MonoBehaviour
         HideTip();
     }
 
-    private void ShowTip(string tip, Vector2 pos)
+    private void ShowTip(string tip, Vector3 pos)
     {
         mTipText.text = tip;
         mTipWindow.sizeDelta = new Vector2(mTipText.preferredWidth, mTipText.preferredHeight);
         mTipWindow.gameObject.SetActive(true);
-        mTipWindow.transform.position = new Vector2(pos.x + mWidth, pos.y + mHeight);
-        //mTipWindow.transform.localPosition = new Vector2(0.0f,0.0f);
+        mTipWindow.transform.localPosition = new Vector3((pos.x / mWidth) - mWidth, (pos.y / mHeight) - mHeight, 0.0f);
     }
 
     private void HideTip()

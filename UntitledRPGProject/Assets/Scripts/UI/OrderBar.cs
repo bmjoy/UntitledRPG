@@ -59,7 +59,7 @@ public class OrderBar : MonoBehaviour
             queueImages.Add(unit, go);
         }
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if(key != null)
         {

@@ -183,6 +183,7 @@ public class Unit : MonoBehaviour, IUnit
             return;
         mAiBuild.property = (AIProperty)UnityEngine.Random.Range(0, 2);
         mAiBuild.type = AIType.None;
+        mAiBuild.priority = AITargetPriority.None;
         mAiBuild.stateMachine = (mAiBuild.stateMachine == null) ? gameObject.AddComponent<StateMachine>()
             : GetComponent<StateMachine>();
         mAiBuild.stateMachine.mAgent = this;
@@ -197,14 +198,28 @@ public class Unit : MonoBehaviour, IUnit
 
     protected virtual void Update()
     {
-        if (mConditions.isDied == false)
-            mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
         if (CameraSwitcher.isCollided)
             GetComponent<SpriteRenderer>().flipX = (mFlag == Flag.Player) ? true : false;
         mHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
         mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
         mHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
         mHealthBar.mMaxMana = mStatus.mMaxMana + mBonusStatus.mMana;
+
+        if (mAnimator.GetFloat("Speed") > 0.1f && (mRunClips.Count > 0))
+        {
+            mWalkTime += Time.deltaTime;
+            if (mWalkTime >= mMaxWalkTime)
+            {
+                AudioManager.PlaySfx(mRunClips[Random.Range(0, mRunClips.Count - 1)].Clip, 0.6f);
+                mWalkTime = 0.0f;
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (mConditions.isDied == false)
+            mLevelText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
 
         switch (mAiBuild.actionEvent)
         {
@@ -216,7 +231,7 @@ public class Unit : MonoBehaviour, IUnit
                     mAnimator.SetBool("Death", (mConditions.isDied) ? true : false);
                     mAiBuild.Update((mAiBuild.type == AIType.Auto));
                     dodgeCurrentPos = transform.position;
-                    dodgePos = (mFlag == Flag.Player) ? transform.position - new Vector3(0.0f,0.0f, 2.5f)
+                    dodgePos = (mFlag == Flag.Player) ? transform.position - new Vector3(0.0f, 0.0f, 2.5f)
             : transform.position + new Vector3(0.0f, 0.0f, 2.5f);
                 }
                 break;
@@ -251,16 +266,8 @@ public class Unit : MonoBehaviour, IUnit
                 mAiBuild.SetActionEvent((mConditions.isDied) ? ActionEvent.None : Run(dodgeCurrentPos, 0.1f, ActionEvent.None, ActionEvent.DodgeBack));
                 break;
         }
+
         CheckGround();
-        if(mAnimator.GetFloat("Speed") > 0.1f && mRunClips.Count > 0)
-        {
-            mWalkTime += Time.deltaTime;
-            if(mWalkTime >= mMaxWalkTime)
-            {
-                AudioManager.PlaySfx(mRunClips[Random.Range(0, mRunClips.Count - 1)].Clip, 0.6f);
-                mWalkTime = 0.0f;
-            }
-        }
     }
 
     protected ActionEvent Run(Vector3 to, float maxDist, ActionEvent actionEvent1, ActionEvent actionEvent2)
@@ -276,7 +283,7 @@ public class Unit : MonoBehaviour, IUnit
         isGrounded = Physics.CheckSphere(mGroundCheck.transform.position, mGroundDistance, LayerMask.GetMask("Ground"));
         mVelocity.y = (isGrounded && mVelocity.y <= 0.0f) ? -GetComponent<BoxCollider>().size.y + 0.2f : mVelocity.y;
         mVelocity.y += -9.8f * Time.deltaTime;
-        mRigidbody.AddForce(mVelocity * Time.deltaTime);
+        mRigidbody.velocity = mVelocity * Time.deltaTime;
         if (transform.position.y <= -50.0f)
             transform.position = mField.transform.position + new Vector3(0.0f,1.0f,0.0f);
     }
@@ -324,26 +331,9 @@ public class Unit : MonoBehaviour, IUnit
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100, (mFlag == Flag.Player) ? LayerMask.GetMask("Enemy") : LayerMask.GetMask("Ally")))
                 {
-                    if(maxDist < hit.distance)
-                    {
-                        mTarget?.mField.TargetedHostile(false);
-                        mTarget?.mSelected.SetActive(false);
-                        mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
-                        mTarget?.mSelected.SetActive(true);
-                        maxDist = hit.distance;
-                    }
-
-                    if(mTarget && mTarget.gameObject != hit.collider.gameObject)
-                    {
-                        mTarget?.mField.TargetedHostile(false);
-                        mTarget?.mSelected.SetActive(false);
-                        mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
-                        mTarget?.mSelected.SetActive(true);
-                        maxDist = hit.distance;
-                    }
-
+                    if((maxDist < hit.distance) || (mTarget && mTarget.gameObject != hit.collider.gameObject))
+                        maxDist = SetTarget(ref hit);
                     mTarget?.mField.TargetedHostile(true);
-
                     if (mTarget && Input.GetMouseButtonDown(0)) break;
                 }
                 else
@@ -442,6 +432,17 @@ public class Unit : MonoBehaviour, IUnit
             mAiBuild.SetActionEvent(ActionEvent.None);
             mAiBuild.ChangeState("Waiting");
         }
+    }
+
+    private float SetTarget(ref RaycastHit hit)
+    {
+        float maxDist;
+        mTarget?.mField.TargetedHostile(false);
+        mTarget?.mSelected.SetActive(false);
+        mTarget = (hit.transform.GetComponent<Unit>().mConditions.isDied == false) ? hit.transform.GetComponent<Unit>() : null;
+        mTarget?.mSelected.SetActive(true);
+        maxDist = hit.distance;
+        return maxDist;
     }
 
     virtual public IEnumerator DefendAction(Action onComplete)
@@ -567,10 +568,10 @@ public class Unit : MonoBehaviour, IUnit
                 mirror?.SetBool("Death", true);
                 mAnimator.SetBool("Death", true);
                 mHealthBar.ActiveDeathAnimation(true);
-                GetComponent<BoxCollider>().enabled = mField.GetComponent<Field>().IsExist = false;
+                GetComponent<BoxCollider>().enabled = mField.IsExist = false;
                 UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().DequeueOrder(this);
                 mBuffNerfController.Stop();
-                mField.GetComponent<Field>().Picked(false);
+                mField.Picked(false);
             }
             mirror?.SetTrigger("Hit");
             mAnimator.SetTrigger("Hit");

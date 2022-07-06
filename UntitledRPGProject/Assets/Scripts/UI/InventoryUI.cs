@@ -50,36 +50,23 @@ public class InventoryUI : MonoBehaviour
     public void Clear()
     {
         foreach(Transform transform in mTextAreaGroup.transform)
-        {
-            transform.GetComponent<TextMeshProUGUI>().text = "";
-        }
+            transform.GetComponent<TextMeshProUGUI>().text = default;
         foreach (Transform transform in mBonusValuesGroup.transform)
-        {
-            transform.GetComponent<TextMeshProUGUI>().text = "";
-        }
+            transform.GetComponent<TextMeshProUGUI>().text = default;
         foreach(Transform transform in mEquipmentImageGroup.transform)
-        {
             transform.GetComponent<Image>().sprite = mEmptyImage;
-        }
         foreach(Transform transform in mButtonGroup.transform)
-        {
             transform.GetComponent<Button>().image.sprite = mEmptyImage;
-        }
         foreach (var item in items)
-        {
             Destroy(item.gameObject);
-        }
         items.Clear();
         foreach (Transform item in mItemsGroup.transform)
-        {
             Destroy(item.gameObject);
-        }
     }
 
     public void Active(bool active)
     {
-        if (mInitialized == false)
-            return;
+        if (mInitialized == false) return;
         if(active == true)
         {
             transform.gameObject.SetActive(true);
@@ -93,8 +80,7 @@ public class InventoryUI : MonoBehaviour
 
     private IEnumerator Wait(bool active)
     {
-        if(!active)
-            GetComponent<Animator>().SetTrigger("Outro");
+        if(!active) GetComponent<Animator>().SetTrigger("Outro");
         mBonusValuesGroup.SetActive(active);
         mTextAreaGroup.SetActive(active);
         mButtonGroup.SetActive(active);
@@ -178,8 +164,7 @@ public class InventoryUI : MonoBehaviour
     List<GameObject> items = new List<GameObject>();
     private void InventorySetup()
     {
-        if (_Initialized)
-            return;
+        if (_Initialized) return;
         items.Clear();
 
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
@@ -218,8 +203,7 @@ public class InventoryUI : MonoBehaviour
                         case ArmorType.Helmet: part = "Head"; break;
                     }
                 }
-                else
-                    continue;
+                else continue;
                 if (part != string.Empty)
                     mEquipmentImageGroup.transform.Find(part).GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Unequip);
             }

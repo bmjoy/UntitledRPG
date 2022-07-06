@@ -50,9 +50,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
     public virtual IEnumerator Interact(Action Callback)
     {
         foreach (Dialogue dialogue in m_DialogueList)
-        {
             m_DialogueQueue.Enqueue(dialogue);
-        }
         UIManager.Instance.FadeInScreen();
         UIManager.Instance.DisplayDialogueBox(true);
         while(m_DialogueQueue.Count > 0)

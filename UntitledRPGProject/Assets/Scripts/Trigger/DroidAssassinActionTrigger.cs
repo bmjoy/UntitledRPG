@@ -8,23 +8,23 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override IEnumerator Action()
     {
         var unit = GetComponent<Unit>();
-
+        float rand = 0.0f;
         yield return new WaitForSeconds(0.3f);
         StartCoroutine(Slash());
         for (int i = 0; i < 2; ++i)
         {
-            float firstMirror = Random.Range(-3.5f, 3.5f);
-            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f, firstMirror), Quaternion.identity);
-            if(firstMirror < 0.0f)
+            rand = Random.Range(-3.5f, 3.5f);
+            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f, rand), Quaternion.identity);
+            if(rand < 0.0f)
                 mirror.GetComponent<SpriteRenderer>().flipX = (CameraSwitcher.isCollided)? false : true;
 
             mirror.GetComponent<Animator>().SetTrigger("Attack1");
             mirror.GetComponent<Animator>().speed = 0.8f;
             Destroy(mirror, 0.8f);
-            float secondMirror = Random.Range(-1.0f, 1.0f);
+            rand = Random.Range(-1.0f, 1.0f);
 
-            GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f,secondMirror), Quaternion.identity);
-            if (secondMirror < 0.0f)
+            GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f,rand), Quaternion.identity);
+            if (rand < 0.0f)
                 mirror2.GetComponent<SpriteRenderer>().flipX = (CameraSwitcher.isCollided) ? false : true;
             mirror2.GetComponent<Animator>().SetTrigger("Attack2");
             mirror2.GetComponent<Animator>().speed = 0.8f;
@@ -54,8 +54,9 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override void StartActionTrigger()
     {
         var unit = GetComponent<Unit>();
-        mPos = unit.mTarget.transform.position;
+        unit.mAiBuild.priority = AITargetPriority.AimToHighHealth;
         unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        mPos = unit.mTarget.transform.position;
 
         unit.mAnimator.Play("Attack");
         mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 0.75f;
@@ -71,35 +72,5 @@ public class DroidAssassinActionTrigger : ActionTrigger
     private void OnDestroy()
     {
         GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
-    }
-
-    public void Find(ref Unit target)
-    {
-        if (GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget)
-        {
-            target = GetComponent<Unit>().mAiBuild.stateMachine.mPreferredTarget;
-            return;
-        }
-
-        var unit = GetComponent<Unit>();
-        IEnumerable<GameObject> list = (unit.mFlag == Flag.Enemy) ? PlayerController.Instance.mHeroes
-            : BattleManager.Instance.mEnemies;
-        if (unit.mAiBuild.stateMachine.mPreferredTarget)
-            unit.mTarget = unit.mAiBuild.stateMachine.mPreferredTarget;
-        else
-        {
-            float maxHealth = 0.0f;
-            float currentHealth = 0.0f;
-
-            foreach(GameObject u in list)
-            {
-                currentHealth = u.GetComponent<Unit>().mStatus.mHealth;
-                if (currentHealth > maxHealth)
-                {
-                    maxHealth = currentHealth;
-                    unit.mTarget = u.GetComponent<Unit>();
-                }
-            }
-        }
     }
 }

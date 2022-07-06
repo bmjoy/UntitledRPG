@@ -17,5 +17,11 @@ public class AttackBehavior : State
 
     public override void Exit(Unit agent)
     {
+        agent.mAiBuild.stateMachine.mPreferredTarget = null;
+    }
+
+    public override bool Find(Unit agent)
+    {
+        return false;
     }
 }

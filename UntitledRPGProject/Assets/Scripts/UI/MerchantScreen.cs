@@ -37,10 +37,7 @@ public class MerchantScreen : MonoBehaviour
         mMoney.transform.Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
         for (int i = 0; i < slots.Length; ++i)
         {
-            if (obj[i] == null)
-                continue;
-            if (obj[i].GetComponent<Item>().isSold)
-                continue;
+            if (obj[i] == null || obj[i].GetComponent<Item>().isSold) continue;
             slots[i].Initialize(ref obj[i],transform);
         }
     }
@@ -52,9 +49,7 @@ public class MerchantScreen : MonoBehaviour
             if(item.GetType().IsAssignableFrom(typeof(EquipmentItem)))
             {
                 EquipmentItem equipment = (EquipmentItem)item.Value;
-
-                if (equipment.IsEquipped) continue;
-                if (!equipment.isSold) continue;
+                if (equipment.IsEquipped || !equipment.isSold) continue;
             }
             GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
             go.GetComponent<ItemUI>().Initialize(item.Key ,item.Value, ItemUI.ItemUIType.Sell);
@@ -77,56 +72,41 @@ public class MerchantScreen : MonoBehaviour
     {
         for (int i = 0; i < slots.Length; ++i)
             slots[i].gameObject.SetActive(active);
-        mBoarder.gameObject.SetActive(active);
-        mMoney.gameObject.SetActive(active);
         MyInventory.gameObject.SetActive(false);
         mSoldItemsGroup.gameObject.SetActive(false);
-        gameObject.SetActive(active);
+        Active(active);
     }    
     
     public void SellActive(bool active)
     {
         for (int i = 0; i < slots.Length; ++i)
             slots[i].gameObject.SetActive(false);
-        mBoarder.gameObject.SetActive(active);
-        mMoney.gameObject.SetActive(active);
         MyInventory.gameObject.SetActive(active);
         mSoldItemsGroup.gameObject.SetActive(active);
+        Active(active);
+    }
+
+    public void Active(bool active)
+    {
+        mBoarder.gameObject.SetActive(active);
+        mMoney.gameObject.SetActive(active);
         gameObject.SetActive(active);
     }
 
     private void OnDisable()
     {
-        if (mSoldItemsGroup == null)
-            return;
-
+        if (mSoldItemsGroup == null) return;
         int count = MyInventory.Find("Items").childCount;
         if (count > 0)
-        {
             foreach (Transform it in MyInventory.Find("Items"))
-            {
                 Destroy(it.gameObject);
-            }
-
-        }
-
         count = mSoldItemsGroup.Find("Items").childCount;
         if(count > 0)
-        {
             foreach (Transform it in mSoldItemsGroup.Find("Items"))
-            {
                 Destroy(it.gameObject);
-            }
-
-        }
         count = mSoldItemsGroup.Find("Objects").childCount;
-        if( count > 0)
-        {
+        if(count > 0)
             foreach (Transform it in mSoldItemsGroup.Find("Objects"))
-            {
                 Destroy(it.gameObject);
-            }
-        }
-
     }
 }

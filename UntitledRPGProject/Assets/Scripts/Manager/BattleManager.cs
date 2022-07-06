@@ -249,8 +249,11 @@ public class BattleManager : MonoBehaviour
             {
                 ItemDrop obj = enemy.mSetting.Item[x];
                 if (obj == null) continue;
-                if (UnityEngine.Random.Range(0, 100) <= obj.mRate) 
-                    enemyItemList.Add(obj.mItem);
+                if (UnityEngine.Random.Range(0, 100) <= obj.mRate)
+                {
+                    if(obj.mItem != null)
+                        enemyItemList.Add(obj.mItem);
+                }
             }
         }
 

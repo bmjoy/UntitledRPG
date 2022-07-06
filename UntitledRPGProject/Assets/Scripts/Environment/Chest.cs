@@ -37,7 +37,6 @@ public class Chest : InteractableEnvironment, ILockable
             List<GameObject> allItems = new List<GameObject>();
             allItems.AddRange(GameManager.Instance.mWeaponPool);
             allItems.AddRange(GameManager.Instance.mArmorPool);
-            Debug.Log(allItems.Count);
             for (int i = 0; i < count; ++i)
                 mItems.Add(Instantiate(allItems[UnityEngine.Random.Range(0, allItems.Count)], transform));
         }
@@ -76,12 +75,8 @@ public class Chest : InteractableEnvironment, ILockable
                 case Dialogue.TriggerType.Success:
                     {
                         EnableIcon();
-
                         if(mItems == null)
-                        {
                             PlayerController.Instance.mGold += mMoney;
-                            Debug.Log("Here");
-                        }
                         else
                         {
                             for (int i = 0; i < mItems.Count; ++i)
@@ -91,9 +86,7 @@ public class Chest : InteractableEnvironment, ILockable
                                 PlayerController.Instance.mInventory.Add(item.GetComponent<Item>());
                             }
                             for (int i = 0; i < mItems.Count; ++i)
-                            {
                                 Destroy(mItems[i]);
-                            }
                             mItems.Clear();
                         }
 
@@ -120,9 +113,7 @@ public class Chest : InteractableEnvironment, ILockable
         UIManager.Instance.DisplayEKeyInDialogue(false);
         action?.Invoke();
         if (_Completed)
-        {
             mAnimator.SetBool("IsOpen", false);
-        }
     }
 
     private void EnableIcon()
