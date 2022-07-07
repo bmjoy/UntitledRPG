@@ -19,6 +19,7 @@ public class Boss : Enemy
     {
         base.Start();
         mActionTriggerComponent = GetComponent<BossActionTrigger>();
+        mAiBuild.stateMachine.AddState<State>(new Boss_Standby(), "Boss_Standby");
     }
 
     protected override void Update()

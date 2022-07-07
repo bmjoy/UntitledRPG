@@ -53,6 +53,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
             m_DialogueQueue.Enqueue(dialogue);
         UIManager.Instance.FadeInScreen();
         UIManager.Instance.DisplayDialogueBox(true);
+        UIManager.Instance.DisplayMiniMap(false);
         while(m_DialogueQueue.Count > 0)
         {
             var dialogue = m_DialogueQueue.Dequeue();
@@ -101,6 +102,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
         UIManager.Instance.ChangeDialogueText("");
         UIManager.Instance.DisplayDialogueBox(false);
         UIManager.Instance.DisplayEKeyInDialogue(false);
+        UIManager.Instance.DisplayMiniMap(true);
         Callback?.Invoke();
         mComplete = false;
         mTrigger = null;

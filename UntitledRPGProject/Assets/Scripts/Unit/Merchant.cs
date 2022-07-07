@@ -21,13 +21,6 @@ public class Merchant : NPC
         m_DialogueAskAgainCase.Trigger = Dialogue.TriggerType.Event;
     }
 
-    protected override void Update()
-    {
-        base.Update();
-        if(Input.GetKeyDown(KeyCode.Escape))
-            mComplete = true;
-    }
-
     public override IEnumerator Event()
     {
         mTrigger = null;

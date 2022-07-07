@@ -22,7 +22,7 @@ public class Field : MonoBehaviour
     }
     public void Initialize()
     {
-        transform.GetComponent<ParticleSystem>()?.Stop();
+        transform.Find("Effect").GetComponent<ParticleSystem>()?.Stop();
         NavMeshHit navMesh = new NavMeshHit();
         if ((!Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Ground")))
             || (Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Obstacle"))
@@ -53,9 +53,9 @@ public class Field : MonoBehaviour
     public void Picked(bool active)
     {
         if(active)
-            transform.GetComponent<ParticleSystem>()?.Play();
+            transform.Find("Effect").GetComponent<ParticleSystem>()?.Play();
         else
-            transform.GetComponent<ParticleSystem>()?.Stop();
+            transform.Find("Effect").GetComponent<ParticleSystem>()?.Stop();
     }
 
     public void TargetedFriendly(bool active)
@@ -75,7 +75,7 @@ public class Field : MonoBehaviour
 
     public void Stop()
     {
-        transform.GetComponent<ParticleSystem>()?.Stop();
+        transform.Find("Effect").GetComponent<ParticleSystem>()?.Stop();
     }
 
     private void OnDrawGizmos()

@@ -31,9 +31,9 @@ public class Player : Unit
         base.Update();
         if(mMyHealthBar != null)
         {
-            mMyHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
+            mMyHealthBar.mCurrentHealth = mStatus.mHealth;
             mMyHealthBar.mMaxHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
-            mMyHealthBar.mCurrentMana = mStatus.mMana + mBonusStatus.mMana;
+            mMyHealthBar.mCurrentMana = mStatus.mMana;
             mMyHealthBar.mMaxMana = mStatus.mMaxMana + mBonusStatus.mMana;
         }
     }

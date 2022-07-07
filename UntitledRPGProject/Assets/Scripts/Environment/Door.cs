@@ -85,6 +85,10 @@ public class Door : InteractableEnvironment, ILockable
     {
         isOpen = true;
         _Completed = true;
+        if(mOpenDirection == string.Empty)
+        {
+            mOpenDirection = "IsFrontOpen";
+        }
         mDoorAnimator.SetBool(mOpenDirection, true);
         AudioManager.PlaySfx(mSFX);
     }

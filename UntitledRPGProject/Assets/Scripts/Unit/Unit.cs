@@ -308,7 +308,10 @@ public class Unit : MonoBehaviour, IUnit
             mStatus.mArmor += bonus.mArmor;
             mStatus.mMagic_Resistance += bonus.mMagic_Resistance;
             mLevelText.text = mStatus.mLevel.ToString();
-            
+
+            mStatus.mHealth = mStatus.mMaxHealth;
+            mStatus.mMana = mStatus.mMaxMana;
+
             return new KeyValuePair<bool, BonusStatus>(true, bonus);
         }
         return new KeyValuePair<bool, BonusStatus>(false, bonus);
@@ -530,6 +533,9 @@ public class Unit : MonoBehaviour, IUnit
             value = (value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance) <= 0.0f) ? 1.0f : value - (mStatus.mMagic_Resistance + mBonusStatus.mMagic_Resistance);
             isDodge = false;
         }
+
+        value = Mathf.Round(value);
+
         if (isDodge)
         {
             mAiBuild.actionEvent = ActionEvent.DodgeWalk;
