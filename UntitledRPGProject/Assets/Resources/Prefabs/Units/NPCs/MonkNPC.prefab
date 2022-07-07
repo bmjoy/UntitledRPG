@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8985402103640690978
+--- !u!1 &4435388881881093393
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,28 +8,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 170401103535302027}
-  - component: {fileID: 8985402103640690982}
-  - component: {fileID: 8985402103640690980}
-  - component: {fileID: 8985402103640690984}
-  - component: {fileID: 8985402103640690985}
-  - component: {fileID: 6333057469042830242}
-  - component: {fileID: -3195471757453502611}
-  - component: {fileID: 453318726312972100}
+  - component: {fileID: 4855522297865183672}
+  - component: {fileID: 4435388881881093397}
+  - component: {fileID: 4435388881881093399}
+  - component: {fileID: 4435388881881093403}
+  - component: {fileID: 4435388881881093402}
+  - component: {fileID: 4625782207344048252}
+  - component: {fileID: 1179244416949813770}
   m_Layer: 9
-  m_Name: ArmorMerchantNPC
+  m_Name: MonkNPC
   m_TagString: Neutral
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &170401103535302027
+--- !u!224 &4855522297865183672
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
+  m_GameObject: {fileID: 4435388881881093393}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -22.08582}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -39,33 +38,33 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.27937, y: 72.46448}
-  m_SizeDelta: {x: 15, y: 6.5}
+  m_AnchoredPosition: {x: -3.4265938, y: 2.474544}
+  m_SizeDelta: {x: 2, y: 3.7}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!65 &8985402103640690982
+--- !u!65 &4435388881881093397
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
+  m_GameObject: {fileID: 4435388881881093393}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 6.5, z: 3}
-  m_Center: {x: 0, y: 0, z: 2}
---- !u!95 &8985402103640690980
+  m_Size: {x: 2, y: 3.7, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &4435388881881093399
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
+  m_GameObject: {fileID: 4435388881881093393}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 66ee045777dcaa94d921515615cce29d, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -74,26 +73,26 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8985402103640690984
+--- !u!114 &4435388881881093403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
-  m_Enabled: 0
+  m_GameObject: {fileID: 4435388881881093393}
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6428c34d6c004244b5f54ef19eb6a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mUseStaticBillboard: 1
---- !u!212 &8985402103640690985
+  mUseStaticBillboard: 0
+--- !u!212 &4435388881881093402
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
+  m_GameObject: {fileID: 4435388881881093393}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -126,80 +125,28 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
-  m_Sprite: {fileID: 5522629400950475488, guid: 1a7bcd25a7b816d4498513fd16b3f602, type: 3}
+  m_SortingOrder: 4
+  m_Sprite: {fileID: 7791811118920659939, guid: 9a601469075e7f646abc290e033f19d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.13, y: 0.15}
+  m_Size: {x: 2.125, y: 2.375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6333057469042830242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9020c9cb218afa54c9adbf89f01a4372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mComplete: 0
-  mName: Zyro
-  m_DialogueList:
-  - Text: Hello, stranger! Glad to see a potential customer wandering around!
-    Trigger: 0
-  - Text: Wanna see some goods?
-    Trigger: 2
-  m_DialogueYesCase:
-  - Text: Thanks for buyin.
-    Trigger: 1
-  m_DialogueNoCase:
-  - Text: Come back here anytime!
-    Trigger: 0
-  m_DialogueFailToTradeCase:
-  - Text: It seems you don't have enough coins!
-    Trigger: 0
-  mInteraction: {fileID: 0}
-  m_DialogueBuyCase:
-    Text: Thank you for buying!
-    Trigger: 1
-  m_DialogueSellCase:
-    Text: Take a look.
-    Trigger: 1
-  m_DialogueAskAgainCase:
-    Text: Do you need something more?
-    Trigger: 2
---- !u!114 &-3195471757453502611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe09b29aaf7c0f243a4c691dbfe8d0c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myItem: []
-  mType: 0
---- !u!195 &453318726312972100
+--- !u!195 &4625782207344048252
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8985402103640690978}
+  m_GameObject: {fileID: 4435388881881093393}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 6.9375
+  m_Radius: 0.75
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -208,7 +155,26 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 6.625
-  m_BaseOffset: 5
+  m_Height: 3.625
+  m_BaseOffset: 3
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 0
+--- !u!114 &1179244416949813770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4435388881881093393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb3d3205f6a52b408f7982215192ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mComplete: 0
+  mName: 
+  m_DialogueList: []
+  m_DialogueYesCase: []
+  m_DialogueNoCase: []
+  m_DialogueFailToTradeCase: []
+  mInteraction: {fileID: 0}

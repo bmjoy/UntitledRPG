@@ -24,8 +24,11 @@ public class Hero : NPC
     {
         yield return StartCoroutine(base.Interact(Callback));
         yield return new WaitForSeconds(0.25f);
-        if (isTrading) Destroy(gameObject, 0.5f);
-        StopAllCoroutines();
+        if (isTrading) 
+        {
+            mProperty.End();
+            Destroy(gameObject, 0.2f); 
+        }
     }
 
     public override IEnumerator Event()

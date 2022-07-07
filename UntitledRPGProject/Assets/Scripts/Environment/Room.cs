@@ -125,7 +125,7 @@ public class Room : Environment
                         spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnvironmentSpawner"), pos, Quaternion.identity).GetComponent<Spawner>();
                         spawner.GetComponent<EnvironmentSpawner>().type = EnvironmentObject.Rock;
                         pos = transform.position + new Vector3(Random.Range(-GetComponent<Renderer>().bounds.size.x / 2.5f, GetComponent<Renderer>().bounds.size.x / 2.5f),
-            mSpawnPoint.transform.position.y + 0.25f, Random.Range(-GetComponent<Renderer>().bounds.size.z / 2.5f, GetComponent<Renderer>().bounds.size.z / 2.5f));
+            mSpawnPoint.transform.position.y + 0.5f, Random.Range(-GetComponent<Renderer>().bounds.size.z / 2.5f, GetComponent<Renderer>().bounds.size.z / 2.5f));
                     }
                 }
                 break;

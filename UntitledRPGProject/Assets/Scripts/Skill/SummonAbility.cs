@@ -128,6 +128,7 @@ public class SummonAbility : Skill_Setting
                 }
                 yield return new WaitForSeconds(mEffectTime);
                 mOwner.mStatus.mMana -= mManaCost;
+                mSelectedField = null;
             }
             else
                 BattleManager.Instance.Cancel();

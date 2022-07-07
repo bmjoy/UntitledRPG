@@ -43,7 +43,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.8693166, b: 1, a: 1}
   m_Intensity: 4
   m_Range: 16
   m_SpotAngle: 30
@@ -330,7 +330,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0, g: 1, b: 0, a: 0.6784314}
+      maxColor: {r: 0, g: 0.83541346, b: 1, a: 0.6784314}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -6236,8 +6236,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.6156863, g: 1, b: 0, a: 0}
-        key2: {r: 0, g: 1, b: 0, a: 0}
+        key1: {r: 0.2396226, g: 0.7489809, b: 1, a: 0}
+        key2: {r: 0, g: 0.7208681, b: 1, a: 0}
         key3: {r: 1, g: 1, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 1}
         key5: {r: 0, g: 0, b: 0, a: 1}
@@ -10970,8 +10970,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.62352943, g: 1, b: 0, a: 0}
-        key2: {r: 0, g: 1, b: 0, a: 0}
+        key1: {r: 0.23018867, g: 0.9197797, b: 1, a: 0}
+        key2: {r: 0, g: 0.7153816, b: 1, a: 0}
         key3: {r: 1, g: 1, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 1}
         key5: {r: 0, g: 0, b: 0, a: 1}

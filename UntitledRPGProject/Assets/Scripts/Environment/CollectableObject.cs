@@ -5,6 +5,7 @@ using UnityEngine;
 public class CollectableObject : MonoBehaviour
 {
     protected BreakableObject mOwner;
+    private Vector3 mPos;
     [SerializeField]
     protected float Radius = 6.0f;
     protected bool _initialize = false;
@@ -19,6 +20,7 @@ public class CollectableObject : MonoBehaviour
     public virtual IEnumerator Initialize(BreakableObject owner)
     {
         mOwner = owner;
+        mPos = mOwner.transform.position;
         yield return new WaitForSeconds(1.5f);
         _initialize = true;
     }
@@ -27,13 +29,15 @@ public class CollectableObject : MonoBehaviour
     {
         if (other.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            GetComponent<Rigidbody>().isKinematic = true;
-            transform.position += new Vector3(0.0f, 0.7f, 0.0f);
+            transform.position = new Vector3(transform.position.x,mPos.y,transform.position.z) + new Vector3(0.0f, 0.5f, 0.0f);
         }
     }
 
     protected virtual void OnTriggerStay(Collider other)
     {
-        
+        if (other.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            transform.position = new Vector3(transform.position.x, mPos.y, transform.position.z) + new Vector3(0.0f, 0.5f, 0.0f);
+        }
     }
 }
