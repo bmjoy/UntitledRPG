@@ -29,6 +29,9 @@ public class CollectableObject : MonoBehaviour
     {
         if (other.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            GetComponent<Rigidbody>().isKinematic = true;
             transform.position = new Vector3(transform.position.x,mPos.y,transform.position.z) + new Vector3(0.0f, 0.5f, 0.0f);
         }
     }
@@ -37,6 +40,8 @@ public class CollectableObject : MonoBehaviour
     {
         if (other.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             transform.position = new Vector3(transform.position.x, mPos.y, transform.position.z) + new Vector3(0.0f, 0.5f, 0.0f);
         }
     }

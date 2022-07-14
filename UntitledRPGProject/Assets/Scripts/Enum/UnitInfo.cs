@@ -104,17 +104,38 @@ public struct BonusStatus
     public float mAgility;
     public float mMagicPower;
 }
+
+public struct SkillTreeBonus
+{
+    public float mArmor;
+    public float mDamage;
+    public float mHealth;
+    public float mMana;
+    
+    public float mHPRegeneration;
+    public float mMPRegeneration;
+    public float mShieldValue;
+
+    public GameObject mShield;
+
+    public bool IsHPRegeneration;
+    public bool IsMPRegeneration;
+    public bool IsShield;
+}
+
 public struct Conditions
 {
     public bool isDied;
     public bool isDefend;
     public bool isCancel;
+    public bool isBattleComplete;
 
-    public Conditions(bool die, bool de, bool can)
+    public Conditions(bool die, bool de, bool can, bool bat)
     {
         isDied = die;
         isDefend = de;
         isCancel = can;
+        isBattleComplete = bat;
     }
 }
 

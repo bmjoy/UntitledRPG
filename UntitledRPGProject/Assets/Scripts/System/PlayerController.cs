@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float mSpeed = 5.0f;
+
+    private float mSummedSpeed = 0.0f;
+    private float mSkillTreeBouns_MovementSpeed = 0.0f;
+
     [SerializeField]
     private float mGroundDistance = 2.0f;
     private float mTrunSmoothVelocity = 0.0f;
@@ -44,6 +48,7 @@ public class PlayerController : MonoBehaviour
     public GameObject mCanvas;
     public GameObject mBag;
 
+    private SkillTreeBonus mPreservedSkillTreeBonus = new SkillTreeBonus();
     private bool isLeft = false;
     public bool onBattle = false;
     public int mGold = 0;
@@ -94,6 +99,13 @@ public class PlayerController : MonoBehaviour
 
         if (mCamera == null)
             mCamera = CameraSwitcher.Instance.transform.Find("GameWorldCamera");
+
+        SkillTreeManager._Instance.OnGainAbility += UnlockAbility;
+        mSummedSpeed = mSpeed;
+        mPreservedSkillTreeBonus.mDamage =
+            mPreservedSkillTreeBonus.mArmor =
+            mPreservedSkillTreeBonus.mHealth =
+            mPreservedSkillTreeBonus.mMana = 0.0f;
     }
 
     void Update()
@@ -121,7 +133,7 @@ public class PlayerController : MonoBehaviour
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref mTrunSmoothVelocity, 0.15f);
                 transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
                 Vector3 moveDirection = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward;
-                mCharacterController.Move(moveDirection.normalized * mSpeed * Time.deltaTime);
+                mCharacterController.Move(moveDirection.normalized * mSummedSpeed * Time.deltaTime);
 
                 mWalkTime += Time.deltaTime;
                 if(mWalkTime >= mEveryWalkTime)
@@ -136,6 +148,49 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && mVelocity.y <= 0.0f) mVelocity.y = -2.0f;
         mVelocity.y += -9.8f * Time.deltaTime;
         mCharacterController.Move(mVelocity * Time.deltaTime);
+    }
+
+    public void UnlockAbility(SkillTree_BounsAbility ability)
+    {
+        switch(ability.Type)
+        {
+            case SkillTree_BounsAbility.SkillTreeAbilityType.Health:
+                mPreservedSkillTreeBonus.mHealth += ability.Value;
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.Mana:
+                mPreservedSkillTreeBonus.mMana += ability.Value;
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.Damage:
+                mPreservedSkillTreeBonus.mDamage += ability.Value;
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.Armor:
+                mPreservedSkillTreeBonus.mArmor += ability.Value;
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.Movement:
+                {
+                    mSummedSpeed = 0.0f;
+                    mSkillTreeBouns_MovementSpeed += ability.Value;
+                    mSummedSpeed = mSpeed + (mSpeed * mSkillTreeBouns_MovementSpeed / 100.0f);
+                }
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.DoubleAttack:
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.MPRegeneration:
+                mPreservedSkillTreeBonus.IsMPRegeneration = true;
+                mPreservedSkillTreeBonus.mMPRegeneration = ability.Value;
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.HPRegeneration:
+                mPreservedSkillTreeBonus.IsHPRegeneration = true;
+                mPreservedSkillTreeBonus.mHPRegeneration = ability.Value;
+                break;
+            case SkillTree_BounsAbility.SkillTreeAbilityType.Shield:
+                mPreservedSkillTreeBonus.IsShield = true;
+                mPreservedSkillTreeBonus.mShieldValue = ability.Value;
+                break;
+            default:
+                Debug.LogWarning("Warning! The type cannot read!");
+                break;
+        }
     }
 
     private void StateControl()
@@ -171,7 +226,7 @@ public class PlayerController : MonoBehaviour
     {
         mHeroes.Clear();
         GameObject go = new GameObject("J");
-
+        mGold = 0;
         bool finish = false;
         while(!finish)
         {
@@ -217,7 +272,8 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < mHeroes.Count; ++i)
         {
             yield return new WaitForSeconds(0.1f);
-            mHeroes[i].GetComponent<Unit>().EnableUnit(i);
+            mHeroes[i].GetComponent<Player>().ApplySkillBonus(mPreservedSkillTreeBonus);
+            mHeroes[i].GetComponent<Player>().EnableUnit(i);
         }
 
         onBattle = true;
@@ -232,7 +288,6 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < mHeroes.Count; ++i)
             mHeroes[i].GetComponent<Unit>().DisableUnit(transform.position);
     }
-
 
     private void OnTriggerEnter(Collider other)
     {

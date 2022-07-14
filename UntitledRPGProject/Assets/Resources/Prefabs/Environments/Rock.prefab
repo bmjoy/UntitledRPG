@@ -110,11 +110,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mID: 0
   mName: Rock
+  mSFX: {fileID: 8300000, guid: eec08500f8e731e4988815a75a3ee2de, type: 3}
   mDialogue: []
   m_DialogueFailCase:
     Text: 
     Trigger: 0
-  mSFX: {fileID: 8300000, guid: eec08500f8e731e4988815a75a3ee2de, type: 3}
   mInteraction: {fileID: 0}
   _Completed: 0
   mAmount: 5

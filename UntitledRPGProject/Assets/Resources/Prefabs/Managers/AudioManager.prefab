@@ -117,6 +117,12 @@ MonoBehaviour:
   mMainMenuButtonSFX: {fileID: 8300000, guid: 3391c5cd3b8ccc44cb7fa2702e7ac343, type: 3}
   mDefendSFX: {fileID: 8300000, guid: 0553908956f1b5444ace312e90bb5dcb, type: 3}
   mDodgeSFX: {fileID: 8300000, guid: 1c283335784cd1740b1a38f17438cb30, type: 3}
+  mDoubleAttackSFX: {fileID: 8300000, guid: b1bd55139b944e0488e3832687446e92, type: 3}
+  mHealingSFX: {fileID: 8300000, guid: 2f34eff2a43c32c46aab0b61e0c25236, type: 3}
+  mSkillTreeButtonSFX: {fileID: 8300000, guid: 8bb3c9e2ac8dbb741b0f8a38da0f38b4, type: 3}
+  mSKillTreeObtainedSFX: {fileID: 8300000, guid: 983ee29dbf5d7b946928a0ceede3f042, type: 3}
+  mShieldHitSFX: {fileID: 8300000, guid: 27239a64abd077443ba232630a0baa18, type: 3}
+  mShieldExplosionSFX: {fileID: 8300000, guid: 4e2a3a8315cc54541afc33dab8b1eef5, type: 3}
 --- !u!1 &4890134167232618478
 GameObject:
   m_ObjectHideFlags: 0

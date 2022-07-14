@@ -93,6 +93,9 @@ public class NPCSpawner : Spawner
                 case NPCUnit.ArmorMerchant:
                     icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
                     break;
+                case NPCUnit.Monk:
+                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/MonkIcon"), transform.position, Quaternion.identity);
+                    break;
                 default:
                     break;
             }

@@ -53,7 +53,7 @@ public class Unit : MonoBehaviour, IUnit
     private float mGroundDistance = 2.0f;
 
     [SerializeField]
-    private float mAttackTime = 1.0f;
+    protected float mAttackTime = 1.0f;
 
     [SerializeField]
     private float mDefendTime = 1.0f;
@@ -104,7 +104,7 @@ public class Unit : MonoBehaviour, IUnit
             mSetting.Agility,
             mSetting.MagicPower,
             mSetting.WeaponType);
-        mConditions = new Conditions(false, false, false);
+        mConditions = new Conditions(false, false, false, false);
 
         mBonusStatus = new BonusStatus();
         mBonusStatus.mAgility = mBonusStatus.mArmor = mBonusStatus.mDefend = mBonusStatus.mDamage = mBonusStatus.mMana
@@ -309,8 +309,12 @@ public class Unit : MonoBehaviour, IUnit
             mStatus.mMagic_Resistance += bonus.mMagic_Resistance;
             mLevelText.text = mStatus.mLevel.ToString();
 
-            mStatus.mHealth = mStatus.mMaxHealth;
-            mStatus.mMana = mStatus.mMaxMana;
+            if(mConditions.isDied == false)
+            {
+                mStatus.mHealth = mStatus.mMaxHealth;
+                mStatus.mMana = mStatus.mMaxMana;
+            }
+
 
             return new KeyValuePair<bool, BonusStatus>(true, bonus);
         }
@@ -370,71 +374,72 @@ public class Unit : MonoBehaviour, IUnit
             mTarget.mSpriteRenderer.sortingOrder = (transform.position.z > mTarget?.transform.position.z) ? 3 : 4;
 
             onComplete?.Invoke();
-            if (mType == AttackType.Melee)
-            {
-                mAiBuild.SetActionEvent(ActionEvent.AttackWalk);
-                yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
-                mirror?.Play("Attack");
-                if (mTarget)
-                {
-                    if (mActionTrigger != null)
-                    {
-                        mActionTrigger?.Invoke();
-                        yield return new WaitUntil(()=> GetComponent<ActionTrigger>().isCompleted);
-                    }
-                    else
-                    {
-                        mAnimator.Play(MyAttackAnim[Random.Range(0, MyAttackAnim.Count)]);
-                        if (mAttackClips.Count > 0)
-                            AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
-                        yield return new WaitForSeconds(mAttackTime);
-
-                        mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
-                    }
-                    StartCoroutine(CounterState(mTarget.mStatus.mDamage));
-                }
-                yield return new WaitForSeconds(1.0f);
-                mAiBuild.SetActionEvent(((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy);
-                TurnEnded();
-                yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
-
-            }
-            else if(mType == AttackType.Range)
-            {
-                mAiBuild.SetActionEvent(ActionEvent.Busy);
-                mAnimator.Play("Attack");
-                mirror?.Play("Attack");
-                if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
-                yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name),transform.Find("Fire").position,Quaternion.identity);
-                if(go.GetComponent<SpriteRenderer>())
-                    go.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
-                Bullet bullet = go.GetComponent<Bullet>();
-                bullet.Initialize(mTarget.transform, mStatus.mDamage + mBonusStatus.mDamage);
-
-                yield return new WaitUntil(() => bullet.isDamaged == true);
-                TurnEnded();
-            }
-            else if(mType == AttackType.Instant)
-            {
-                mirror?.Play("Attack");
-                mAiBuild.SetActionEvent(ActionEvent.Busy);
-                mAnimator.Play("Attack");
-                if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
-                yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
-                mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
-                Destroy(go, 1.0f);
-
-                yield return new WaitUntil(() => go == null);
-                TurnEnded();
-
-            }
+            StartCoroutine(BattleState(type));
+            yield return new WaitUntil(() => mConditions.isBattleComplete == true);
             mAiBuild.SetActionEvent(ActionEvent.None);
             mAiBuild.ChangeState("Waiting");
         }
+    }
+
+    virtual protected IEnumerator BattleState(DamageType type)
+    {
+        if (mType == AttackType.Melee)
+        {
+            mAiBuild.SetActionEvent(ActionEvent.AttackWalk);
+            yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+            mirror?.Play("Attack");
+            if (mTarget)
+            {
+                if (mActionTrigger != null)
+                {
+                    mActionTrigger?.Invoke();
+                    yield return new WaitUntil(() => GetComponent<ActionTrigger>().isCompleted);
+                }
+                else
+                {
+                    mAnimator.Play(MyAttackAnim[Random.Range(0, MyAttackAnim.Count)]);
+                    if (mAttackClips.Count > 0)
+                        AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
+                    yield return new WaitForSeconds(mAttackTime);
+
+                    mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+                }
+                StartCoroutine(CounterState(mTarget.mStatus.mDamage));
+            }
+            yield return new WaitForSeconds(1.0f);
+            mAiBuild.SetActionEvent(((mStatus.mHealth > 0.0f)) ? ActionEvent.BackWalk : ActionEvent.Busy);
+            yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+        }
+        else if (mType == AttackType.Range)
+        {
+            mAiBuild.SetActionEvent(ActionEvent.Busy);
+            mAnimator.Play("Attack");
+            mirror?.Play("Attack");
+            if (mAttackClips.Count > 0)
+                AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
+            yield return new WaitForSeconds(mAttackTime);
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), transform.Find("Fire").position, Quaternion.identity);
+            if (go.GetComponent<SpriteRenderer>())
+                go.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
+            Bullet bullet = go.GetComponent<Bullet>();
+            bullet.Initialize(mTarget.transform, mStatus.mDamage + mBonusStatus.mDamage);
+
+            yield return new WaitUntil(() => bullet.isDamaged == true);
+        }
+        else if (mType == AttackType.Instant)
+        {
+            mirror?.Play("Attack");
+            mAiBuild.SetActionEvent(ActionEvent.Busy);
+            mAnimator.Play("Attack");
+            if (mAttackClips.Count > 0)
+                AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
+            yield return new WaitForSeconds(mAttackTime);
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+            mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+            Destroy(go, 1.0f);
+            yield return new WaitUntil(() => go == null);
+        }
+        TurnEnded();
     }
 
     private float SetTarget(ref RaycastHit hit)
@@ -526,7 +531,7 @@ public class Unit : MonoBehaviour, IUnit
         if (type == DamageType.Physical)
         {
             value = (mConditions.isDefend) ? dmg - (dmg * mStatus.mDefend / 100.0f) : dmg;
-            value = (value - (mStatus.mArmor + mBonusStatus.mArmor) <= 0.0f) ? 1.0f : value - (mStatus.mArmor + mBonusStatus.mArmor);
+            value = (value - (mStatus.mArmor + mBonusStatus.mArmor) <= 0.0f) ? ((mConditions.isDefend) ? 0.0f : 1.0f) : value - (mStatus.mArmor + mBonusStatus.mArmor);
         }
         else
         {
@@ -544,7 +549,7 @@ public class Unit : MonoBehaviour, IUnit
         GameObject damage = Instantiate(mCanvas.transform.Find("DamageValue").gameObject
             , mCanvas.transform.position - new Vector3(0.0f,1.0f,0.0f), Quaternion.identity, mCanvas.transform);
         damage.SetActive(true);
-        damage.GetComponent<TextMeshProUGUI>().text = (isDodge) ? "Miss!" : value.ToString();
+        damage.GetComponent<TextMeshProUGUI>().text = (isDodge) ? "Miss!" : ((value == 0.0f) ? "Blocked!" : value.ToString());
         Destroy(damage, 1.1f);
         if(!isDodge)
         {
@@ -614,13 +619,13 @@ public class Unit : MonoBehaviour, IUnit
     }
     virtual public void TurnEnded()
     {
+        mConditions.isBattleComplete = true;
         if(mTarget != null)
         {
             mTarget.mSelected.SetActive(false);
             mSpriteRenderer.sortingOrder = mTarget.mSpriteRenderer.sortingOrder = 4;
         }
         mField.GetComponent<Field>().Picked(false);
-
         mTarget = null;
         mOrder = Order.TurnEnd;
     }
@@ -642,7 +647,7 @@ public class Unit : MonoBehaviour, IUnit
         AI_Initialize();
     }
 
-    public void DisableUnit(Vector3 pos)
+    virtual public void DisableUnit(Vector3 pos)
     {
         transform.position = pos;
         mHealthBar.Active(false);
@@ -658,7 +663,7 @@ public class Unit : MonoBehaviour, IUnit
         gameObject.SetActive(false);
     }
 
-    public void EnableUnit(int index)
+    virtual public void EnableUnit(int index)
     {
         if(mFlag == Flag.Player)
         {
@@ -688,6 +693,7 @@ public class Unit : MonoBehaviour, IUnit
             mAnimator.SetBool("Death", true);
         }
         mirror = null;
+        
     }
 
     public void Revive(float val)
@@ -700,5 +706,14 @@ public class Unit : MonoBehaviour, IUnit
         TakeRecover(Mathf.RoundToInt((val * mStatus.mMaxHealth) / (mStatus.mMaxHealth + mBonusStatus.mHealth)));
         TakeRecoverMana(Mathf.RoundToInt((val * mStatus.mMaxMana) / (mStatus.mMaxMana + mBonusStatus.mMana)));
         UIManager.Instance.mStorage.mOrderbar.GetComponent<OrderBar>().EnqueueSignleOrder(this);
+    }
+
+    virtual public void BeginTurn()
+    {
+        mConditions.isDefend = false;
+        mConditions.isBattleComplete = false;
+        mOrder = Order.Standby;
+        mBuffNerfController.Tick();
+        mField.Picked(true);
     }
 }

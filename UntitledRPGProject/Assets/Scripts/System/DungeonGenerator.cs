@@ -11,6 +11,7 @@ public class DungeonGenerator : MonoBehaviour
     int _CurrentWeaponMerchant = 0;
     int _CurrentArmorMerchant = 0;
     int _CurrentCompanion = 0;
+    int _CurrentMonk = 0;
     int _CurrentRecover = 0;
     int _CurrentSecret = 0;
 
@@ -26,10 +27,8 @@ public class DungeonGenerator : MonoBehaviour
 
     void Generate()
     {
-        _CurrentWeaponMerchant = 0;
-        _CurrentArmorMerchant = 0;
-        _CurrentCompanion = 0;
-        _CurrentRecover = 0;
+        _CurrentWeaponMerchant = _CurrentArmorMerchant = _CurrentCompanion = _CurrentRecover =
+            _CurrentMonk = 0;
 
         Room room;
         Room.RoomType type = Room.RoomType.None;
@@ -101,7 +100,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private Room.RoomType GetRoomType(float Chance, Room.RoomType defaultType)
     {
-        Room.RoomType type = (Room.RoomType)UnityEngine.Random.Range(0, 5);
+        Room.RoomType type = (Room.RoomType)UnityEngine.Random.Range(0, 6);
         if (UnityEngine.Random.Range(0, 100) <= Chance)
             return defaultType;
 
@@ -128,6 +127,12 @@ public class DungeonGenerator : MonoBehaviour
             case Room.RoomType.Companion:
                 if (_CurrentCompanion < _Info.CompanionAmount)
                     _CurrentCompanion++;
+                else
+                    type = defaultType;
+                break;
+            case Room.RoomType.Monk:
+                if (_CurrentMonk < _Info.MonkAmount)
+                    _CurrentMonk++;
                 else
                     type = defaultType;
                 break;

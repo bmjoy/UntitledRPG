@@ -27,6 +27,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
     protected List<Dialogue> m_DialogueFailToTradeCase = new List<Dialogue>();
     protected Item mProperty;
     protected GameObject mCanvas;
+    protected Animator mAnimator;
     public GameObject mInteraction;
 
     protected virtual void Start()
@@ -39,6 +40,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
             mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         mInteraction = mCanvas.transform.Find("Interaction").gameObject;
         mInteraction.SetActive(false);
+        mAnimator = GetComponent<Animator>();
     }
 
     protected virtual void Update()
