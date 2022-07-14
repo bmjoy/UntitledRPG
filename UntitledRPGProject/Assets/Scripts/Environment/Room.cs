@@ -13,6 +13,7 @@ public class Room : Environment
         Recover,
         ArmorMerchant,
         WeaponMerchant,
+        Monk,
         Companion,
         LowTierMonster,
         MiddleTierMonster,
@@ -143,6 +144,11 @@ public class Room : Environment
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.WeaponMerchant;
                 mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
+                break;
+            case RoomType.Monk:
+                spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
+                spawner.GetComponent<NPCSpawner>().mType = NPCUnit.Monk;
+                mMainIcon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/MonkIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.LowTierMonster:
                 spawner = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/EnemySpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<EnemySpawner>();

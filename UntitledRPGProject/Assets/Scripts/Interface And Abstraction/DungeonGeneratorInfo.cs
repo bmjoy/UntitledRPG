@@ -17,6 +17,7 @@ public class DungeonGeneratorInfo : ScriptableObject
     [Range(0, 10)] public int MerchantAmount = 2;
     [Range(0, 10)] public int CompanionAmount = 2;
     [Range(0, 10)] public int RecoverAmount = 2;
+    [Range(0, 10)] public int MonkAmount = 2;
     [Header("Spawn Chance Rate")]
     [Range(0.0f, 100.0f)] public float NoneRoomRate = 35.0f;
     [Range(0.0f, 100.0f)] public float HighTierMonsterChance = 40.0f;

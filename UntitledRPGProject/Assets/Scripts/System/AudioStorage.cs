@@ -19,6 +19,12 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mMainMenuButtonSFX;
     public AudioClip mDefendSFX;
     public AudioClip mDodgeSFX;
+    public AudioClip mDoubleAttackSFX;
+    public AudioClip mHealingSFX;
+    public AudioClip mSkillTreeButtonSFX;
+    public AudioClip mSKillTreeObtainedSFX;
+    public AudioClip mShieldHitSFX;
+    public AudioClip mShieldExplosionSFX;
 
     public void ChangeMusic(string name)
     {

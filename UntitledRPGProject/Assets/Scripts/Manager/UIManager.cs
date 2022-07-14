@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
     public OptionScreen mOptionScreenUI;
     public VictoryScreen mVictoryScreen;
     public MerchantScreen mMerchantScreen;
-
+    public SkillTreeScreen mSkillTreeScreen;
     private bool switchOfInventory = false;
     private float mTime = 0.0f;
     private float mCoolTime = 1.0f;
@@ -69,6 +69,8 @@ public class UIManager : MonoBehaviour
         mVictoryScreen = mCanvas.transform.Find("VictoryScreen").GetComponent<VictoryScreen>();
         mMerchantScreen = mCanvas.transform.Find("MerchantBox").GetComponent<MerchantScreen>();
         mOptionScreenUI = mCanvas.transform.Find("OptionScreen").GetComponent<OptionScreen>();
+        mSkillTreeScreen = mCanvas.transform.Find("SkillTreeScreen").GetComponent<SkillTreeScreen>();
+        mSkillTreeScreen.Initialize();
         mTransitionAnimator = mStorage.mScreenTransition.GetComponent<Animator>();
         mTextAnimator = mStorage.mBasicText.GetComponent<Animator>();
         mFadeAnimator = mStorage.mFadeScreen.GetComponent<Animator>();
@@ -76,19 +78,24 @@ public class UIManager : MonoBehaviour
         mOrderBar = mStorage.mOrderbar.GetComponent<OrderBar>();
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize(this);
+
         DisplayExitButtonInDialogue(false);
         DisplayBackButtonInDialogue(false);
         DisplayBattleInterface(false);
         DisplayText(false);
         DisplayDialogueBox(false);
         DisplayInventory(false);
+        DisplaySkillTreeScreen(false);
     }
 
     public void DisplayInventory(bool active)
     {
         mInventoryUI.Active(active);
     }
-
+    public void DisplaySkillTreeScreen(bool active)
+    {
+        mSkillTreeScreen.Active(active);
+    }
     private void Update()
     {
         if (PlayerController.Instance && PlayerController.Instance.onBattle)

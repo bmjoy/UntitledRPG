@@ -144,6 +144,7 @@ public class BattleManager : MonoBehaviour
                     }
                     else
                     {
+                        mCurrentUnit.BeginTurn();
                         mCurrentUnit.mAiBuild.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
                         mCurrentUnit.mField.GetComponent<Field>().Picked(true);

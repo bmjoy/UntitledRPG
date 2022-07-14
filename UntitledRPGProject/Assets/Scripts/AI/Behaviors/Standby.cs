@@ -9,10 +9,6 @@ public class Standby : State
     private bool IsSearched = false;
     public override void Enter(Unit agent)
     {
-        agent.mConditions.isDefend = false;
-        agent.mOrder = Order.Standby;
-        agent.GetComponent<BuffAndNerfEntity>().Tick();
-        agent.mField.GetComponent<Field>().Picked(true);
         IsSucceeded = false;
         IsSearched = false;
         while (IsSucceeded == false)

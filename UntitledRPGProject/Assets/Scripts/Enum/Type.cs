@@ -63,6 +63,7 @@ public enum NPCUnit
     Eleven,
     ArmorMerchant,
     WeaponMerchant,
+    Monk,
     Jimmy
 }
 

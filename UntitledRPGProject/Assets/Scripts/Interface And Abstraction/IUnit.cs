@@ -19,4 +19,6 @@ public interface IUnit
     void DisableUnit(Vector3 pos);
     void EnableUnit(int index);
     void ResetUnit();
+
+    void BeginTurn();
 }

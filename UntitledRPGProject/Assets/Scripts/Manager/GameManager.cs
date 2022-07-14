@@ -163,6 +163,7 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.musicSource.loop = true;
         Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
             Instance.mCamera.transform.Find("GameWorldCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().LookAt = PlayerController.Instance.transform;
+        UIManager.Instance.DisplayMiniMap(true);
     }
 
     private void ResetObjects()

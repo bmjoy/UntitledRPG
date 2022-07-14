@@ -19,6 +19,7 @@ MonoBehaviour:
   MerchantAmount: 2
   CompanionAmount: 2
   RecoverAmount: 2
+  MonkAmount: 3
   NoneRoomRate: 35
   HighTierMonsterChance: 40
   MiddleTierMonsterChance: 40
