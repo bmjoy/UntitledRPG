@@ -653,11 +653,11 @@ public class Unit : MonoBehaviour, IUnit
         mHealthBar.Active(false);
 
         mStatus.mMaxHealth -= mBonusStatus.mHealth;
-        if (mStatus.mHealth > mStatus.mMaxHealth + mBonusStatus.mHealth)
-            mStatus.mHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
+        mStatus.mHealth -= mBonusStatus.mHealth;
+
         mStatus.mMaxMana -= mBonusStatus.mMana;
-        if (mStatus.mMana > mStatus.mMaxMana + mBonusStatus.mMana)
-            mStatus.mMana = mStatus.mMaxMana + mBonusStatus.mMana;
+        mStatus.mMana -= mBonusStatus.mMana;
+
         mBuffNerfController.Stop();
         mAiBuild.SetActionEvent(ActionEvent.None);
         gameObject.SetActive(false);
@@ -682,7 +682,7 @@ public class Unit : MonoBehaviour, IUnit
 
         mStatus.mMana += mBonusStatus.mMana;
         mStatus.mMaxMana += mBonusStatus.mMana;
-        
+
         mAiBuild.SetActionEvent(ActionEvent.IntroWalk);
 
         gameObject.SetActive(true);

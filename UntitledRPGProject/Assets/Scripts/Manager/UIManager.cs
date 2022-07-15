@@ -100,6 +100,10 @@ public class UIManager : MonoBehaviour
     {
         if (PlayerController.Instance && PlayerController.Instance.onBattle)
             return;
+
+        if (GameManager.Instance.IsCinematicEvent)
+            return;
+
         if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f && GameManager.Instance.mGameState == GameState.GamePlay)
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mOpenInventorySFX);

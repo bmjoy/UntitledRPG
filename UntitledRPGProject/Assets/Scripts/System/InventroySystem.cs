@@ -22,6 +22,7 @@ public class InventroySystem : MonoBehaviour
         }
     }
     public InventoryInfo mInventoryInfo;
+    public event System.Action mAction;
     public void Initialize()
     {
         mInventoryInfo = new InventoryInfo();
@@ -30,6 +31,7 @@ public class InventroySystem : MonoBehaviour
     public bool Equip(object item)
     {
         bool isExisted = false;
+        mAction?.Invoke();
         if (item is Weapon)
         {
             Weapon weapon = (Weapon)item;

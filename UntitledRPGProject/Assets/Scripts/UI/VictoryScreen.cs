@@ -59,30 +59,64 @@ public class VictoryScreen : MonoBehaviour
     private void UpdateCharacterList()
     {
         isLevelUP = false;
-        for (int i=0; i < PlayerController.Instance.mHeroes.Count; ++i)
+        bool LevelEvent = false;
+
+        BonusStatus[] bonusStatuses = new BonusStatus[PlayerController.Instance.mHeroes.Count];
+        bool[] islevelUpGroup = new bool[PlayerController.Instance.mHeroes.Count];
+        do
+        {
+            LevelEvent = false;
+            for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
+                LevelEvent = CheckLevelUp(ref bonusStatuses, ref islevelUpGroup, i);
+        }
+        while (LevelEvent);
+
+        for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
         {
             var hero = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
-            var levelUp = hero.LevelUP();
             var borader = Boraders[i].transform;
-            borader.Find("Status").gameObject.SetActive((levelUp.Key == true) ? true : false);
-            if(levelUp.Key)
-            {
-                borader.Find("Status").Find("Health").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mHealth.ToString();
-                borader.Find("Status").Find("Mana").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mMana.ToString();
-                borader.Find("Status").Find("Sub_First").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mDamage.ToString();
-                borader.Find("Status").Find("Sub_Second").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mMagicPower.ToString();
-                borader.Find("Status").Find("Sub_Third").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mArmor.ToString();
-                borader.Find("Status").Find("Sub_Forth").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + levelUp.Value.mMagic_Resistance.ToString();
-                isLevelUP = true;
-            }
-            borader.Find("Name").GetComponent<TextMeshProUGUI>().text = hero.mSetting.Name;
-            borader.Find("Level").GetComponent<TextMeshProUGUI>().text = "Lv. " + hero.mStatus.mLevel.ToString();
-            borader.Find("EXPValue").GetComponent<TextMeshProUGUI>().text = (levelUp.Key) ? "Level up!" : hero.mStatus.mEXP.ToString() + " / " + (GameManager.Instance.mRequiredEXP + (50 *  hero.mStatus.mLevel));
-            borader.Find("Sprite").GetComponent<Image>().sprite = Resources.Load<Image>("Prefabs/UI/" + hero.mSetting.Name + "_UI").sprite;
-            borader.Find("Sprite").GetComponent<Animator>().runtimeAnimatorController = Resources.Load<Animator>("Prefabs/UI/" + hero.mSetting.Name + "_UI").runtimeAnimatorController;
+            PrintOutHeroStatus(bonusStatuses, islevelUpGroup, i, hero, borader);
         }
-        
     }
+
+    private void PrintOutHeroStatus(BonusStatus[] bonusStatuses, bool[] islevelUpGroup, int i, Unit hero, Transform borader)
+    {
+        borader.Find("Status").gameObject.SetActive(islevelUpGroup[i]);
+        if (islevelUpGroup[i])
+        {
+            borader.Find("Status").Find("Health").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + bonusStatuses[i].mHealth.ToString();
+            borader.Find("Status").Find("Mana").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + bonusStatuses[i].mMana.ToString();
+            borader.Find("Status").Find("Sub_First").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + bonusStatuses[i].mDamage.ToString();
+            borader.Find("Status").Find("Sub_Second").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + bonusStatuses[i].mMagicPower.ToString();
+            borader.Find("Status").Find("Sub_Third").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + bonusStatuses[i].mArmor.ToString();
+            borader.Find("Status").Find("Sub_Forth").Find("Value").GetComponent<TextMeshProUGUI>().text = "+ " + bonusStatuses[i].mMagic_Resistance.ToString();
+        }
+        borader.Find("Name").GetComponent<TextMeshProUGUI>().text = hero.mSetting.Name;
+        borader.Find("Level").GetComponent<TextMeshProUGUI>().text = "Lv. " + hero.mStatus.mLevel.ToString();
+        borader.Find("EXPValue").GetComponent<TextMeshProUGUI>().text = (islevelUpGroup[i]) ? "Level up!" : hero.mStatus.mEXP.ToString() + " / " + (GameManager.Instance.mRequiredEXP + (50 * hero.mStatus.mLevel));
+        borader.Find("Sprite").GetComponent<Image>().sprite = Resources.Load<Image>("Prefabs/UI/" + hero.mSetting.Name + "_UI").sprite;
+        borader.Find("Sprite").GetComponent<Animator>().runtimeAnimatorController = Resources.Load<Animator>("Prefabs/UI/" + hero.mSetting.Name + "_UI").runtimeAnimatorController;
+    }
+
+    private bool CheckLevelUp(ref BonusStatus[] bonusStatuses, ref bool[] islevelUpGroup, int i)
+    {
+        var hero = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+        var levelUp = hero.LevelUP();
+        if (levelUp.Key)
+        {
+            islevelUpGroup[i] = levelUp.Key;
+            bonusStatuses[i].mHealth += levelUp.Value.mHealth;
+            bonusStatuses[i].mArmor += levelUp.Value.mArmor;
+            bonusStatuses[i].mDamage += levelUp.Value.mDamage;
+            bonusStatuses[i].mMagicPower += levelUp.Value.mMagicPower;
+            bonusStatuses[i].mMagic_Resistance += levelUp.Value.mMagic_Resistance;
+            bonusStatuses[i].mMana += levelUp.Value.mMana;
+            isLevelUP = true;
+        }
+
+        return levelUp.Key;
+    }
+
     public IEnumerator WaitForEnd()
     {
         GetComponent<Animator>().Play("Outro");

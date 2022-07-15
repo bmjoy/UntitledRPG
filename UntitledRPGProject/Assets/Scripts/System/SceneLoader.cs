@@ -28,7 +28,6 @@ public class SceneLoader : MonoBehaviour
         Instantiate(Resources.Load<GameObject>("Prefabs/Managers/GameManager"),Vector3.zero,Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Prefabs/Managers/LevelManager"), Vector3.zero, Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Prefabs/Managers/BattleManager"), Vector3.zero, Quaternion.identity);
-        Instantiate(Resources.Load<GameObject>("Prefabs/Managers/SkillTreeManager"), Vector3.zero, Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Prefabs/Managers/UIManager"), Vector3.zero, Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Prefabs/Managers/AudioManager"), Vector3.zero, Quaternion.identity);
         Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), Vector3.zero, Quaternion.identity);
@@ -36,13 +35,9 @@ public class SceneLoader : MonoBehaviour
         LevelManager.Instance.mCurrentLevel = _sceneIndex;
     }
 
-    void Update()
-    {
-    }
-
     public void StartGame()
     {
-        mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
+        StopAllCoroutines();
         StartCoroutine(StartLoad());
     }
 
