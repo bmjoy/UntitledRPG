@@ -31,7 +31,4 @@ public class SkillTreeManager : MonoBehaviour
             OnGainAbility?.Invoke(skill_Node._BonusAbility);
         }
     }
-
-
-
 }

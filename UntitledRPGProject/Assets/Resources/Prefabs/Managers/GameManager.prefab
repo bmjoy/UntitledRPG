@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2678286021081469868}
   - component: {fileID: 6699237290124560843}
+  - component: {fileID: 780436741718853984}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -46,10 +47,23 @@ MonoBehaviour:
   mGameState: 0
   mArmorPool: []
   mWeaponPool: []
-  _ItemID: 0
   mCamera: {fileID: 0}
   mEnemyProwler: {fileID: 0}
-  mCurrentLevel: 0
   mRequiredEXP: 50
   mAmountofSoul: 1
   mWaitForRestart: 3
+  characterExists: []
+  IsCinematicEvent: 0
+--- !u!114 &780436741718853984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611940729746462027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47576deb03cc181479c7c38fa354b25f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTotalBounsAbilities: []

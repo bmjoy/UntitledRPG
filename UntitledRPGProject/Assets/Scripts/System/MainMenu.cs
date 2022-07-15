@@ -28,8 +28,10 @@ public class MainMenu : MonoBehaviour
         AudioManager.SetSFXVolume(mSFXSlider.value);
 
         button.onClick.RemoveAllListeners();
+        SceneLoader.Instance._sceneIndex = 2;
+ 
         button.onClick.AddListener(() => AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mMainMenuButtonSFX));
-        button.onClick.AddListener(() => loader.GetComponent<SceneLoader>().StartGame());
+        button.onClick.AddListener(() => SceneLoader.Instance.StartGame());
         button.onClick.AddListener(() => mCanvas.sortingOrder = -1);
         button.onClick.AddListener(() => GameManager.Instance.mGameState = GameState.Initialize);
     }

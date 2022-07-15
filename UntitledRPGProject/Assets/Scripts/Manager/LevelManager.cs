@@ -61,6 +61,13 @@ public class LevelManager : MonoBehaviour
         RespawnEntities();
     }
 
+    public void ReturnToMainMenu()
+    {
+        SceneLoader.Instance._sceneIndex = 1;
+        SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
+        SceneLoader.Instance.StartGame();
+    }
+
     public void RestartGame()
     {
         SceneLoader.Instance._sceneIndex = mCurrentLevel = 2;
