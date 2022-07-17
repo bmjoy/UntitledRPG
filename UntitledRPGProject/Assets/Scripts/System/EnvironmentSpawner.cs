@@ -52,7 +52,7 @@ public class EnvironmentSpawner : Spawner
         else
         {
             mInitialized = true;
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, 2.0f);
         }
         yield return null;
     }

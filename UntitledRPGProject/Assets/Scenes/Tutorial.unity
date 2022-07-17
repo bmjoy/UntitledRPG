@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 302833247}
   - component: {fileID: 302833246}
   - component: {fileID: 302833245}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,16 +333,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _EnemySpawner: {fileID: 6851679595670550415}
+  _EnvironmentSpawner: {fileID: 3592557064824492650}
   m_DialogueList:
   - Text: 'Greetings, Player! Welcome to the RPG world!
 
       (Press ''<color=yellow>E</color>''
       to continue)'
     Trigger: 0
-  - Text: 'I shall guide how to survive in this world. Hopefully follow me! '
+  - Text: I shall guide you how to survive... *blah *blah (Press the <color=yellow>any
+      button</color> on dialogue!)
     Trigger: 2
   m_DialogueYesCase:
-    Text: Happy to hear! Let's start it!
+    Text: Oh... oh! Happy to hear that! Let's start it!
     Trigger: 0
   m_DialogueNoCase:
     Text: Eh, eh...? Huh? Wait! There is no right to say "<color=red>NO</color>"!
@@ -355,12 +357,22 @@ MonoBehaviour:
       keys!
     Trigger: 2
   m_DialogueMoveSuccess:
-    Text: Great job! Keep moving the next step!
+    Text: Great job! Moving on the next step!
+    Trigger: 0
+  m_DialogueInteractList:
+  - Text: The next step is interaction! As you know, the world has many objects can
+      interact!
+    Trigger: 0
+  - Text: Press '<color=yellow>E</color>' key is the main key to interact! Try to
+      interact that rock to get items!
+    Trigger: 2
+  m_DialogueInteractSuccess:
+    Text: Great job! You can interact other environment or NPC too! Let's move on!
     Trigger: 0
   m_DialogueBattleList:
   - Text: The next step is battle! YEAHHHHHH!
     Trigger: 0
-  - Text: You can order your unit with <color=yellow> Attack</color>/<color=yellow>Magic</color>/<color=yellow>Defend</color>.
+  - Text: You can order your unit with  <color=yellow>Attack</color>/<color=yellow>Magic</color>/<color=yellow>Defend</color>.
     Trigger: 0
   m_DialogueBattleHelp:
     Text: Press <color=yellow> Attack </color> or <color=yellow> Magic </color>,
@@ -371,7 +383,10 @@ MonoBehaviour:
     Text: Great job! You won the battle! :D
     Trigger: 0
   m_DialogueEndList:
-  - Text: Almost finished! The final step is inventory! Press "<color=yellow>I</color>"
+  - Text: Finally, the final step is inventory! In the gameworld, you can achieve
+      the item from merchants or enemies!
+    Trigger: 0
+  - Text: I provide you a <color=blue>weapon</color>! Press "<color=yellow>I</color>"
       key to open your inventory! Then equip an item!
     Trigger: 2
   m_DialogueEndSuccessList:
@@ -839,7 +854,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.3044715, b: 0.7169812, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -10476,6 +10491,53 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &3307282650315406212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3307282650315406234}
+  - component: {fileID: 3592557064824492650}
+  m_Layer: 0
+  m_Name: EnvironmentSpawner
+  m_TagString: EnemySpawner
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3307282650315406234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3307282650315406212}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.1, y: 0.5, z: -14.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3592557064824492650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3307282650315406212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b072254b7ffe6645972ed5b1d5111e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObject: {fileID: 0}
+  mInitialized: 0
+  mGizmoColor: {r: 1, g: 0.7988266, b: 0, a: 0}
+  type: 2
 --- !u!4 &6851679595670550414
 Transform:
   m_ObjectHideFlags: 0

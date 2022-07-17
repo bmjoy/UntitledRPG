@@ -91,6 +91,7 @@ public class EnemyProwler : Prowler
             mCollider.enabled = false;
             mRigidbody.isKinematic = true;
             mModel.SetActive(false);
+            mCanvas.transform.Find("Tutorial").gameObject.SetActive(false);
             StartCoroutine(WaitForSpawn());
         }
     }

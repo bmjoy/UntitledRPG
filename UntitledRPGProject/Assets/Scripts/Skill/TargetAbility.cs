@@ -42,13 +42,17 @@ public class TargetAbility : DamagableAbility
                 {
                     Raycasting();
                     if(Input.GetMouseButtonDown(0) && mTarget)
+                    {
+                        isActive = true;
                         break;
+                    }
                     if (Input.GetMouseButtonDown(1))
                     {
                         mTarget?.mField.TargetedMagicHostile(false);
                         mTarget?.mField.TargetedFriendly(false);
                         mTarget = null;
                         isActive = false;
+                        BattleManager.Instance.mSpellChanning = false;
                         UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                         break;
                     }
@@ -61,22 +65,6 @@ public class TargetAbility : DamagableAbility
                 }
 
                 UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
-                while (true)
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        isActive = true;
-                        break;
-                    }
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        isActive = false;
-                        mTarget = null;
-                        UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
-                        break;
-                    }
-                    yield return null;
-                }
             }
             else
             {
@@ -86,6 +74,7 @@ public class TargetAbility : DamagableAbility
 
             if (isActive)
             {
+                BattleManager.Instance.mSpellChanning = false;
                 mTarget.mField.TargetedMagicHostile(false);
                 mTarget.mField.TargetedFriendly(false);
                 UIManager.Instance.ChangeOrderBarText("<color=red>"+ mName + "!</color>");
@@ -237,7 +226,9 @@ public class TargetAbility : DamagableAbility
         RaycastHit hit;
 
         if (mProperty == SkillProperty.Friendly)
-        {
+        {                   
+            BattleManager.Instance.mSpellChanning = true;
+
             if (Physics.Raycast(ray, out hit, 100, (mOwner.GetComponent<Unit>().mFlag == Flag.Player) ? LayerMask.GetMask("Ally") 
                 : LayerMask.GetMask("Enemy")))
             {
@@ -259,7 +250,16 @@ public class TargetAbility : DamagableAbility
                     maxDist = hit.distance;
                 }
 
-                mTarget?.mField.TargetedFriendly(true);
+            }
+            else if(BattleManager.Instance.mCurrentUnit.mTarget)
+            {
+                if(mTarget != BattleManager.Instance.mCurrentUnit.mTarget)
+                {
+                    mTarget?.mField.TargetedFriendly(false);
+                    mTarget?.mSelected.SetActive(false);
+                    mTarget = (BattleManager.Instance.mCurrentUnit.mTarget.mConditions.isDied == false) ? BattleManager.Instance.mCurrentUnit.mTarget : null;
+                    mTarget?.mSelected.SetActive(true);
+                }
             }
             else
             {
@@ -268,6 +268,7 @@ public class TargetAbility : DamagableAbility
                 mTarget?.mSelected.SetActive(false);
                 mTarget = null;
             }
+            mTarget?.mField.TargetedFriendly(true);
         }
         else
         {

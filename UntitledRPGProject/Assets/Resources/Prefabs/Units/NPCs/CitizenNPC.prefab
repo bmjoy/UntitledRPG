@@ -1,0 +1,288 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6717110167382297564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2582837914564034421}
+  - component: {fileID: 6717110167382297560}
+  - component: {fileID: 6717110167382297562}
+  - component: {fileID: 6717110167382297558}
+  - component: {fileID: 6717110167382297559}
+  - component: {fileID: 2344201410583832241}
+  - component: {fileID: 3439338231309182531}
+  m_Layer: 9
+  m_Name: CitizenNPC
+  m_TagString: Neutral
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2582837914564034421
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 355.63812}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 274.8158, y: 73.42762}
+  m_SizeDelta: {x: 2, y: 3.7}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!65 &6717110167382297560
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 3.7, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &6717110167382297562
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9ffcade849628e94ab142bc7d6f760ae, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6717110167382297558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6428c34d6c004244b5f54ef19eb6a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mUseStaticBillboard: 0
+--- !u!212 &6717110167382297559
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 4
+  m_Sprite: {fileID: -6922429608195983187, guid: 6c58bb561103ddc42b6f42a9dbd26b46, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 1
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2.125, y: 2.375}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!195 &2344201410583832241
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.75
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 3.625
+  m_BaseOffset: 3
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0
+--- !u!114 &3439338231309182531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6717110167382297564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbe99d267dc7b6a4cbff8d780a160e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mComplete: 0
+  mName: 
+  m_DialogueList:
+  - Text: Greetings!
+    Trigger: 0
+  m_DialogueYesCase: []
+  m_DialogueNoCase: []
+  m_DialogueFailToTradeCase: []
+  mInteraction: {fileID: 0}
+  m_DialogueResultCase:
+    Text: 
+    Trigger: 0
+  names:
+  - Amy
+  - Billy
+  - Carry
+  - Danny
+  - Ebi
+  - Fury
+  - Gon
+  - Hugo
+  - Ivony
+  - Jenny
+  - Ken
+  - Leon
+  - Mol
+  - Nani
+  - Oppa
+  - Peon
+  - Quan
+  - Robert
+  - Steven
+  - Uven
+  - Vanny
+  - Wrath
+  - Xath
+  - Yammy
+  - Zen
+  - Aqua
+  - Bean
+  - Curry
+  - Don
+  - Eric
+  - Frick
+  - Grak
+  - Han
+  - Itch
+  - Jhon
+  - Khan
+  - Leona
+  - Mint Choco
+  - Noob
+  - Oasis
+  - Penny
+  - Queen
+  - Reni
+  - Seth
+  - Uza
+  - Vill
+  - Wendy
+  - Xens
+  - York
+  - Zero
+  eventContexts:
+  - Help, Help! I need you help!
+  - I need your help, please!!
+  - ...Can you help?
+  - Ehhhhhhhhhhhhhh~~!!
+  - Hehehe I am drunk~
+  - Kyaaaaaaaa~~~!!
+  - '*Sigh...'
+  - HELP ME!!
+  - I don't want to die!!
+  - Grrrrrrrrrr...
+  - Oh Noooooooooo!!!!
+  - Please please help me!!
+  - Can you play with me?
+  - You are a handsome boy.
+  - Sorry, can you help me?
+  - Support me!
+  - I am your fan!! Sign it please!
+  - Oh my god! It's you, my friend!
+  - The world shall be ended...
+  - Hahahahahahahahaha...
+  - I like you.
+  - I love you.
+  - I hate you.
+  - Hey, dude!
+  - I beg you! Help me!
+  normalContexts:
+  - Greetings!
+  - Hello, boy!
+  - I have never seen a person like you.
+  - Are you our savior? Ah...
+  - I have not eaten anything... because the <color=red>king</color> stole my ketchup!
+  - Please kick the <color=red>king</color>'s ass!
+  - I am sorry. I cannot help you.
+  - We are powerless...
+  - Please save the world!
+  - You look delicious.
+  - Nice boy!
+  - Oh my god, our good friend!
+  - Have a nice hell!
+  - We can do nothing!!
+  - Grrrrrrrrrrr... Oh, I just get hungry
+  - Hi, boy!
+  - The <color=red>king</color> has done brutal and horrible things on our town!
+  - Noooooo, We are useless!
+  - Play fun with me!
+  - Gotcha! You are a hero, right?
+  - This town is boring, and you look boring.
+  - I want to invite you my home!
+  - What the hell?
+  - The <color=red>king</color> dominates our town.
+  - This is the end of the world

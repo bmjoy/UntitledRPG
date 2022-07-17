@@ -36,6 +36,12 @@ public class UIStorage : MonoBehaviour
     public GameObject mVictoryScreenTransition;
     public GameObject mMinimap;
 
+    public GameObject mTutorialMouseIcon;
+    public GameObject mTutorialWASDIcon;
+    public GameObject mTutorialInteractIcon;
+    public GameObject mTutorialItemIcon;
+    public GameObject mTutorialHereIcon;
+
     public TextMeshProUGUI mDialogueText;
     public void Initialize()
     {

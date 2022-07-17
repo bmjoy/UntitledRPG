@@ -74,7 +74,7 @@ public class InventoryUI : MonoBehaviour
             Display(0);
             _Initialized = false;
         }
-
+        
         StartCoroutine(Wait(active));
     }
 
@@ -166,7 +166,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (_Initialized) return;
         items.Clear();
-
+        PlayerController.Instance.mInventory.myInventory.Sort((a, b) => a.Value.Value.CompareTo(b.Value.Value));
         foreach (var item in PlayerController.Instance.mInventory.myInventory)
         {
             if (item.Value.GetType().IsSubclassOf(typeof(Expendables)))
@@ -178,14 +178,6 @@ public class InventoryUI : MonoBehaviour
             else
             {
                 EquipmentItem equipment = (EquipmentItem)item.Value;
-
-                if (equipment.GetType() == typeof(Weapon))
-                {
-                    var unit = PlayerController.Instance.mHeroes[mIndex].GetComponent<Player>();
-                    WeaponInfo weapon = (WeaponInfo)item.Value.Info;
-                    if (weapon.mWeaponType != unit.mWeaponType) continue;
-                }
-
                 if (equipment.IsEquipped) continue;
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
                 go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Equip);

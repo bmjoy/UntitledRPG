@@ -70,9 +70,11 @@ public class LevelManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneLoader.Instance._sceneIndex = mCurrentLevel = 2;
+        if(SceneLoader.Instance._sceneIndex > 2)
+            SceneLoader.Instance._sceneIndex = mCurrentLevel = 3;
+        else
+            SceneLoader.Instance._sceneIndex = mCurrentLevel = 2;
         SceneLoader.Instance.mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0;
         SceneLoader.Instance.StartGame();
-        mCurrentLevel = 2;
     }
 }

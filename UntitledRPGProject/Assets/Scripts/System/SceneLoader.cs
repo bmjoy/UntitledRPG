@@ -38,6 +38,7 @@ public class SceneLoader : MonoBehaviour
     public void StartGame()
     {
         StopAllCoroutines();
+        LevelManager.Instance.mCurrentLevel = _sceneIndex;
         StartCoroutine(StartLoad());
     }
 

@@ -227,6 +227,13 @@ public class Room : Environment
             default:
                 break;
         }
+
+        if(Random.Range(0, 100) <= 30)
+        {
+            NPCSpawner citizenSpawn = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position + new Vector3(Random.Range(-3.5f,3.5f),0.0f, Random.Range(-3.5f, 3.5f)), Quaternion.identity).GetComponent<NPCSpawner>();
+            citizenSpawn.mType = NPCUnit.Citizen;
+        }
+
         if(mMainIcon != null)
         {
             mMainIcon.transform.eulerAngles = new Vector3(90.0f, -90.0f, 0.0f);

@@ -39,7 +39,8 @@ public class TrapBullet : Bullet
             Destroy(this.gameObject);
         }
         if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")
-            || collision.collider.gameObject.layer == LayerMask.NameToLayer("NPC"))
+            || collision.collider.gameObject.layer == LayerMask.NameToLayer("NPC")
+            || collision.collider.gameObject.layer == LayerMask.NameToLayer("EnemyProwler"))
         {
             GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
 , transform.position, Quaternion.identity);

@@ -15,6 +15,18 @@ public class InteractSystem : MonoBehaviour
     void FixedUpdate()
     {
         if (PlayerController.Instance.onBattle) return;
+        if (mClosestNPC != null)
+        {
+            mClosestNPC.React(true);
+            Vector3 pos = mClosestNPC.GetPosition();
+            if (Vector3.Distance(pos, transform.position) > mRadius)
+            {
+                mClosestNPC.React(false);
+                mClosestNPC = null;
+            }
+            return;
+        }
+
         if (mCurrentCoolTime > 0.0f)
             return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, mRadius, LayerMask.GetMask("NPC"));
@@ -31,24 +43,12 @@ public class InteractSystem : MonoBehaviour
             if(Vector3.Distance(hit.transform.position, transform.position) < mRadius)
             {
                 mClosestNPC = hit.transform.GetComponent<IInteractiveObject>();
-                mClosestNPC.React(true);
             }
             else
             {
                 hit.transform.GetComponent<IInteractiveObject>().React(false);
             }
         }
-
-        if(mClosestNPC != null)
-        {
-            Vector3 pos = mClosestNPC.GetPosition();
-            if (Vector3.Distance(pos, transform.position) > mRadius)
-            {
-                mClosestNPC.React(false);
-                mClosestNPC = null;
-            }
-        }
-
     }
 
     private void Update()

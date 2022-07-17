@@ -17,7 +17,6 @@ public class ItemUI : MonoBehaviour
 
     public Button mButton;
     public Image mSprite;
-    public TextMeshProUGUI mName;
     private int ID;
     private Item mItem;
     private ItemUIType mType;
@@ -34,12 +33,38 @@ public class ItemUI : MonoBehaviour
                 {
                     mSprite = transform.Find("ItemSprite").GetComponent<Image>();
                     mSprite.sprite = mItem.Info.mSprite;
-                    mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-                    mName.text = mItem.Name;
                     GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + "</color>";
+                    Debug.Log("Here");
                     if (typeof(EquipmentInfo).IsAssignableFrom(mItem.Info.GetType()))
                     {
                         var item = (EquipmentInfo)mItem.Info;
+
+                        if(typeof(WeaponInfo).IsAssignableFrom(item.GetType()))
+                        {
+                            var weapon = (WeaponInfo)mItem.Info;
+                            string unitName = string.Empty;
+                            switch(weapon.mWeaponType)
+                            {
+                                case WeaponType.Soul:
+                                    unitName = "Jimmy";
+                                    break;
+                                case WeaponType.Bow:
+                                    unitName = "Eleven";
+                                    break;
+                                case WeaponType.Orb:
+                                    unitName = "Victor";
+                                    break;
+                                case WeaponType.Spear:
+                                    unitName = "Roger";
+                                    break;
+                                case WeaponType.Double_Swords:
+                                    unitName = "Vin";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            GetComponent<HoverTip>().mTipToShow += $"\n Vaild Units: <color=yellow>{unitName}</color>\n";
+                        }
                         foreach (var i in item.mBonusAbilities)
                         {
                             if (i.Type == BonusAbility.AbilityType.Magic)
@@ -48,7 +73,13 @@ public class ItemUI : MonoBehaviour
                                 GetComponent<HoverTip>().mTipToShow += "\n<color=green>" + i.Type.ToString() + "</color>: " + i.Value;
                         }
                     }
+                    else
+                    {
+                        var item = (ExpendablesInfo)mItem.Info;
+                        GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + $"</color> ({item.mAmount})";
+                    }
                     ID = mItem.ID;
+
                     mButton.onClick.AddListener(() => Activate());
                 }
 
@@ -76,14 +107,10 @@ public class ItemUI : MonoBehaviour
                 {
                     mSprite = transform.Find("ItemSprite").GetComponent<Image>();
                     mSprite.sprite = mItem.Info.mSprite;
-                    mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
                     if (mItem.GetType().IsSubclassOf(typeof(Expendables)))
                     {
                         ExpendablesInfo info = (ExpendablesInfo)mItem.Info;
-                        mName.text = $"{mItem.Name} ({info.mAmount})<color=yellow>({mItem.Value})</color>";
                     }
-                    else
-                        mName.text = $"{mItem.Name} <color=yellow>({mItem.Value})</color>";
                     ID = mItem.ID;
                     mButton.onClick.AddListener(() => Sell());
                 }
@@ -97,18 +124,13 @@ public class ItemUI : MonoBehaviour
                 {
                     mSprite = transform.Find("ItemSprite").GetComponent<Image>();
                     mSprite.sprite = mItem.Info.mSprite;
-                    mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
                     if(mItem.GetType().IsSubclassOf(typeof(Expendables)))
                     {
-                        ExpendablesInfo info = (ExpendablesInfo)mItem.Info;
-                        mName.text = $"{mItem.Name} ({info.mAmount})";
+                        var item = (ExpendablesInfo)mItem.Info;
+                        GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + $"</color> ({item.mAmount})";
                     }
                     else
-                    {
-                        mName.text = $"{mItem.Name}";
-                    }
-
-                    GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + "</color>";
+                        GetComponent<HoverTip>().mTipToShow = "<color=yellow>" + mItem.Name + "</color>";
                 }
                 break;
             default:
@@ -127,8 +149,6 @@ public class ItemUI : MonoBehaviour
         if (unit.Equip(item))
         {
             Debug.Log("Hi");
-            mName = transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            mName.text = mItem.Name;
             if (mItem.GetType().IsAssignableFrom(typeof(EquipmentItem)))
                 gameObject.SetActive(false);
         }
