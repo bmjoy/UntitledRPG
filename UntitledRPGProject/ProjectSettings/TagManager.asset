@@ -19,6 +19,7 @@ TagManager:
   - PlayerCompanion
   - Room
   - UnitSpawnMananger
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - PlayerController
   - Ally
   - Minimap
-  - 
+  - Wall
   - 
   - 
   - 

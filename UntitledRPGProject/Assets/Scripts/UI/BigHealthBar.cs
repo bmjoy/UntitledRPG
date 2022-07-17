@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class BigHealthBar : HealthBar
+
+public class BigHealthBar : HealthBar, IPointerEnterHandler, IPointerExitHandler
 {
     private TextMeshProUGUI mNameText;
     private TextMeshProUGUI mHPText;
@@ -12,6 +14,9 @@ public class BigHealthBar : HealthBar
 
     private Image mDamagedHealthBar;
     private Image mDamagedManaBar;
+    private GameObject mTargetBar;
+    public Player mTarget;
+    public bool isTargetted = false;
 
     public float mNextHealth = 0.0f;
 
@@ -26,30 +31,34 @@ public class BigHealthBar : HealthBar
         mNameText = transform.Find("Name").GetComponent<TextMeshProUGUI>();
         mHPText = transform.Find("HPValue").GetComponent<TextMeshProUGUI>();
         mMPText = transform.Find("MPValue").GetComponent<TextMeshProUGUI>();
+        mTargetBar = transform.Find("Targetted").gameObject;
+        mTargetBar.SetActive(false);
         Active(false);
     }
 
-    public void Initialize(string name, float currHP, float maxHP, float currMP, float maxMP)
+    public void Initialize(Player target)
     {
-        mNameText.text = name;
-        mCurrentHealth = currHP;
-        mMaxHealth = maxHP;
-        mCurrentMana = currMP;
-        mMaxMana = maxMP;
+        mTarget = target;
+        mNameText.text = mTarget.mSetting.Name;
+        mCurrentHealth = mTarget.mStatus.mHealth;
+        mMaxHealth = mTarget.mStatus.mMaxHealth;
+        mCurrentMana = mTarget.mStatus.mMana;
+        mMaxMana = mTarget.mStatus.mMaxMana;
 
         mBar.fillAmount = mCurrentHealth / mMaxHealth;
         mManaBar.fillAmount = mCurrentMana / mMaxMana;
         mHPText.text = mCurrentHealth.ToString();
         mMPText.text = mCurrentMana.ToString();
-
+        isTargetted = false;
         isInitialized = true;
         Active(true);
     }
 
     protected override void Update()
     {
-        if(isInitialized)
+        if (isInitialized)
         {
+            mTargetBar.SetActive(isTargetted);
             mBar.fillAmount = (mNextHealth > mCurrentHealth) ? Mathf.Lerp(mBar.fillAmount, mNextHealth / mMaxHealth, Time.deltaTime * 1.5f)
                 : mCurrentHealth / mMaxHealth;
             if ((mNextHealth > mCurrentHealth) && mBar.fillAmount >= (mNextHealth / mMaxHealth) - 0.01f)
@@ -79,5 +88,25 @@ public class BigHealthBar : HealthBar
     {
         mAnimator.SetTrigger("Wiggle");
         yield return new WaitForSeconds(0.51f);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (isInitialized && BattleManager.Instance.mSpellChanning)
+        {
+            isTargetted = true;
+            Player unit = (Player)BattleManager.Instance.mCurrentUnit;
+            unit.mTarget = mTarget;
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isInitialized)
+        {
+            isTargetted = false;
+            Player unit = (Player)BattleManager.Instance.mCurrentUnit;
+            unit.mTarget = null;
+        }
     }
 }

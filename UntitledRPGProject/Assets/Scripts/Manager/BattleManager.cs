@@ -40,6 +40,8 @@ public class BattleManager : MonoBehaviour
     public Vector3 playerCenter = Vector3.zero;
     public Vector3 enemyCenter = Vector3.zero;
     public float mRunningSpeed = 9.0f;
+    [HideInInspector]
+    public bool mSpellChanning = false;
 
     private List<Vector3> mOriginalFieldPos = new List<Vector3>(8)
     {
@@ -145,7 +147,8 @@ public class BattleManager : MonoBehaviour
                     else
                     {
                         mCurrentUnit.BeginTurn();
-                        mCurrentUnit.mAiBuild.ChangeState("Standby");
+                        if (mCurrentUnit.mAiBuild.type == AIType.Auto)
+                            mCurrentUnit.mAiBuild.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
                         mCurrentUnit.mField.GetComponent<Field>().Picked(true);
                         if (mCurrentUnit.mAiBuild.type == AIType.Manual)
@@ -280,6 +283,7 @@ public class BattleManager : MonoBehaviour
         UIManager.Instance.mVictoryScreen.Active(true);
         GetEnemyItem();
         PlayerController.Instance.mGold += GameManager.s_TotalGold;
+        PlayerController.Instance.mSoul += GameManager.s_TotalSoul;
         GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
     }
 

@@ -42,6 +42,10 @@ public class BreakableObject : InteractableEnvironment
             _Completed = true;
             mInteraction.SetActive(false);
             action?.Invoke();
+
+            a -= Time.deltaTime;
+            mat.SetFloat("__Surface", 1.0f);
+            mat.color = new Color(color.r,color.g,color.b,0);
         }
         yield return null;
     }

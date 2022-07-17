@@ -712,6 +712,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         mConditions.isDefend = false;
         mConditions.isBattleComplete = false;
+        mTarget = null;
         mOrder = Order.Standby;
         mBuffNerfController.Tick();
         mField.Picked(true);

@@ -215,11 +215,7 @@ public class UIManager : MonoBehaviour
             if (display)
             {
                 var unit = PlayerController.Instance.mHeroes[i].GetComponent<Player>();
-                mHealthBarList[i].Initialize(unit.mSetting.Name,
-                    unit.mStatus.mHealth,
-                    unit.mStatus.mMaxHealth,
-                    unit.mStatus.mMana,
-                    unit.mStatus.mMaxMana); 
+                mHealthBarList[i].Initialize(unit); 
                 unit.mMyHealthBar = mHealthBarList[i];
             }
 
@@ -383,6 +379,51 @@ public class UIManager : MonoBehaviour
     public void DisplayBackButtonInDialogue(bool action)
     {
         mStorage.mBackButton.gameObject.SetActive(action);
+    }
+
+    public void DisplayTutorialIcon(string icon, bool here = false)
+    {
+        switch(icon)
+        {
+            case "Mouse":
+                mStorage.mTutorialMouseIcon.SetActive(true);
+                mStorage.mTutorialHereIcon.SetActive(here);
+                mStorage.mTutorialItemIcon.SetActive(false);
+                mStorage.mTutorialWASDIcon.SetActive(false);
+                mStorage.mTutorialInteractIcon.SetActive(false);
+                break;
+            case "Move":
+                mStorage.mTutorialMouseIcon.SetActive(false);
+                mStorage.mTutorialHereIcon.SetActive(here);
+                mStorage.mTutorialItemIcon.SetActive(false);
+                mStorage.mTutorialWASDIcon.SetActive(true);
+                mStorage.mTutorialInteractIcon.SetActive(false);
+                break;
+            case "Interact":
+                mStorage.mTutorialMouseIcon.SetActive(false);
+                mStorage.mTutorialHereIcon.SetActive(here);
+                mStorage.mTutorialItemIcon.SetActive(false);
+                mStorage.mTutorialWASDIcon.SetActive(false);
+                mStorage.mTutorialInteractIcon.SetActive(true);
+                break;
+            case "Item":
+                mStorage.mTutorialMouseIcon.SetActive(false);
+                mStorage.mTutorialItemIcon.SetActive(true);
+                mStorage.mTutorialWASDIcon.SetActive(false);
+                mStorage.mTutorialHereIcon.SetActive(here);
+                mStorage.mTutorialInteractIcon.SetActive(false);
+                break;
+            case "None":
+                mStorage.mTutorialMouseIcon.SetActive(false);
+                mStorage.mTutorialItemIcon.SetActive(false);
+                mStorage.mTutorialWASDIcon.SetActive(false);
+                mStorage.mTutorialHereIcon.SetActive(here);
+                mStorage.mTutorialInteractIcon.SetActive(false);
+                break;
+            default:
+                Debug.LogWarning($"<color=yellow>Warning!</color> The name of {icon} is not vaild!");
+                break;
+        }
     }
 
     public void ChangeTwoButtons(Sprite left, Sprite right)

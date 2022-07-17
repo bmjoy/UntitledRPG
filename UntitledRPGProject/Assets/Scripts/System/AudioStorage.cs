@@ -12,6 +12,7 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mMainMenuMusic;
 
     public AudioClip mItemPurchaseSFX;
+    public AudioClip mItemTrapSFX;
     public AudioClip mLevelUPSFX;
     public AudioClip mItemEquipSFX;
     public AudioClip mOpenInventorySFX;

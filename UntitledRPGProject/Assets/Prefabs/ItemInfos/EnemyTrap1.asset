@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: EnemyTrap1
   m_EditorClassIdentifier: 
   mName: 
-  mCost: 0
+  mCost: 50
   mSprite: {fileID: 0}
   mEnemyUnits: 01000000010000000100000001000000

@@ -64,6 +64,7 @@ public enum NPCUnit
     ArmorMerchant,
     WeaponMerchant,
     Monk,
+    Citizen,
     Jimmy
 }
 

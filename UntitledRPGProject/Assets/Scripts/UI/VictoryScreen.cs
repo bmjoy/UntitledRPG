@@ -126,14 +126,17 @@ public class VictoryScreen : MonoBehaviour
 
     public void UpdateItemList(List<GameObject> ItemList)
     {
+        if(ItemList.Count > 0)
+            Debug.Log("here");
         mItemList.Find("Gold").GetComponent<TextMeshProUGUI>().text = GameManager.s_TotalGold.ToString();
         mItemList.Find("Soul").GetComponent<TextMeshProUGUI>().text = GameManager.s_TotalSoul.ToString();
+        GameObject prefab = (Resources.Load<GameObject>("Prefabs/UI/ObtainedItem"));
         foreach (var item in ItemList)
         {
-            GameObject slot = Instantiate(Resources.Load<GameObject>("Prefabs/UI/ObtainedItem"));
-            slot.transform.SetParent(mItemList.Find("ItemScroll").Find("Items"));
+            GameObject slot = Instantiate(prefab, mItemList.transform.position, Quaternion.identity, mItemList.Find("ItemScroll").Find("Items"));
             slot.transform.Find("Sprite").GetComponent<Image>().sprite = item.GetComponent<Item>().Info.mSprite;
             slot.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = item.GetComponent<Item>().Info.mName;
+            Debug.Log(item.name);
         }
     }
 }
