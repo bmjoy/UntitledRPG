@@ -335,20 +335,19 @@ MonoBehaviour:
   _EnemySpawner: {fileID: 6851679595670550415}
   _EnvironmentSpawner: {fileID: 3592557064824492650}
   m_DialogueList:
-  - Text: 'Greetings, Player! Welcome to the RPG world!
+  - Text: 'Hello, Player! Welcome to Mini Dungeons!
 
       (Press ''<color=yellow>E</color>''
       to continue)'
     Trigger: 0
-  - Text: I shall guide you how to survive... *blah *blah (Press the <color=yellow>any
+  - Text: This guide will teach you how to survive, let's start. (Press the <color=yellow>any
       button</color> on dialogue!)
     Trigger: 2
   m_DialogueYesCase:
     Text: Oh... oh! Happy to hear that! Let's start it!
     Trigger: 0
   m_DialogueNoCase:
-    Text: Eh, eh...? Huh? Wait! There is no right to say "<color=red>NO</color>"!
-      >:3
+    Text: Eh, eh...? Huh? Wait! You clicked no? "<color=red>NO</color>"! >:3
     Trigger: 0
   m_DialogueMovementList:
   - Text: Anyways! Let's control your character!
@@ -360,14 +359,15 @@ MonoBehaviour:
     Text: Great job! Moving on the next step!
     Trigger: 0
   m_DialogueInteractList:
-  - Text: The next step is interaction! As you know, the world has many objects can
-      interact!
+  - Text: The next step is interaction! The world has many objects you can interact
+      with!
     Trigger: 0
   - Text: Press '<color=yellow>E</color>' key is the main key to interact! Try to
-      interact that rock to get items!
+      interact with that rock to get items!
     Trigger: 2
   m_DialogueInteractSuccess:
-    Text: Great job! You can interact other environment or NPC too! Let's move on!
+    Text: Great job! You can interact with other objects or NPC's aswell! Let's move
+      on!
     Trigger: 0
   m_DialogueBattleList:
   - Text: The next step is battle! YEAHHHHHH!
@@ -384,7 +384,7 @@ MonoBehaviour:
     Trigger: 0
   m_DialogueEndList:
   - Text: Finally, the final step is inventory! In the gameworld, you can achieve
-      the item from merchants or enemies!
+      items from merchants or enemies!
     Trigger: 0
   - Text: I provide you a <color=blue>weapon</color>! Press "<color=yellow>I</color>"
       key to open your inventory! Then equip an item!
@@ -392,9 +392,9 @@ MonoBehaviour:
   m_DialogueEndSuccessList:
   - Text: Press the "<color=yellow>I</color>" key again to close the inventory!
     Trigger: 0
-  - Text: Congratulations! You all clear the tutorial!
+  - Text: Congratulations! You have cleared the tutorial!
     Trigger: 0
-  - Text: Have a fun! And see you next time!
+  - Text: Have fun! And see you next time!
     Trigger: 0
   mItem: {fileID: 6884613172769436045, guid: 7b99f8b0505985e48b72c949faa4496c, type: 3}
   Type: 0

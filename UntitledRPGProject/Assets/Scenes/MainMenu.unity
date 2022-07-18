@@ -1044,7 +1044,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Untitled RPG
+  m_Text: Mini Dungeons
 --- !u!222 &418663659
 CanvasRenderer:
   m_ObjectHideFlags: 0

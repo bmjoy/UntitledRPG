@@ -207,7 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: MP Regeneration
   _Description: Obtain MP Regeneration ability to heal mana 4% every turn.
-  _Cost: 0
+  _Cost: 25
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 0}
   _Button: {fileID: 0}
@@ -4653,7 +4653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Armor2
   _Description: Increase armor and magic resistance more +10%
-  _Cost: 0
+  _Cost: 5
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 3240896738548490004}
   _Button: {fileID: 0}
@@ -9517,7 +9517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Mana1
   _Description: Increase maximum mana more +5%
-  _Cost: 0
+  _Cost: 1
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 3864693172516330858}
   _Button: {fileID: 0}
@@ -13700,7 +13700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Armor1
   _Description: Increase armor and magic resistance more +5%
-  _Cost: 0
+  _Cost: 1
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 5283796075381359921}
   _Button: {fileID: 0}
@@ -16011,7 +16011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: HP Regeneration
   _Description: Obtain HP Regeneration ability to heal health 4% every turn.
-  _Cost: 0
+  _Cost: 25
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 0}
   _Button: {fileID: 0}
@@ -16981,7 +16981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Attack1
   _Description: Increase damage more +5%
-  _Cost: 0
+  _Cost: 1
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 4792137764706565477}
   _Button: {fileID: 0}
@@ -19907,7 +19907,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Attack2
   _Description: Increase damage more +10%
-  _Cost: 0
+  _Cost: 5
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 2980411935721916229}
   _Button: {fileID: 0}
@@ -20534,7 +20534,7 @@ MonoBehaviour:
   _Name: Shield
   _Description: Obtain shield ability and the shield spawns when the battle begins.
     The shield provides maximum mana 10% of the unit.
-  _Cost: 0
+  _Cost: 25
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 0}
   _Button: {fileID: 0}
@@ -22798,7 +22798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Movement1
   _Description: Increase move speed more +10%
-  _Cost: 0
+  _Cost: 10
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 3021086162381980315}
   _Button: {fileID: 0}
@@ -22980,15 +22980,15 @@ RectTransform:
   m_GameObject: {fileID: 5760639005199376037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1089475549582963804}
   m_Father: {fileID: 2184442769834790173}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 250, y: -24.998001}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -313.89883, y: 80.816925}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1748044799014123232
@@ -23828,7 +23828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Mana2
   _Description: Increase maximum mana more +10%
-  _Cost: 0
+  _Cost: 5
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 1658364931718356400}
   _Button: {fileID: 0}
@@ -24916,7 +24916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Double Attack
   _Description: All units can use double attack.
-  _Cost: 0
+  _Cost: 25
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 0}
   _Button: {fileID: 0}
@@ -27111,7 +27111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Health2
   _Description: Increase maximum health more +15%
-  _Cost: 0
+  _Cost: 5
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 1787284381929055969}
   _Button: {fileID: 0}
@@ -28590,7 +28590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Movement2
   _Description: Increase move speed more +25%
-  _Cost: 0
+  _Cost: 25
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 0}
   _Button: {fileID: 0}
@@ -31748,7 +31748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Name: Health1
   _Description: Increase maximum health more +10%
-  _Cost: 0
+  _Cost: 1
   _Sprite: {fileID: 0}
   _LineSprite: {fileID: 3899289098536717282}
   _Button: {fileID: 0}
@@ -32378,7 +32378,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -157.76262}
+  m_AnchoredPosition: {x: 0, y: -157.76263}
   m_SizeDelta: {x: 500, y: 120}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &7383870566847302056

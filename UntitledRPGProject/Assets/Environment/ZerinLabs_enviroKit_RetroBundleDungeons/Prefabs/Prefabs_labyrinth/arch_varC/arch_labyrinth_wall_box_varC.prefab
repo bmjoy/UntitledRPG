@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 452938708846199481}
   - component: {fileID: 5614791191437953275}
   - component: {fileID: 2222306223224337410}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: arch_labyrinth_wall_box_varC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
