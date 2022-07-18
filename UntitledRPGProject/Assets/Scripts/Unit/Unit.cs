@@ -53,7 +53,7 @@ public class Unit : MonoBehaviour, IUnit
     private float mGroundDistance = 2.0f;
 
     [SerializeField]
-    protected float mAttackTime = 1.0f;
+    public float mAttackTime = 1.0f;
 
     [SerializeField]
     private float mDefendTime = 1.0f;
@@ -68,6 +68,7 @@ public class Unit : MonoBehaviour, IUnit
     public Action mStartActionTrigger = null;
     private float mWalkTime = 0.0f;
     private float mMaxWalkTime = 0.3f;
+    protected string mProjectileName = string.Empty;
     [HideInInspector]
     public float mCurrentSpeed = 1.0f;
     [HideInInspector]
@@ -165,7 +166,7 @@ public class Unit : MonoBehaviour, IUnit
         mLevelText.gameObject.SetActive(true);
         mHealthBar.Active(false);
         mSelected.SetActive(false);
-
+        mProjectileName = mSetting.Name;
         mRunClips.Clear();
         mAttackClips.Clear();
         if(mSetting.Clips.Count > 0)
@@ -418,7 +419,7 @@ public class Unit : MonoBehaviour, IUnit
             if (mAttackClips.Count > 0)
                 AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
             yield return new WaitForSeconds(mAttackTime);
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), transform.Find("Fire").position, Quaternion.identity);
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity);
             if (go.GetComponent<SpriteRenderer>())
                 go.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
             Bullet bullet = go.GetComponent<Bullet>();
@@ -434,7 +435,7 @@ public class Unit : MonoBehaviour, IUnit
             if (mAttackClips.Count > 0)
                 AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
             yield return new WaitForSeconds(mAttackTime);
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
             mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
             Destroy(go, 1.0f);
             yield return new WaitUntil(() => go == null);
