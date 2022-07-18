@@ -16,6 +16,15 @@ public class TrapBullet : Bullet
     {
         if(mInitialize)
             GetComponent<Rigidbody>().AddForce(mDirection * mSpeed);
+        if (!isDamaged &&( PlayerController.Instance.Interaction || PlayerController.Instance.onBattle || PlayerController.Instance.IsDied))
+        {
+            isDamaged = true;
+            GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
+, transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+            Destroy(damage, 1.5f);
+            AudioManager.PlaySfx(clip);
+            Destroy(this.gameObject);
+        }
     }
 
     protected override void OnCollisionEnter(Collision collision)

@@ -124,12 +124,12 @@ TextureImporter:
       name: Rage without VFX_0
       rect:
         serializedVersion: 2
-        x: 15
+        x: 0
         y: 166
-        width: 14
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -145,12 +145,12 @@ TextureImporter:
       name: Rage without VFX_1
       rect:
         serializedVersion: 2
-        x: 15
+        x: 0
         y: 133
-        width: 13
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -166,12 +166,12 @@ TextureImporter:
       name: Rage without VFX_2
       rect:
         serializedVersion: 2
-        x: 13
+        x: 0
         y: 100
-        width: 19
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -187,12 +187,12 @@ TextureImporter:
       name: Rage without VFX_3
       rect:
         serializedVersion: 2
-        x: 13
+        x: 0
         y: 67
-        width: 19
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -208,12 +208,12 @@ TextureImporter:
       name: Rage without VFX_4
       rect:
         serializedVersion: 2
-        x: 13
+        x: 0
         y: 34
-        width: 19
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -229,12 +229,12 @@ TextureImporter:
       name: Rage without VFX_5
       rect:
         serializedVersion: 2
-        x: 14
+        x: 0
         y: 1
-        width: 17
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

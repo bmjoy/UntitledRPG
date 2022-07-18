@@ -16,7 +16,9 @@ public class InventoryUI : MonoBehaviour
     private Image mCurrentUnit;
     private Animator mCurrentUnitAnimator;
 
-    public Sprite mEmptyImage;
+    public Sprite mCharacterEmptyImage;
+    public Sprite mEquipmentEmptyImage;
+    public Sprite mCenterCharacterEmptyImage;
     private bool mInitialized = false;
     public int mIndex = 0;
 
@@ -54,9 +56,9 @@ public class InventoryUI : MonoBehaviour
         foreach (Transform transform in mBonusValuesGroup.transform)
             transform.GetComponent<TextMeshProUGUI>().text = default;
         foreach(Transform transform in mEquipmentImageGroup.transform)
-            transform.GetComponent<Image>().sprite = mEmptyImage;
+            transform.GetComponent<Image>().sprite = mEquipmentEmptyImage;
         foreach(Transform transform in mButtonGroup.transform)
-            transform.GetComponent<Button>().image.sprite = mEmptyImage;
+            transform.GetComponent<Button>().image.sprite = mCharacterEmptyImage;
         foreach (var item in items)
             Destroy(item.gameObject);
         items.Clear();
@@ -67,31 +69,29 @@ public class InventoryUI : MonoBehaviour
     public void Active(bool active)
     {
         if (mInitialized == false) return;
-        if(active == true)
-        {
-            transform.gameObject.SetActive(true);
-            mIndex = 0;
-            Display(0);
-            _Initialized = false;
-        }
-        
-        StartCoroutine(Wait(active));
-    }
-
-    private IEnumerator Wait(bool active)
-    {
-        if(!active) GetComponent<Animator>().SetTrigger("Outro");
         mBonusValuesGroup.SetActive(active);
         mTextAreaGroup.SetActive(active);
         mButtonGroup.SetActive(active);
         mEquipmentImageGroup.SetActive(active);
-        yield return new WaitForSeconds(1.0f);
-        if (active == false)
+        mIndex = 0;
+        if (active == true)
         {
-            Clear();
-            transform.gameObject.SetActive(false);
+            transform.gameObject.SetActive(true);
+            Display(0);
+            _Initialized = false;
         }
-        yield return null;
+        else
+        {
+            if(transform.gameObject.activeSelf)
+                StartCoroutine(WaitToClose());
+        }    
+    }
+    private IEnumerator WaitToClose()
+    {
+        GetComponent<Animator>().SetTrigger("Outro");
+        yield return new WaitForSeconds(1.0f);
+        Clear();
+        transform.gameObject.SetActive(false);
     }
 
     public void Display(int num)
@@ -112,7 +112,7 @@ public class InventoryUI : MonoBehaviour
         var unit = PlayerController.Instance.mHeroes[num].GetComponent<Player>();
         GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/" + unit.mSetting.Name + "_UI"), transform.position, Quaternion.identity);
         mCurrentUnit = transform.Find("CurrentUnit").GetComponent<Image>();
-        mCurrentUnit.sprite = mEmptyImage;
+        mCurrentUnit.sprite = mCenterCharacterEmptyImage;
         mCurrentUnitAnimator = transform.Find("CurrentUnit").GetComponent<Animator>();
         mCurrentUnitAnimator.runtimeAnimatorController = null;
         mCurrentUnit.sprite = go.GetComponent<Image>().sprite;
@@ -149,15 +149,15 @@ public class InventoryUI : MonoBehaviour
         mBonusValuesGroup.transform.Find("Agility").GetComponent<TextMeshProUGUI>().text = "+" + unit.mBonusStatus.mAgility.ToString();
 
         mEquipmentImageGroup.transform.Find("Weapon").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Weapon) ?
-            unit.GetComponent<InventroySystem>().mInventoryInfo.Weapon.Info.mSprite : mEmptyImage;
+            unit.GetComponent<InventroySystem>().mInventoryInfo.Weapon.Info.mSprite : mEquipmentEmptyImage;
         mEquipmentImageGroup.transform.Find("Body").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Body) ?
-            unit.GetComponent<InventroySystem>().mInventoryInfo.Body.Info.mSprite : mEmptyImage;
+            unit.GetComponent<InventroySystem>().mInventoryInfo.Body.Info.mSprite : mEquipmentEmptyImage;
         mEquipmentImageGroup.transform.Find("Leg").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Leg) ?
-    unit.GetComponent<InventroySystem>().mInventoryInfo.Leg.Info.mSprite : mEmptyImage;
+    unit.GetComponent<InventroySystem>().mInventoryInfo.Leg.Info.mSprite : mEquipmentEmptyImage;
         mEquipmentImageGroup.transform.Find("Head").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Head) ?
-    unit.GetComponent<InventroySystem>().mInventoryInfo.Head.Info.mSprite : mEmptyImage;
+    unit.GetComponent<InventroySystem>().mInventoryInfo.Head.Info.mSprite : mEquipmentEmptyImage;
         mEquipmentImageGroup.transform.Find("Arm").GetComponent<Image>().sprite = (unit.GetComponent<InventroySystem>().mInventoryInfo.Arm) ?
-    unit.GetComponent<InventroySystem>().mInventoryInfo.Arm.Info.mSprite : mEmptyImage;
+    unit.GetComponent<InventroySystem>().mInventoryInfo.Arm.Info.mSprite : mEquipmentEmptyImage;
     }
 
     bool _Initialized = false;

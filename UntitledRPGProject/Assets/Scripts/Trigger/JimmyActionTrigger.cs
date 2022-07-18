@@ -6,6 +6,7 @@ public class JimmyActionTrigger : ActionTrigger
 {
     [SerializeField]
     private float mCombo = 10.0f;
+    private bool isFinish = false;
     void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
@@ -13,10 +14,20 @@ public class JimmyActionTrigger : ActionTrigger
     }
     protected override void StartActionTrigger()
     {
-        mPos = GetComponent<Unit>().mTarget.transform.position;
+        var unit = GetComponent<Unit>();
+        mPos = unit.mTarget.transform.position;
         isCompleted = false;
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
-        GetComponent<Unit>().mAnimator.Play("Attack");
+        unit.mAiBuild.actionEvent = ActionEvent.Busy;
+        if (30 >= Mathf.RoundToInt((100 * unit.mTarget.mStatus.mHealth) / unit.mTarget.mStatus.mMaxHealth))
+        {
+            isFinish = true;
+            unit.mAnimator.Play("Finish");
+        }
+        else
+        {
+            isFinish = false;
+            unit.mAnimator.Play("Attack");
+        }
         mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         StartCoroutine(Action());
     }
@@ -53,27 +64,44 @@ public class JimmyActionTrigger : ActionTrigger
     {
         float h = -0.60f;
         var unit = GetComponent<Unit>();
-        yield return new WaitForSeconds(0.3f);
-        for (int i = 0; i < mCombo; ++i)
+        if(isFinish)
         {
-            GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunchFire"), unit.transform.position + new Vector3(0.0f, 0.4f + Random.Range(-0.3f, 0.1f), 1.0f), Quaternion.identity);
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunch"), new Vector3(mPos.x, mPos.y + h, mPos.z + Random.Range(-h, h)), Quaternion.identity);
+            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyFinisher"), unit.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
+            Destroy(go, 1.0f);
 
-            unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage) / mCombo, DamageType.Physical);
-            Destroy(go, 0.5f);
-            Destroy(gofire, 0.3f);
+            yield return new WaitForSeconds(0.8f);
+            StartCoroutine(CameraSwitcher.Instance.ShakeCamera(1.0f));
+            GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyFinishExplosion"), mPos + new Vector3(0.0f, Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f)), Quaternion.identity);
+            Destroy(gofire, 1.0f);
 
-            transform.position += new Vector3(0.0f, 0.0f, Random.Range(-0.1f, 0.1f));
-            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorJimmy"), unit.transform.position, Quaternion.identity);
-            mirror.GetComponent<Animator>().speed = Random.Range(0.7f, 1.05f);
-            Destroy(mirror, 0.25f);
-            yield return new WaitForSeconds(mTime / mCombo);
-            if (unit.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
-            if (unit.mTarget.mConditions.isDied)
-                break;
-            h += 0.3f;
+            unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
+            yield return new WaitForSeconds(mTime / 2.0f);
         }
+        else
+        {
+            yield return new WaitForSeconds(0.3f);
+            for (int i = 0; i < mCombo; ++i)
+            {
+                GameObject gofire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunchFire"), unit.transform.position + new Vector3(0.0f, 0.4f + Random.Range(-0.3f, 0.1f), 1.0f), Quaternion.identity);
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/JimmyPunch"), new Vector3(mPos.x, mPos.y + h, mPos.z + Random.Range(-h, h)), Quaternion.identity);
+
+                unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage) / mCombo, DamageType.Physical);
+                Destroy(go, 0.5f);
+                Destroy(gofire, 0.3f);
+
+                transform.position += new Vector3(0.0f, 0.0f, Random.Range(-0.1f, 0.1f));
+                GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorJimmy"), unit.transform.position, Quaternion.identity);
+                mirror.GetComponent<Animator>().speed = Random.Range(0.7f, 1.05f);
+                Destroy(mirror, 0.25f);
+                yield return new WaitForSeconds(mTime / mCombo);
+                if (unit.mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
+                if (unit.mTarget.mConditions.isDied)
+                    break;
+                h += 0.3f;
+            }
+        }
+
         isCompleted = true;
     }
 

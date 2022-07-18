@@ -10,6 +10,10 @@ public class Citizen : NPC
 
     private int mMoney = 0;
     private bool isEvent = false;
+    GameObject item;
+    [SerializeField]
+    private float mRateToTurnEnemy = 30.0f;
+
     [SerializeField]
     private string[] names = new string[50]
     {
@@ -83,13 +87,10 @@ public class Citizen : NPC
                 "This is the end of the world"
         };
 
-
-    // Quest
-
     protected override void Start()
     {
         base.Start();
-        isEvent = UnityEngine.Random.Range(0, 100) <= 30 ? true : false;
+        isEvent = UnityEngine.Random.Range(0, 100) <= mRateToTurnEnemy ? true : false;
 
         mName = names[UnityEngine.Random.Range(0, names.Length)];
         mMoney = UnityEngine.Random.Range(5, 100);
@@ -109,19 +110,20 @@ public class Citizen : NPC
                 else
                 {
                     m_DialogueNoCase.Add(new Dialogue("Hehehe~ I would eat you all~", Dialogue.TriggerType.Fail));
-                    m_DialogueYesCase.Add(new Dialogue($"(You have stolen <color=yellow>{mMoney}</color>)", Dialogue.TriggerType.Success));
+                    m_DialogueYesCase.Add(new Dialogue($"(You have stolen <color=yellow>{mMoney}</color> golds)", Dialogue.TriggerType.Success));
                 }
 
             }
             else
             {
-                GameObject item = (UnityEngine.Random.Range(0, 100) <= 50) ? Instantiate((UnityEngine.Random.Range(0, 100) <= 50) ?
+                item = (UnityEngine.Random.Range(0, 100) >= 70) ? Instantiate((UnityEngine.Random.Range(0, 100) <= 50) ?
                     GameManager.Instance.mArmorPool[UnityEngine.Random.Range(0, GameManager.Instance.mArmorPool.Length)] :
                     GameManager.Instance.mWeaponPool[UnityEngine.Random.Range(0, GameManager.Instance.mWeaponPool.Length)], transform) : null;
                 if (item != null)
                 {
+                    item.GetComponent<Item>().Initialize(-1);
+                    item.GetComponent<Item>().isSold = true;
                     mProperty = item.GetComponent<Item>();
-                    mProperty.isSold = true;
                 }
 
                 string what = ((item == null) ? "Gold: " + mMoney.ToString() : item.GetComponent<Item>().Name);
@@ -175,11 +177,7 @@ public class Citizen : NPC
                             Callback += () => { Destroy(gameObject,2.0f); };
                         }
                         else
-                        {
-                            m_DialogueList.Clear();
-                            m_DialogueResultCase = new Dialogue("...", Dialogue.TriggerType.None);
-                            m_DialogueList.Add(m_DialogueResultCase);
-                        }
+                            ResultDialogue(". . .");
                     }
                     break;
                 case Dialogue.TriggerType.Success:
@@ -190,33 +188,20 @@ public class Citizen : NPC
                         {
                             if (mProperty.GetType().IsAssignableFrom(typeof(EnemyTrap)))
                             {
-                                PlayerController.Instance.mGold += mProperty.Value;
-                                AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
-                                m_DialogueList.Clear();
-                                m_DialogueResultCase = new Dialogue("Where is my money??", Dialogue.TriggerType.None);
-                                m_DialogueList.Add(m_DialogueResultCase);
+                                PlayerController.Instance.GetGold(mProperty.Value);
+                                ResultDialogue("??? Where is my money??");
                             }
                             else
                             {
-                                GameObject newItem = new GameObject(mProperty.Name);
-                                newItem.AddComponent<EquipmentItem>();
-                                newItem.GetComponent<EquipmentItem>().Info = mProperty.Info;
-                                newItem.GetComponent<EquipmentItem>().Initialize(mProperty.ID);
-                                PlayerController.Instance.mInventory.Add(newItem.GetComponent<Item>());
-                                newItem.transform.SetParent(PlayerController.Instance.mBag.transform);
-
-                                m_DialogueList.Clear();
-                                m_DialogueResultCase = new Dialogue("Thank you, hero!", Dialogue.TriggerType.None);
-                                m_DialogueList.Add(m_DialogueResultCase);
+                                item.transform.SetParent(PlayerController.Instance.mBag.transform);
+                                PlayerController.Instance.mInventory.Add(item.GetComponent<Item>());
+                                ResultDialogue("Greetings, hero!");
                             }
                         }
                         else
                         {
-                            PlayerController.Instance.mGold += mMoney;
-                            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
-                            m_DialogueList.Clear();
-                            m_DialogueResultCase = new Dialogue("Thank you, hero!", Dialogue.TriggerType.None);
-                            m_DialogueList.Add(m_DialogueResultCase);
+                            PlayerController.Instance.GetGold(mMoney);
+                            ResultDialogue("Greetings, my hero!");
                         }
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     }
@@ -234,6 +219,13 @@ public class Citizen : NPC
         Callback?.Invoke();
         mComplete = false;
         mTrigger = null;
+    }
+
+    private void ResultDialogue(string text)
+    {
+        m_DialogueList.Clear();
+        m_DialogueResultCase = new Dialogue(text, Dialogue.TriggerType.None);
+        m_DialogueList.Add(m_DialogueResultCase);
     }
 
     private void IconEnable()

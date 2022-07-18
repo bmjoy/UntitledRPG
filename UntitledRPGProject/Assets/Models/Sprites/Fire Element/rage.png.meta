@@ -22,7 +22,7 @@ TextureImporter:
     second: rage_5
   - first:
       213: -1495439334089909884
-    second: rage_4
+    second: rage_3
   - first:
       213: -3986854206606963056
     second: rage_5
@@ -130,12 +130,12 @@ TextureImporter:
       name: rage_0
       rect:
         serializedVersion: 2
-        x: 14
+        x: 0
         y: 166
-        width: 16
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 94
+        height: 32
+      alignment: 9
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -151,12 +151,12 @@ TextureImporter:
       name: rage_1
       rect:
         serializedVersion: 2
-        x: 5
+        x: 0
         y: 133
-        width: 32
-        height: 23
+        width: 94
+        height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -172,12 +172,12 @@ TextureImporter:
       name: rage_2
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 100
-        width: 38
-        height: 26
+        width: 94
+        height: 32
       alignment: 9
-      pivot: {x: 0.525, y: 0.4}
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -190,15 +190,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rage_3
+      name: rage_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 68
-        width: 42
-        height: 28
+        y: 34
+        width: 94
+        height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.37}
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -211,22 +211,22 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rage_4
+      name: rage_3
       rect:
         serializedVersion: 2
-        x: 1
-        y: 34
-        width: 41
-        height: 30
+        x: 0
+        y: 67
+        width: 94
+        height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.36}
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4899c6c49d12f3be0800000000000000
-      internalID: -1495439334089909884
+      spriteID: 06c81187ec27801e0800000000000000
+      internalID: -2231407384258835360
       vertices: []
       indices: 
       edges: []
@@ -235,19 +235,19 @@ TextureImporter:
       name: rage_5
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 1
-        width: 41
-        height: 31
+        width: 94
+        height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.35}
+      pivot: {x: 0.23, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 09e8bebe839dba8c0800000000000000
-      internalID: -3986854206606963056
+      spriteID: 5a37384980ca21f50800000000000000
+      internalID: 6850727136035304357
       vertices: []
       indices: 
       edges: []
