@@ -77,6 +77,12 @@ public class TargetAbility : DamagableAbility
                 BattleManager.Instance.mSpellChanning = false;
                 mTarget.mField.TargetedMagicHostile(false);
                 mTarget.mField.TargetedFriendly(false);
+                if(mTarget.GetType() == typeof(Player) && mProperty == SkillProperty.Friendly)
+                {
+                    Player playerunit = (Player)mTarget;
+                    playerunit.mMyHealthBar.isTargetted = false;
+                }
+
                 UIManager.Instance.ChangeOrderBarText("<color=red>"+ mName + "!</color>");
                 mOwner.mTarget = mTarget;
                 mTarget?.mSelected.SetActive(false);
