@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public EnemyProwler mEnemyProwler;
     public int mRequiredEXP = 100;
     public int mAmountofSoul = 20;
+    public int mFinisherChance = 30;
     [SerializeField]
     private float mWaitForRestart = 3.0f;
 

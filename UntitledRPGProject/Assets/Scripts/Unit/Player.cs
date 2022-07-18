@@ -15,7 +15,6 @@ public class Player : Unit
     public WeaponType mWeaponType;
 
     private SkillTreeBonus mPreservedSkillTreeBonus = new SkillTreeBonus();
-
     protected override void Start()
     {
         base.Start();
@@ -40,9 +39,21 @@ public class Player : Unit
             mMyHealthBar.mMaxMana = mStatus.mMaxMana;
         }
     }
-
+    private bool isFinish = false;
     protected override IEnumerator BattleState(DamageType type)
     {
+        if (mStatus.mDamage + mBonusStatus.mDamage > mTarget.mStatus.mHealth || GameManager.Instance.mFinisherChance >= Mathf.RoundToInt((100 * mTarget.mStatus.mHealth) / mTarget.mStatus.mMaxHealth))
+        {
+            mProjectileName += "_Finisher";
+            mStatus.mDamage *= 1.2f;
+            isFinish = true;
+        }
+        else
+        {
+            mProjectileName = mSetting.Name;
+            isFinish = false;
+        }
+
         var doubleAttack = SkillTreeManager._Instance.mTotalBounsAbilities.Find(s => s.Type == SkillTree_BounsAbility.SkillTreeAbilityType.DoubleAttack);
 
         if (doubleAttack != null && Random.Range(1, 100) >= doubleAttack.Value)
@@ -79,7 +90,7 @@ public class Player : Unit
                 if (mAttackClips.Count > 0)
                     AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), transform.Find("Fire").position, Quaternion.identity);
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity);
                 if (go.GetComponent<SpriteRenderer>())
                     go.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
                 Bullet bullet = go.GetComponent<Bullet>();
@@ -95,9 +106,9 @@ public class Player : Unit
                 if (mAttackClips.Count > 0)
                     AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mSetting.Name), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
-                Destroy(go, 1.0f);
+                Destroy(go, 2.0f);
                 yield return new WaitUntil(() => go == null);
             }
             yield return new WaitForSeconds(0.8f);
@@ -109,7 +120,15 @@ public class Player : Unit
         }
         else
             yield return StartCoroutine(base.BattleState(type));
+    }
 
+    public override void TurnEnded()
+    {
+        base.TurnEnded();
+        if(isFinish)
+            mStatus.mDamage /= 1.2f;
+        isFinish = false;
+        mProjectileName = mSetting.Name;
     }
 
     public override bool TakeDamage(float dmg, DamageType type)

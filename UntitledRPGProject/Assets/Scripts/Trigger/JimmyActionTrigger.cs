@@ -18,10 +18,11 @@ public class JimmyActionTrigger : ActionTrigger
         mPos = unit.mTarget.transform.position;
         isCompleted = false;
         unit.mAiBuild.actionEvent = ActionEvent.Busy;
-        if (30 >= Mathf.RoundToInt((100 * unit.mTarget.mStatus.mHealth) / unit.mTarget.mStatus.mMaxHealth))
+        if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth || 
+            GameManager.Instance.mFinisherChance >= Mathf.RoundToInt((100 * unit.mTarget.mStatus.mHealth) / unit.mTarget.mStatus.mMaxHealth))
         {
             isFinish = true;
-            unit.mAnimator.Play("Finish");
+            unit.mAnimator.Play("Finisher");
         }
         else
         {
@@ -95,7 +96,7 @@ public class JimmyActionTrigger : ActionTrigger
                 Destroy(mirror, 0.25f);
                 yield return new WaitForSeconds(mTime / mCombo);
                 if (unit.mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
+                    AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
                 if (unit.mTarget.mConditions.isDied)
                     break;
                 h += 0.3f;
