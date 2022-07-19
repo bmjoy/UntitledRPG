@@ -17,11 +17,11 @@ MonoBehaviour:
   EXP: 500
   MaxHealth: 1000
   MaxMana: 50
-  Magic_Resistance: 25
-  Attack: 25
+  Magic_Resistance: 30
+  Attack: 60
   Defend: 25
   MagicPower: 25
-  Armor: 10
+  Armor: 25
   Agility: 0
   Gold: 100
   WeaponType: 0
@@ -35,8 +35,4 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 67e2342dc7a60834f8b41f62e7ce324e, type: 3}
   - Type: 1
     Clip: {fileID: 8300000, guid: 8a78e3239878d2f4c83c3075be35224f, type: 3}
-  Item:
-  - mRate: 0
-    mItem: {fileID: 0}
-  - mRate: 0
-    mItem: {fileID: 0}
+  Item: []

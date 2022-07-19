@@ -47,18 +47,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mID: 0
   mName: Chest
+  mSFX: {fileID: 8300000, guid: 73923844704a10d47b1cac20779dc936, type: 3}
   mDialogue:
   - Text: What is this? Should I open it?
     Trigger: 2
   m_DialogueFailCase:
     Text: Ouch! This chest is locked!
     Trigger: 3
-  mSFX: {fileID: 8300000, guid: 73923844704a10d47b1cac20779dc936, type: 3}
   mInteraction: {fileID: 0}
   _Completed: 0
-  mItems: []
+  mTutorialIcon: {fileID: 0}
+  mItemDropRate: 30
+  mMaximumGold: 25
   m_DialogueYesCase:
-  - Text: Nice!
+    Text: 'Nice! '
     Trigger: 4
   m_DialogueNoCase:
   - Text: Hmm I will be back

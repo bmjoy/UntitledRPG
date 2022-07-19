@@ -6,7 +6,9 @@ using UnityEngine;
 public class VinActionTrigger : ActionTrigger
 {
     private bool _isShadow = false;
-
+    private bool isFinish = false;
+    [SerializeField]
+    private AudioClip[] mHitClip;
     [SerializeField]
     private int mSlashAmount = 5;
     [SerializeField]
@@ -19,12 +21,13 @@ public class VinActionTrigger : ActionTrigger
     void Start()
     {
         GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartActionTrigger;
-        mTime = GetComponent<Skill_DataBase>().mSkill.mEffectTime;
+        GetComponent<Unit>().mActionTrigger += StartFinisherTrigger;
     }
     protected override void StartActionTrigger()
     {
+        var unit = GetComponent<Unit>();
         mPos = transform.position;
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+        unit.mAiBuild.actionEvent = ActionEvent.Busy;
         _isShadow = true;
         isCompleted = false;
         for (int y = 0; y < 4; ++y)
@@ -33,7 +36,72 @@ public class VinActionTrigger : ActionTrigger
             if (t.GetComponent<Field>().IsExist == true)
                 maxCount++;
         }
+        mTime = GetComponent<Skill_DataBase>().mSkill.mEffectTime;
         StartCoroutine(Action());
+    }
+
+    private void StartFinisherTrigger()
+    {
+        var unit = GetComponent<Unit>();
+        mPos = unit.mTarget.transform.position;
+        unit.mAiBuild.actionEvent = ActionEvent.Busy;
+        isCompleted = false;
+        if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth)
+        {
+            isFinish = true;
+            unit.mAnimator.Play("Finisher");
+        }
+        else
+        {
+            isFinish = false;
+            unit.mAnimator.Play("Attack");
+        }
+        mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+        StartCoroutine(AttackAction());
+    }
+
+    private IEnumerator AttackAction()
+    {
+        var unit = GetComponent<Unit>();
+        if (isFinish)
+        {
+            GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/Vin_Shadow");
+            GameObject shadow = Instantiate(obj, unit.transform.position, Quaternion.Euler(obj.transform.eulerAngles));
+            Destroy(shadow, 3.0f);
+            yield return new WaitForSeconds(1.0f);
+            for (int i = 0; i < 14; ++i)
+            {
+                GameObject obj2 = Resources.Load<GameObject>("Prefabs/Effects/Vin_Slash");
+                GameObject slash = Instantiate(obj2, mPos + new Vector3(0.0f, 1.2f, 1.0f), Quaternion.Euler(obj2.transform.eulerAngles + new Vector3(Random.Range(-180,180), Random.Range(-90, 90), Random.Range(-45, 45))));
+                Destroy(slash, 3.0f);
+                GameObject obj3 = Resources.Load<GameObject>("Prefabs/Effects/Vin_Blood");
+                GameObject blood = Instantiate(obj3, mPos + new Vector3(Random.Range(-3f, 3f), Random.Range(0f,2f), Random.Range(-3f, 3f)), Quaternion.Euler(obj3.transform.eulerAngles));
+                Destroy(blood, 3.0f);
+
+                if (unit.mAttackClips.Count > 0)
+                    AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+                yield return new WaitForSeconds(Random.Range(0.05f,0.08f));
+            }
+            yield return new WaitForSeconds(0.3f);
+            obj = Resources.Load<GameObject>("Prefabs/Effects/Vin_Shadow");
+            GameObject shadow2 = Instantiate(obj, unit.transform.position, Quaternion.Euler(obj.transform.eulerAngles));
+            Destroy(shadow2, 3.0f);
+            isCompleted = true;
+            yield return new WaitForSeconds(0.7f);
+            AudioManager.PlaySfx(mHitClip[1]);
+            unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
+            StartCoroutine(CameraSwitcher.Instance.ShakeCamera(1.0f));
+
+        }
+        else
+        {
+            unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
+            if (unit.mAttackClips.Count > 0)
+                AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+            yield return new WaitForSeconds(unit.mAttackTime);
+            isCompleted = true;
+        }
+
     }
 
     private void Update()
@@ -134,16 +202,21 @@ public class VinActionTrigger : ActionTrigger
         yield return new WaitForSeconds(0.5f);
         _isShadow = false;
         isCompleted = true;
+        yield break;
     }
 
     private void OnDestroy()
     {
         if (GetComponent<Skill_DataBase>().mSkill != null)
             GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartActionTrigger;
+        if (GetComponent<Unit>().mActionTrigger != null)
+            GetComponent<Unit>().mActionTrigger -= StartFinisherTrigger;
     }
     private void OnApplicationQuit()
     {
         if (GetComponent<Skill_DataBase>().mSkill != null)
             GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartActionTrigger;
+        if (GetComponent<Unit>().mActionTrigger != null)
+            GetComponent<Unit>().mActionTrigger -= StartFinisherTrigger;
     }
 }

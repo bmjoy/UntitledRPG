@@ -15,10 +15,10 @@ MonoBehaviour:
   Name: Eleven
   Level: 1
   EXP: 0
-  MaxHealth: 100
+  MaxHealth: 75
   MaxMana: 25
   Magic_Resistance: 5
-  Attack: 30
+  Attack: 35
   Defend: 10
   MagicPower: 25
   Armor: 2

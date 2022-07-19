@@ -19,6 +19,7 @@ public class Skill_Node : MonoBehaviour
 
     private void Start()
     {
+        SkillTreeManager._Instance.skill_Nodes.Add(this);
         _Sprite = GetComponent<Image>();
         _Button = GetComponent<Button>();
         _Button.onClick.RemoveAllListeners();
@@ -67,6 +68,16 @@ public class Skill_Node : MonoBehaviour
             if (!_Parents[i].IsUnlocked())
                 return false;
         return true;
+    }
+
+    public void ResetNode()
+    {
+        _isUnlocked = false;
+        _Button.onClick.RemoveAllListeners();
+        _Button.onClick.AddListener(() => UIManager.Instance.mSkillTreeScreen.Display(this));
+        _Sprite.color = new Color(1.0f, 1.0f, 1.0f);
+        if (_LineSprite != null)
+            _LineSprite.fillAmount = 0;
     }
 
     private void OnApplicationQuit()

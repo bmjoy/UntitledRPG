@@ -17,6 +17,7 @@ public class Phantom : Projectile
     {
         mTarget = target;
         mActionEvent += actionEvent;
+        mDamage /= mCount;
         StartCoroutine(Spawn());
     }
 
@@ -28,7 +29,7 @@ public class Phantom : Projectile
             GameObject go = Instantiate(Resources.Load<GameObject>
                 ("Prefabs/Bullets/PhantomArrow"), transform.position + new Vector3(UnityEngine.Random.Range(-3.0f, 3.0f), UnityEngine.Random.Range(-3.0f, 3.0f), UnityEngine.Random.Range(-3.0f, 1.0f)), Quaternion.identity);
             go.GetComponent<PhantomMini>().Initialize(mTarget, () => {
-                mTarget.TakeDamage(mDamage, DamageType.Magical); });
+                mTarget.TakeDamage(mDamage / mCount, DamageType.Magical); });
             yield return new WaitForSeconds(0.1f);
         }
     }

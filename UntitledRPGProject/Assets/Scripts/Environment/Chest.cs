@@ -16,7 +16,7 @@ public class Chest : InteractableEnvironment, ILockable
 
     private List<GameObject> mItems;
     [SerializeField]
-    protected List<Dialogue> m_DialogueYesCase = new List<Dialogue>();
+    protected Dialogue m_DialogueYesCase;
     [SerializeField]
     protected List<Dialogue> m_DialogueNoCase = new List<Dialogue>();
     protected delegate IEnumerator TriggerEvent();
@@ -38,12 +38,29 @@ public class Chest : InteractableEnvironment, ILockable
             allItems.AddRange(GameManager.Instance.mWeaponPool);
             allItems.AddRange(GameManager.Instance.mArmorPool);
             for (int i = 0; i < count; ++i)
+            {
                 mItems.Add(Instantiate(allItems[UnityEngine.Random.Range(0, allItems.Count)], transform));
+                mItems[i].GetComponent<Item>().Initialize(-1);
+            }
         }
         else
             mMoney = UnityEngine.Random.Range(100, mMaximumGold);
         mInteraction.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 0.0f);
         isLock = (UnityEngine.Random.Range(0,100) <= 40) ? true : false;
+        m_DialogueYesCase.Text += " You obtained ";
+
+        if(mItems != null)
+        {
+            for (int i = 0; i < mItems.Count; ++i)
+            {
+                m_DialogueYesCase.Text += $"<color=yellow>{mItems[i].GetComponent<Item>().Name}</color> ";
+            }
+            m_DialogueYesCase.Text += ".";
+        }
+        else
+        {
+            m_DialogueYesCase.Text += $"<color=yellow>{mMoney}</color> golds.";
+        }
     }
 
     public override IEnumerator Interact(Action action = null)
@@ -146,8 +163,7 @@ public class Chest : InteractableEnvironment, ILockable
                 key.End();
                 UnLock();
                 UIManager.Instance.AddListenerLeftButton(() => {
-                    foreach (var dialogue in m_DialogueYesCase)
-                        m_DialogueQueue.Enqueue(dialogue);
+                    m_DialogueQueue.Enqueue(m_DialogueYesCase);
                     _DialogueComplete = true;
                 });
             }
@@ -162,8 +178,7 @@ public class Chest : InteractableEnvironment, ILockable
         else
         {
             UIManager.Instance.AddListenerLeftButton(() => {
-                foreach (var dialogue in m_DialogueYesCase)
-                    m_DialogueQueue.Enqueue(dialogue);
+                m_DialogueQueue.Enqueue(m_DialogueYesCase);
                 _DialogueComplete = true;
             });
         }

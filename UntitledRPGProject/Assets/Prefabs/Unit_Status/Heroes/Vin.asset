@@ -21,7 +21,7 @@ MonoBehaviour:
   Attack: 35
   Defend: 10
   MagicPower: 50
-  Armor: 10
+  Armor: 1
   Agility: 0
   Gold: 0
   WeaponType: 5

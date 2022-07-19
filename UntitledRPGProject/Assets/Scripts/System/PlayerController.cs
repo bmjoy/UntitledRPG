@@ -193,6 +193,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ResetAbility()
+    {
+        mPreservedSkillTreeBonus.mDamage =
+            mPreservedSkillTreeBonus.mArmor =
+            mPreservedSkillTreeBonus.mHealth =
+            mPreservedSkillTreeBonus.mMana = 0.0f;
+        mPreservedSkillTreeBonus.IsMPRegeneration = false;
+        mPreservedSkillTreeBonus.mMPRegeneration = 0.0f;
+        mPreservedSkillTreeBonus.IsHPRegeneration = false;
+        mPreservedSkillTreeBonus.mHPRegeneration = 0.0f;
+        mPreservedSkillTreeBonus.IsShield = false;
+        mPreservedSkillTreeBonus.mShieldValue = 0.0f;
+    }
+
     private void StateControl()
     {
         switch(mState.ToString())
@@ -242,7 +256,7 @@ public class PlayerController : MonoBehaviour
             if (finish == exist) break;
         }
         mInventory?.AllDelete();
-
+            
         Destroy(go);
 
         for (int i = 0; i < transform.childCount; i++)

@@ -14,10 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSprite: {fileID: 0}
   mName: Heal
-  mDescription: Heal
+  mDescription: 'Spells healing to the ally unit!
+
+    The unit gets heal for <color=red>25</color>
+    * <color=green>MagicPower</color>.
+
+    Mana Cost - <color=blue>15</color>'
   mManaCost: 15
   mOwner: {fileID: 0}
-  isActive: 1
+  isActive: 0
   isComplete: 1
   mSkillType: 1
   mProperty: 0
@@ -27,7 +32,7 @@ MonoBehaviour:
   mBuffList: []
   mNerfList: []
   mValue: 25
-  isCritical: 0
+  mDamageType: 1
   mShootType: 2
   mRange: 20
   mStartPosition: {x: 0, y: 0}

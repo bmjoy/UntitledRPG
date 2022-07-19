@@ -42,7 +42,7 @@ public class Player : Unit
     private bool isFinish = false;
     protected override IEnumerator BattleState(DamageType type)
     {
-        if (mStatus.mDamage + mBonusStatus.mDamage > mTarget.mStatus.mHealth || GameManager.Instance.mFinisherChance >= Mathf.RoundToInt((100 * mTarget.mStatus.mHealth) / mTarget.mStatus.mMaxHealth))
+        if (mStatus.mDamage + mBonusStatus.mDamage > mTarget.mStatus.mHealth)
         {
             mProjectileName += "_Finisher";
             mStatus.mDamage *= 1.2f;
