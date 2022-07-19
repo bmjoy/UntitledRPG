@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSprite: {fileID: 0}
   mName: Phantom Dance
-  mDescription: Phantom dance!
-  mManaCost: 5
+  mDescription: "Shoots <color=red>5</color> arrows to single enemy and gives (20
+    *<color=green>MagicPower</color> * each arrow) damage each! Meanwhile, Eleven
+    gets power up his normal damage \n<color=green>2</color> times next turn!\nMana
+    Cost - <color=blue>7</color>"
+  mManaCost: 7
   mOwner: {fileID: 0}
   isActive: 1
   isComplete: 1
@@ -27,7 +30,7 @@ MonoBehaviour:
   mBuffList:
   - {fileID: 11400000, guid: 504f9e0068f2e8e4fab6fea7038fd8f0, type: 2}
   mNerfList: []
-  mValue: 8
+  mValue: 20
   mDamageType: 1
   mShootType: 1
   mRange: 11

@@ -126,6 +126,7 @@ MonoBehaviour:
   mAttackClips: []
   mSkillClips: []
   mDeathClips: []
+  MyAttackAnim: []
   mirror: {fileID: 0}
   mMyHealthBar: {fileID: 0}
   mWeaponType: 5
@@ -221,6 +222,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTime: 0
   isCompleted: 0
+  mHitClip:
+  - {fileID: 8300000, guid: c790a4428d69a6947a03d6a06529be8c, type: 3}
+  - {fileID: 8300000, guid: 4345e9a391485ff47bcbe17b42104134, type: 3}
   mSlashAmount: 5
   mEverySlashTime: 0.2
   mCriticalChance: 0.6

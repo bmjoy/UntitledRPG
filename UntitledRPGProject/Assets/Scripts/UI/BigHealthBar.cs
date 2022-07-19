@@ -102,7 +102,7 @@ public class BigHealthBar : HealthBar, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (isInitialized)
+        if (isInitialized && BattleManager.Instance.mSpellChanning)
         {
             isTargetted = false;
             if(BattleManager.Instance.mCurrentUnit)

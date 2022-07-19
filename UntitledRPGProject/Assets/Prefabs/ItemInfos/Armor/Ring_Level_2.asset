@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8a240bfc6dd884592a6cca1996a189, type: 3}
   m_Name: Ring_Level_2
   m_EditorClassIdentifier: 
-  mName: Ring lvl.1
+  mName: Ring lvl.2
   mCost: 30
   mSprite: {fileID: 21300000, guid: 219056397c0458d4f9d9a90a34e0e32c, type: 3}
   mBonusAbilities:
   - Type: 3
     Value: 30
+    Skill: {fileID: 0}
+  - Type: 2
+    Value: 25
     Skill: {fileID: 0}
   mArmorType: 3

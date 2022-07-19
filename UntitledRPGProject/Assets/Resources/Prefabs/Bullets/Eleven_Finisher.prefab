@@ -9483,7 +9483,6 @@ GameObject:
   - component: {fileID: 5990616375090783029}
   - component: {fileID: 5547358203231058425}
   - component: {fileID: 8609472795528508619}
-  - component: {fileID: 6426377918075359687}
   m_Layer: 0
   m_Name: Eleven_Finisher
   m_TagString: Untagged
@@ -14177,23 +14176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57959545a30041b4da0487232d373361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mSpeed: 100
+  mSpeed: 300
   isDamaged: 0
   clip: {fileID: 8300000, guid: 3d3a1d9770ce7c543af95512c7c5ef94, type: 3}
   mExplosion: {fileID: 198216, guid: 2d3e75b2a5e951848855ceab5c68946c, type: 3}
---- !u!135 &6426377918075359687
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5990616375106697707}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.92300016
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5990616375106719385
 GameObject:
   m_ObjectHideFlags: 0

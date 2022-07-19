@@ -21,7 +21,7 @@ MonoBehaviour:
   Attack: 0
   Defend: 35
   MagicPower: 0
-  Armor: 20
+  Armor: 5
   Agility: 0
   Gold: 50
   WeaponType: 0
@@ -34,9 +34,5 @@ MonoBehaviour:
   - Type: 0
     Clip: {fileID: 8300000, guid: 471efcd67be76024aac179cc9e75992b, type: 3}
   Item:
-  - mRate: 0
-    mItem: {fileID: 0}
-  - mRate: 0
-    mItem: {fileID: 0}
-  - mRate: 0
-    mItem: {fileID: 0}
+  - mRate: 20
+    mItem: {fileID: 4253830172592404258, guid: 0c1fdadab85d7794e8f59c6ddd023913, type: 3}

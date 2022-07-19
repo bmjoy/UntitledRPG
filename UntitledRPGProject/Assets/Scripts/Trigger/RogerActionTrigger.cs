@@ -18,7 +18,7 @@ public class RogerActionTrigger : ActionTrigger
         mPos = unit.mTarget.transform.position;
         isCompleted = false;
         unit.mAiBuild.actionEvent = ActionEvent.Busy;
-        if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth || GameManager.Instance.mFinisherChance >= Mathf.RoundToInt((100 * unit.mTarget.mStatus.mHealth) / unit.mTarget.mStatus.mMaxHealth))
+        if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth)
         {
             isFinish = true;
             unit.mAnimator.Play("Finisher");
@@ -61,6 +61,7 @@ public class RogerActionTrigger : ActionTrigger
             yield return new WaitForSeconds(unit.mAttackTime);
         }
         isCompleted = true;
+        yield break;
     }
 
     private void OnApplicationQuit()

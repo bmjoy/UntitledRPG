@@ -8,10 +8,9 @@ public class Bullet : MonoBehaviour
     protected float mPower = 0.0f;
     [SerializeField]
     protected float mSpeed = 0.0f;
-
+    protected float mMaximumDistance = 1.5f;
     protected bool mInitialize = false;
     public bool isDamaged = false;
-
     public AudioClip clip;
 
     virtual public void Initialize(Transform target, float power)
@@ -23,7 +22,7 @@ public class Bullet : MonoBehaviour
 
     virtual protected void FixedUpdate()
     {
-        if(mInitialize && mTarget)
+        if (mInitialize && mTarget)
             transform.position = Vector3.MoveTowards(transform.position, mTarget.transform.position, Time.deltaTime * mSpeed);
         if (mInitialize && mTarget.GetComponent<Unit>().mConditions.isDied)
         {

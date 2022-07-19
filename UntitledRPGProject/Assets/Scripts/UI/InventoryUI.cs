@@ -126,6 +126,7 @@ public class InventoryUI : MonoBehaviour
         if (num >= PlayerController.Instance.mHeroes.Count) return;
         var unit = PlayerController.Instance.mHeroes[num].GetComponent<Player>();
 
+        mTextAreaGroup.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = unit.mSetting.Name;
         mTextAreaGroup.transform.Find("Level").GetComponent<TextMeshProUGUI>().text = unit.mStatus.mLevel.ToString();
         mTextAreaGroup.transform.Find("Health").GetComponent<TextMeshProUGUI>().text = unit.mStatus.mHealth.ToString() + "/" + unit.mStatus.mMaxHealth.ToString();
         mTextAreaGroup.transform.Find("Mana").GetComponent<TextMeshProUGUI>().text = unit.mStatus.mMana.ToString() + "/" + unit.mStatus.mMaxMana.ToString();

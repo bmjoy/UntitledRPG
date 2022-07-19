@@ -36,11 +36,15 @@ MonoBehaviour:
   - Type: 3
     Clip: {fileID: 8300000, guid: e67d59729c1a75744aa7224243f68a86, type: 3}
   Item:
-  - mRate: 40
+  - mRate: 30
     mItem: {fileID: 914373095374713423, guid: 7127613e139d7064f8d82bbc0f39dfbb, type: 3}
   - mRate: 5
     mItem: {fileID: 3519973982565569764, guid: acad645e5905cc6448aec18464bd1aed, type: 3}
   - mRate: 30
-    mItem: {fileID: 6884613172769436045, guid: 5166942c23ca0e142bcd4c79ab500901, type: 3}
+    mItem: {fileID: 6884613172769436045, guid: 7b99f8b0505985e48b72c949faa4496c, type: 3}
   - mRate: 5
-    mItem: {fileID: 6884613172769436045, guid: ea6f021d46c70ad489d92067dfbbdf6b, type: 3}
+    mItem: {fileID: 6884613172769436045, guid: c40c9ca9ae014ee41ad14d91dde649d2, type: 3}
+  - mRate: 30
+    mItem: {fileID: 6884613172769436045, guid: 62c95bf7e6ac05947a9eee4631e02309, type: 3}
+  - mRate: 5
+    mItem: {fileID: 6884613172769436045, guid: 350441de3c963fc42bc049145bac60b3, type: 3}

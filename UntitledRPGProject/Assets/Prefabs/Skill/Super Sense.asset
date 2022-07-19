@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSprite: {fileID: 0}
   mName: Super Sense
-  mDescription: Super Sense
+  mDescription: 'Roger opens his potential ability! The super sense can increase
+    his armor, and enable to taunt enemies!
+
+    Mana Cost - <color=blue>20</color>'
   mManaCost: 10
   mOwner: {fileID: 0}
-  isActive: 1
+  isActive: 0
   isComplete: 1
   mSkillType: 3
   mProperty: 0
@@ -29,6 +32,6 @@ MonoBehaviour:
   mNerfList:
   - {fileID: 11400000, guid: 0707a831379829847b9a153512e30c6f, type: 2}
   mValue: 5
-  isCritical: 0
+  mDamageType: 1
   mSkillNerfTarget: 2
   mSkillBuffTarget: 1

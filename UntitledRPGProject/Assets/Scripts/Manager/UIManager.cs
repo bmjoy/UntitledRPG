@@ -98,7 +98,7 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (PlayerController.Instance && PlayerController.Instance.onBattle)
+        if (PlayerController.Instance && (PlayerController.Instance.onBattle || PlayerController.Instance.Interaction))
             return;
 
         if (GameManager.Instance.IsCinematicEvent)

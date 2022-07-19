@@ -7,10 +7,11 @@ public class JimmyActionTrigger : ActionTrigger
     [SerializeField]
     private float mCombo = 10.0f;
     private bool isFinish = false;
-    void Start()
+    private void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
         GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartSkillActionTrigger;
+        Debug.Log("Jimmy Action Trigger activates");
     }
     protected override void StartActionTrigger()
     {
@@ -18,8 +19,7 @@ public class JimmyActionTrigger : ActionTrigger
         mPos = unit.mTarget.transform.position;
         isCompleted = false;
         unit.mAiBuild.actionEvent = ActionEvent.Busy;
-        if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth || 
-            GameManager.Instance.mFinisherChance >= Mathf.RoundToInt((100 * unit.mTarget.mStatus.mHealth) / unit.mTarget.mStatus.mMaxHealth))
+        if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth)
         {
             isFinish = true;
             unit.mAnimator.Play("Finisher");
@@ -104,6 +104,7 @@ public class JimmyActionTrigger : ActionTrigger
         }
 
         isCompleted = true;
+        yield break;
     }
 
     private void OnApplicationQuit()

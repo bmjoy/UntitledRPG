@@ -68,6 +68,10 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         UpdateGameState();
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(LevelManager.Instance.GoNextLevel());
+        }
     }
 
     public void AssignCharacter(string unit)

@@ -15,13 +15,13 @@ MonoBehaviour:
   Name: Roger
   Level: 1
   EXP: 0
-  MaxHealth: 150
+  MaxHealth: 125
   MaxMana: 25
   Magic_Resistance: 15
-  Attack: 35
-  Defend: 10
-  MagicPower: 5
-  Armor: 15
+  Attack: 32
+  Defend: 25
+  MagicPower: 2
+  Armor: 12
   Agility: 0
   Gold: 0
   WeaponType: 4

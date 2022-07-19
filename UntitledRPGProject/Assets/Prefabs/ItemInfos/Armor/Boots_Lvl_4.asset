@@ -19,4 +19,7 @@ MonoBehaviour:
   - Type: 4
     Value: 60
     Skill: {fileID: 0}
+  - Type: 5
+    Value: 14
+    Skill: {fileID: 0}
   mArmorType: 2

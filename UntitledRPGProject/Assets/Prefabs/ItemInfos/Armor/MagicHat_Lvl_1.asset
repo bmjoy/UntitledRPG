@@ -19,4 +19,7 @@ MonoBehaviour:
   - Type: 7
     Value: 10
     Skill: {fileID: 0}
+  - Type: 5
+    Value: 1
+    Skill: {fileID: 0}
   mArmorType: 0

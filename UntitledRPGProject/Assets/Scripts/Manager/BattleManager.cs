@@ -110,6 +110,7 @@ public class BattleManager : MonoBehaviour
             mOrders.Enqueue(mUnits[i].GetComponent<Unit>());
         }
         UIManager.Instance.DisplayHealthBar(true);
+        UIManager.Instance.ChangeOrderBarText("");
         onEnqueuingOrderEvent?.Invoke();
         status = GameStatus.Start;
         yield return new WaitForSeconds(2.0f);

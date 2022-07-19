@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9a87318eb2cdf47af93bdd00b481da, type: 3}
   m_Name: SpellBook_Lvl_6
   m_EditorClassIdentifier: 
-  mName: SpellBook lvl.1
+  mName: SpellBook lvl.6
   mCost: 150
   mSprite: {fileID: 21300000, guid: 1a6f83814b6283a40a0a3692da05c490, type: 3}
   mBonusAbilities:
+  - Type: 2
+    Value: 100
+    Skill: {fileID: 11400000, guid: 26fdec986c1ea4346877a18e659f4055, type: 2}
   - Type: 1
-    Value: 80
+    Value: 12
     Skill: {fileID: 11400000, guid: 26fdec986c1ea4346877a18e659f4055, type: 2}
   mWeaponType: 3

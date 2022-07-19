@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSprite: {fileID: 0}
   mName: HellFire
-  mDescription: Fire
+  mDescription: "Breathes <color=red>fire</color> to single enemy and gives\n (10
+    * <color=green>MagicPower</color>) damage! Meanwhile, the enemy gets\n (2 * <color=green>60%
+    MagicPower</color>) damage every turn! (<color=yellow>3</color> turns)\nMana
+    Cost - <color=blue>5</color>"
   mManaCost: 5
   mOwner: {fileID: 0}
   isActive: 1
@@ -28,7 +31,7 @@ MonoBehaviour:
   mNerfList:
   - {fileID: 11400000, guid: 61afe5be2cf25114ab0396c4d71c19a8, type: 2}
   mValue: 10
-  isCritical: 0
+  mDamageType: 1
   mShootType: 0
   mRange: 4
   mStartPosition: {x: 6, y: 1}
