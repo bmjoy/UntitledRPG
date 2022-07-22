@@ -12,6 +12,7 @@ public class InventoryUI : MonoBehaviour
     private GameObject mEquipmentImageGroup;
     private GameObject mItemsGroup;
     private GameObject mMoneyGroup;
+    public GameObject mPickIcon;
 
     private Image mCurrentUnit;
     private Animator mCurrentUnitAnimator;
@@ -20,7 +21,10 @@ public class InventoryUI : MonoBehaviour
     public Sprite mEquipmentEmptyImage;
     public Sprite mCenterCharacterEmptyImage;
     private bool mInitialized = false;
+    //private bool mTransfer = false;
     public int mIndex = 0;
+
+    //private int mSelectedItemIndex = 0;
 
     private void Start()
     {
@@ -36,7 +40,39 @@ public class InventoryUI : MonoBehaviour
         mMoneyGroup = transform.Find("Money").gameObject;
         mCurrentUnit = transform.Find("CurrentUnit").GetComponent<Image>();
         mItemsGroup = transform.Find("ItemScroll").transform.Find("Items").gameObject;
+        //mSelectedItemIndex = 0;
+        mPickIcon.SetActive(false);
         mInitialized = true;
+    }
+
+    private void Update()
+    {
+        //if (items.Count > 0)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.LeftArrow) && mSelectedItemIndex > 0)
+        //    {
+        //        mSelectedItemIndex--;
+        //    }
+        //    if (Input.GetKeyDown(KeyCode.RightArrow) && mSelectedItemIndex < items.Count - 1)
+        //    {
+        //        mSelectedItemIndex++;
+        //    }
+        //    if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
+        //    {
+        //        if (items[mSelectedItemIndex].GetComponent<ItemUI>().mType == ItemUI.ItemUIType.Equip)
+        //        {
+        //            items[mSelectedItemIndex].GetComponent<ItemUI>().Activate();
+        //            items.Remove(items[mSelectedItemIndex]);
+        //        }
+        //        mPickIcon.transform.SetParent(items[mSelectedItemIndex].transform);
+        //        mPickIcon.transform.position = items[mSelectedItemIndex].transform.position + new Vector3(0, -1, 0);
+        //    }
+        //}
+        //else
+        //{
+        //    mPickIcon.transform.SetParent(transform);
+        //    mPickIcon.transform.position = transform.position;
+        //}
     }
 
     private void LateUpdate()
@@ -88,6 +124,8 @@ public class InventoryUI : MonoBehaviour
     }
     private IEnumerator WaitToClose()
     {
+        //mPickIcon.transform.SetParent(transform);
+        //mPickIcon.transform.position = transform.position;
         GetComponent<Animator>().SetTrigger("Outro");
         yield return new WaitForSeconds(1.0f);
         Clear();
@@ -219,6 +257,7 @@ public class InventoryUI : MonoBehaviour
         _Initialized = false;
         InventorySetup();
         mMoneyGroup.transform.Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
+        //mSelectedItemIndex = 0;
     }
 
 
@@ -228,14 +267,18 @@ public class InventoryUI : MonoBehaviour
             return;
         for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
             mButtonGroup.transform.GetChild(i).GetComponent<Button>().image.sprite = PlayerController.Instance.mHeroes[i].GetComponent<Unit>().mSetting.BasicSprite;
+        //mSelectedItemIndex = 0;
     }
 
     private void OnDisable()
     {
+        mIndex = 0;
+        //mSelectedItemIndex = 0;
+        if (mItemsGroup == null)
+            return;
         foreach (Transform obj in mItemsGroup.transform)
         {
             Destroy(obj.gameObject);
         }
-        mIndex = 0;
     }
 }

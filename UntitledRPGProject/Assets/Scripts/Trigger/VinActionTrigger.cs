@@ -27,7 +27,7 @@ public class VinActionTrigger : ActionTrigger
     {
         var unit = GetComponent<Unit>();
         mPos = transform.position;
-        unit.mAiBuild.actionEvent = ActionEvent.Busy;
+        unit.mAiBuild.actionEvent = AIBuild.ActionEvent.Busy;
         _isShadow = true;
         isCompleted = false;
         for (int y = 0; y < 4; ++y)
@@ -44,7 +44,7 @@ public class VinActionTrigger : ActionTrigger
     {
         var unit = GetComponent<Unit>();
         mPos = unit.mTarget.transform.position;
-        unit.mAiBuild.actionEvent = ActionEvent.Busy;
+        unit.mAiBuild.actionEvent = AIBuild.ActionEvent.Busy;
         isCompleted = false;
         if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth)
         {
@@ -78,8 +78,8 @@ public class VinActionTrigger : ActionTrigger
                 GameObject blood = Instantiate(obj3, mPos + new Vector3(Random.Range(-3f, 3f), Random.Range(0f,2f), Random.Range(-3f, 3f)), Quaternion.Euler(obj3.transform.eulerAngles));
                 Destroy(blood, 3.0f);
 
-                if (unit.mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+                if (unit.mAttackClips.Count() > 0)
+                    AudioManager.PlaySfx(unit.mAttackClips.ElementAt(Random.Range(0, unit.mAttackClips.Count())).Clip);
                 yield return new WaitForSeconds(Random.Range(0.05f,0.08f));
             }
             yield return new WaitForSeconds(0.3f);
@@ -96,8 +96,8 @@ public class VinActionTrigger : ActionTrigger
         else
         {
             unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
-            if (unit.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+            if (unit.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(unit.mAttackClips.ElementAt(Random.Range(0, unit.mAttackClips.Count())).Clip);
             yield return new WaitForSeconds(unit.mAttackTime);
             isCompleted = true;
         }
@@ -114,8 +114,8 @@ public class VinActionTrigger : ActionTrigger
     {
         for (int i = 0; i < mSlashAmount; ++i)
         {
-            if(GetComponent<Unit>().mSkillClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mSkillClips[Random.Range(0, GetComponent<Unit>().mSkillClips.Count - 1)].Clip);
+            if(GetComponent<Unit>().mSkillClips.Count() > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mSkillClips.ElementAt(Random.Range(0, GetComponent<Unit>().mSkillClips.Count())).Clip);
             yield return new WaitForSeconds(mEverySlashTime);
         }
     }
@@ -181,7 +181,7 @@ public class VinActionTrigger : ActionTrigger
         }
 
         transform.position = mPos;
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.None;
+        GetComponent<Unit>().mAiBuild.actionEvent = AIBuild.ActionEvent.None;
 
         Destroy(mirror);
         Destroy(mirror2);

@@ -7,15 +7,17 @@ using TMPro;
 public class SkillTreeScreen : MonoBehaviour
 {
     private Transform mBorader;
-    private Button mPurchase;
     public Sprite mBasicImage;
+    [SerializeField]
+    private GameObject mSelect;
 
     private bool isInitialize = false;
 
+    private int mSelectIndex = 0;
     public void Initialize()
     {
         mBorader = transform.Find("Panel");
-        mPurchase = mBorader.Find("Buy").GetComponent<Button>();
+        mSelectIndex = 0;
         isInitialize = true;
     }
 
@@ -24,11 +26,59 @@ public class SkillTreeScreen : MonoBehaviour
         if(PlayerController.Instance)
             transform.Find("MyPanel").Find("Value").GetComponent<TextMeshProUGUI>().text =
             PlayerController.Instance.mSoul.ToString();
+        if (gameObject.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                if (mSelectIndex > 0)
+                {
+                    mSelectIndex--;
+                }
+                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                if (mSelectIndex < SkillTreeManager._Instance.skill_Nodes.Count-1)
+                {
+                    mSelectIndex++;
+                }
+                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (mSelectIndex > 0)
+                {
+                    mSelectIndex -= 3;
+                    if (mSelectIndex < 0)
+                    {
+                        mSelectIndex = 0;
+                    }
+                }
+                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (mSelectIndex < SkillTreeManager._Instance.skill_Nodes.Count - 1)
+                {
+                    mSelectIndex += 3;
+                    if(mSelectIndex > SkillTreeManager._Instance.skill_Nodes.Count -1)
+                    {
+                        mSelectIndex = SkillTreeManager._Instance.skill_Nodes.Count - 1;
+                    }
+                }
+                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
+            }
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                SkillTreeManager._Instance.UnlockSkill(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
+            }
+            mSelect.transform.SetParent(SkillTreeManager._Instance.skill_Nodes[mSelectIndex].transform);
+            mSelect.transform.position = SkillTreeManager._Instance.skill_Nodes[mSelectIndex].transform.position;
+        }
     }
 
     public void Active(bool active)
     {
-        mPurchase.onClick.RemoveAllListeners();
         transform.gameObject.SetActive(active);
     }
 
@@ -49,9 +99,6 @@ public class SkillTreeScreen : MonoBehaviour
         mBorader.Find("Cost").GetComponent<TextMeshProUGUI>().text = skill_Node._Cost.ToString();
         mBorader.Find("Icon").GetComponent<Image>().sprite = skill_Node._Sprite.sprite;
         mBorader.Find("Icon").GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f);
-        mPurchase.onClick.RemoveAllListeners();
-        if(!skill_Node.IsUnlocked())
-            mPurchase.onClick.AddListener(() => SkillTreeManager._Instance.UnlockSkill(skill_Node));
     }
 
     private void OnEnable()
@@ -65,6 +112,6 @@ public class SkillTreeScreen : MonoBehaviour
         mBorader.Find("Cost").GetComponent<TextMeshProUGUI>().text = "0";
         mBorader.Find("Icon").GetComponent<Image>().sprite = mBasicImage;
         mBorader.Find("Icon").GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f);
-        mPurchase.onClick.RemoveAllListeners();
+        mSelectIndex = 0;
     }
 }

@@ -128,7 +128,7 @@ public class BattleManager : MonoBehaviour
             case GameStatus.None: break;
             case GameStatus.Start:
                 {
-                    status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == ActionEvent.None) && mTime >= mPendingTime) ? GameStatus.Queue : GameStatus.Start;
+                    status = (mUnits.TrueForAll(t => t.GetComponent<Unit>().mAiBuild.actionEvent == AIBuild.ActionEvent.None) && mTime >= mPendingTime) ? GameStatus.Queue : GameStatus.Start;
                     mTime += Time.deltaTime;
                 }
                 break;
@@ -148,12 +148,19 @@ public class BattleManager : MonoBehaviour
                     else
                     {
                         mCurrentUnit.BeginTurn();
-                        if (mCurrentUnit.mAiBuild.type == AIType.Auto)
+                        if (mCurrentUnit.mAiBuild.type == AIBuild.AIType.Auto)
                             mCurrentUnit.mAiBuild.ChangeState("Standby");
                         onMovingOrderEvent?.Invoke();
                         mCurrentUnit.mField.GetComponent<Field>().Picked(true);
-                        if (mCurrentUnit.mAiBuild.type == AIType.Manual)
+                        if (mCurrentUnit.mAiBuild.type == AIBuild.AIType.Manual)
                         {
+                            UIManager.Instance.DisplaySupportKey(true, true);
+                            UIManager.Instance.ChangeSupportText(new string[3]
+                            {
+                                "Proceed",
+                                "Cancel",
+                                string.Empty
+                            });
                             UIManager.Instance.DisplayBattleInterface((mCurrentUnit.mFlag == Flag.Player) ? true : false);
                             var data = mCurrentUnit.GetComponent<Skill_DataBase>();
                             if (data != null)
@@ -191,6 +198,7 @@ public class BattleManager : MonoBehaviour
 
                     if (onReward == false && isWin)
                     {
+                        UIManager.Instance.DisplaySupportKey(false);
                         UIManager.Instance.DisplayHealthBar(false);
                         AudioManager.Instance.mAudioStorage.ChangeMusic("Victory");
                         AudioManager.Instance.musicSource.loop = false;
@@ -198,7 +206,7 @@ public class BattleManager : MonoBehaviour
                         StartCoroutine(RewardTime());
                         onReward = true;
                     }
-                    if((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && _AvailableSkip)
+                    if(Input.GetKeyDown(KeyCode.E) && _AvailableSkip)
                     {
                         StopCoroutine(RewardTime());
 
@@ -358,7 +366,12 @@ public class BattleManager : MonoBehaviour
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
-            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical, () => EndAction()));
+            StartCoroutine(mCurrentUnit.AttackAction(DamageType.Physical, () =>
+            {
+                UIManager.Instance.DisplaySupportKey(false);
+                EndAction();
+            }
+            ));
         }
     }
 
@@ -368,7 +381,12 @@ public class BattleManager : MonoBehaviour
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
-            StartCoroutine(mCurrentUnit.DefendAction(() => EndAction()));
+            StartCoroutine(mCurrentUnit.DefendAction(() =>
+            {
+                UIManager.Instance.DisplaySupportKey(false);
+                EndAction();
+            }
+            ));
         }
     }
 
@@ -383,7 +401,10 @@ public class BattleManager : MonoBehaviour
                 return;
             }
             UIManager.Instance.DisplayBattleInterface(false);
-            StartCoroutine(mCurrentUnit.MagicAction(() => EndAction()));
+            StartCoroutine(mCurrentUnit.MagicAction(() =>
+            {
+                EndAction();
+            }));
         }
     }
 
@@ -404,5 +425,6 @@ public class BattleManager : MonoBehaviour
         mCurrentUnit.mTarget?.mSelected.SetActive(false);
         mCurrentUnit.mTarget = null;
         mCurrentUnit.mField.GetComponent<Field>().Picked(true);
+        UIManager.Instance.DisplaySupportKey(true,true);
     }
 }

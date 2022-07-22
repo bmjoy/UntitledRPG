@@ -12,7 +12,7 @@ public class Boss_Standby : State
 
     public override void Execute(Unit agent)
     {
-        if (agent.mAiBuild.type == AIType.Auto)
+        if (agent.mAiBuild.type == AIBuild.AIType.Auto)
         {
             if (!IsSearched)
             {
@@ -43,6 +43,17 @@ public class Boss_Standby : State
             {
                 database.ChangeSkill(database.mUltimateSkillIndex);
                 current = "Magic";
+                if (database.mSkill.GetType().IsAssignableFrom(typeof(SelfAbility)))
+                {
+                    for (int i = 0; i < PlayerController.Instance.mHeroes.Count; i++)
+                    {
+                        Unit unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                        if (!unit.mConditions.isDied)
+                        {
+                            unit.mField.TargetedMagicHostile(true);
+                        }
+                    }
+                }
             }
             else
             {
@@ -56,6 +67,8 @@ public class Boss_Standby : State
                 }
                 if (agent.mBuffNerfController.GetBuffCount() > 0)
                     current = "Attack";
+                boss.mTarget.mField.TargetedMagicHostile(boss.mSkillDataBase.mSkill.mProperty == SkillProperty.Hostile);
+                boss.mTarget.mField.TargetedMagicHostile(boss.mSkillDataBase.mSkill.mProperty == SkillProperty.Friendly);
             }
         }
         else
@@ -75,5 +88,94 @@ public class Boss_Standby : State
                 }
             }
         }
+
+        if(current.Contains("Magic"))
+        {
+            if ((agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility)))
+            {
+                agent.mTarget = agent;
+            }
+            else if ((agent.mSkillDataBase.mSkill.GetType() == typeof(SelfAbility)))
+            {
+                SelfAbility ability = (SelfAbility)agent.mSkillDataBase.mSkill;
+                if (ability.mSkillNerfTarget == SkillTarget.All)
+                {
+                    if (agent.mFlag == Flag.Player)
+                    {
+                        for (int i = 0; i < BattleManager.Instance.mEnemies.Count; ++i)
+                        {
+                            var unit = BattleManager.Instance.mEnemies[i].GetComponent<Unit>();
+                            unit.mField.TargetedMagicHostile(true);
+                        }
+                    }
+                    else if (agent.mFlag == Flag.Enemy)
+                    {
+                        for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
+                        {
+                            var unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                            unit.mField.TargetedMagicHostile(true);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (ability.mSkillNerfTarget == SkillTarget.Self)
+                {
+                    agent.mField.TargetedMagicHostile(true);
+                }
+                else
+                {
+                    agent.mField.TargetedMagicHostile(true);
+                }
+                if (ability.mSkillBuffTarget == SkillTarget.All)
+                {
+                    if (agent.mFlag == Flag.Enemy)
+                    {
+                        for (int i = 0; i < BattleManager.Instance.mEnemies.Count; ++i)
+                        {
+                            var unit = BattleManager.Instance.mEnemies[i].GetComponent<Unit>();
+                            unit.mField.TargetedFriendly(true);
+                        }
+                    }
+                    else if (agent.mFlag == Flag.Player)
+                    {
+                        for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
+                        {
+                            var unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                            unit.mField.TargetedFriendly(true);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (ability.mSkillBuffTarget == SkillTarget.Self)
+                {
+                    agent.mField.TargetedFriendly(true);
+                }
+                else
+                {
+
+                }
+
+            }
+            else
+            {
+                TargetAbility ability = (TargetAbility)agent.mSkillDataBase.mSkill;
+                if (ability.mProperty == SkillProperty.Friendly)
+                {
+                    agent.mTarget.mField.TargetedFriendly(true);
+                }
+                else
+                {
+                    agent.mTarget.mField.TargetedMagicHostile(true);
+                }
+            }
+        }
+
+
     }
 }

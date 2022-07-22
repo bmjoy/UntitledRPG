@@ -56,7 +56,12 @@ public class NPC : MonoBehaviour, IInteractiveObject
         UIManager.Instance.FadeInScreen();
         UIManager.Instance.DisplayDialogueBox(true);
         UIManager.Instance.DisplayMiniMap(false);
-        while(m_DialogueQueue.Count > 0)
+        UIManager.Instance.DisplaySupportKey();
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            "None",
+            "None"});
+        while (m_DialogueQueue.Count > 0)
         {
             var dialogue = m_DialogueQueue.Dequeue();
             UIManager.Instance.ChangeDialogueText(mName + ": " + dialogue.Text);
@@ -64,8 +69,6 @@ public class NPC : MonoBehaviour, IInteractiveObject
             {
                 case Dialogue.TriggerType.None:
                     yield return new WaitForSeconds(0.5f);
-                    UIManager.Instance.DisplayButtonsInDialogue(false);
-                    UIManager.Instance.DisplayEKeyInDialogue(true);
                     yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     break;
                 case Dialogue.TriggerType.Trade:
@@ -77,19 +80,9 @@ public class NPC : MonoBehaviour, IInteractiveObject
                     mTrigger = Event;
                     break;
                 case Dialogue.TriggerType.Fail:
-                    {
-                        yield return new WaitForSeconds(0.5f);
-                        UIManager.Instance.DisplayButtonsInDialogue(false);
-                        UIManager.Instance.DisplayEKeyInDialogue(true);
-                        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
-                        // Spawn Enemy
-                    }
-                    break;
                 case Dialogue.TriggerType.Success:
                     {
                         yield return new WaitForSeconds(0.5f);
-                        UIManager.Instance.DisplayButtonsInDialogue(false);
-                        UIManager.Instance.DisplayEKeyInDialogue(true);
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     }
                     // Give something
@@ -103,8 +96,8 @@ public class NPC : MonoBehaviour, IInteractiveObject
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.ChangeDialogueText("");
         UIManager.Instance.DisplayDialogueBox(false);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
         UIManager.Instance.DisplayMiniMap(true);
+        UIManager.Instance.DisplaySupportKey(false);
         Callback?.Invoke();
         mComplete = false;
         mTrigger = null;
@@ -113,41 +106,45 @@ public class NPC : MonoBehaviour, IInteractiveObject
 
     public virtual IEnumerator Event()
     {
+        UIManager.Instance.DisplaySupportKey(true,true,false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Yes",
+            "No",
+            "None"});
         mTrigger = null;
-        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.YesButtonImage,
-    UIManager.Instance.mStorage.NoButtonImage);
-        UIManager.Instance.AddListenerRightButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             foreach (var dialogue in m_DialogueYesCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        UIManager.Instance.DisplayButtonsInDialogue(true);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
     }
 
     public virtual IEnumerator Trade()
     {
         mTrigger = null;
-        UIManager.Instance.AddListenerRightButton(() => {
+        UIManager.Instance.DisplaySupportKey(true, true, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Yes",
+            "No",
+            string.Empty});
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             // Input quest?
             mComplete = true;
         });
-        UIManager.Instance.DisplayButtonsInDialogue(true);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
     }
 
     public void React(bool active)

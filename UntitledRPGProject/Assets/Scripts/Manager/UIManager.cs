@@ -19,7 +19,12 @@ public class UIManager : MonoBehaviour
             mInstance = this;
         DontDestroyOnLoad(gameObject);
     }
-    
+
+    [Header("Key Setting")]
+    public KeyCode mYesKeyCode;
+    public KeyCode mNoKeyCode;
+    public KeyCode mExitKeyCode;
+    [Header("UI Components")]
     public UIStorage mStorage;
     public Canvas mCanvas;
     public Canvas mAdditionalCanvas;
@@ -34,15 +39,17 @@ public class UIManager : MonoBehaviour
     private List<BigHealthBar> mHealthBarList = new List<BigHealthBar>();
     private BossHealthBar mBossHealthBar;
 
-    public OrderBar mOrderBar;
 
-    public InventoryUI mInventoryUI;
     // ----- Screen -----
+    public OrderBar mOrderBar;
+    public InventoryUI mInventoryUI;
     public OptionScreen mOptionScreenUI;
     public VictoryScreen mVictoryScreen;
     public MerchantScreen mMerchantScreen;
     public SkillTreeScreen mSkillTreeScreen;
     private bool switchOfInventory = false;
+    [HideInInspector]
+    public bool IsOpenScreen = false;
     private float mTime = 0.0f;
     private float mCoolTime = 1.5f;
 
@@ -78,9 +85,6 @@ public class UIManager : MonoBehaviour
         mOrderBar = mStorage.mOrderbar.GetComponent<OrderBar>();
         mInventoryUI.Initialize();
         mVictoryScreen.Initialize(this);
-
-        DisplayExitButtonInDialogue(false);
-        DisplayBackButtonInDialogue(false);
         DisplayBattleInterface(false);
         DisplayText(false);
         DisplayDialogueBox(false);
@@ -91,14 +95,18 @@ public class UIManager : MonoBehaviour
     public void DisplayInventory(bool active)
     {
         mInventoryUI.Active(active);
+        IsOpenScreen = active;
+        if(PlayerController.Instance)
+            PlayerController.Instance.mInteractSystem.IsInteracting = active;
     }
     public void DisplaySkillTreeScreen(bool active)
     {
         mSkillTreeScreen.Active(active);
+        IsOpenScreen = active;
     }
     private void Update()
     {
-        if (PlayerController.Instance && (PlayerController.Instance.onBattle || PlayerController.Instance.Interaction))
+        if (PlayerController.Instance && PlayerController.Instance.onBattle)
             return;
 
         if (GameManager.Instance.IsCinematicEvent)
@@ -136,8 +144,6 @@ public class UIManager : MonoBehaviour
 
     public static void ResetUI()
     {
-        Instance.mStorage.mLeftButton.onClick.RemoveAllListeners();
-        Instance.mStorage.mRightButton.onClick.RemoveAllListeners();
         Instance.DisplayBattleInterface(false);
         Instance.DisplayDialogueBox(false);
     }
@@ -184,10 +190,10 @@ public class UIManager : MonoBehaviour
 
     public void DisplayDialogueBox(bool display)
     {
+        IsOpenScreen = display;
         if (display)
         {
             mStorage.mDialogueText.gameObject.SetActive(display);
-            mStorage.EKeyImage.gameObject.SetActive(display);
             mStorage.mDialogueBox.SetActive(display);
         }
         else
@@ -200,9 +206,6 @@ public class UIManager : MonoBehaviour
             mStorage.mDialogueBox.GetComponent<Animator>().Play("Outro");
         yield return new WaitForSeconds(1.0f);
         mStorage.mDialogueText.gameObject.SetActive(false);
-        mStorage.EKeyImage.gameObject.SetActive(false);
-        mStorage.mLeftButton.gameObject.SetActive(false);
-        mStorage.mRightButton.gameObject.SetActive(false);
         mStorage.mDialogueBox.SetActive(false);
     }
 
@@ -335,52 +338,6 @@ public class UIManager : MonoBehaviour
         mTextAnimator.SetBool("FadeIn", false);
         mTextAnimator.SetBool("FadeOut", true);
     }
-
-    public void AddListenerLeftButton(UnityAction action = null)
-    {
-        mStorage.mLeftButton.onClick.RemoveAllListeners();
-        mStorage.mLeftButton.onClick.AddListener(action);
-    }
-
-    public void AddListenerRightButton(UnityAction action = null)
-    {
-        mStorage.mRightButton.onClick.RemoveAllListeners();
-        mStorage.mRightButton.onClick.AddListener(action);
-    }    
-    
-    public void AddListenerExitButton(UnityAction action = null)
-    {
-        mStorage.mExitButton.onClick.RemoveAllListeners();
-        mStorage.mExitButton.onClick.AddListener(action);
-    }
-    
-    public void AddListenerBackButton(UnityAction action = null)
-    {
-        mStorage.mBackButton.onClick.RemoveAllListeners();
-        mStorage.mBackButton.onClick.AddListener(action);
-    }
-
-    public void DisplayButtonsInDialogue(bool action)
-    {
-        mStorage.mLeftButton.gameObject.SetActive(action);
-        mStorage.mRightButton.gameObject.SetActive(action);
-    }
-
-    public void DisplayExitButtonInDialogue(bool action)
-    {
-        mStorage.mExitButton.gameObject.SetActive(action);
-    }
-    
-    public void DisplayEKeyInDialogue(bool action)
-    {
-        mStorage.EKeyImage.gameObject.SetActive(action);
-    }
-    
-    public void DisplayBackButtonInDialogue(bool action)
-    {
-        mStorage.mBackButton.gameObject.SetActive(action);
-    }
-
     public void DisplayMoneyBoxInDialogue(bool action, int cost = 0)
     {
         StopCoroutine("DisplayMoneyBoxInTime");
@@ -404,40 +361,47 @@ public class UIManager : MonoBehaviour
         mStorage.mCurrentMoney.SetActive(false);
     }
 
+    public void DisplaySupportKey(bool E = true, bool R = false, bool ESC = false)
+    {
+        mStorage.mSupportKey.SetActive(E);
+        mStorage.mSupportKey.transform.Find("ESC Key").gameObject.SetActive(ESC);
+        mStorage.mSupportKey.transform.Find("E Key").gameObject.SetActive(E);
+        mStorage.mSupportKey.transform.Find("R Key").gameObject.SetActive(R);
+    }
+
+    public void ChangeSupportText(string[] strings)
+    {
+        if (strings[2] != string.Empty)
+            mStorage.mSupportKey.transform.Find("ESC Key").Find("Text").GetComponent<TextMeshProUGUI>().text = strings[2];
+        if (strings[0] != string.Empty)
+            mStorage.mSupportKey.transform.Find("E Key").Find("Text").GetComponent<TextMeshProUGUI>().text = strings[0];
+        if (strings[1] != string.Empty)
+            mStorage.mSupportKey.transform.Find("R Key").Find("Text").GetComponent<TextMeshProUGUI>().text = strings[1];
+    }
+
     public void DisplayTutorialIcon(string icon, bool here = false)
     {
         switch(icon)
         {
-            case "Mouse":
-                mStorage.mTutorialMouseIcon.SetActive(true);
-                mStorage.mTutorialHereIcon.SetActive(here);
-                mStorage.mTutorialItemIcon.SetActive(false);
-                mStorage.mTutorialWASDIcon.SetActive(false);
-                mStorage.mTutorialInteractIcon.SetActive(false);
-                break;
             case "Move":
-                mStorage.mTutorialMouseIcon.SetActive(false);
                 mStorage.mTutorialHereIcon.SetActive(here);
                 mStorage.mTutorialItemIcon.SetActive(false);
                 mStorage.mTutorialWASDIcon.SetActive(true);
                 mStorage.mTutorialInteractIcon.SetActive(false);
                 break;
             case "Interact":
-                mStorage.mTutorialMouseIcon.SetActive(false);
                 mStorage.mTutorialHereIcon.SetActive(here);
                 mStorage.mTutorialItemIcon.SetActive(false);
                 mStorage.mTutorialWASDIcon.SetActive(false);
                 mStorage.mTutorialInteractIcon.SetActive(true);
                 break;
             case "Item":
-                mStorage.mTutorialMouseIcon.SetActive(false);
                 mStorage.mTutorialItemIcon.SetActive(true);
                 mStorage.mTutorialWASDIcon.SetActive(false);
                 mStorage.mTutorialHereIcon.SetActive(here);
                 mStorage.mTutorialInteractIcon.SetActive(false);
                 break;
             case "None":
-                mStorage.mTutorialMouseIcon.SetActive(false);
                 mStorage.mTutorialItemIcon.SetActive(false);
                 mStorage.mTutorialWASDIcon.SetActive(false);
                 mStorage.mTutorialHereIcon.SetActive(here);
@@ -447,11 +411,5 @@ public class UIManager : MonoBehaviour
                 Debug.LogWarning($"<color=yellow>Warning!</color> The name of {icon} is not vaild!");
                 break;
         }
-    }
-
-    public void ChangeTwoButtons(Sprite left, Sprite right)
-    {
-        mStorage.mLeftButton.image.sprite = left;
-        mStorage.mRightButton.image.sprite = right;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Merchant : NPC
@@ -24,51 +25,71 @@ public class Merchant : NPC
     public override IEnumerator Event()
     {
         mTrigger = null;
-        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.BuyButtonImage,
-            UIManager.Instance.mStorage.SellButtonImage);
-        UIManager.Instance.AddListenerRightButton(() => {
+        UIManager.Instance.DisplaySupportKey(true, true, true);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Buy",
+            "Sell",
+            "Exit"});
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             m_DialogueQueue.Enqueue(m_DialogueSellCase);
             isBuy = false;
+            UIManager.Instance.DisplaySupportKey();
+            UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
             mComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             m_DialogueQueue.Enqueue(m_DialogueBuyCase);
             isBuy = true;
             mComplete = true;
         });
-        UIManager.Instance.AddListenerExitButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mExitAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
+            UIManager.Instance.DisplaySupportKey();
+            UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
             mComplete = true;
         });
-        UIManager.Instance.DisplayButtonsInDialogue(true);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
-        UIManager.Instance.DisplayExitButtonInDialogue(true);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
-        UIManager.Instance.DisplayExitButtonInDialogue(false);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
     }
 
     public override IEnumerator Trade()
     {
-        UIManager.Instance.AddListenerExitButton(() => {
-            foreach (var dialogue in m_DialogueNoCase)
-                m_DialogueQueue.Enqueue(dialogue);
-            mComplete = true;
-        });
-        UIManager.Instance.AddListenerBackButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mExitAction += (() => {
             m_DialogueQueue.Enqueue(m_DialogueAskAgainCase);
             mComplete = true;
         });
-        UIManager.Instance.DisplayExitButtonInDialogue(true);
-        UIManager.Instance.DisplayBackButtonInDialogue(true);
         if (isBuy)
+        {
+            UIManager.Instance.DisplaySupportKey(true,false ,true);
+            UIManager.Instance.ChangeSupportText(new string[3]{
+            "Purchase",
+            string.Empty,
+            "Exit"});
             mSlotManager.StartBuyTrade();
+        }
         else
+        {
+            UIManager.Instance.DisplaySupportKey(true, true, true);
+            UIManager.Instance.ChangeSupportText(new string[3]{
+            "Sell/Buy",
+            "Transfer",
+            "Exit"});
             mSlotManager.StartSellTrade();
+        }
         yield return new WaitUntil(() => mComplete);
         mSlotManager.EndTrade();
-        UIManager.Instance.DisplayExitButtonInDialogue(false);
-        UIManager.Instance.DisplayBackButtonInDialogue(false);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
+        UIManager.Instance.DisplaySupportKey();
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
     }
 }

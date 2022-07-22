@@ -39,6 +39,8 @@ public class AudioManager : MonoBehaviour
 
     public static void PlaySfx(AudioClip clip, float volume = 1.0f)
     {
+        if (clip == null)
+            return;
         Instance.sfxSource.PlayOneShot(clip,volume);
     }
 

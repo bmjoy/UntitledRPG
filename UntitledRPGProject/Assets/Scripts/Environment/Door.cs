@@ -66,12 +66,15 @@ public class Door : InteractableEnvironment, ILockable
                 {
                     UIManager.Instance.DisplayDialogueBox(true);
                     yield return new WaitForSeconds(0.5f);
-                    EnableIcon();
+                    UIManager.Instance.DisplaySupportKey(true, false, false);
+                    UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
                     UIManager.Instance.ChangeDialogueText("Jimmy" + ": " + m_DialogueFailCase.Text);
                     yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     UIManager.Instance.ChangeDialogueText("");
                     UIManager.Instance.DisplayDialogueBox(false);
-                    UIManager.Instance.DisplayEKeyInDialogue(false);
                 }
             }
             else
@@ -91,12 +94,6 @@ public class Door : InteractableEnvironment, ILockable
         }
         mDoorAnimator.SetBool(mOpenDirection, true);
         AudioManager.PlaySfx(mSFX);
-    }
-
-    private void EnableIcon()
-    {
-        UIManager.Instance.DisplayButtonsInDialogue(false);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
     }
     public bool IsLocked()
     {

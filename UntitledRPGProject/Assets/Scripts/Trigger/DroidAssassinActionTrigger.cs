@@ -45,8 +45,8 @@ public class DroidAssassinActionTrigger : ActionTrigger
             GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Droid_Assassin_Slash"), unit.mTarget.transform.position, Quaternion.identity);
             slash.transform.Rotate(new Vector3(Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f)));
             Destroy(slash, 0.5f);
-            if (unit.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips[Random.Range(0, unit.mAttackClips.Count - 1)].Clip);
+            if (unit.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(GetComponent<Unit>().mAttackClips.ElementAt(Random.Range(0, unit.mAttackClips.Count())).Clip);
             yield return new WaitForSeconds(0.08f);
         }
     }
@@ -54,8 +54,8 @@ public class DroidAssassinActionTrigger : ActionTrigger
     protected override void StartActionTrigger()
     {
         var unit = GetComponent<Unit>();
-        unit.mAiBuild.priority = AITargetPriority.AimToHighHealth;
-        unit.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        unit.mAiBuild.priority = AIBuild.AITargetPriority.AimToHighHealth;
+        unit.mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
         mPos = unit.mTarget.transform.position;
 
         unit.mAnimator.Play("Attack");

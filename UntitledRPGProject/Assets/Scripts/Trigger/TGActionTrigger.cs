@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // Temple Guardian's action trigger
@@ -45,8 +46,8 @@ public class TGActionTrigger : BossActionTrigger
         }
         if (boss.mTarget)
         {
-            if(boss.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip,0.6f);
+            if(boss.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip,0.6f);
             boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
         }
     }
@@ -67,7 +68,7 @@ public class TGActionTrigger : BossActionTrigger
             mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f) / 2.0f;
         }
         mPos = boss.mTarget.transform.position;
-        boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        boss.mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
         isCompleted = false;
         StartCoroutine(Action());
     }

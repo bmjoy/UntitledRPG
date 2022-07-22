@@ -23,7 +23,7 @@ public class Standby : State
     {
         if (agent.GetType() == typeof(Boss)) return;
 
-        if (agent.mAiBuild.type == AIType.Auto)
+        if (agent.mAiBuild.type == AIBuild.AIType.Auto)
         {
             if(IsSucceeded && !IsSearched)
             {
@@ -42,7 +42,7 @@ public class Standby : State
 
     public override bool Find(Unit agent)
     {
-        if (agent.mAiBuild.priority == AITargetPriority.AimToHighHealth)
+        if (agent.mAiBuild.priority == AIBuild.AITargetPriority.AimToHighHealth)
         {
             SeekToHighHealthCost(agent, ref agent.mTarget);
             return true;
@@ -64,6 +64,88 @@ public class Standby : State
     {
         current = ((agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility))
 || (agent.mStatus.mMana >= agent.mSkillDataBase.Mana && UnityEngine.Random.Range(0, 100) >= 50)) ? "Magic" : current;
+        if(current.Contains("Magic"))
+        {
+            if ((agent.mSkillDataBase.mSkill.GetType() == typeof(SummonAbility)))
+            {
+                agent.mTarget = agent;
+            }
+            else if ((agent.mSkillDataBase.mSkill.GetType() == typeof(SelfAbility)))
+            {
+                SelfAbility ability = (SelfAbility)agent.mSkillDataBase.mSkill;
+                if (ability.mSkillNerfTarget == SkillTarget.All)
+                {
+                    if(agent.mFlag == Flag.Player)
+                    {
+                        for (int i = 0; i < BattleManager.Instance.mEnemies.Count; ++i)
+                        {
+                            var unit = BattleManager.Instance.mEnemies[i].GetComponent<Unit>();
+                            unit.mField.TargetedMagicHostile(true);
+                        }
+                    }
+                    else if(agent.mFlag == Flag.Enemy)
+                    {
+                        for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
+                        {
+                            var unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                            unit.mField.TargetedMagicHostile(true);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    agent.mField.TargetedMagicHostile(true);
+                }
+                if(ability.mSkillBuffTarget == SkillTarget.All)
+                {
+                    if (agent.mFlag == Flag.Enemy)
+                    {
+                        for (int i = 0; i < BattleManager.Instance.mEnemies.Count; ++i)
+                        {
+                            var unit = BattleManager.Instance.mEnemies[i].GetComponent<Unit>();
+                            unit.mField.TargetedFriendly(true);
+                        }
+                    }
+                    else if (agent.mFlag == Flag.Player)
+                    {
+                        for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
+                        {
+                            var unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                            unit.mField.TargetedFriendly(true);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (ability.mSkillBuffTarget == SkillTarget.Self)
+                {
+                    agent.mField.TargetedFriendly(true);
+                }
+                else
+                {
+
+                }
+
+            }
+            else
+            {
+                TargetAbility ability = (TargetAbility)agent.mSkillDataBase.mSkill;
+                if (ability.mProperty == SkillProperty.Friendly)
+                {
+                    agent.mTarget.mField.TargetedFriendly(true);
+                }
+                else
+                {
+                    agent.mTarget.mField.TargetedMagicHostile(true);
+                }
+            }
+        }
     }
 
     private void SeekToHighHealthCost(Unit agent, ref Unit target)

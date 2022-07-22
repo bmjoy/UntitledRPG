@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/TargetAbility")]
@@ -28,41 +29,105 @@ public class TargetAbility : DamagableAbility
             BattleManager.Instance.Cancel();
         else
         {
-            if (mOwner.mAiBuild.type == AIType.Manual)
+            Field unit = null;
+            if (mOwner.mAiBuild.type == AIBuild.AIType.Manual)
             {
                 UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForTarget);
+                DisplayArrow(true);
                 mTarget = null;
-
-                foreach (GameObject unit in (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies)
-                {
-                    if (!unit.GetComponent<Unit>().mConditions.isDied)
-                        unit.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(true);
-                }
+                unit = RandomTargeting(ref unit);
+                if(mProperty == SkillProperty.Friendly)
+                    BattleManager.Instance.mSpellChanning = true;
                 while (true)
                 {
-                    Raycasting();
-                    if(Input.GetMouseButtonDown(0) && mTarget)
+                    if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        mTarget = null;
+                        unit.TargetedMagicHostile(false);
+                        unit.TargetedFriendly(false);
+                        unit = (mProperty == SkillProperty.Hostile) ? BattleManager.enemyFieldParent.GetChild(0).GetComponent<Field>()
+                            : BattleManager.playerFieldParent.GetChild(1).GetComponent<Field>();
+                        if (unit.IsExist)
+                        {
+                            mTarget = unit.mUnit;
+                            unit.TargetedMagicHostile(mProperty == SkillProperty.Hostile);
+                            unit.TargetedFriendly(mProperty == SkillProperty.Friendly);
+                        }
+                        else
+                            unit = RandomTargeting(ref unit);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        unit.TargetedMagicHostile(false);
+                        unit.TargetedFriendly(false);
+                        mTarget = null;
+                        unit = (mProperty == SkillProperty.Hostile) ? BattleManager.enemyFieldParent.GetChild(1).GetComponent<Field>()
+    : BattleManager.playerFieldParent.GetChild(0).GetComponent<Field>();
+                        if (unit.IsExist)
+                        {
+                            mTarget = unit.mUnit;
+                            unit.TargetedMagicHostile(mProperty == SkillProperty.Hostile);
+                            unit.TargetedFriendly(mProperty == SkillProperty.Friendly);
+                        }
+                        else
+                            unit = RandomTargeting(ref unit);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        unit.TargetedMagicHostile(false);
+                        unit.TargetedFriendly(false);
+                        mTarget = null;
+                        unit = (mProperty == SkillProperty.Hostile) ? BattleManager.enemyFieldParent.GetChild(2).GetComponent<Field>()
+    : BattleManager.playerFieldParent.GetChild(2).GetComponent<Field>();
+                        if (unit.IsExist)
+                        {
+                            mTarget = unit.mUnit;
+                            unit.TargetedMagicHostile(mProperty == SkillProperty.Hostile);
+                            unit.TargetedFriendly(mProperty == SkillProperty.Friendly);
+                        }
+                        else
+                            unit = RandomTargeting(ref unit);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        unit.TargetedMagicHostile(false);
+                        unit.TargetedFriendly(false);
+                        mTarget = null;
+                        unit = (mProperty == SkillProperty.Hostile) ? BattleManager.enemyFieldParent.GetChild(3).GetComponent<Field>()
+     : BattleManager.playerFieldParent.GetChild(3).GetComponent<Field>();
+                        if (unit.IsExist)
+                        {
+                            mTarget = unit.mUnit;
+                            unit.TargetedMagicHostile(mProperty == SkillProperty.Hostile);
+                            unit.TargetedFriendly(mProperty == SkillProperty.Friendly);
+                        }
+                        else
+                            unit = RandomTargeting(ref unit);
+                    }
+                    else { }
+
+                    if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode) && mTarget)
                     {
                         isActive = true;
                         break;
                     }
-                    if (Input.GetMouseButtonDown(1))
+
+                    if(Input.GetKeyDown(UIManager.Instance.mNoKeyCode))
                     {
-                        mTarget?.mField.TargetedMagicHostile(false);
-                        mTarget?.mField.TargetedFriendly(false);
-                        mTarget = null;
+                        unit.TargetedMagicHostile(false);
+                        unit.TargetedFriendly(false);
                         isActive = false;
+                        unit = null;
+                        mTarget = null;
                         BattleManager.Instance.mSpellChanning = false;
                         UIManager.Instance.ChangeOrderBarText("Waiting for Order...");
                         break;
                     }
+
                     yield return null;
                 }
 
-                foreach (GameObject unit in (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes : BattleManager.Instance.mEnemies)
-                {
-                    unit.GetComponent<Unit>().mCanvas.transform.Find("Arrow").gameObject.SetActive(false);
-                }
+                DisplayArrow(false);
 
                 UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
             }
@@ -70,13 +135,17 @@ public class TargetAbility : DamagableAbility
             {
                 isActive = true;
                 mTarget = mOwner.mTarget;
+                unit = mTarget.mField;
             }
 
             if (isActive)
             {
+                UIManager.Instance.DisplaySupportKey(false);
+                unit.TargetedMagicHostile(false);
+                unit.TargetedFriendly(false);
                 BattleManager.Instance.mSpellChanning = false;
-                mTarget.mField.TargetedMagicHostile(false);
-                mTarget.mField.TargetedFriendly(false);
+                unit.TargetedMagicHostile(false);
+                unit.TargetedFriendly(false);
                 if(mTarget.GetType() == typeof(Player) && mProperty == SkillProperty.Friendly)
                 {
                     Player playerunit = (Player)mTarget;
@@ -88,10 +157,10 @@ public class TargetAbility : DamagableAbility
                 mTarget?.mSelected.SetActive(false);
                 bool hasState = mOwner.mAnimator.HasState(0, Animator.StringToHash(mAnimationName));
                 mOwner.mMagicDistance = mRange;
-                mOwner.mAiBuild.SetActionEvent(ActionEvent.MagicWalk);
+                mOwner.mAiBuild.SetActionEvent(AIBuild.ActionEvent.MagicWalk);
                 if(mProperty == SkillProperty.Friendly)
                     CameraSwitcher.Instance.StartCoroutine(CameraSwitcher.Instance.ZoomCamera(mEffectTime / 2.0f, Vector3.Lerp(mOwner.transform.position, mTarget.transform.position, 0.5f)));
-                yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
+                yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
                 mOwner.mStatus.mMana -= mManaCost;
 
                 if (mShootType == SKillShootType.Range)
@@ -99,8 +168,8 @@ public class TargetAbility : DamagableAbility
                     mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
                     mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                     yield return new WaitForSeconds(mEffectTime);
-                    if(mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
+                    if(mOwner.mSkillClips.Count() > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips.ElementAt(UnityEngine.Random.Range(0, mOwner.mSkillClips.Count())).Clip, 1.0f);
                     Shoot();
                     yield return new WaitUntil(() => mProjectile.GetComponent<Projectile>().isCollide == true);
                 }
@@ -117,8 +186,8 @@ public class TargetAbility : DamagableAbility
                     {
                         mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
                         yield return new WaitForSeconds(mOwner.mAnimator.GetCurrentAnimatorStateInfo(0).length + mEffectTime);
-                        if (mOwner.mSkillClips.Count > 0)
-                            AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
+                        if (mOwner.mSkillClips.Count() > 0)
+                            AudioManager.PlaySfx(mOwner.mSkillClips.ElementAt(UnityEngine.Random.Range(0, mOwner.mSkillClips.Count())).Clip, 1.0f);
                         CommonState();
                     }
                     yield return new WaitForSeconds(0.2f);
@@ -127,8 +196,8 @@ public class TargetAbility : DamagableAbility
                 {
                     mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
                     mOwner.mAnimator.Play((hasState) ? mAnimationName : "Attack");
-                    if (mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip, 1.0f);
+                    if (mOwner.mSkillClips.Count() > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips.ElementAt(UnityEngine.Random.Range(0, mOwner.mSkillClips.Count())).Clip, 1.0f);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }
@@ -141,17 +210,96 @@ public class TargetAbility : DamagableAbility
                     Destroy(go, 1.1f);
                 }
                 yield return new WaitForSeconds(0.5f);
-                mOwner.mAiBuild.SetActionEvent(ActionEvent.BackWalk);
+                mOwner.mAiBuild.SetActionEvent(AIBuild.ActionEvent.BackWalk);
             }
             else
                 BattleManager.Instance.Cancel();
         }
-        if(mOwner.mAiBuild.actionEvent == ActionEvent.BackWalk)
+        if(mOwner.mAiBuild.actionEvent == AIBuild.ActionEvent.BackWalk)
         {
-            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == ActionEvent.Busy);
+            yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
         }
         isComplete = true;
         yield return null;
+    }
+    private Field RandomTargeting(ref Field unit)
+    {
+        if(mProperty == SkillProperty.Friendly)
+        {
+            for (int i = 0; i < BattleManager.playerFieldParent.childCount; ++i)
+            {
+                unit = BattleManager.playerFieldParent.GetChild(i).GetComponent<Field>();
+                if (unit.IsExist)
+                {
+                    mTarget = unit.mUnit;
+                    unit.TargetedFriendly(true);
+                    return unit;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < BattleManager.enemyFieldParent.childCount; ++i)
+            {
+                unit = BattleManager.enemyFieldParent.GetChild(i).GetComponent<Field>();
+                if (unit.IsExist)
+                {
+                    mTarget = unit.mUnit;
+                    unit.TargetedMagicHostile(true);
+                    return unit;
+                }
+            }
+        }
+        return unit;
+    }
+    private void DisplayArrow(bool display)
+    {
+        int count = 0;
+        if (mOwner.mFlag == Flag.Player)
+        {
+            count = (mProperty == SkillProperty.Friendly) ? PlayerController.Instance.mHeroes.Count : BattleManager.Instance.mEnemies.Count;
+        }
+        else if(mOwner.mFlag == Flag.Enemy)
+        {
+            count = (mProperty == SkillProperty.Hostile) ? PlayerController.Instance.mHeroes.Count : BattleManager.Instance.mEnemies.Count;
+        }
+        else
+        {
+            count = 0;
+        }
+        for (int i = 0; i < count; ++i)
+        {
+            if (mOwner.mFlag == Flag.Player)
+            {
+                if(mProperty == SkillProperty.Hostile)
+                {
+                    Unit e = BattleManager.Instance.mEnemies[i].GetComponent<Unit>();
+                    if (!e.mConditions.isDied)
+                        e.mArrow.SetActive(display);
+                }
+                else
+                {
+                    Unit e = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                    if (!e.mConditions.isDied)
+                        e.mArrow.SetActive(display);
+                }
+            }
+            else if (mOwner.mFlag == Flag.Enemy)
+            {
+                if (mProperty == SkillProperty.Friendly)
+                {
+                    Unit e = BattleManager.Instance.mEnemies[i].GetComponent<Unit>();
+                    if (!e.mConditions.isDied)
+                        e.mArrow.SetActive(display);
+                }
+                else
+                {
+                    Unit e = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                    if (!e.mConditions.isDied)
+                        e.mArrow.SetActive(display);
+                }
+            }
+        }
     }
 
     private void CommonState()

@@ -113,15 +113,15 @@ public class TutorialManager : MonoBehaviour
                         {
                             mEvent = true;
                             GameManager.Instance.IsCinematicEvent = false;
-                            UIManager.Instance.DisplayEKeyInDialogue(false);
                             UIManager.Instance.DisplayTutorialIcon("Move");
+                            UIManager.Instance.DisplaySupportKey(false);
                         }
                     }
                 }
-                if((Input.GetKey(KeyCode.W) ||
-                    Input.GetKey(KeyCode.A) ||
-                    Input.GetKey(KeyCode.D) ||
-                    Input.GetKey(KeyCode.S)) && !mMoveMission)
+                if((Input.GetKey(KeyCode.DownArrow) ||
+                    Input.GetKey(KeyCode.UpArrow) ||
+                    Input.GetKey(KeyCode.LeftArrow) ||
+                    Input.GetKey(KeyCode.RightArrow)) && !mMoveMission)
                 {
                     _MoveTimer += Time.deltaTime;
                     if(_MoveTimer >= 3.0f)
@@ -132,9 +132,9 @@ public class TutorialManager : MonoBehaviour
                         var dialogue = m_DialogueQueue.Dequeue();
                         UIManager.Instance.ChangeDialogueText(dialogue.Text);
                         StartCoroutine(BeginInteractTutorial());
-                        UIManager.Instance.DisplayEKeyInDialogue(false);
                         PlayerController.Instance.mState = new IdleState();
                         PlayerController.Instance.mModel.GetComponent<Animator>().SetFloat("Speed", 0.0f);
+                        UIManager.Instance.DisplaySupportKey(false, false, false);
                         mEvent = false;
                     }
                 }
@@ -150,8 +150,7 @@ public class TutorialManager : MonoBehaviour
                         {
                             mEvent = true;
                             GameManager.Instance.IsCinematicEvent = false;
-                            UIManager.Instance.DisplayEKeyInDialogue(false);
-
+                            UIManager.Instance.DisplaySupportKey(false, false, false);
                             StartCoroutine(SpawnTutorialEnvironment());
                         }
                     }
@@ -163,7 +162,6 @@ public class TutorialManager : MonoBehaviour
                     var dialogue = m_DialogueQueue.Dequeue();
                     UIManager.Instance.ChangeDialogueText(dialogue.Text);
                     StartCoroutine(BeginBattleTutorial());
-                    UIManager.Instance.DisplayEKeyInDialogue(false);
                     _BreakableObject.mTutorialIcon.SetActive(false);
                     mEvent = false;
                 }
@@ -189,7 +187,7 @@ public class TutorialManager : MonoBehaviour
                             m_DialogueQueue.Enqueue(m_DialogueBattleHelp);
                             var dialogue = m_DialogueQueue.Dequeue();
                             UIManager.Instance.ChangeDialogueText(dialogue.Text);
-                            UIManager.Instance.DisplayEKeyInDialogue(false);
+                            UIManager.Instance.DisplaySupportKey(false, false, false);
                         }
                     }
                 }
@@ -198,7 +196,6 @@ public class TutorialManager : MonoBehaviour
                     m_DialogueQueue.Enqueue(m_DialogueBattleSuccess);
                     var dialogue = m_DialogueQueue.Dequeue();
                     UIManager.Instance.ChangeDialogueText(dialogue.Text);
-                    UIManager.Instance.DisplayEKeyInDialogue(false);
                     StartCoroutine(BeginEndTutorial());
                     mEvent = false;
                 }
@@ -216,11 +213,11 @@ public class TutorialManager : MonoBehaviour
                             GameObject i = Instantiate(mItem);
                             i.transform.SetParent(transform, false);
                             i.GetComponent<Item>().isSold = true;
-                            UIManager.Instance.DisplayEKeyInDialogue(false);
                             i.transform.SetParent(PlayerController.Instance.mBag.transform);
                             PlayerController.Instance.mInventory.Add(i.GetComponent<Item>());
                             PlayerController.Instance.mHeroes[0].GetComponent<InventroySystem>().mAction += ItemMission;
                             UIManager.Instance.DisplayTutorialIcon("Item");
+                            UIManager.Instance.DisplaySupportKey(false, false, false);
                         }
                     }
                     else
@@ -235,6 +232,7 @@ public class TutorialManager : MonoBehaviour
                             m_DialogueQueue.Clear();
                             UIManager.Instance.ChangeDialogueText("");
                             UIManager.Instance.DisplayDialogueBox(false);
+                            UIManager.Instance.DisplaySupportKey(false, false, false);
                         }
                     }
                 }
@@ -245,9 +243,12 @@ public class TutorialManager : MonoBehaviour
                     {
                         var dialogue = m_DialogueQueue.Dequeue();
                         UIManager.Instance.ChangeDialogueText(dialogue.Text);
-                        UIManager.Instance.DisplayEKeyInDialogue(true);
                         UIManager.Instance.DisplayTutorialIcon("None");
                         mEvent = false;
+                        UIManager.Instance.DisplaySupportKey(true, false, false);
+                        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty, string.Empty});
                     }
                 }
                 break;
@@ -274,7 +275,6 @@ public class TutorialManager : MonoBehaviour
         var dialogue = m_DialogueQueue.Dequeue();
         UIManager.Instance.ChangeDialogueText(dialogue.Text);
         mSecondaryEndMission = true;
-        UIManager.Instance.DisplayEKeyInDialogue(false);
     }
 
     IEnumerator BeginTutorial()
@@ -309,8 +309,11 @@ public class TutorialManager : MonoBehaviour
         }
         var dialogue = m_DialogueQueue.Dequeue();
         UIManager.Instance.ChangeDialogueText(dialogue.Text);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
         Type = TutorialType.Movement;
+        UIManager.Instance.DisplaySupportKey(true, false, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty, string.Empty});
     }
 
     IEnumerator BeginInteractTutorial()
@@ -324,7 +327,10 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         var dialogue = m_DialogueQueue.Dequeue();
         UIManager.Instance.ChangeDialogueText(dialogue.Text);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
+        UIManager.Instance.DisplaySupportKey(true, false, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty, string.Empty});
         Type = TutorialType.Interact;
     }
 
@@ -339,8 +345,11 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         var dialogue = m_DialogueQueue.Dequeue();
         UIManager.Instance.ChangeDialogueText(dialogue.Text);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
         Type = TutorialType.Battle;
+        UIManager.Instance.DisplaySupportKey(true, false, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty, string.Empty});
     }
 
     IEnumerator BeginEndTutorial()
@@ -354,9 +363,12 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         var dialogue = m_DialogueQueue.Dequeue();
         UIManager.Instance.ChangeDialogueText(dialogue.Text);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
         mEvent = false;
         Type = TutorialType.End;
+        UIManager.Instance.DisplaySupportKey(true, false, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty, string.Empty});
     }
 
     IEnumerator SpawnTutorialEnvironment()
@@ -388,32 +400,32 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator Event()
     {
-        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.YesButtonImage,
-    UIManager.Instance.mStorage.NoButtonImage);
-        UIManager.Instance.AddListenerRightButton(() => {
+        yield return new WaitForSeconds(0.5f);
+        UIManager.Instance.DisplaySupportKey(true, true, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Yes",
+            "No",
+            string.Empty});
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             m_DialogueQueue.Enqueue(m_DialogueNoCase);
             mComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             m_DialogueQueue.Enqueue(m_DialogueYesCase);
             fireworksTop = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/CelebrationEffect2"), UIManager.Instance.mAdditionalCanvas.transform.localPosition + new Vector3(0.0f, 25.0f, 0.0f), Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
             mComplete = true;
         });
-        UIManager.Instance.DisplayButtonsInDialogue(true);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
-        UIManager.Instance.DisplayTutorialIcon("Mouse", true);
         Transform t = UIManager.Instance.mStorage.mTutorialHereIcon.transform.parent;
         UIManager.Instance.mStorage.mTutorialHereIcon.transform.SetParent(
             UIManager.Instance.mStorage.mDialogueBox.transform);
-        UIManager.Instance.mStorage.mTutorialHereIcon.transform.localPosition =
-            UIManager.Instance.mStorage.mLeftButton.transform.localPosition - new Vector3(0,20,0);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
         var dialogue = m_DialogueQueue.Dequeue();
         UIManager.Instance.ChangeDialogueText(dialogue.Text);
         mEvent = false;
         mComplete = false;
         StartCoroutine(BeginMoveTutorial());
         UIManager.Instance.mStorage.mTutorialHereIcon.transform.SetParent(t);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
+        UIManager.Instance.DisplaySupportKey(false, false, false);
     }
 }

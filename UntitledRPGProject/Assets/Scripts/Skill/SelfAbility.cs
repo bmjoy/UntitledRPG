@@ -8,9 +8,9 @@ using UnityEngine;
 public class SelfAbility : DamagableAbility
 {
     [SerializeField]
-    SkillTarget mSkillNerfTarget;
+    public SkillTarget mSkillNerfTarget;
     [SerializeField]
-    SkillTarget mSkillBuffTarget;
+    public SkillTarget mSkillBuffTarget;
 
     private GameObject effect;
 
@@ -35,7 +35,7 @@ public class SelfAbility : DamagableAbility
             BattleManager.Instance.Cancel();
         else
         {
-            if(mOwner.mAiBuild.type == AIType.Manual)
+            if(mOwner.mAiBuild.type == AIBuild.AIType.Manual)
             {
                 UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
                 IEnumerable<GameObject> AllyALL = (mOwner.mFlag == Flag.Enemy) ? BattleManager.Instance.mEnemies : PlayerController.Instance.mHeroes;
@@ -75,7 +75,7 @@ public class SelfAbility : DamagableAbility
                         }
                     }
 
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
                     {
                         isActive = true;
                         foreach (GameObject g in TargetALL)
@@ -94,7 +94,7 @@ public class SelfAbility : DamagableAbility
                         }
                         break;
                     }
-                    if (Input.GetMouseButtonDown(1))
+                    if (Input.GetKeyDown(UIManager.Instance.mNoKeyCode))
                     {
                         isActive = false;
                         foreach (GameObject g in TargetALL)
@@ -135,15 +135,15 @@ public class SelfAbility : DamagableAbility
                 {
                     mActionTrigger?.Invoke();
                     yield return new WaitUntil(()=> mOwner.GetComponent<ActionTrigger>().isCompleted);
-                    if (mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip);
+                    if (mOwner.mSkillClips.Count() > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips.ElementAt(UnityEngine.Random.Range(0, mOwner.mSkillClips.Count())).Clip);
                     DoBuff();
                     DoNerf();
                 }
                 else
                 {
-                    if (mOwner.mSkillClips.Count > 0)
-                        AudioManager.PlaySfx(mOwner.mSkillClips[UnityEngine.Random.Range(0, mOwner.mSkillClips.Count - 1)].Clip);
+                    if (mOwner.mSkillClips.Count() > 0)
+                        AudioManager.PlaySfx(mOwner.mSkillClips.ElementAt(UnityEngine.Random.Range(0, mOwner.mSkillClips.Count())).Clip);
                     yield return new WaitForSeconds(mEffectTime);
                     CommonState();
                 }

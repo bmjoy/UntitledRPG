@@ -10,11 +10,7 @@ public class BKActionTrigger : BossActionTrigger
     [SerializeField]
     private float mShakeTime = 3.0f;
     [SerializeField]
-    private AudioClip clip;
-    [SerializeField]
-    private AudioClip clip2;
-    [SerializeField]
-    private AudioClip originalClip;
+    private List<AudioClip> clips = new List<AudioClip>(3);
     protected override IEnumerator Action()
     {
         var boss = GetComponent<Boss>();
@@ -43,8 +39,8 @@ public class BKActionTrigger : BossActionTrigger
         {
             mirror.GetComponent<Animator>().speed = 1.0f;
             mirror.GetComponent<Animator>().SetTrigger("Explosion");
-            if (GetComponent<Unit>().mSkillClips.Count > 0)
-                AudioManager.PlaySfx(clip2);
+            if (GetComponent<Unit>().mSkillClips.Count() > 0)
+                AudioManager.PlaySfx(clips[1]);
         }
 
         IEnumerable<GameObject> group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
@@ -68,7 +64,7 @@ public class BKActionTrigger : BossActionTrigger
             Destroy(mirror);
         }
         _mirrors.Clear();
-        boss.mSkillClips[0].Clip = originalClip;
+        boss.mSkillClips.ElementAt(0).Clip = clips[2];
     }
 
     private IEnumerator Slash()
@@ -76,38 +72,38 @@ public class BKActionTrigger : BossActionTrigger
         var boss = GetComponent<Boss>();
         yield return new WaitForSeconds(0.75f);
         yield return new WaitForSeconds(0.05f);
-        if (boss.mAttackClips.Count > 0)
-            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count() > 0)
+            AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
         yield return new WaitForSeconds(0.22f);
-        if (boss.mAttackClips.Count > 0)
-            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count() > 0)
+            AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
         yield return new WaitForSeconds(0.05f);
-        if (boss.mAttackClips.Count > 0)
-            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count() > 0)
+            AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
         for (int i = 0; i < 6; ++i)
         {
             yield return new WaitForSeconds(0.12f);
-            if (boss.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+            if (boss.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
         }
 
         yield return new WaitForSeconds(0.25f);
-        if (boss.mAttackClips.Count > 0)
-            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count() > 0)
+            AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
 
         yield return new WaitForSeconds(0.25f);
-        if (boss.mAttackClips.Count > 0)
-            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count() > 0)
+            AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
         yield return new WaitForSeconds(0.5f);
-        if (boss.mAttackClips.Count > 0)
-            AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip);
+        if (boss.mAttackClips.Count() > 0)
+            AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip);
     }
 
     protected override void StartActionTrigger()
     {
         var boss = GetComponent<Boss>();
         var boss_Skill = GetComponent<Boss_Skill_DataBase>();
-        boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        boss.mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
         mTime = boss_Skill.mSkillDatas[2].mEffectTime;
         mPos = transform.position;
         _isRed = true;
@@ -118,8 +114,8 @@ public class BKActionTrigger : BossActionTrigger
     public void StartUltimateTrigger()
     {
         var boss = GetComponent<Boss>();
-        originalClip = boss.mSkillClips[0].Clip;
-        boss.mSkillClips[0].Clip = clip;
+        clips[2] = boss.mSkillClips.ElementAt(0).Clip;
+        boss.mSkillClips.ElementAt(0).Clip = clips[0];
         _isUltimate = true;
         _isRed = true;
         isCompleted = false;
@@ -174,15 +170,15 @@ public class BKActionTrigger : BossActionTrigger
         if (boss.mTarget)
         {
             boss.mTarget.TakeDamage(boss.mStatus.mDamage + boss.mBonusStatus.mDamage, DamageType.Physical);
-            if (boss.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(boss.mAttackClips[Random.Range(0, boss.mAttackClips.Count - 1)].Clip, 0.6f);
+            if (boss.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(boss.mAttackClips.ElementAt(Random.Range(0, boss.mAttackClips.Count())).Clip, 0.6f);
         }
     }
 
     public void StartAttackActionTrigger()
     {
         var boss = GetComponent<Boss>();
-        boss.mAiBuild.SetActionEvent(ActionEvent.Busy);
+        boss.mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
         boss.mAnimator.SetBool("Attack2", (boss.mBuffNerfController.GetBuffCount() > 0));
         mTime = boss.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         isCompleted = false;
@@ -214,8 +210,8 @@ public class BKActionTrigger : BossActionTrigger
             boss_Skill.mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
         if(boss.mActionTrigger != null)
             boss.mActionTrigger -= StartAttackActionTrigger;
-        if (boss.mSkillClips.Count > 0)
-            boss.mSkillClips[0].Clip = originalClip;
+        if (boss.mSkillClips.Count() > 0)
+            boss.mSkillClips.ElementAt(0).Clip = clips[2];
     }
 
     private void OnApplicationQuit()
@@ -228,7 +224,7 @@ public class BKActionTrigger : BossActionTrigger
             boss_Skill.mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
         if (boss.mActionTrigger != null)
             boss.mActionTrigger -= StartAttackActionTrigger;
-        if (boss.mSkillClips.Count > 0)
-            boss.mSkillClips[0].Clip = originalClip;
+        if (boss.mSkillClips.Count() > 0)
+            boss.mSkillClips.ElementAt(0).Clip = clips[2];
     }
 }

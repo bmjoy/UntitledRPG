@@ -15,12 +15,19 @@ public class Slot : MonoBehaviour
     private Image mItemImage;
     [SerializeField]
     private Sprite mBasicImage;    
-    [SerializeField]
-    private Sprite mSoldImage;
-    private Button mButton;
 
     GameObject mMyItem = null;
     private bool isInitialized = false;
+    private bool isPurchased = false;
+    private Button mButton;
+
+    private void Update()
+    {
+        if(isPurchased)
+        {
+            mItemImage.color = Color.Lerp(mItemImage.color, new Color(1, 1, 1), Time.deltaTime);
+        }
+    }
 
     public void Initialize(ref GameObject myItem, Transform t)
     {
@@ -30,7 +37,6 @@ public class Slot : MonoBehaviour
         mCost = transform.Find("Value").GetComponent<TextMeshProUGUI>();
         mItemImage = transform.Find("SlotImage").Find("Image").GetComponent<Image>();
         mButton = transform.Find("SlotImage").Find("Image").GetComponent<Button>();
-
         ResetItem();
         if (myItem == null)
             return;
@@ -69,14 +75,14 @@ public class Slot : MonoBehaviour
     private void ResetItem()
     {
         mItemImage.sprite = mBasicImage;
-        mButton.onClick.RemoveAllListeners();
         mName.text = string.Empty;
         mDescription.text = string.Empty;
-        mCost.text = 0.ToString();
+        mCost.text = string.Empty;
+        mButton.onClick.RemoveAllListeners();
         isInitialized = true;
     }
 
-    private void Buy()
+    public void Buy()
     {
         if (mMyItem == null)
             return;
@@ -95,8 +101,12 @@ public class Slot : MonoBehaviour
             PlayerController.Instance.mInventory.Add(newItem.GetComponent<Item>());
             newItem.GetComponent<Item>().isSold = true;
             mBoarder.transform.Find("Money").Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
+            GameObject fireworks = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PurchaseEffect"), transform.position, Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
+            Destroy(fireworks, 3.5f);
             Destroy(mMyItem);
             ResetItem();
+            mItemImage.color = new Color(0, 0, 0);
+            isPurchased = true;
         }
     }
 

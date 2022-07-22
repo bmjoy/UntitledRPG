@@ -42,7 +42,8 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer mSpriteRenderer;
     private GameObject mGroundCheck;
     private Transform mCamera;
-    private InteractSystem mInteractSystem;
+    [HideInInspector]
+    public InteractSystem mInteractSystem;
 
     public Inventory mInventory;
     public GameObject mCanvas;
@@ -216,12 +217,12 @@ public class PlayerController : MonoBehaviour
                 break;
             case "RunState":
                 {
-                    if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !isLeft)
+                    if (Input.GetKey(KeyCode.LeftArrow) && !isLeft)
                     {
                         isLeft = true;
                         mSpriteRenderer.flipX = false;
                     }
-                    if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && isLeft)
+                    if (Input.GetKey(KeyCode.RightArrow) && isLeft)
                     {
                         isLeft = false;
                         mSpriteRenderer.flipX = true;
@@ -279,7 +280,7 @@ public class PlayerController : MonoBehaviour
         mGold += money;
         AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
         GameObject prefab = mCanvas.transform.Find("Boarder").Find("GoldGet").gameObject;
-        GameObject particle = Instantiate(prefab, PlayerController.Instance.transform.position
+        GameObject particle = Instantiate(prefab, Instance.transform.position
             + new Vector3(0, 2, 0), Quaternion.Euler(prefab.transform.eulerAngles));
         particle.SetActive(true);
         Destroy(particle, 1.5f);

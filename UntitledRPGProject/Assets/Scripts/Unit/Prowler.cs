@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,9 +32,7 @@ public class Prowler : MonoBehaviour
     [HideInInspector] public float mWalkTime = 0.0f;
     [HideInInspector] public float mMaxWalkTime = 0.3f;
     private bool isGrounded = false;
-
-
-    public List<SoundClip> _RunClip = new List<SoundClip>();
+    public IEnumerable<SoundClip> _RunClip = Enumerable.Empty<SoundClip>();
 
     protected virtual void Start()
     {

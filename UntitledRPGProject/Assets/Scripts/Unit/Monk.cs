@@ -31,40 +31,53 @@ public class Monk : NPC
     public override IEnumerator Event()
     {
         mTrigger = null;
-        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.YesButtonImage,
-UIManager.Instance.mStorage.NoButtonImage);
-        UIManager.Instance.AddListenerRightButton(() => {
+        UIManager.Instance.DisplaySupportKey(true, true, false);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Yes",
+            "No",
+            string.Empty});
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
+            UIManager.Instance.DisplaySupportKey();
+            UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty, string.Empty});
             mComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             foreach (var dialogue in m_DialogueYesCase)
                 m_DialogueQueue.Enqueue(dialogue);
             isTrading = true;
             mComplete = true;
         });
-        UIManager.Instance.DisplayButtonsInDialogue(true);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
     }
 
     public override IEnumerator Trade()
     {
+        UIManager.Instance.DisplaySupportKey(true,false ,true);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Learn",
+            string.Empty,
+            "Exit"});
         mTrigger = null;
-        UIManager.Instance.AddListenerExitButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mExitAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
 
         UIManager.Instance.DisplaySkillTreeScreen(true);
-
-        UIManager.Instance.DisplayExitButtonInDialogue(true);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayExitButtonInDialogue(false);
         UIManager.Instance.DisplaySkillTreeScreen(false);
         isTrading = false;
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
+        UIManager.Instance.DisplaySupportKey();
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
     }
 }

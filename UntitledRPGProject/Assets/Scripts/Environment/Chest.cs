@@ -79,20 +79,18 @@ public class Chest : InteractableEnvironment, ILockable
             switch (dialogue.Trigger)
             {
                 case Dialogue.TriggerType.None:
+                case Dialogue.TriggerType.Fail:
                     {
-                        EnableIcon();
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     }
                     break;
                 case Dialogue.TriggerType.Event:
-                    UIManager.Instance.DisplayEKeyInDialogue(false);
                     _DialogueComplete = false;
                     mTrigger = Event;
                     break;
                 case Dialogue.TriggerType.Success:
                     {
-                        EnableIcon();
-                        if(mItems == null)
+                        if (mItems == null)
                             PlayerController.Instance.GetGold(mMoney);
                         else
                         {
@@ -115,28 +113,16 @@ public class Chest : InteractableEnvironment, ILockable
                     break;
                 case Dialogue.TriggerType.Trade:
                     break;
-                case Dialogue.TriggerType.Fail:
-                    {
-                        EnableIcon();
-                        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
-                    }
-                    break;
+
             }
             yield return (mTrigger != null) ? StartCoroutine(mTrigger()) : null;
             yield return (mTrigger != null) ? new WaitUntil(() => _DialogueComplete) : null;
         }
         UIManager.Instance.ChangeDialogueText("");
         UIManager.Instance.DisplayDialogueBox(false);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
         action?.Invoke();
         if (_Completed)
             mAnimator.SetBool("IsOpen", false);
-    }
-
-    private void EnableIcon()
-    {
-        UIManager.Instance.DisplayButtonsInDialogue(false);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
     }
 
     public override void Reset()
@@ -147,13 +133,17 @@ public class Chest : InteractableEnvironment, ILockable
 
     public IEnumerator Event()
     {
+        UIManager.Instance.DisplaySupportKey(true, true);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Yes",
+            "No",
+            string.Empty});
         mTrigger = null;
-        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.YesButtonImage,
-    UIManager.Instance.mStorage.NoButtonImage);
-        UIManager.Instance.AddListenerRightButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
             _DialogueComplete = true;
+
         });
         if(IsLocked())
         {
@@ -162,14 +152,14 @@ public class Chest : InteractableEnvironment, ILockable
             {
                 key.End();
                 UnLock();
-                UIManager.Instance.AddListenerLeftButton(() => {
+                PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
                     m_DialogueQueue.Enqueue(m_DialogueYesCase);
                     _DialogueComplete = true;
                 });
             }
             else
             {
-                UIManager.Instance.AddListenerLeftButton(() => {
+                PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
                     m_DialogueQueue.Enqueue(m_DialogueFailCase);
                     _DialogueComplete = true;
                 });
@@ -177,15 +167,19 @@ public class Chest : InteractableEnvironment, ILockable
         }
         else
         {
-            UIManager.Instance.AddListenerLeftButton(() => {
+            PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
                 m_DialogueQueue.Enqueue(m_DialogueYesCase);
                 _DialogueComplete = true;
             });
         }
-
-        UIManager.Instance.DisplayButtonsInDialogue(true);
+        UIManager.Instance.DisplaySupportKey();
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
         yield return new WaitUntil(() => _DialogueComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
+        UIManager.Instance.DisplaySupportKey(false);
     }
 
     public void UnLock()

@@ -29,8 +29,6 @@ public class Skill_Setting : ScriptableObject
     public string mAnimationName = string.Empty;
 
     public List<Buff> mBuffList = new List<Buff>();
-
-    
     public List<Nerf> mNerfList = new List<Nerf>();
     public virtual void Initialize(Unit owner) { }
     public virtual void Activate(MonoBehaviour parent) { }

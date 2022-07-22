@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RogerActionTrigger : ActionTrigger
@@ -17,7 +18,7 @@ public class RogerActionTrigger : ActionTrigger
         var unit = GetComponent<Unit>();
         mPos = unit.mTarget.transform.position;
         isCompleted = false;
-        unit.mAiBuild.actionEvent = ActionEvent.Busy;
+        unit.mAiBuild.actionEvent = AIBuild.ActionEvent.Busy;
         if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth)
         {
             isFinish = true;
@@ -46,8 +47,8 @@ public class RogerActionTrigger : ActionTrigger
             GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/Roger_Slash");
             GameObject slash = Instantiate(obj, mPos + new Vector3(0.0f,1.2f,1.0f), Quaternion.Euler(obj.transform.eulerAngles));
             Destroy(slash, 1.1f);
-            if (unit.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+            if (unit.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(unit.mAttackClips.ElementAt(Random.Range(0, unit.mAttackClips.Count())).Clip);
             unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical); 
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(1.0f));
             yield return new WaitForSeconds(0.5f);
@@ -56,8 +57,8 @@ public class RogerActionTrigger : ActionTrigger
         else
         {
             unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
-            if (unit.mAttackClips.Count > 0)
-                AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+            if (unit.mAttackClips.Count() > 0)
+                AudioManager.PlaySfx(unit.mAttackClips.ElementAt(Random.Range(0, unit.mAttackClips.Count())).Clip);
             yield return new WaitForSeconds(unit.mAttackTime);
         }
         isCompleted = true;

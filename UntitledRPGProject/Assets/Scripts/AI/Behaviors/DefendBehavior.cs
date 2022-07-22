@@ -19,6 +19,13 @@ public class DefendBehavior : State
     {
         agent.mAiBuild.stateMachine.mPreferredTarget = null;
         agent.mTarget = null;
+        for (int i = 0; i < BattleManager.Instance.mUnits.Count; i++)
+        {
+            Unit unit = BattleManager.Instance.mUnits[i].GetComponent<Unit>();
+            unit.mField.TargetedMagicHostile(false);
+            unit.mField.TargetedFriendly(false);
+            unit.mField.TargetedHostile(false);
+        }
     }
 
     public override bool Find(Unit agent)
