@@ -17,6 +17,8 @@ public class Bullet : MonoBehaviour
     {
         mTarget = target;
         mPower = (power > 0) ? power : 10.0f;
+        if (GetComponent<SpriteRenderer>())
+            GetComponent<SpriteRenderer>().flipX = !mTarget.transform.GetComponent<SpriteRenderer>().flipX;
         mInitialize = true;
     }
 

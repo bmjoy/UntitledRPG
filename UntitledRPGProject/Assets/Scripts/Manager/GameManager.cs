@@ -68,10 +68,6 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         UpdateGameState();
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(LevelManager.Instance.GoNextLevel());
-        }
     }
 
     public void AssignCharacter(string unit)
@@ -97,7 +93,12 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.GamePlay:
-            case GameState.GamePause:Pause(); break;
+            case GameState.GamePause:
+                {
+                    if(UIManager.Instance && !UIManager.Instance.IsOpenScreen)
+                        Pause();
+                }
+                break;
             case GameState.Victory: OnBattleEnd(); break;
             case GameState.GameOver:
                 {

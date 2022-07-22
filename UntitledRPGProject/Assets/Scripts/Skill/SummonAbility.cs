@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 [CreateAssetMenu(menuName = "Abilities/SummonAbility")]
 public class SummonAbility : Skill_Setting
@@ -8,7 +9,7 @@ public class SummonAbility : Skill_Setting
     EnemyUnit mSummonUnit = EnemyUnit.Ghoul;
     [HideInInspector]
     public int mTurn = 0;
-    public GameObject mSelectedField = null;
+    public Field mSelectedField = null;
     [SerializeField]
     public int mSkillUsageEveryTurn = 3;
 
@@ -20,10 +21,11 @@ public class SummonAbility : Skill_Setting
         {
             for (int i = 0; i < BattleManager.Instance.mCurrentField.transform.Find("EnemyFields").childCount; ++i)
             {
-                var obj = BattleManager.Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).gameObject;
+                var obj = BattleManager.Instance.mCurrentField.transform.Find("EnemyFields").GetChild(i).gameObject.GetComponent<Field>();
                 if (obj.GetComponent<Field>().IsExist == false)
                 {
                     mSelectedField = obj;
+                    mSelectedField.TargetedMagicHostile(true);
                     break;
                 }
             }
@@ -32,31 +34,40 @@ public class SummonAbility : Skill_Setting
         {
             for (int i = 0; i < BattleManager.Instance.mCurrentField.transform.Find("PlayerFields").childCount; i++)
             {
-                var obj = BattleManager.Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).gameObject;
+                var obj = BattleManager.Instance.mCurrentField.transform.Find("PlayerFields").GetChild(i).gameObject.GetComponent<Field>();
                 if (obj.GetComponent<Field>().IsExist == false)
                 {
                     mSelectedField = obj;
+                    mSelectedField.TargetedMagicHostile(true);
                     break;
                 }
             }
         }
         else
             mSelectedField = null;
-        if (mOwner.mAiBuild.type == AIType.Auto)
+        if (mOwner.mAiBuild.type == AIBuild.AIType.Auto)
         {
             if (mSelectedField && mSkillUsageEveryTurn * 4 != mTurn)
+            {
                 mTurn++;
+            }
             if (mTurn % 3 == 0 && mSelectedField)
                 parent.StartCoroutine(WaitforDecision());
             else
+            {
+                mSelectedField.TargetedMagicHostile(false);
                 BattleManager.Instance.Defend();
+            }
         }
         else
         {
             if(mSelectedField)
                 parent.StartCoroutine(WaitforDecision());
             else
+            {
+                mSelectedField.TargetedMagicHostile(false);
                 BattleManager.Instance.Defend();
+            }
         }
     }
 
@@ -72,7 +83,7 @@ public class SummonAbility : Skill_Setting
             BattleManager.Instance.Cancel();
         else
         {
-            if (mOwner.mAiBuild.type == AIType.Manual)
+            if (mOwner.mAiBuild.type == AIBuild.AIType.Manual)
             {
                 UIManager.Instance.ChangeOrderBarText(UIManager.Instance.mStorage.mTextForAccpet);
                 while (true)
@@ -116,8 +127,7 @@ public class SummonAbility : Skill_Setting
                     GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity, mOwner.transform.parent);
                     unit.GetComponent<Animator>().SetTrigger("Spawn");
                     unit.GetComponent<Unit>().mField = mSelectedField.GetComponent<Field>();
-                    unit.GetComponent<Unit>().mField.IsExist = true;
-                    unit.GetComponent<Unit>().ResetUnit();
+                    unit.GetComponent<Unit>().mField.mUnit = unit.GetComponent<Unit>();
                     unit.GetComponent<Unit>().mOrder = Order.Standby;
                     unit.GetComponent<Unit>().mFlag = mOwner.mFlag;
                     BattleManager.Instance.mOrders.Enqueue(unit.GetComponent<Unit>());
@@ -126,8 +136,11 @@ public class SummonAbility : Skill_Setting
                         BattleManager.Instance.mEnemies.Add(unit);
                     UIManager.Instance.mOrderBar.EnqueueSignleOrder(unit.GetComponent<Unit>());
                 }
+                if (mOwner.mSkillClips.Count() > 0)
+                    AudioManager.PlaySfx(mOwner.mSkillClips.ElementAt(UnityEngine.Random.Range(0, mOwner.mSkillClips.Count())).Clip, 1.0f);
                 yield return new WaitForSeconds(mEffectTime);
                 mOwner.mStatus.mMana -= mManaCost;
+                mSelectedField.TargetedMagicHostile(false);
                 mSelectedField = null;
             }
             else

@@ -36,25 +36,25 @@ public class EnemySpawner : Spawner
 
         GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
         newEnemyProwler.tag = "EnemyProwler";
-        newEnemyProwler.layer = 6;
+        newEnemyProwler.layer = LayerMask.NameToLayer("EnemyProwler");
         newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, mSpeed, ID, newModel.gameObject);
-
+        EnemyProwler enemyProwler = newEnemyProwler.GetComponent<EnemyProwler>();
         for (int i = 0; i < mEnemyList.Count; i++)
         {
             if (mEnemyList[i] == EnemyUnit.None)
                 continue;
             GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity, newEnemyProwler.transform);
-            newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
+            enemyProwler.mEnemySpawnGroup.Add(obj);
             obj.SetActive(false);
         }
 
-        newEnemyProwler.GetComponent<EnemyProwler>()._RunClip = newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup[0].GetComponent<Unit>().mSetting.Clips.FindAll(
+        enemyProwler._RunClip = enemyProwler.mEnemySpawnGroup[0].GetComponent<Unit>().mSetting.Clips.FindAll(
             delegate (SoundClip s)
             {
                 return s.Type == SoundClip.SoundType.Run;
             });
 
-        newEnemyProwler.GetComponent<EnemyProwler>().Initialize(this);
+        enemyProwler.Initialize(this);
         return newEnemyProwler;
     }
 

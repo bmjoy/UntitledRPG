@@ -181,10 +181,7 @@ MonoBehaviour:
   mMagicDistance: 0
   mCurrentSpeed: 1
   dodgePos: {x: 0, y: 0, z: 0}
-  mRunClips: []
-  mAttackClips: []
-  mSkillClips: []
-  mDeathClips: []
+  MyAttackAnim: []
   mirror: {fileID: 0}
   _magicWhenHalfHealth: 0
   mMyHealthBar: {fileID: 0}
@@ -228,6 +225,7 @@ MonoBehaviour:
   isCompleted: 0
   _isUltimate: 0
   mShakeTime: 2
-  clip: {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
-  clip2: {fileID: 8300000, guid: cc76c35b3bdf57f4785409c50e49a478, type: 3}
-  originalClip: {fileID: 8300000, guid: cf508185c6822e5428a6950ca957f2c3, type: 3}
+  clips:
+  - {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
+  - {fileID: 8300000, guid: cc76c35b3bdf57f4785409c50e49a478, type: 3}
+  - {fileID: 0}

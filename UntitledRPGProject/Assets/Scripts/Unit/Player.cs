@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -24,7 +25,7 @@ public class Player : Unit
             for (int i = 0; i < agent.Length; i++)
                 Physics.IgnoreCollision(this.GetComponent<Collider>(), agent[i].GetComponent<Collider>());
         }
-        mAiBuild.type = AIType.Manual;
+        mAiBuild.type = AIBuild.AIType.Manual;
         mTarget = null;
     }
 
@@ -60,8 +61,8 @@ public class Player : Unit
         {
             if (mType == AttackType.Melee)
             {
-                mAiBuild.SetActionEvent(ActionEvent.AttackWalk);
-                yield return new WaitUntil(() => mAiBuild.actionEvent == ActionEvent.Busy);
+                mAiBuild.SetActionEvent(AIBuild.ActionEvent.AttackWalk);
+                yield return new WaitUntil(() => mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
                 mirror?.Play("Attack");
                 if (mTarget)
                 {
@@ -73,8 +74,8 @@ public class Player : Unit
                     else
                     {
                         mAnimator.Play(MyAttackAnim[Random.Range(0, MyAttackAnim.Count)]);
-                        if (mAttackClips.Count > 0)
-                            AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
+                        if (mAttackClips.Count() > 0)
+                            AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
                         yield return new WaitForSeconds(mAttackTime);
 
                         mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
@@ -84,11 +85,11 @@ public class Player : Unit
             }
             else if (mType == AttackType.Range)
             {
-                mAiBuild.SetActionEvent(ActionEvent.Busy);
+                mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
                 mAnimator.Play("Attack");
                 mirror?.Play("Attack");
-                if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
+                if (mAttackClips.Count() > 0)
+                    AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity);
                 if (go.GetComponent<SpriteRenderer>())
@@ -101,10 +102,10 @@ public class Player : Unit
             else if (mType == AttackType.Instant)
             {
                 mirror?.Play("Attack");
-                mAiBuild.SetActionEvent(ActionEvent.Busy);
+                mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
                 mAnimator.Play("Attack");
-                if (mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(mAttackClips[Random.Range(0, mAttackClips.Count)].Clip, 0.6f);
+                if (mAttackClips.Count() > 0)
+                    AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
                 GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
@@ -169,7 +170,7 @@ public class Player : Unit
             }
             else
             {
-                mAiBuild.actionEvent = ActionEvent.DodgeWalk;
+                mAiBuild.actionEvent = AIBuild.ActionEvent.DodgeWalk;
                 AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDodgeSFX);
             }
         }
@@ -312,5 +313,10 @@ public class Player : Unit
 , transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
             Destroy(recover, 1.5f);
         }
+    }
+    public override void ResetUnit()
+    {
+        base.ResetUnit();
+        mAiBuild.type = AIBuild.AIType.Manual;
     }
 }

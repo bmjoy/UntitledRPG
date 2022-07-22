@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,10 +12,26 @@ public class InteractSystem : MonoBehaviour
     private IInteractiveObject mClosestNPC = null;
     public bool IsInteracting = false;
 
+    public event Action mLeftAction;
+    public event Action mRightAction;
+    public event Action mExitAction;
+
     // Update is called once per frame
     void FixedUpdate()
     {
         if (PlayerController.Instance.onBattle) return;
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, mRadius + 5.0f, LayerMask.GetMask("EnemyProwler"));
+
+        if(colliders.Length > 0)
+        {
+            if(mClosestNPC != null)
+                mClosestNPC.React(false);
+            IsInteracting = false;
+            mClosestNPC = null;
+            return;
+        }
+
         if (mClosestNPC != null)
         {
             mClosestNPC.React(true);
@@ -29,7 +46,7 @@ public class InteractSystem : MonoBehaviour
 
         if (mCurrentCoolTime > 0.0f)
             return;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, mRadius, LayerMask.GetMask("NPC"));
+        colliders = Physics.OverlapSphere(transform.position, mRadius, LayerMask.GetMask("NPC"));
         if (colliders.Length == 0)
         {
             IsInteracting = false;
@@ -73,5 +90,24 @@ public class InteractSystem : MonoBehaviour
                     mClosestNPC = null;
                 }));
         }
+        if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
+        {
+            mLeftAction?.Invoke();
+        }
+        if (Input.GetKeyDown(UIManager.Instance.mNoKeyCode))
+        {
+            mRightAction?.Invoke();
+        }
+        if (Input.GetKeyDown(UIManager.Instance.mExitKeyCode))
+        {
+            mExitAction?.Invoke();
+        }
+    }
+
+    public void ResetActions()
+    {
+        mLeftAction = null;
+        mRightAction = null;
+        mExitAction = null;
     }
 }

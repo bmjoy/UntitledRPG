@@ -338,10 +338,10 @@ MonoBehaviour:
   - Text: 'Hello, Player! Welcome to Mini Dungeons!
 
       (Press ''<color=yellow>E</color>''
-      to continue)'
+      key to continue)'
     Trigger: 0
-  - Text: This guide will teach you how to survive, let's start. (Press the <color=yellow>any
-      button</color> on dialogue!)
+  - Text: This guide will teach you how to survive, let's start. (Press the <color=yellow>E</color>
+      or <color=yellow>R</color> Key!)
     Trigger: 2
   m_DialogueYesCase:
     Text: Oh... oh! Happy to hear that! Let's start it!
@@ -352,7 +352,8 @@ MonoBehaviour:
   m_DialogueMovementList:
   - Text: Anyways! Let's control your character!
     Trigger: 0
-  - Text: Move your character with <color=yellow> W</color>/<color=yellow>S</color>/<color=yellow>A</color>/<color=yellow>D</color>
+  - Text: Move your character with <color=yellow> Up arrow</color>/<color=yellow>Down
+      arrow</color>/<color=yellow>Left arrow</color>/<color=yellow>Right arrow</color>
       keys!
     Trigger: 2
   m_DialogueMoveSuccess:
@@ -375,9 +376,9 @@ MonoBehaviour:
   - Text: You can order your unit with  <color=yellow>Attack</color>/<color=yellow>Magic</color>/<color=yellow>Defend</color>.
     Trigger: 0
   m_DialogueBattleHelp:
-    Text: Press <color=yellow> Attack </color> or <color=yellow> Magic </color>,
-      then click on enemy! Otherwise you can press the <color=yellow> Defend </color>
-      to get less damage!
+    Text: Move <color=yellow>arrow keys</color> and press E key to choose <color=yellow>
+      Attack </color> or <color=yellow> Magic </color>, then click on enemy! Otherwise
+      you can press the <color=yellow> Defend </color> to get less damage!
     Trigger: 0
   m_DialogueBattleSuccess:
     Text: Great job! You won the battle! :D
@@ -387,7 +388,7 @@ MonoBehaviour:
       items from merchants or enemies!
     Trigger: 0
   - Text: I provide you a <color=blue>weapon</color>! Press "<color=yellow>I</color>"
-      key to open your inventory! Then equip an item!
+      key to open your inventory! Then click an item to equip with your mouse!
     Trigger: 2
   m_DialogueEndSuccessList:
   - Text: Press the "<color=yellow>I</color>" key again to close the inventory!

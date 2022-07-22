@@ -15,7 +15,7 @@ public abstract class State
         yield return new WaitForSeconds(0.5f);
         int percent = Mathf.RoundToInt((100 * agent.mStatus.mHealth) / agent.mStatus.mMaxHealth);
         int targetPercent = Mathf.RoundToInt((100 * agent.mTarget.mStatus.mHealth) / agent.mTarget.mStatus.mMaxHealth);
-        randomNumber = (agent.mAiBuild.property == AIProperty.Offensive) ? Random.Range(10, 20) : Random.Range(40, 60);
+        randomNumber = (agent.mAiBuild.property == AIBuild.AIProperty.Offensive) ? Random.Range(10, 20) : Random.Range(40, 60);
 
         bool condition1 = percent > randomNumber;
         bool condition2 = percent > targetPercent;
@@ -30,6 +30,7 @@ public abstract class State
         if (agent.mAiBuild.stateMachine.mPreferredTarget)
             behavior = (agent.mType != AttackType.None) ? "Attack" : "Defend";
         agent.mAiBuild.stateMachine.ChangeState(behavior);
+        agent.mTarget.mField.TargetedHostile((behavior.Contains("Attack")));
     }
 
     public virtual void ThinkingMagic(Unit agent, ref string current) {}

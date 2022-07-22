@@ -12,6 +12,18 @@ public class Field : MonoBehaviour
     private GameObject mTargetHostile;
     private GameObject mTargetMagicHostile;
 
+    private Unit _Unit;
+    public Unit mUnit { 
+        set
+        {
+            _Unit = value;
+            IsExist = true;
+        } get 
+        { 
+            return _Unit; 
+        } 
+    }
+
     private void Start()
     {
         if(transform.GetComponent<ParticleSystem>())

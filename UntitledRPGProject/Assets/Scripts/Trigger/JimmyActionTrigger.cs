@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class JimmyActionTrigger : ActionTrigger
@@ -18,7 +19,7 @@ public class JimmyActionTrigger : ActionTrigger
         var unit = GetComponent<Unit>();
         mPos = unit.mTarget.transform.position;
         isCompleted = false;
-        unit.mAiBuild.actionEvent = ActionEvent.Busy;
+        unit.mAiBuild.actionEvent = AIBuild.ActionEvent.Busy;
         if (unit.mStatus.mDamage + unit.mBonusStatus.mDamage > unit.mTarget.mStatus.mHealth)
         {
             isFinish = true;
@@ -36,7 +37,7 @@ public class JimmyActionTrigger : ActionTrigger
     {
         mPos = transform.position;
         isCompleted = false;
-        GetComponent<Unit>().mAiBuild.actionEvent = ActionEvent.Busy;
+        GetComponent<Unit>().mAiBuild.actionEvent = AIBuild.ActionEvent.Busy;
         GetComponent<Unit>().mAnimator.Play("Skill");
         mTime = GetComponent<Unit>().GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         StartCoroutine(SkillAction());
@@ -52,8 +53,8 @@ public class JimmyActionTrigger : ActionTrigger
         mProjectile.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
         mProjectile.GetComponent<SpriteRenderer>().flipX = unit.GetComponent<SpriteRenderer>().flipX;
         Destroy(mProjectile.gameObject, unit.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + skill.mEffectTime);
-        if (unit.mSkillClips.Count > 0)
-            AudioManager.PlaySfx(unit.mSkillClips[UnityEngine.Random.Range(0, unit.mSkillClips.Count - 1)].Clip, 1.0f);
+        if (unit.mSkillClips.Count() > 0)
+            AudioManager.PlaySfx(unit.mSkillClips.ElementAt(Random.Range(0, unit.mSkillClips.Count())).Clip, 1.0f);
         yield return new WaitForSeconds(unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + skill.mEffectTime);
         unit.mTarget?.TakeDamage((unit.mStatus.mMagicPower + unit.mBonusStatus.mMagicPower), DamageType.Magical);
         foreach (var nerf in skill.mNerfList)
@@ -95,8 +96,8 @@ public class JimmyActionTrigger : ActionTrigger
                 mirror.GetComponent<Animator>().speed = Random.Range(0.7f, 1.05f);
                 Destroy(mirror, 0.25f);
                 yield return new WaitForSeconds(mTime / mCombo);
-                if (unit.mAttackClips.Count > 0)
-                    AudioManager.PlaySfx(unit.mAttackClips[Random.Range(0, unit.mAttackClips.Count)].Clip);
+                if (unit.mAttackClips.Count() > 0)
+                    AudioManager.PlaySfx(unit.mAttackClips.ElementAt(Random.Range(0, unit.mAttackClips.Count())).Clip);
                 if (unit.mTarget.mConditions.isDied)
                     break;
                 h += 0.3f;

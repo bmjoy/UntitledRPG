@@ -19,8 +19,12 @@ public class ItemUI : MonoBehaviour
     public Image mSprite;
     private int ID;
     private Item mItem;
-    private ItemUIType mType;
-    
+    public ItemUIType mType;
+    public bool Sold
+    {
+        get { return mItem.isSold; }
+    }
+
     public void Initialize(int ID, Item it, ItemUIType type)
     {
         mItem = it;

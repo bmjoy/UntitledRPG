@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -50,10 +51,7 @@ public class EnemyProwler : Prowler
             mCanvas.transform.localRotation = new Quaternion(0.0f, 180.0f, 0.0f, 1.0f);
         else
             mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-        GameObject[] agent = GameObject.FindGameObjectsWithTag("Enemy");
-        if (agent.Length > 1)
-            for (int i = 0; i < agent.Length; i++)
-                Physics.IgnoreCollision(this.GetComponent<BoxCollider>(), agent[i].GetComponent<BoxCollider>(),true);
+
 
         mExclamation.SetActive(false);
         mParticles.SetActive(false);
@@ -71,14 +69,14 @@ public class EnemyProwler : Prowler
         }
 
         mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-        if (mAnimator.GetFloat("Speed") > 0.1f && _RunClip.Count > 0)
+        if (mAnimator.GetFloat("Speed") > 0.1f && _RunClip.Count() > 0)
         {
             mWalkTime += Time.deltaTime;
             if (mWalkTime >= mMaxWalkTime)
             {
                 float distance = Vector3.Distance(transform.position, PlayerController.Instance.transform.position);
-                if(_RunClip.Count > 0)
-                    AudioManager.PlaySfx(_RunClip[UnityEngine.Random.Range(0, _RunClip.Count - 1)].Clip, Mathf.Clamp01((distance - maxDistance) / (minDistance - maxDistance)));
+                if(_RunClip.Count() > 0)
+                    AudioManager.PlaySfx(_RunClip.ElementAt(UnityEngine.Random.Range(0, _RunClip.Count())).Clip, Mathf.Clamp01((distance - maxDistance) / (minDistance - maxDistance)));
                 mWalkTime = 0.0f;
             }
         }
@@ -100,30 +98,15 @@ public class EnemyProwler : Prowler
     {
         if(id == this.id)
         {
-            List<GameObject> list = new List<GameObject>();
             for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
-            {
-                if (mEnemySpawnGroup[i].GetComponent<Enemy>().mConditions.isDied)
-                {
-                    Destroy(mEnemySpawnGroup[i], 3.0f);
-                    continue;
-                }    
-                list.Add(mEnemySpawnGroup[i]);
-            }
-
+                Destroy(mEnemySpawnGroup[i], 1.0f);
             mEnemySpawnGroup.Clear();
-            mEnemySpawnGroup = new List<GameObject>(list);
-
-            for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
-            {
-                mEnemySpawnGroup[i].GetComponent<Unit>().DisableUnit(transform.position);
-                mEnemySpawnGroup[i].gameObject.SetActive(false);
-            }
         }
         onBattle = false;
         mModel.SetActive(true);
         ChangeBehavior("Idle");
         onAction?.Invoke();
+        Destroy(gameObject);
     }
 
     private IEnumerator WaitForSpawn()

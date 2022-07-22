@@ -35,7 +35,7 @@ public class TimedTaunt : TimedNerf
         taunt.IsTurnFinished = true;
         mTarget.mAiBuild.stateMachine.mPreferredTarget = null;
         if (mTarget.mFlag == Flag.Player)
-            mTarget.mAiBuild.type = AIType.Manual;
+            mTarget.mAiBuild.type = AIBuild.AIType.Manual;
         if(effectObject)
             GameObject.Destroy(effectObject);
     }
@@ -45,7 +45,7 @@ public class TimedTaunt : TimedNerf
         taunt = (Taunt)Nerf;
         mTarget.mAiBuild.stateMachine.mPreferredTarget = mOwner;
         if (mTarget.mFlag == Flag.Player)
-            mTarget.mAiBuild.type = AIType.Auto;
+            mTarget.mAiBuild.type = AIBuild.AIType.Auto;
         if (mOwner.mConditions.isDied || mTarget.mConditions.isDied)
             End();
     }

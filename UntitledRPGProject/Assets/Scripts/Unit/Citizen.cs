@@ -149,6 +149,11 @@ public class Citizen : NPC
         }
         UIManager.Instance.FadeInScreen();
         UIManager.Instance.DisplayDialogueBox(true);
+        UIManager.Instance.DisplaySupportKey();
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
         while (m_DialogueQueue.Count > 0)
         {
             var dialogue = m_DialogueQueue.Dequeue();
@@ -157,7 +162,6 @@ public class Citizen : NPC
             switch (dialogue.Trigger)
             {
                 case Dialogue.TriggerType.None:
-                    IconEnable();
                     yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                     break;
                 case Dialogue.TriggerType.Event:
@@ -166,7 +170,6 @@ public class Citizen : NPC
                     break;
                 case Dialogue.TriggerType.Fail:
                     {
-                        IconEnable();
                         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.E));
                         if(mProperty.GetType().IsAssignableFrom(typeof(EnemyTrap)))
                         {
@@ -183,8 +186,7 @@ public class Citizen : NPC
                 case Dialogue.TriggerType.Success:
                     {
                         // TODO: Quest completed
-                        IconEnable();
-                        if(mProperty)
+                        if (mProperty)
                         {
                             if (mProperty.GetType().IsAssignableFrom(typeof(EnemyTrap)))
                             {
@@ -215,7 +217,7 @@ public class Citizen : NPC
         UIManager.Instance.FadeOutScreen();
         UIManager.Instance.ChangeDialogueText("");
         UIManager.Instance.DisplayDialogueBox(false);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
+        UIManager.Instance.DisplaySupportKey(false);
         Callback?.Invoke();
         mComplete = false;
         mTrigger = null;
@@ -228,31 +230,30 @@ public class Citizen : NPC
         m_DialogueList.Add(m_DialogueResultCase);
     }
 
-    private void IconEnable()
-    {
-        UIManager.Instance.DisplayButtonsInDialogue(false);
-        UIManager.Instance.DisplayEKeyInDialogue(true);
-    }
-
     public override IEnumerator Event()
     {
         mTrigger = null;
-        UIManager.Instance.ChangeTwoButtons(UIManager.Instance.mStorage.YesButtonImage,
-    UIManager.Instance.mStorage.NoButtonImage);
-        UIManager.Instance.AddListenerRightButton(() => {
+        UIManager.Instance.DisplaySupportKey(true, true);
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Yes",
+            "No",
+            string.Empty});
+        PlayerController.Instance.GetComponent<InteractSystem>().mRightAction += (() => {
             foreach (var dialogue in m_DialogueNoCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        UIManager.Instance.AddListenerLeftButton(() => {
+        PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             foreach (var dialogue in m_DialogueYesCase)
                 m_DialogueQueue.Enqueue(dialogue);
             mComplete = true;
         });
-        UIManager.Instance.DisplayButtonsInDialogue(true);
-        UIManager.Instance.DisplayEKeyInDialogue(false);
         yield return new WaitUntil(() => mComplete);
-        UIManager.Instance.DisplayButtonsInDialogue(false);
-        //TODO: Quest?
+        PlayerController.Instance.GetComponent<InteractSystem>().ResetActions();
+        UIManager.Instance.DisplaySupportKey();
+        UIManager.Instance.ChangeSupportText(new string[3]{
+            "Continue",
+            string.Empty,
+            string.Empty});
     }
 }
