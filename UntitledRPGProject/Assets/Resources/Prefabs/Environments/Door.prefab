@@ -49,13 +49,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mID: 0
   mName: Door
-  mSFX: {fileID: 8300000, guid: f6d74fac1a0f774478de0fff79268cf1, type: 3}
+  mSFX: {fileID: 8300000, guid: 32ea0f4e6f2c56a4fa69eaba31fad76a, type: 3}
   mDialogue: []
   m_DialogueFailCase:
     Text: Door is locked
     Trigger: 0
   mInteraction: {fileID: 0}
   _Completed: 0
+  mTutorialIcon: {fileID: 0}
   mGate: {fileID: 8276398860844115967}
   mDetectors:
   - {fileID: 1237322481257152540}
