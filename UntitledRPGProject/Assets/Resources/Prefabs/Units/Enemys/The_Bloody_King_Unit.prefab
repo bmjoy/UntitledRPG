@@ -169,6 +169,7 @@ MonoBehaviour:
   mType: 0
   mFlag: 2
   mCanvas: {fileID: 0}
+  mArrow: {fileID: 0}
   mAnimator: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 7d11e9a9391f4d148bf83bc025333ccc, type: 2}
   mFireLocation: {x: 0, y: 0}
@@ -223,9 +224,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTime: 0
   isCompleted: 0
+  mClips:
+  - {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
+  - {fileID: 8300000, guid: cf508185c6822e5428a6950ca957f2c3, type: 3}
+  - {fileID: 8300000, guid: 510545b5d0df7dd43b5a9f8fdef8202d, type: 3}
   _isUltimate: 0
   mShakeTime: 2
-  clips:
-  - {fileID: 8300000, guid: 217f5c29f9f8da145b8b9da4f259b5fc, type: 3}
-  - {fileID: 8300000, guid: cc76c35b3bdf57f4785409c50e49a478, type: 3}
-  - {fileID: 0}

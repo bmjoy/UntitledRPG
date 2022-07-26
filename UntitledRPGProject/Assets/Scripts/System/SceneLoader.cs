@@ -25,12 +25,12 @@ public class SceneLoader : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        Instantiate(Resources.Load<GameObject>("Prefabs/Managers/GameManager"),Vector3.zero,Quaternion.identity);
-        Instantiate(Resources.Load<GameObject>("Prefabs/Managers/LevelManager"), Vector3.zero, Quaternion.identity);
-        Instantiate(Resources.Load<GameObject>("Prefabs/Managers/BattleManager"), Vector3.zero, Quaternion.identity);
-        Instantiate(Resources.Load<GameObject>("Prefabs/Managers/UIManager"), Vector3.zero, Quaternion.identity);
-        Instantiate(Resources.Load<GameObject>("Prefabs/Managers/AudioManager"), Vector3.zero, Quaternion.identity);
-        Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), Vector3.zero, Quaternion.identity);
+        Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/GameManager"),Vector3.zero,Quaternion.identity);
+        Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/LevelManager"), Vector3.zero, Quaternion.identity);
+        Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/BattleManager"), Vector3.zero, Quaternion.identity);
+        Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/UIManager"), Vector3.zero, Quaternion.identity);
+        Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/AudioManager"), Vector3.zero, Quaternion.identity);
+        Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/GameCamera"), Vector3.zero, Quaternion.identity);
 
         LevelManager.Instance.mCurrentLevel = _sceneIndex;
     }

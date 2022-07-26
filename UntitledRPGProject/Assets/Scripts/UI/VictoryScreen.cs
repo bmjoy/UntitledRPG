@@ -128,7 +128,7 @@ public class VictoryScreen : MonoBehaviour
     {
         mItemList.Find("Gold").GetComponent<TextMeshProUGUI>().text = GameManager.s_TotalGold.ToString();
         mItemList.Find("Soul").GetComponent<TextMeshProUGUI>().text = GameManager.s_TotalSoul.ToString();
-        GameObject prefab = (Resources.Load<GameObject>("Prefabs/UI/ObtainedItem"));
+        GameObject prefab = (ResourceManager.GetResource<GameObject>("Prefabs/UI/ObtainedItem"));
         foreach (var item in ItemList)
         {
             GameObject slot = Instantiate(prefab, mItemList.transform.position, Quaternion.identity, mItemList.Find("ItemScroll").Find("Items"));

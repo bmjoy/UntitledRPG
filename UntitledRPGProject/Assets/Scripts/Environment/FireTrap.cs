@@ -21,7 +21,7 @@ public class FireTrap : Trap
         base.OnTriggerEnter(other);
         if(isHit)
         {
-            GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Explosion")
+            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Explosion")
             , PlayerController.Instance.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
             Destroy(damage, 1.5f);
         }

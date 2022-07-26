@@ -58,7 +58,7 @@ public class Prowler : MonoBehaviour
 
         if (mGroundCheck == null)
         {
-            GameObject groundCheck = Instantiate(Resources.Load<GameObject>("Prefabs/UnitGroundCheck"), (
+            GameObject groundCheck = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UnitGroundCheck"), (
              new Vector3(transform.position.x,
                 transform.position.y - (transform.GetComponent<BoxCollider>().size.y / 2.0f), transform.position.z)), Quaternion.identity);
             groundCheck.transform.parent = transform;
@@ -86,7 +86,7 @@ public class Prowler : MonoBehaviour
         if (PlayerController.Instance == false)
             return;
 
-        if (LevelManager.Instance.isNext || GameManager.Instance.IsCinematicEvent || BattleManager.Instance.status != BattleManager.GameStatus.None
+        if (LevelManager.Instance.isNext || GameManager.Instance.IsCinematicEvent || BattleManager.status != BattleManager.GameStatus.None
     || PlayerController.Instance.Interaction)
         {
             mStateMachine.ChangeState("Stop");

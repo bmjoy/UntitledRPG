@@ -9,7 +9,7 @@ public class TimedPoison : TimedNerf
 
     public TimedPoison(Poison nerf, Unit owner, Unit target) : base(nerf, owner, target)
     {
-        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name);
+        GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Nerf.name);
         if (obj == null)
             return;
         poison = (Poison)Nerf;

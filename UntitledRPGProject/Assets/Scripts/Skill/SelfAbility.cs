@@ -17,7 +17,7 @@ public class SelfAbility : DamagableAbility
     public override void Activate(MonoBehaviour parent)
     {
         isActive = false;
-        effect = Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect");
+        effect = ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + mName + "_Effect");
         parent.StopAllCoroutines();
         parent.StartCoroutine(WaitforDecision());
     }
@@ -122,6 +122,7 @@ public class SelfAbility : DamagableAbility
 
             if (isActive)
             {
+                UIManager.Instance.DisplaySupportKey(false);
                 UIManager.Instance.ChangeOrderBarText("<color=red>" + mName + "!</color>");
                 
                 bool hasState = mOwner.GetComponent<Animator>().HasState(0, Animator.StringToHash(mAnimationName));

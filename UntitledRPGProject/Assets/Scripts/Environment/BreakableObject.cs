@@ -58,7 +58,7 @@ public class BreakableObject : InteractableEnvironment
         {
             Vector3 randomPos = transform.position + new Vector3(Random.Range(-2.8f, 2.8f),
                 Random.Range(0.5f, 2.8f), Random.Range(-2.8f, 2.8f));
-            GameObject f = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/RockFrag"),
+            GameObject f = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/RockFrag"),
                 randomPos, Quaternion.identity, transform);
             Destroy(f, 0.5f);
             if (i < mCollectObjects.Count && mat.color.a < 0.5f)
@@ -108,13 +108,13 @@ public class BreakableObject : InteractableEnvironment
 
     private void NewCoin()
     {
-        GameObject coin = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/Coin"), transform.position, Quaternion.identity, transform);
+        GameObject coin = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Environments/Coin"), transform.position, Quaternion.identity, transform);
         coin.SetActive(false);
         mCollectObjects.Add(coin);
     }
     private void NewKey()
     {
-        GameObject key = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/Key"), transform.position, Quaternion.identity, transform);
+        GameObject key = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Environments/Key"), transform.position, Quaternion.identity, transform);
         key.SetActive(false);
         mCollectObjects.Add(key);
     }

@@ -12,7 +12,7 @@ public class PhantomMini : Phantom
     {
         base.Start();
         mRigidbody = GetComponent<Rigidbody>();
-        GameObject Effect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PhantomExp"), transform.position, Quaternion.identity);
+        GameObject Effect = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/PhantomExp"), transform.position, Quaternion.identity);
         Destroy(Effect, 1.0f);
     }
 
@@ -37,7 +37,7 @@ public class PhantomMini : Phantom
             if (Vector3.Distance(transform.position, mTarget.transform.position) < mMaximumDistance && !isCollide)
             {
                 isCollide = true;
-                GameObject damageEffect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PhathomExplosion")
+                GameObject damageEffect = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/PhathomExplosion")
 , mTarget.transform.position + new Vector3(UnityEngine.Random.Range(1.0f, 5.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)),
 Quaternion.identity, mTarget.transform);
                 Destroy(damageEffect, 1.0f);

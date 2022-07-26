@@ -107,6 +107,7 @@ public class SummonAbility : Skill_Setting
 
             if (isActive)
             {
+                UIManager.Instance.DisplaySupportKey(false);
                 UIManager.Instance.ChangeOrderBarText("<color=red>" + mName + "!</color>");
                 bool hasState = mOwner.mAnimator.HasState(0, Animator.StringToHash("Skill"));
                 mOwner.mAnimator.Play((hasState) ? "Skill" : "Attack");
@@ -114,9 +115,9 @@ public class SummonAbility : Skill_Setting
 
                 mActionTrigger?.Invoke();
                 
-                if (Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
+                if (ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + mName + "_Effect") != null)
                 {
-                    GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect")
+                    GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + mName + "_Effect")
     , mSelectedField.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
                     Destroy(go, mEffectTime);
                 }
@@ -124,7 +125,7 @@ public class SummonAbility : Skill_Setting
 
                 if (mSelectedField)
                 {
-                    GameObject unit = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity, mOwner.transform.parent);
+                    GameObject unit = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Enemys/" + mSummonUnit.ToString() + "_Unit"), mSelectedField.transform.position, Quaternion.identity, mOwner.transform.parent);
                     unit.GetComponent<Animator>().SetTrigger("Spawn");
                     unit.GetComponent<Unit>().mField = mSelectedField.GetComponent<Field>();
                     unit.GetComponent<Unit>().mField.mUnit = unit.GetComponent<Unit>();

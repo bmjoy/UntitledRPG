@@ -54,7 +54,7 @@ public class DungeonGenerator : MonoBehaviour
                 _Count++;
             }
         }
-        UnitSpawnManager unitSpawnManager = Instantiate(Resources.Load<GameObject>("Prefabs/Spawners/UnitSpawnManager"), transform).GetComponent<UnitSpawnManager>();
+        UnitSpawnManager unitSpawnManager = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/UnitSpawnManager"), transform).GetComponent<UnitSpawnManager>();
         unitSpawnManager.isDungeon = true;
         unitSpawnManager.SpawnAll();
     }

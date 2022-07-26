@@ -24,9 +24,9 @@ public class NPCSpawner : Spawner
             case NPCUnit.Vin:
                 if (GameManager.Instance.IsExist(mType.ToString()))
                 {
-                    for (int i = 0; i < GameManager.Instance.characterExists.Count; ++i)
+                    for (int i = 0; i < GameManager.characterExists.Count; ++i)
                     {
-                        var exist = GameManager.Instance.characterExists[i];
+                        var exist = GameManager.characterExists[i];
                         if (exist.mUnit == NPCUnit.Jimmy)
                             continue;
                         if (exist.isExist == false)
@@ -39,7 +39,7 @@ public class NPCSpawner : Spawner
                     }
                     if (mType == NPCUnit.None)
                     {
-                        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/Rock"), transform.position, Quaternion.identity);
+                        mObject = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Environments/Rock"), transform.position, Quaternion.identity);
                         mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
                         mObject.GetComponent<Environment>().Initialize(ID);
                         mObject.transform.Rotate(new Vector3(0.0f, Random.Range(-360.0f, 360.0f), 0.0f));
@@ -52,7 +52,7 @@ public class NPCSpawner : Spawner
         if(mType != NPCUnit.None)
         {
             GameObject group = (GameObject.Find("NPCs")) ? GameObject.Find("NPCs").gameObject : new GameObject("NPCs");
-            mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity,group.transform);
+            mObject = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/NPCs/" + mType.ToString() + "NPC"), transform.position, Quaternion.identity,group.transform);
             mObject.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
             mObject.tag = "Neutral";
             mObject.layer = 9;
@@ -85,16 +85,16 @@ public class NPCSpawner : Spawner
                 case NPCUnit.Jimmy:
                 case NPCUnit.Victor:
                 case NPCUnit.Vin:
-                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/CompanionIcon"), transform.position, Quaternion.identity);
+                    icon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/CompanionIcon"), transform.position, Quaternion.identity);
                     break;
                 case NPCUnit.WeaponMerchant:
-                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
+                    icon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
                     break;
                 case NPCUnit.ArmorMerchant:
-                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
+                    icon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
                     break;
                 case NPCUnit.Monk:
-                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/MonkIcon"), transform.position, Quaternion.identity);
+                    icon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/MonkIcon"), transform.position, Quaternion.identity);
                     break;
                 default:
                     break;

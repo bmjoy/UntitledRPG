@@ -8,6 +8,9 @@ public abstract class ActionTrigger : MonoBehaviour
     [HideInInspector]
     public float mTime;
     public bool isCompleted = false;
+    protected bool isFinish = false;
+    [SerializeField]
+    protected AudioClip[] mClips;
     protected virtual void StartActionTrigger() { }
 
     protected virtual IEnumerator Action() { yield return null; }

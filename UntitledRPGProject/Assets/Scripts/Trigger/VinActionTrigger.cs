@@ -6,17 +6,12 @@ using UnityEngine;
 public class VinActionTrigger : ActionTrigger
 {
     private bool _isShadow = false;
-    private bool isFinish = false;
-    [SerializeField]
-    private AudioClip[] mHitClip;
     [SerializeField]
     private int mSlashAmount = 5;
     [SerializeField]
     private float mEverySlashTime = 0.15f;
     [SerializeField]
     private float mCriticalChance = 0.6f;
-    [SerializeField]
-    private AudioClip clip;
     private int maxCount = 0;
     void Start()
     {
@@ -65,16 +60,17 @@ public class VinActionTrigger : ActionTrigger
         var unit = GetComponent<Unit>();
         if (isFinish)
         {
-            GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/Vin_Shadow");
+            GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Vin_Shadow");
+            AudioManager.PlaySfx(mClips[2]);
             GameObject shadow = Instantiate(obj, unit.transform.position, Quaternion.Euler(obj.transform.eulerAngles));
             Destroy(shadow, 3.0f);
             yield return new WaitForSeconds(1.0f);
             for (int i = 0; i < 14; ++i)
             {
-                GameObject obj2 = Resources.Load<GameObject>("Prefabs/Effects/Vin_Slash");
+                GameObject obj2 = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Vin_Slash");
                 GameObject slash = Instantiate(obj2, mPos + new Vector3(0.0f, 1.2f, 1.0f), Quaternion.Euler(obj2.transform.eulerAngles + new Vector3(Random.Range(-180,180), Random.Range(-90, 90), Random.Range(-45, 45))));
                 Destroy(slash, 3.0f);
-                GameObject obj3 = Resources.Load<GameObject>("Prefabs/Effects/Vin_Blood");
+                GameObject obj3 = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Vin_Blood");
                 GameObject blood = Instantiate(obj3, mPos + new Vector3(Random.Range(-3f, 3f), Random.Range(0f,2f), Random.Range(-3f, 3f)), Quaternion.Euler(obj3.transform.eulerAngles));
                 Destroy(blood, 3.0f);
 
@@ -83,12 +79,13 @@ public class VinActionTrigger : ActionTrigger
                 yield return new WaitForSeconds(Random.Range(0.05f,0.08f));
             }
             yield return new WaitForSeconds(0.3f);
-            obj = Resources.Load<GameObject>("Prefabs/Effects/Vin_Shadow");
+            obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Vin_Shadow");
+            AudioManager.PlaySfx(mClips[2]);
             GameObject shadow2 = Instantiate(obj, unit.transform.position, Quaternion.Euler(obj.transform.eulerAngles));
             Destroy(shadow2, 3.0f);
             isCompleted = true;
             yield return new WaitForSeconds(0.7f);
-            AudioManager.PlaySfx(mHitClip[1]);
+            AudioManager.PlaySfx(mClips[1]);
             unit.mTarget?.TakeDamage((unit.mStatus.mDamage + unit.mBonusStatus.mDamage), DamageType.Physical);
             StartCoroutine(CameraSwitcher.Instance.ShakeCamera(1.0f));
 
@@ -121,7 +118,7 @@ public class VinActionTrigger : ActionTrigger
     }
     protected override IEnumerator Action()
     {
-        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/MirrorVin");
+        GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/MirrorVin");
         GameObject mirror = new GameObject("Mirror");
         GameObject mirror2 = new GameObject("Mirror");
         GameObject mirror3 = new GameObject("Mirror");
@@ -193,7 +190,7 @@ public class VinActionTrigger : ActionTrigger
         foreach (GameObject unit in group)
         {
             var u = unit.GetComponent<Unit>();
-            AudioManager.PlaySfx(clip);
+            AudioManager.PlaySfx(mClips[0]);
             if (Random.Range(0.0f,1.0f) >= mCriticalChance)
                 u.TakeDamage((GetComponent<Unit>().mStatus.mDamage + GetComponent<Unit>().mBonusStatus.mDamage) * 2.0f, DamageType.Physical);
             else

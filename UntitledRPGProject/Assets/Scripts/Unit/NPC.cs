@@ -32,7 +32,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
 
     protected virtual void Start()
     {
-        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForNPC"), transform.position
+        mCanvas = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/CanvasForNPC"), transform.position
     + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.5f, 0.0f), Quaternion.identity, transform);
         if(!GetComponent<Billboard>().mUseStaticBillboard)
             mCanvas.transform.localRotation = new Quaternion(0.0f, 180.0f, 0.0f, 1.0f);

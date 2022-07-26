@@ -234,6 +234,8 @@ GameObject:
   - component: {fileID: 2795973750525847383}
   - component: {fileID: 8849840816494340604}
   - component: {fileID: 1465856979696942393}
+  - component: {fileID: 68104354282896544}
+  - component: {fileID: 6355516984193792021}
   m_Layer: 3
   m_Name: Down(Hide)
   m_TagString: Untagged
@@ -317,9 +319,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &68104354282896544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969938625415532156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &6355516984193792021
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969938625415532156}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1075021069492110405
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,6 +695,8 @@ GameObject:
   - component: {fileID: 6567549947648009135}
   - component: {fileID: 581699260956966621}
   - component: {fileID: 8736879724379319889}
+  - component: {fileID: 899558268539103017}
+  - component: {fileID: 4809975921535810112}
   m_Layer: 3
   m_Name: Left(Hide)
   m_TagString: Untagged
@@ -748,9 +780,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &899558268539103017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364323631578279782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &4809975921535810112
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364323631578279782}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1406443649452499608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,6 +1553,8 @@ GameObject:
   - component: {fileID: 6798680789884223261}
   - component: {fileID: 7499703527958580681}
   - component: {fileID: 7040952399055567496}
+  - component: {fileID: 8346188882255640343}
+  - component: {fileID: 6965975915953380736}
   m_Layer: 3
   m_Name: Up(Hide)
   m_TagString: Untagged
@@ -1576,9 +1638,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8346188882255640343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3256922900799674346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &6965975915953380736
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3256922900799674346}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &3559012892275793779
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,6 +2471,8 @@ GameObject:
   - component: {fileID: 3948709103640835708}
   - component: {fileID: 3179978504279773711}
   - component: {fileID: 8547757002204638110}
+  - component: {fileID: 5438195168993938950}
+  - component: {fileID: 3317180818125326845}
   m_Layer: 3
   m_Name: Right(Hide)
   m_TagString: Untagged
@@ -2464,9 +2556,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &5438195168993938950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7126444255888200479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &3317180818125326845
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7126444255888200479}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &8497998057232989250
 GameObject:
   m_ObjectHideFlags: 0
@@ -2596,7 +2716,6 @@ MonoBehaviour:
   - {fileID: 1895798171844352707}
   - {fileID: 25906619066785517}
   - {fileID: 1316670220274693209}
-  mArcs: []
   mConnectors:
   - {fileID: 3256922900799674346}
   - {fileID: 969938625415532156}
@@ -2604,6 +2723,8 @@ MonoBehaviour:
   - {fileID: 1364323631578279782}
   meshSurface: {fileID: 0}
   _type: 0
+  mSpawnPoint: {fileID: 0}
+  mGizmoColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &1365362599844213702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2630,7 +2751,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 1.1666666
+  m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &8560290340746911863

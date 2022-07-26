@@ -374,7 +374,7 @@ public class TutorialManager : MonoBehaviour
     IEnumerator SpawnTutorialEnvironment()
     {
         _EnvironmentSpawner.Spawn();
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/SpawnTutorial")
+        GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/SpawnTutorial")
 , _EnvironmentSpawner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
         Destroy(go, 2.0f);
         _BreakableObject = _EnvironmentSpawner.mObject.GetComponent<BreakableObject>();
@@ -387,7 +387,7 @@ public class TutorialManager : MonoBehaviour
     {
         _EnemySpawner.Spawn();
         yield return new WaitForSeconds(1.1f);
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Ghoul Summon_Effect")
+        GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Ghoul Summon_Effect")
 , _EnemySpawner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
         Destroy(go, 2.0f);
         _EnemyProwler = _EnemySpawner.mObject.GetComponent<EnemyProwler>();
@@ -412,7 +412,7 @@ public class TutorialManager : MonoBehaviour
         });
         PlayerController.Instance.GetComponent<InteractSystem>().mLeftAction += (() => {
             m_DialogueQueue.Enqueue(m_DialogueYesCase);
-            fireworksTop = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/CelebrationEffect2"), UIManager.Instance.mAdditionalCanvas.transform.localPosition + new Vector3(0.0f, 25.0f, 0.0f), Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
+            fireworksTop = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/CelebrationEffect2"), UIManager.Instance.mAdditionalCanvas.transform.localPosition + new Vector3(0.0f, 25.0f, 0.0f), Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
             mComplete = true;
         });
         Transform t = UIManager.Instance.mStorage.mTutorialHereIcon.transform.parent;

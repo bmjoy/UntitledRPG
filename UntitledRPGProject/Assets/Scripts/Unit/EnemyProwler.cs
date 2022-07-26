@@ -34,7 +34,7 @@ public class EnemyProwler : Prowler
         GameManager.Instance.onEnemyWin += Win;
 
         base.Initialize(spawner);
-        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForEnemyProwler"), transform.position
+        mCanvas = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/CanvasForEnemyProwler"), transform.position
 + new Vector3(0.0f, GetComponent<BoxCollider>().center.y + 3.0f, 0.0f), Quaternion.identity, mModel.transform);
 
         if(mModel.transform.Find("Canvas") != null)
@@ -60,8 +60,7 @@ public class EnemyProwler : Prowler
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (BattleManager.Instance.status != BattleManager.GameStatus.None
-|| PlayerController.Instance.Interaction)
+        if (BattleManager.status != BattleManager.GameStatus.None || PlayerController.Instance.Interaction)
         {
             mExclamation.SetActive(false);
             mParticles.SetActive(false);

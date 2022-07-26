@@ -63,11 +63,12 @@ public class Slot : MonoBehaviour
         if (info_Object.GetType().IsSubclassOf((typeof(EquipmentInfo))))
         {
             EquipmentInfo info = (EquipmentInfo)info_Object;
-            foreach (var ability in info.mBonusAbilities)
+            for (int i = 0; i < info.mBonusAbilities.Count; ++i)
             {
+                var ability = info.mBonusAbilities[i];
                 mDescription.text += ((ability.Type != BonusAbility.AbilityType.Magic)) ?
-                    ability.Type.ToString() + ": " + ability.Value + "\n"
-                    : ability.Skill.mName + "\n";
+    ability.Type.ToString() + ": " + ability.Value + "\n"
+    : ability.Skill.mName + "\n";
             }
         }
     }
@@ -95,13 +96,13 @@ public class Slot : MonoBehaviour
         if(PlayerController.Instance.mGold >= result)
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mItemPurchaseSFX);
-            PlayerController.Instance.mGold -= result;
+            PlayerController.Instance.GetGold(-result);
             GameObject newItem = Instantiate(mMyItem);
             newItem.transform.SetParent(PlayerController.Instance.transform.Find("Bag"));
             PlayerController.Instance.mInventory.Add(newItem.GetComponent<Item>());
             newItem.GetComponent<Item>().isSold = true;
             mBoarder.transform.Find("Money").Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
-            GameObject fireworks = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PurchaseEffect"), transform.position, Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
+            GameObject fireworks = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/PurchaseEffect"), transform.position, Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
             Destroy(fireworks, 3.5f);
             Destroy(mMyItem);
             ResetItem();

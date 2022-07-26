@@ -122,7 +122,7 @@ public class Unit : MonoBehaviour, IUnit
     {
         if(mGroundCheck == null)
         {
-            GameObject groundCheck = Instantiate(Resources.Load<GameObject>("Prefabs/UnitGroundCheck"),(
+            GameObject groundCheck = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UnitGroundCheck"),(
              new Vector3(transform.position.x,
                 transform.position.y - (transform.GetComponent<BoxCollider>().size.y / 2.0f), transform.position.z)),Quaternion.identity);
             groundCheck.transform.parent = transform;
@@ -141,7 +141,7 @@ public class Unit : MonoBehaviour, IUnit
             Destroy(mCanvas);
             mCanvas = null;
         }
-        mCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CanvasForUnit"), transform.position
+        mCanvas = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/CanvasForUnit"), transform.position
             + new Vector3(0.0f,GetComponent<BoxCollider>().center.y + 0.5f, 0.0f), Quaternion.identity, transform);
         mCanvas.GetComponent<Canvas>().sortingOrder = 8;
         mArrow = mCanvas.transform.Find("Arrow").gameObject;
@@ -465,7 +465,7 @@ public class Unit : MonoBehaviour, IUnit
             if (mAttackClips.Count() > 0)
                 AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
             yield return new WaitForSeconds(mAttackTime);
-            Bullet go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity).GetComponent<Bullet>();
+            Bullet go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity).GetComponent<Bullet>();
             go.Initialize(mTarget.transform, mStatus.mDamage + mBonusStatus.mDamage);
             yield return new WaitUntil(() => go.isDamaged == true);
         }
@@ -477,7 +477,7 @@ public class Unit : MonoBehaviour, IUnit
             if (mAttackClips.Count() > 0)
                 AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
             yield return new WaitForSeconds(mAttackTime);
-            GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+            GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
             mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
             Destroy(go, 1.0f);
             yield return new WaitUntil(() => go == null);
@@ -520,7 +520,7 @@ public class Unit : MonoBehaviour, IUnit
         mConditions.isDefend = true;
         onComplete?.Invoke();
         AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDefendSFX);
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Defend"),
+        GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Defend"),
             new Vector3(transform.position.x,
             transform.position.y + GetComponent<BoxCollider>().size.y / 2.0f,
             transform.position.z), Quaternion.identity);
@@ -549,15 +549,16 @@ public class Unit : MonoBehaviour, IUnit
 
     public IEnumerator CounterState(float dmg)
     {
-        if (mTarget.mBuffNerfController.SearchBuff("Counter"))
+        
+        if (mTarget.mBuffNerfController.GetBuff(typeof(Counter)))
         {
-            Counter counter = mTarget.mBuffNerfController.GetBuff("Counter") as Counter;
-            if (counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
+            Counter counter = mTarget.mBuffNerfController.GetBuff(typeof(Counter)) as Counter;
+            if(counter.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f))
             {
                 yield return new WaitForSeconds(0.25f);
                 AudioManager.PlaySfx((mTarget.mAttackClips.Count() > 0) ? mTarget.mAttackClips.ElementAt(Random.Range(0, mTarget.mAttackClips.Count())).Clip : null, 0.6f);
                 mTarget.mTarget = this;
-                mTarget.mAnimator.Play((mTarget.MyAttackAnim.Count > 0) ? mTarget.MyAttackAnim[Random.Range(0,mTarget.MyAttackAnim.Count)] : "Attack");
+                mTarget.mAnimator.Play((mTarget.MyAttackAnim.Count > 0) ? mTarget.MyAttackAnim[Random.Range(0, mTarget.MyAttackAnim.Count)] : "Attack");
                 mTarget.mTarget.TakeDamage(dmg, DamageType.Physical);
                 if (mStatus.mHealth <= 0.0f)
                 {
@@ -570,9 +571,9 @@ public class Unit : MonoBehaviour, IUnit
     
     public bool DodgeState()
     {
-        if (mBuffNerfController.SearchBuff("Dodge"))
+        if (mBuffNerfController.GetBuff(typeof(Dodge)))
         {
-            Dodge dodge = mBuffNerfController.GetBuff("Dodge") as Dodge;
+            Dodge dodge = mBuffNerfController.GetBuff(typeof(Dodge)) as Dodge;
             return (dodge.mChanceRate >= UnityEngine.Random.Range(0.0f, 1.0f));
         }
         else
@@ -610,7 +611,7 @@ public class Unit : MonoBehaviour, IUnit
         DisplayDamage(isDodge, value);
         if (!isDodge)
         {
-            GameObject go = Instantiate(Resources.Load<GameObject>
+            GameObject go = Instantiate(ResourceManager.GetResource<GameObject>
                 ("Prefabs/Effects/Hit"), transform.position + new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(0.5f, 1.2f), Random.Range(-1.0f, 1.0f)), Quaternion.identity, transform);
             Destroy(go, 1.1f);
             mStatus.mHealth -= value;

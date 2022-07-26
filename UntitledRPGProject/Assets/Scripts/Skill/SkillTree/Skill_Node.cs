@@ -50,7 +50,7 @@ public class Skill_Node : MonoBehaviour
             _LineSprite.color = new Color(1.0f, 1.0f, 1.0f);
         PlayerController.Instance.mSoul -= _Cost;
         AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mSKillTreeObtainedSFX);
-        GameObject fireworks = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/UpgradeEffect"), transform.position, Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
+        GameObject fireworks = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/UpgradeEffect"), transform.position, Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
         Destroy(fireworks, 3.0f);
     }
 

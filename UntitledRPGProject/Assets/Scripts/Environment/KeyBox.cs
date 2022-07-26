@@ -29,7 +29,7 @@ public class KeyBox : CollectableObject
                 PlayerController.Instance.mInventory.Get("Key").Apply();
             else
             {
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Items/Expendables/Key"), PlayerController.Instance.mBag.transform);
+                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Items/Expendables/Key"), PlayerController.Instance.mBag.transform);
                 go.GetComponent<Item>().isSold = true;
                 PlayerController.Instance.mInventory.Add(go.GetComponent<Item>());
             }

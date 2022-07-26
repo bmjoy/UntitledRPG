@@ -34,7 +34,7 @@ public class EnemySpawner : Spawner
                 break;
         }
 
-        GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
+        GameObject newModel = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
         newEnemyProwler.tag = "EnemyProwler";
         newEnemyProwler.layer = LayerMask.NameToLayer("EnemyProwler");
         newEnemyProwler.AddComponent<EnemyProwler>().Setup(mRadius, mAngle, mSpeed, ID, newModel.gameObject);
@@ -43,7 +43,7 @@ public class EnemySpawner : Spawner
         {
             if (mEnemyList[i] == EnemyUnit.None)
                 continue;
-            GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity, newEnemyProwler.transform);
+            GameObject obj = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Enemys/" + mEnemyList[i].ToString() + "_Unit"), transform.position, Quaternion.identity, newEnemyProwler.transform);
             enemyProwler.mEnemySpawnGroup.Add(obj);
             obj.SetActive(false);
         }
@@ -65,7 +65,7 @@ public class EnemySpawner : Spawner
         ID = GameManager.s_ID++;
         if (isDungeon == false)
         {
-            GameObject icon = Instantiate(Resources.Load<GameObject>((mEnemyList.Contains(EnemyUnit.Temple_Guardian) || mEnemyList.Contains(EnemyUnit.The_Bloody_King)) ? "Prefabs/UI/Icon/BossEnemyIcon" : "Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
+            GameObject icon = Instantiate(ResourceManager.GetResource<GameObject>((mEnemyList.Contains(EnemyUnit.Temple_Guardian) || mEnemyList.Contains(EnemyUnit.The_Bloody_King)) ? "Prefabs/UI/Icon/BossEnemyIcon" : "Prefabs/UI/Icon/NormalEnemyIcon"), transform.position, Quaternion.identity);
             if (icon != null)
                 icon.transform.eulerAngles = new Vector3(90.0f, -90.0f, 0.0f);
         }

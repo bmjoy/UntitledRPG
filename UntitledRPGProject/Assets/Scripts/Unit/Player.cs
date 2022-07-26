@@ -91,7 +91,7 @@ public class Player : Unit
                 if (mAttackClips.Count() > 0)
                     AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity);
+                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), transform.Find("Fire").position, Quaternion.identity);
                 if (go.GetComponent<SpriteRenderer>())
                     go.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
                 Bullet bullet = go.GetComponent<Bullet>();
@@ -107,14 +107,14 @@ public class Player : Unit
                 if (mAttackClips.Count() > 0)
                     AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
+                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                 Destroy(go, 2.0f);
                 yield return new WaitUntil(() => go == null);
             }
             yield return new WaitForSeconds(0.8f);
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDoubleAttackSFX);
-            GameObject effectPrefab = Resources.Load<GameObject>("Prefabs/Effects/DoubleAttackEffect");
+            GameObject effectPrefab = ResourceManager.GetResource<GameObject>("Prefabs/Effects/DoubleAttackEffect");
             GameObject d_effect = Instantiate(effectPrefab, transform.position + new Vector3(0.0f, GetComponent<BoxCollider>().size.y / 2.0f, 0.0f), Quaternion.Euler(effectPrefab.transform.eulerAngles));
             Destroy(d_effect, 1.0f);
             yield return StartCoroutine(base.BattleState(type));
@@ -154,7 +154,7 @@ public class Player : Unit
                 if (bonusShield < 0.0f)
                 {
                     AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mShieldExplosionSFX);
-                    effectPrefab = Resources.Load<GameObject>("Prefabs/Effects/ShieldExplosion");
+                    effectPrefab = ResourceManager.GetResource<GameObject>("Prefabs/Effects/ShieldExplosion");
                     effect = Instantiate(effectPrefab, transform.position + new Vector3(0.0f, GetComponent<BoxCollider>().size.y / 2.0f, 0.0f), Quaternion.Euler(effectPrefab.transform.eulerAngles));
                     Destroy(effect, 1.0f);                   
                     Destroy(mPreservedSkillTreeBonus.mShield);
@@ -163,7 +163,7 @@ public class Player : Unit
                 else
                 {
                     AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mShieldHitSFX);
-                    effectPrefab = Resources.Load<GameObject>("Prefabs/Effects/ShieldHit");
+                    effectPrefab = ResourceManager.GetResource<GameObject>("Prefabs/Effects/ShieldHit");
                     effect = Instantiate(effectPrefab, transform.position + new Vector3(0.0f, GetComponent<BoxCollider>().size.y / 2.0f, 0.0f), Quaternion.Euler(effectPrefab.transform.eulerAngles));
                     Destroy(effect, 1.0f);
                 }
@@ -288,7 +288,7 @@ public class Player : Unit
         if(mPreservedSkillTreeBonus.IsShield)
         {
             bonusShield = Mathf.RoundToInt(mStatus.mMaxMana * mPreservedSkillTreeBonus.mShieldValue / 100.0f);
-            GameObject ShieldPrefab = Resources.Load<GameObject>("Prefabs/Effects/Shield");
+            GameObject ShieldPrefab = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Shield");
             mPreservedSkillTreeBonus.mShield = Instantiate(ShieldPrefab
 , transform.position + new Vector3(0.0f, 0.2f, 0.0f), Quaternion.Euler(ShieldPrefab.transform.eulerAngles),transform);
         }
@@ -301,7 +301,7 @@ public class Player : Unit
         {
             TakeRecover(bonusHPRE);
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mHealingSFX, 0.3f);
-            GameObject recover = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Healing_Effect")
+            GameObject recover = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Healing_Effect")
 , transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
             Destroy(recover, 1.5f);
         }
@@ -309,7 +309,7 @@ public class Player : Unit
         {
             TakeRecoverMana(bonusHPRE);
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mHealingSFX, 0.3f);
-            GameObject recover = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MP_Healing_Effect")
+            GameObject recover = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/MP_Healing_Effect")
 , transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
             Destroy(recover, 1.5f);
         }

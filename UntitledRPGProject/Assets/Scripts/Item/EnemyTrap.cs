@@ -34,7 +34,7 @@ public class EnemyTrap : Item
                 break;
         }
 
-        GameObject newModel = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + info.mEnemyUnits[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
+        GameObject newModel = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Enemys/" + info.mEnemyUnits[LeaderCount].ToString()), newEnemyProwler.transform.position, Quaternion.identity, newEnemyProwler.transform);
         newEnemyProwler.tag = "EnemyProwler";
         newEnemyProwler.layer = 6;
         newEnemyProwler.AddComponent<EnemyProwler>().Setup(30, 15, 3, ID, newModel.gameObject);
@@ -43,7 +43,7 @@ public class EnemyTrap : Item
         {
             if (info.mEnemyUnits[i] == EnemyUnit.None)
                 continue;
-            GameObject obj = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Enemys/" + info.mEnemyUnits[i].ToString() + "_Unit"), pos, Quaternion.identity, newEnemyProwler.transform);
+            GameObject obj = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Enemys/" + info.mEnemyUnits[i].ToString() + "_Unit"), pos, Quaternion.identity, newEnemyProwler.transform);
             newEnemyProwler.GetComponent<EnemyProwler>().mEnemySpawnGroup.Add(obj);
             obj.SetActive(false);
         }

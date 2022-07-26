@@ -16,10 +16,10 @@ public class GameManager : MonoBehaviour
         else
             mInstance = this;
         DontDestroyOnLoad(gameObject);
-        mCamera = Instantiate(Resources.Load<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
+        mCamera = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/GameCamera"), transform.position, Quaternion.identity);
     }
 
-    public GameState mGameState = GameState.MainMenu;
+    public static GameState mGameState = GameState.MainMenu;
     private GameObject[] EnemyProwlers;
     private GameObject[] NPCProwlers;
    
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float mWaitForRestart = 3.0f;
 
-    public List<CharacterExist> characterExists;
+    public static List<CharacterExist> characterExists;
 
     public bool IsCinematicEvent = false;
     private void Start()
@@ -120,10 +120,27 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public static void GameReset()
+    {
+        Instance.Initialize();
+        if (UIManager.Instance.mInventoryUI.gameObject.activeSelf)
+            UIManager.Instance.mInventoryUI.Active(false);
+        mGameState = GameState.MainMenu;
+        characterExists.Clear();
+        characterExists = new List<CharacterExist>(5)
+    {
+        new CharacterExist(NPCUnit.Vin, false),
+        new CharacterExist(NPCUnit.Eleven, false),
+        new CharacterExist(NPCUnit.Roger, false),
+        new CharacterExist(NPCUnit.Victor, false),
+        new CharacterExist(NPCUnit.Jimmy, true)
+    };
+    }
+
     private void GameOver()
     {
         // TODO: Gameover music
-        BattleManager.Instance.status = BattleManager.GameStatus.Finish;
+        BattleManager.status = BattleManager.GameStatus.Finish;
         UIManager.Instance.BattleEnd();
         UIManager.Instance.DisplayMiniMap(false);
         AudioManager.Instance.mAudioStorage.ChangeMusic("Defeat");

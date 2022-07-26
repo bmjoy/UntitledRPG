@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +12,25 @@ public class BuffAndNerfEntity : MonoBehaviour
     {
         if (mBuff.Count > 0)
         {
-            foreach(var buff in mBuff.Values.ToList())
+            var list = mBuff.Values.ToArray();
+            for (int i = 0; i < list.Length; i++)
             {
+                var buff = list[i];
                 buff.Tick();
-                if(buff.isActive == false)
-                {
+                if (buff.isActive == false)
                     mBuff.Remove(buff.Buff);
-                }
             }
         }
         if (mNerf.Count > 0)
         {
-            foreach (var nerf in mNerf.Values.ToList())
+            var list = mNerf.Values.ToArray();
+
+            for (int i = 0; i < list.Length; i++)
             {
+                var nerf = list[i];
                 nerf.Tick();
                 if (nerf.isActive == false)
-                {
                     mNerf.Remove(nerf.Nerf);
-                }
             }
         }
     }
@@ -37,20 +39,22 @@ public class BuffAndNerfEntity : MonoBehaviour
     {
         if (mBuff.Count > 0)
         {
-            foreach (var buff in mBuff.Values.ToList())
+            var list = mBuff.Values.ToArray();
+            for (int i = 0; i < list.Length; i++)
             {
+                var buff = list[i];
                 buff.Inactivate();
                 if (buff.isActive == false)
-                {
                     mBuff.Remove(buff.Buff);
-                }
             }
         }
 
         if (mNerf.Count > 0)
         {
-            foreach (var nerf in mNerf.Values.ToList())
+            var list = mNerf.Values.ToArray();
+            for (int i = 0; i < list.Length; i++)
             {
+                var nerf = list[i];
                 nerf.Inactivate();
                 if (nerf.isActive == false)
                 {
@@ -89,36 +93,25 @@ public class BuffAndNerfEntity : MonoBehaviour
 
     }
 
-    public bool SearchBuff(string name)
+    public Buff GetBuff(Type name)
     {
-        foreach(var b in mBuff)
+        for (int i = 0; i < mBuff.Count; ++i)
         {
-            if (b.Key.GetType().ToString() == name)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Buff GetBuff(string name)
-    {
-        foreach (var b in mBuff)
-        {
-            if (b.Key.GetType().ToString() == name)
-                return b.Key;
+            var b = mBuff.ElementAt(i).Key;
+            if (b.GetType() == name || b.name.Contains(name.Name))
+                return b;
         }
         return null;
     }
-
-    public bool SearchNerf(string name)
+    public Nerf GetNerf(Type name)
     {
-        foreach(var n in mNerf)
+        for (int i = 0; i < mNerf.Count; ++i)
         {
-            if(n.Key.name == name)
-                return true;
+            var n = mNerf.ElementAt(i).Key;
+            if (n.GetType() == name || n.name.Contains(name.Name))
+                return n;
         }
-        return false;
+        return null;
     }
 
     public int GetBuffCount()

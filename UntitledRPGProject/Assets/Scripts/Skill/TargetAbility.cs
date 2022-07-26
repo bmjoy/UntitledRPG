@@ -141,8 +141,6 @@ public class TargetAbility : DamagableAbility
             if (isActive)
             {
                 UIManager.Instance.DisplaySupportKey(false);
-                unit.TargetedMagicHostile(false);
-                unit.TargetedFriendly(false);
                 BattleManager.Instance.mSpellChanning = false;
                 unit.TargetedMagicHostile(false);
                 unit.TargetedFriendly(false);
@@ -202,7 +200,7 @@ public class TargetAbility : DamagableAbility
                     CommonState();
                 }
 
-                GameObject effect = Resources.Load<GameObject>("Prefabs/Effects/" + mName + "_Effect");
+                GameObject effect = ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + mName + "_Effect");
                 if (effect != null)
                 {
                     GameObject go = Instantiate(effect
@@ -216,9 +214,7 @@ public class TargetAbility : DamagableAbility
                 BattleManager.Instance.Cancel();
         }
         if(mOwner.mAiBuild.actionEvent == AIBuild.ActionEvent.BackWalk)
-        {
             yield return new WaitUntil(() => mOwner.mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
-        }
         isComplete = true;
         yield return null;
     }
@@ -355,7 +351,7 @@ public class TargetAbility : DamagableAbility
     {
         float newValue = mValue + mOwner.mStatus.mMagicPower + mOwner.mBonusStatus.mMagicPower;
         Vector3 dir = (mTarget.transform.position - mOwner.transform.position).normalized;
-        mProjectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
+        mProjectile = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mName), mOwner.transform.position + dir * mStartPosition.x, Quaternion.identity);
         mProjectile.GetComponent<Projectile>().mDamage = newValue;
         mProjectile.transform.LookAt(dir);
 

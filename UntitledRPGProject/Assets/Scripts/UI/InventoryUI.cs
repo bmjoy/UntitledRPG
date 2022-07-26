@@ -148,7 +148,7 @@ public class InventoryUI : MonoBehaviour
         if (num >= PlayerController.Instance.mHeroes.Count) return;
 
         var unit = PlayerController.Instance.mHeroes[num].GetComponent<Player>();
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/" + unit.mSetting.Name + "_UI"), transform.position, Quaternion.identity);
+        GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/" + unit.mSetting.Name + "_UI"), transform.position, Quaternion.identity);
         mCurrentUnit = transform.Find("CurrentUnit").GetComponent<Image>();
         mCurrentUnit.sprite = mCenterCharacterEmptyImage;
         mCurrentUnitAnimator = transform.Find("CurrentUnit").GetComponent<Animator>();
@@ -210,7 +210,7 @@ public class InventoryUI : MonoBehaviour
         {
             if (item.Value.GetType().IsSubclassOf(typeof(Expendables)))
             {
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
+                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
                 go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Non_Activate);
                 items.Add(go);
             }
@@ -218,7 +218,7 @@ public class InventoryUI : MonoBehaviour
             {
                 EquipmentItem equipment = (EquipmentItem)item.Value;
                 if (equipment.IsEquipped) continue;
-                GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
+                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Item"), mItemsGroup.transform.position, Quaternion.identity, mItemsGroup.transform);
                 go.GetComponent<ItemUI>().Initialize(item.Key, item.Value, ItemUI.ItemUIType.Equip);
                 items.Add(go);
                 string part = string.Empty;

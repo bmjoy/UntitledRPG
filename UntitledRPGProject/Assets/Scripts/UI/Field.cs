@@ -44,19 +44,19 @@ public class Field : MonoBehaviour
         }
         transform.position += new Vector3(Random.Range(-0.5f,0.5f), 1.5f, Random.Range(-0.5f, 0.5f));
         if(mTargetFriendly == null)
-            mTargetFriendly = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/FriendlyField"), transform.position, Quaternion.identity, transform);
+            mTargetFriendly = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/FriendlyField"), transform.position, Quaternion.identity, transform);
         mTargetFriendly.transform.position = transform.position - new Vector3(0.0f,1.2f,0.0f);
         mTargetFriendly.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetFriendly.SetActive(false);
 
         if(mTargetHostile == null)
-            mTargetHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileField"), transform.position, Quaternion.identity, transform);
+            mTargetHostile = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/HostileField"), transform.position, Quaternion.identity, transform);
         mTargetHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
         mTargetHostile.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetHostile.SetActive(false);      
         
         if(mTargetMagicHostile == null)
-            mTargetMagicHostile = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/HostileMagicTarget"), transform.position, Quaternion.identity, transform);
+            mTargetMagicHostile = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/HostileMagicTarget"), transform.position, Quaternion.identity, transform);
         mTargetMagicHostile.transform.position = transform.position - new Vector3(0.0f, 1.2f, 0.0f);
         mTargetMagicHostile.transform.eulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
         mTargetMagicHostile.SetActive(false);
