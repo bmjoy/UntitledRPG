@@ -111,10 +111,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (!IsDied && PlayerController.Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        if (!IsDied && Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             if(!IsDied)
-                GameManager.Instance.mGameState = GameState.GameOver;
+                GameManager.mGameState = GameState.GameOver;
             IsDied = true;
             return;
         }

@@ -11,7 +11,7 @@ public class EnvironmentSpawner : Spawner
     {
         if (type == EnvironmentObject.None) return null;
         GameObject group = (GameObject.Find("Environments")) ? GameObject.Find("Environments").gameObject : new GameObject("Environments");
-        mObject = Instantiate(Resources.Load<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, transform.rotation,group.transform);
+        mObject = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, transform.rotation,group.transform);
         if (mObject.GetComponent<BoxCollider>()) mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
         else mObject.AddComponent<NavMeshObstacle>();
         mObject.GetComponent<Environment>().Initialize(ID);
@@ -29,7 +29,7 @@ public class EnvironmentSpawner : Spawner
             switch (type)
             {
                 case EnvironmentObject.Well:
-                    icon = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Icon/RecoverIcon"), transform.position, Quaternion.identity);
+                    icon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/RecoverIcon"), transform.position, Quaternion.identity);
                     break;
                 default:
                     break;

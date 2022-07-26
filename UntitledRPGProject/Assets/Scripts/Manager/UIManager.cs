@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.IsCinematicEvent)
             return;
 
-        if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f && GameManager.Instance.mGameState == GameState.GamePlay)
+        if(Input.GetKeyDown(KeyCode.I) && mTime <= 0.0f && GameManager.mGameState == GameState.GamePlay)
         {
             AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mOpenInventorySFX);
             DisplayInventory();
@@ -251,15 +251,15 @@ public class UIManager : MonoBehaviour
     {
         if (isLevelUP)
         {
-            GameObject fireworksTop = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/CelebrationEffect2"), mAdditionalCanvas.transform.localPosition + new Vector3(0.0f, 25.0f, 0.0f), Quaternion.identity, mAdditionalCanvas.transform);
+            GameObject fireworksTop = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/CelebrationEffect2"), mAdditionalCanvas.transform.localPosition + new Vector3(0.0f, 25.0f, 0.0f), Quaternion.identity, mAdditionalCanvas.transform);
             float random = 0.0f;
             while (true)
             {
-                GameObject fireworks = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/CelebrationEffect1"), mAdditionalCanvas.transform.localPosition + new Vector3(UnityEngine.Random.Range(-50.0f, 50.0f), UnityEngine.Random.Range(-50.0f, 50.0f), 0.0f), Quaternion.identity, mAdditionalCanvas.transform);
+                GameObject fireworks = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/CelebrationEffect1"), mAdditionalCanvas.transform.localPosition + new Vector3(UnityEngine.Random.Range(-50.0f, 50.0f), UnityEngine.Random.Range(-50.0f, 50.0f), 0.0f), Quaternion.identity, mAdditionalCanvas.transform);
                 Destroy(fireworks, 3.0f);
                 random = UnityEngine.Random.Range(0.25f, 0.7f);
                 yield return new WaitForSeconds(random);
-                if (BattleManager.Instance.status == BattleManager.GameStatus.None)
+                if (BattleManager.status == BattleManager.GameStatus.None)
                     break;
             }
             fireworksTop.GetComponent<ParticleSystem>().Stop();

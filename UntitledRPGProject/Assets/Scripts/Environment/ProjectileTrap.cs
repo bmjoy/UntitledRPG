@@ -41,10 +41,10 @@ public class ProjectileTrap : Trap
 
     private void Shoot()
     {
-        TrapBullet projectile = Instantiate(Resources.Load<GameObject>("Prefabs/Bullets/Trap_Projectile"), mFirePoint.position, Quaternion.identity).GetComponent<TrapBullet>();
+        TrapBullet projectile = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/Trap_Projectile"), mFirePoint.position, Quaternion.identity).GetComponent<TrapBullet>();
         projectile.transform.LookAt(mFirePoint);
         projectile.Initialize(mDirection, mDamage);
-        GameObject Fire = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Trap_Projectile_Fire")
+        GameObject Fire = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Fire")
 , mFirePoint.position, Quaternion.identity);
         Destroy(Fire, 1.5f);
         Destroy(projectile.gameObject, 4.0f);

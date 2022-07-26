@@ -34,11 +34,11 @@ public class InteractSystem : MonoBehaviour
 
         if (mClosestNPC != null)
         {
-            mClosestNPC.React(true);
+            mClosestNPC?.React(true);
             Vector3 pos = mClosestNPC.GetPosition();
             if (Vector3.Distance(pos, transform.position) > mRadius)
             {
-                mClosestNPC.React(false);
+                mClosestNPC?.React(false);
                 mClosestNPC = null;
             }
             return;

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b3a3b30d1f70d34892ec47ed510dfd6, type: 3}
+  m_Name: Jimmy_Test
+  m_EditorClassIdentifier: 
+  Column: 6
+  Row: 6
+  Offset: {x: 60, y: 60}
+  SecretRoomAmount: 4
+  MerchantAmount: 2
+  CompanionAmount: 2
+  RecoverAmount: 2
+  MonkAmount: 2
+  NoneRoomRate: 35
+  HighTierMonsterChance: 40
+  MiddleTierMonsterChance: 40
+  LowTierMonsterChance: 40
+  SecretRate: 20
+  WallTrapRate: 50
+  GroundTrapRate: 50
+  ProjectileTrapRate: 40
+  SwitchTrapRate: 40
+  FireOrbRate: 20
+  GenerateTrapsRandom: 0
+  _1TierUnit: 0600000007000000
+  _2TierUnit: 030000000400000005000000
+  _3TierUnit: 0100000002000000
+  Rooms:
+  - {fileID: 8497998057232989250, guid: cce1a20d054256647b1e6014557e5509, type: 3}
+  - {fileID: 4171566842334870531, guid: f14db990a11812744a2fc6ff56ff936c, type: 3}
+  - {fileID: 4454274137241353100, guid: e327ea7c9c7deb24f9bd3da961fc6aae, type: 3}
+  - {fileID: 4465560321431692542, guid: fc281e1345fa77240bb9944f7604267f, type: 3}
+  PlayerRoom: {fileID: 4368484331024628079, guid: b48d904a8dc114d4da1d3efbb0b4cd46, type: 3}
+  MiniBossRoom: {fileID: 4410816806614490037, guid: cb0aaa50107b21c4597f5cb5e5717a1b, type: 3}
+  BossRoom: {fileID: 2663310844850497279, guid: 81a696ea5afeba94d8b1de7e3947c53e, type: 3}

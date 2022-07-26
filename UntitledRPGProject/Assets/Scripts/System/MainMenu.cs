@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
     public Slider mSFXSlider;
     void Start()
     {
-        GameManager.Instance.mGameState = GameState.MainMenu;
+        GameManager.mGameState = GameState.MainMenu;
         AudioManager.Instance.mAudioStorage.ChangeMusic("MainMenu");
 
         mMasterSlider.value = 0.0f;
@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour
         Tutorial.onClick.AddListener(() => AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mMainMenuButtonSFX));
         Tutorial.onClick.AddListener(() => SceneLoader.Instance.StartGame());
         Tutorial.onClick.AddListener(() => mCanvas.sortingOrder = -1);
-        Tutorial.onClick.AddListener(() => GameManager.Instance.mGameState = GameState.Initialize);
+        Tutorial.onClick.AddListener(() => GameManager.mGameState = GameState.Initialize);
 
         StartGame.onClick.AddListener(() =>
         {
@@ -61,6 +61,6 @@ public class MainMenu : MonoBehaviour
         StartGame.onClick.AddListener(() => AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mMainMenuButtonSFX));
         StartGame.onClick.AddListener(() => SceneLoader.Instance.StartGame());
         StartGame.onClick.AddListener(() => mCanvas.sortingOrder = -1);
-        StartGame.onClick.AddListener(() => GameManager.Instance.mGameState = GameState.Initialize);
+        StartGame.onClick.AddListener(() => GameManager.mGameState = GameState.Initialize);
     }
 }

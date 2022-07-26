@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class RogerActionTrigger : ActionTrigger
 {
-    private bool isFinish = false;
-    public AudioClip[] mClips;
-
     private void Start()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
@@ -44,7 +41,7 @@ public class RogerActionTrigger : ActionTrigger
                 yield return new WaitForSeconds(mTime / 10.0f);
             }
             yield return new WaitForSeconds(0.5f);
-            GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/Roger_Slash");
+            GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Roger_Slash");
             GameObject slash = Instantiate(obj, mPos + new Vector3(0.0f,1.2f,1.0f), Quaternion.Euler(obj.transform.eulerAngles));
             Destroy(slash, 1.1f);
             if (unit.mAttackClips.Count() > 0)

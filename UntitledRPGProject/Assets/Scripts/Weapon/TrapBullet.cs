@@ -19,7 +19,7 @@ public class TrapBullet : Bullet
         if (!isDamaged &&( PlayerController.Instance.Interaction || PlayerController.Instance.onBattle || PlayerController.Instance.IsDied))
         {
             isDamaged = true;
-            GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
+            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
 , transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
             Destroy(damage, 1.5f);
             AudioManager.PlaySfx(clip);
@@ -36,7 +36,7 @@ public class TrapBullet : Bullet
         if (collision.collider.CompareTag("Player"))
         {
             isDamaged = true;
-            GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
+            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
 , PlayerController.Instance.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
             Destroy(damage, 1.5f);
             foreach (GameObject unit in PlayerController.Instance.mHeroes)
@@ -51,7 +51,7 @@ public class TrapBullet : Bullet
             || collision.collider.gameObject.layer == LayerMask.NameToLayer("NPC")
             || collision.collider.gameObject.layer == LayerMask.NameToLayer("EnemyProwler"))
         {
-            GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
+            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
 , transform.position, Quaternion.identity);
             Destroy(damage, 1.5f);
             AudioManager.PlaySfx(clip);

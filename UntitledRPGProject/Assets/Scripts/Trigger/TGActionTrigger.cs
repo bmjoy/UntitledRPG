@@ -12,15 +12,18 @@ public class TGActionTrigger : BossActionTrigger
     private float mAttackTriggerPercentage = 50.0f;
     [SerializeField]
     private float mShakeTime = 1.0f;
-    private bool mTriggered = false;
+    void Start()
+    {
+        GetComponent<Boss>().mActionTrigger += StartActionTrigger;
+    }
     protected override IEnumerator Action()
     {
         var boss = GetComponent<Boss>();
-        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/Temple_Guardian_Slash");
+        GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Temple_Guardian_Slash");
         yield return new WaitForSeconds(mTime / 2.0f);
         GameObject slash = Instantiate(obj, mPos, Quaternion.Euler(obj.transform.eulerAngles));
         DamageState();
-        if (mTriggered)
+        if (isFinish)
         {
             yield return new WaitForSeconds(mTime + 0.2f);
             GameObject slash2 = Instantiate(obj, mPos + obj.transform.position, Quaternion.Euler(new Vector3(0.0f,90.0f,-20.0f)));
@@ -37,7 +40,7 @@ public class TGActionTrigger : BossActionTrigger
     void DamageState()
     {
         var boss = GetComponent<Boss>();
-        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/Temple_Guardian_Explosion");
+        GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/Temple_Guardian_Explosion");
         if (boss.mBuffNerfController.GetBuffCount() > 0)
         {
             GameObject slash = Instantiate(obj, boss.mTarget.transform.position +new Vector3(0.0f,0.5f,0.0f), Quaternion.Euler(obj.transform.eulerAngles));
@@ -58,24 +61,19 @@ public class TGActionTrigger : BossActionTrigger
         boss.mAnimator.Play("Attack");
         if (UnityEngine.Random.Range(0, 100) >= mAttackTriggerPercentage)
         {
-            mTriggered = true;
+            isFinish = true;
             boss.mAnimator.SetBool("Attack2", true);
             mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f);
         }
         else
         {
-            mTriggered = false;
+            isFinish = false;
             mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length - 0.2f) / 2.0f;
         }
         mPos = boss.mTarget.transform.position;
         boss.mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
         isCompleted = false;
         StartCoroutine(Action());
-    }
-
-    void Start()
-    {
-        GetComponent<Boss>().mActionTrigger += StartActionTrigger;
     }
 
     private void OnDestroy()

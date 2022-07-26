@@ -26,7 +26,7 @@ public class Phantom : Projectile
         yield return new WaitForSeconds(mChannelingTime / 2.0f);
         for (int i = 0; i < mCount; i++)
         {
-            GameObject go = Instantiate(Resources.Load<GameObject>
+            GameObject go = Instantiate(ResourceManager.GetResource<GameObject>
                 ("Prefabs/Bullets/PhantomArrow"), transform.position + new Vector3(UnityEngine.Random.Range(-3.0f, 3.0f), UnityEngine.Random.Range(-3.0f, 3.0f), UnityEngine.Random.Range(-3.0f, 1.0f)), Quaternion.identity);
             go.GetComponent<PhantomMini>().Initialize(mTarget, () => {
                 mTarget.TakeDamage(mDamage / mCount, DamageType.Magical); });
@@ -44,7 +44,7 @@ public class Phantom : Projectile
             if (Vector3.Distance(transform.position, mTarget.transform.position) < mMaximumDistance && !isCollide)
             {
                 isCollide = true;
-                GameObject damageEffect = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/PhathomExplosion")
+                GameObject damageEffect = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/PhathomExplosion")
         , mTarget.transform.position + new Vector3(UnityEngine.Random.Range(1.0f, 5.0f), UnityEngine.Random.Range(-1.0f, 1.0f), UnityEngine.Random.Range(-1.0f, 1.0f)),
         Quaternion.identity, mTarget.transform);
                 Destroy(damageEffect, 1.0f);

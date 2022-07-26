@@ -14,7 +14,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
         for (int i = 0; i < 2; ++i)
         {
             rand = Random.Range(-3.5f, 3.5f);
-            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f, rand), Quaternion.identity);
+            GameObject mirror = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f, rand), Quaternion.identity);
             if(rand < 0.0f)
                 mirror.GetComponent<SpriteRenderer>().flipX = (CameraSwitcher.isCollided)? false : true;
 
@@ -23,7 +23,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
             Destroy(mirror, 0.8f);
             rand = Random.Range(-1.0f, 1.0f);
 
-            GameObject mirror2 = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f,rand), Quaternion.identity);
+            GameObject mirror2 = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/MirrorDroidAssassin"), unit.mTarget.transform.position + new Vector3(0.0f,0.0f,rand), Quaternion.identity);
             if (rand < 0.0f)
                 mirror2.GetComponent<SpriteRenderer>().flipX = (CameraSwitcher.isCollided) ? false : true;
             mirror2.GetComponent<Animator>().SetTrigger("Attack2");
@@ -42,7 +42,7 @@ public class DroidAssassinActionTrigger : ActionTrigger
         var unit = GetComponent<Unit>();
         for (int i = 0; i < 15; ++i)
         {
-            GameObject slash = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Droid_Assassin_Slash"), unit.mTarget.transform.position, Quaternion.identity);
+            GameObject slash = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Droid_Assassin_Slash"), unit.mTarget.transform.position, Quaternion.identity);
             slash.transform.Rotate(new Vector3(Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f), Random.Range(-180.0f, 180.0f)));
             Destroy(slash, 0.5f);
             if (unit.mAttackClips.Count() > 0)

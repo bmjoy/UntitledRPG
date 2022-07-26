@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour
     private bool isWin = false;
     public bool onReward = false;
     private bool _AvailableSkip = false;
-    public GameStatus status = GameStatus.None;
+    public static GameStatus status = GameStatus.None;
 
     public event Action onEnqueuingOrderEvent;
     public event Action<Unit> onDequeuingOrderEvent;
@@ -72,7 +72,7 @@ public class BattleManager : MonoBehaviour
 
     private void Start()
     {
-        mCurrentField = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Field"));
+        mCurrentField = GameObject.Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Field"));
         mCurrentField.transform.parent = transform;
         mCurrentField.SetActive(false);
         GameManager.Instance.onPlayerBattleStart += Initialize;
@@ -213,7 +213,7 @@ public class BattleManager : MonoBehaviour
                         UIManager.Instance.FadeOutScreen();
                         GameManager.s_TotalSoul = GameManager.s_TotalExp = GameManager.s_TotalGold = 0;
                         UIManager.Instance.mVictoryScreen.StartCoroutine(UIManager.Instance.mVictoryScreen.WaitForEnd());
-                        GameManager.Instance.mGameState = GameState.Victory;
+                        GameManager.mGameState = GameState.Victory;
                         status = GameStatus.Finish;
                         _AvailableSkip = false;
                     }
@@ -221,8 +221,11 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameStatus.Finish:
                 {
-                    foreach (GameObject unit in mUnits)
-                        unit?.GetComponent<BuffAndNerfEntity>().Stop();
+                    for (int i = 0; i < mUnits.Count; ++i)
+                    {
+                        Unit unit = mUnits[i].GetComponent<Unit>();
+                        unit?.mBuffNerfController.Stop();
+                    } 
                     UIManager.Instance.DisplayHealthBar(false);
                     CameraSwitcher.StopShakeCamera();
                     mCurrentUnit = null;
@@ -287,8 +290,11 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(_TransitionTime);
         _AvailableSkip = true;
         int shareExp = GameManager.s_TotalExp / PlayerController.Instance.mHeroes.Count;
-        foreach (var unit in PlayerController.Instance.mHeroes)
-            unit.GetComponent<Unit>().mStatus.mEXP += shareExp;
+        for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
+        {
+            var unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+            unit.mStatus.mEXP += shareExp;
+        }            
         UIManager.Instance.mVictoryScreen.Active(true);
         GetEnemyItem();
         PlayerController.Instance.mGold += GameManager.s_TotalGold;
@@ -362,7 +368,7 @@ public class BattleManager : MonoBehaviour
 
     public void Attack()
     {
-        if (GameManager.Instance.mGameState == GameState.GamePause) return;
+        if (GameManager.mGameState == GameState.GamePause) return;
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
@@ -377,7 +383,7 @@ public class BattleManager : MonoBehaviour
 
     public void Defend()
     {
-        if (GameManager.Instance.mGameState == GameState.GamePause) return;
+        if (GameManager.mGameState == GameState.GamePause) return;
         if (status == GameStatus.WaitForOrder)
         {
             UIManager.Instance.DisplayBattleInterface(false);
@@ -392,7 +398,7 @@ public class BattleManager : MonoBehaviour
 
     public void Magic()
     {
-        if (GameManager.Instance.mGameState == GameState.GamePause) return;
+        if (GameManager.mGameState == GameState.GamePause) return;
         if (status == GameStatus.WaitForOrder)
         {
             if(mCurrentUnit.GetComponent<Skill_DataBase>().Skill == null)

@@ -8,11 +8,11 @@ public class TimedAttackBuff : TimedBuff
     private bool mReinforced = false;
     public TimedAttackBuff(AttackBuff buff, Unit owner, Unit target) : base(buff, owner, target)
     {
-        if (Resources.Load<GameObject>("Prefabs/Effects/" + Buff.name) == null)
+        if (ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Buff.name) == null)
             return;
         if (mTarget.transform.Find(Buff.name + "(Clone)") == null && mTarget.mStatus.mHealth > 0.0f)
         {
-            GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Buff.name), new Vector3(mTarget.transform.position.x, mTarget.transform.position.y + 0.5f, mTarget.transform.position.z),
+            GameObject go = Object.Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Buff.name), new Vector3(mTarget.transform.position.x, mTarget.transform.position.y + 0.5f, mTarget.transform.position.z),
                 new Quaternion(0.0f,0.0f,0.0f,1.0f));
             go.GetComponent<Renderer>().sortingLayerName = "Foreground";
             go.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8610003657896392990}
   - component: {fileID: 4697650245891214282}
   - component: {fileID: 5229620876735708299}
+  - component: {fileID: 4745801743468037026}
+  - component: {fileID: 7627742768073930079}
   m_Layer: 3
   m_Name: Up(Hide)
   m_TagString: Untagged
@@ -95,9 +97,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4745801743468037026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294931360959140329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &7627742768073930079
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294931360959140329}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &657250042667371322
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +648,8 @@ GameObject:
   - component: {fileID: 1146289053713342804}
   - component: {fileID: 6049978929510199295}
   - component: {fileID: 4427849554917112634}
+  - component: {fileID: 3344583121382884841}
+  - component: {fileID: 1270874142956671233}
   m_Layer: 3
   m_Name: Down(Hide)
   m_TagString: Untagged
@@ -701,9 +733,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &3344583121382884841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616818534595594367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &1270874142956671233
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616818534595594367}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &2868257956892967494
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,6 +1033,8 @@ GameObject:
   - component: {fileID: 8215053337689171372}
   - component: {fileID: 2393585104923015390}
   - component: {fileID: 5772072434045380690}
+  - component: {fileID: 1173692682318389419}
+  - component: {fileID: 1320354653930270109}
   m_Layer: 3
   m_Name: Left(Hide)
   m_TagString: Untagged
@@ -1056,9 +1118,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1173692682318389419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4308301625464498533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &1320354653930270109
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4308301625464498533}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &4368484331024628079
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,7 +1279,6 @@ MonoBehaviour:
   - {fileID: 5998292275906469870}
   - {fileID: 5272875691624324032}
   - {fileID: 6572104226226254196}
-  mArcs: []
   mConnectors:
   - {fileID: 294931360959140329}
   - {fileID: 2616818534595594367}
@@ -1197,6 +1286,8 @@ MonoBehaviour:
   - {fileID: 4308301625464498533}
   meshSurface: {fileID: 0}
   _type: 0
+  mSpawnPoint: {fileID: 0}
+  mGizmoColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &-1353021679052979812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1223,7 +1314,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 1.1666666
+  m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &4533097089912991752
@@ -1571,6 +1662,8 @@ GameObject:
   - component: {fileID: 2299517106405027967}
   - component: {fileID: 361599705765975052}
   - component: {fileID: 6898000779176291741}
+  - component: {fileID: 5006138784536473901}
+  - component: {fileID: 378265232718586060}
   m_Layer: 3
   m_Name: Right(Hide)
   m_TagString: Untagged
@@ -1654,9 +1747,37 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &5006138784536473901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5459228986473092380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d92a72522d95d49ae3b7b22ab5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &378265232718586060
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5459228986473092380}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &5467715131902547125
 GameObject:
   m_ObjectHideFlags: 0

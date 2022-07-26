@@ -110,6 +110,7 @@ MonoBehaviour:
   mType: 0
   mFlag: 0
   mCanvas: {fileID: 0}
+  mArrow: {fileID: 0}
   mAnimator: {fileID: 0}
   mSetting: {fileID: 11400000, guid: 7190519438ef42e40aca8bc2e020abc0, type: 2}
   mFireLocation: {x: 0, y: 0}
@@ -122,10 +123,7 @@ MonoBehaviour:
   mMagicDistance: 4.5
   mCurrentSpeed: 1
   dodgePos: {x: 0, y: 0, z: 0}
-  mRunClips: []
-  mAttackClips: []
-  mSkillClips: []
-  mDeathClips: []
+  MyAttackAnim: []
   mirror: {fileID: 0}
   mMyHealthBar: {fileID: 0}
   mWeaponType: 1
@@ -221,4 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTime: 0
   isCompleted: 0
+  mClips:
+  - {fileID: 8300000, guid: 2f34eff2a43c32c46aab0b61e0c25236, type: 3}
+  - {fileID: 8300000, guid: eec08500f8e731e4988815a75a3ee2de, type: 3}
   mCombo: 10

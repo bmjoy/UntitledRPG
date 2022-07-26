@@ -12,12 +12,12 @@ public class TimedTaunt : TimedNerf
         taunt = (Taunt)Nerf;
         if (taunt.mChanceRate >= Random.Range(0.0f, 1.0f))
         {
-            if (Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
+            if (ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
                 return;
 
             if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > 0)
             {
-                GameObject go = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.identity);
+                GameObject go = Object.Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.identity);
                 go.transform.parent = target.transform;
                 effectObject = go;
             }

@@ -10,7 +10,7 @@ public class Companion : Item
     public bool isSuccess = false;
     public override void Apply()
     {
-        GameObject go = Instantiate(Resources.Load<GameObject>("Prefabs/Units/Allys/" + Name), PlayerController.Instance.transform.position, Quaternion.identity, PlayerController.Instance.transform);
+        GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Allys/" + Name), PlayerController.Instance.transform.position, Quaternion.identity, PlayerController.Instance.transform);
         
         go.GetComponent<Unit>().ResetUnit();
         go.SetActive(false);
@@ -21,7 +21,7 @@ public class Companion : Item
 
     public override void End()
     {
-        GameObject model = Resources.Load<GameObject>("Prefabs/Effects/CompanionEffect");
+        GameObject model = ResourceManager.GetResource<GameObject>("Prefabs/Effects/CompanionEffect");
         GameObject go = Instantiate(model, mTransform.position + new Vector3(0.0f,0.5f,0.0f), Quaternion.Euler(model.transform.eulerAngles));
         Destroy(go, 1.5f);
     }

@@ -9,24 +9,20 @@ public class BKActionTrigger : BossActionTrigger
     List<GameObject> _mirrors = new List<GameObject>();
     [SerializeField]
     private float mShakeTime = 3.0f;
-    [SerializeField]
-    private List<AudioClip> clips = new List<AudioClip>(3);
     protected override IEnumerator Action()
     {
         var boss = GetComponent<Boss>();
         var boss_Skill = GetComponent<Boss_Skill_DataBase>();
-        bool isHit = true;
-
         boss.mAnimator.SetTrigger("Skill2");
         yield return new WaitForSeconds(mTime / 6.9f);
         transform.position = BattleManager.playerFieldParent.position + new Vector3(0.0f,0.0f,-2.0f);
-        foreach (Transform t in BattleManager.playerFieldParent)
+        for (int i = 0; i < BattleManager.playerFieldParent.childCount; ++i)
         {
-            GameObject mirror = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/MirrorBlood"), t.position + new Vector3(0.0f, 0.0f, -0.5f), Quaternion.identity);
-            mirror.GetComponent<SpriteRenderer>().flipX = transform.GetComponent<SpriteRenderer>().flipX;
+            var t = BattleManager.playerFieldParent.GetChild(i);
+            GameObject mirror = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/MirrorBlood"), t.position + new Vector3(0.0f, 0.0f, -0.5f), Quaternion.identity);
+            mirror.GetComponent<SpriteRenderer>().flipX = boss.mSpriteRenderer.flipX;
             mirror.GetComponent<Animator>().speed = 0.4f;
             _mirrors.Add(mirror);
-
         }
         StartCoroutine(Slash());
         yield return new WaitForSeconds(mTime -2.3f);
@@ -35,36 +31,35 @@ public class BKActionTrigger : BossActionTrigger
         yield return new WaitForSeconds(1.2f);
 
         StartCoroutine(CameraSwitcher.Instance.ShakeCamera(mShakeTime));
-        foreach (GameObject mirror in _mirrors)
+        for (int i = 0; i < _mirrors.Count; ++i)
         {
+            GameObject mirror = _mirrors[i];
             mirror.GetComponent<Animator>().speed = 1.0f;
             mirror.GetComponent<Animator>().SetTrigger("Explosion");
-            if (GetComponent<Unit>().mSkillClips.Count() > 0)
-                AudioManager.PlaySfx(clips[1]);
+            if (boss.mSkillClips.Count() > 0)
+                AudioManager.PlaySfx(mClips[1]);
         }
 
-        IEnumerable<GameObject> group = (GetComponent<Unit>().mFlag == Flag.Player) ? BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy)
-: BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
+        IEnumerable<GameObject> group = (boss.mFlag == Flag.Player) ? 
+            BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Enemy): 
+            BattleManager.Instance.mUnits.Where(s => s.GetComponent<Unit>().mFlag == Flag.Player);
         DamagableAbility damagable = boss_Skill.mSkillDatas[boss_Skill.mUltimateSkillIndex] as DamagableAbility;
-        foreach (GameObject unit in group)
+        for (int x = 0; x < group.Count(); ++x)
         {
-            var i = unit.GetComponent<Unit>();
-            i.TakeDamage((damagable.mValue + boss.mStatus.mMagicPower + boss.mBonusStatus.mMagicPower), DamageType.Magical);
-            if(isHit)
-                foreach (var nerf in boss_Skill.Skill.mNerfList)
-                    i.SetNerf(nerf.Initialize(boss, i));
+            Unit unit = group.ElementAt(x).GetComponent<Unit>();
+            if (unit.TakeDamage((damagable.mValue + boss.mStatus.mMagicPower + boss.mBonusStatus.mMagicPower), DamageType.Magical))
+                for (int y = 0; y < boss_Skill.Skill.mNerfList.Count; y++)
+                    unit.SetNerf(boss_Skill.Skill.mNerfList[y].Initialize(boss, unit));
         }
 
         boss.mAnimator.ResetTrigger("Skill2");
         yield return new WaitForSeconds(0.5f);
         _isRed = _isUltimate = false;
         isCompleted = true;
-        foreach (GameObject mirror in _mirrors)
-        {
-            Destroy(mirror);
-        }
+        for (int i = 0; i < _mirrors.Count; i++)
+            Destroy(_mirrors[i]);
         _mirrors.Clear();
-        boss.mSkillClips.ElementAt(0).Clip = clips[2];
+        boss.mSkillClips.ElementAt(0).Clip = mClips[2];
     }
 
     private IEnumerator Slash()
@@ -114,8 +109,7 @@ public class BKActionTrigger : BossActionTrigger
     public void StartUltimateTrigger()
     {
         var boss = GetComponent<Boss>();
-        clips[2] = boss.mSkillClips.ElementAt(0).Clip;
-        boss.mSkillClips.ElementAt(0).Clip = clips[0];
+        boss.mSkillClips.ElementAt(0).Clip = mClips[0];
         _isUltimate = true;
         _isRed = true;
         isCompleted = false;
@@ -135,7 +129,7 @@ public class BKActionTrigger : BossActionTrigger
     private IEnumerator AttackAction()
     {
         var boss = GetComponent<Boss>();
-        GameObject obj = Resources.Load<GameObject>("Prefabs/Effects/BloodySlash");
+        GameObject obj = ResourceManager.GetResource<GameObject>("Prefabs/Effects/BloodySlash");
         boss.mAnimator.Play(boss.MyAttackAnim[Random.Range(0,boss.MyAttackAnim.Count)]);
         mTime = (boss.mAnimator.GetCurrentAnimatorStateInfo(0).length);
 
@@ -211,7 +205,7 @@ public class BKActionTrigger : BossActionTrigger
         if(boss.mActionTrigger != null)
             boss.mActionTrigger -= StartAttackActionTrigger;
         if (boss.mSkillClips.Count() > 0)
-            boss.mSkillClips.ElementAt(0).Clip = clips[2];
+            boss.mSkillClips.ElementAt(0).Clip = mClips[2];
     }
 
     private void OnApplicationQuit()
@@ -225,6 +219,6 @@ public class BKActionTrigger : BossActionTrigger
         if (boss.mActionTrigger != null)
             boss.mActionTrigger -= StartAttackActionTrigger;
         if (boss.mSkillClips.Count() > 0)
-            boss.mSkillClips.ElementAt(0).Clip = clips[2];
+            boss.mSkillClips.ElementAt(0).Clip = mClips[2];
     }
 }

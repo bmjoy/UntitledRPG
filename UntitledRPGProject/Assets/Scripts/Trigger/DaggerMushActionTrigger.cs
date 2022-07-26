@@ -47,11 +47,13 @@ public class DaggerMushActionTrigger : ActionTrigger
 
     void Start()
     {
-        GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+        if(GetComponent<Unit>().mActionTrigger == null)
+            GetComponent<Unit>().mActionTrigger += StartActionTrigger;
     }
 
     private void OnDestroy()
     {
-        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+        if (GetComponent<Unit>().mActionTrigger != null)
+            GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
     }
 }

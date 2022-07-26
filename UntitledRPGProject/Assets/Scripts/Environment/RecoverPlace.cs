@@ -19,7 +19,7 @@ public class RecoverPlace : InteractableEnvironment
         if(!_Completed)
         {
             AudioManager.PlaySfx(mSFX, 1.0f);
-            GameObject damage = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/Healing_Effect")
+            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Healing_Effect")
 , PlayerController.Instance.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
             Destroy(damage, 1.5f);
             foreach (GameObject go in PlayerController.Instance.mHeroes)
