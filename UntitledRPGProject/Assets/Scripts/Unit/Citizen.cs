@@ -136,7 +136,7 @@ public class Citizen : NPC
             m_DialogueList.Clear();
             m_DialogueList.Add(new Dialogue($"{normalContexts[UnityEngine.Random.Range(0, normalContexts.Length)]}", Dialogue.TriggerType.None));
         }
-
+        mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         if (mProperty != null)
             mProperty.Initialize(-1);
     }

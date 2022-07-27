@@ -117,6 +117,7 @@ MonoBehaviour:
     Trigger: 0
   mInteraction: {fileID: 0}
   _Completed: 0
+  mTutorialIcon: {fileID: 0}
   mAmount: 5
   mKeyChance: 30
   mCollectObjects: []

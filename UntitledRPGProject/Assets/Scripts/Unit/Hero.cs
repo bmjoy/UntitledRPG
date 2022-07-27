@@ -11,7 +11,7 @@ public class Hero : NPC
         mProperty = ((Companion)mProperty != null) ? (Companion)mProperty
     : Resources.Load<Companion>("Prefabs/Items/Companions/" + mName);
         Destroy(mInteraction.GetComponent<Billboard>());
-        mCanvas.transform.localRotation = new Quaternion(0.0f, 208.0f, 0.0f, 1.0f);
+        mCanvas.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         mProperty.Initialize(-1);
         Companion companion = (Companion)mProperty;
         companion.mTransform = transform;

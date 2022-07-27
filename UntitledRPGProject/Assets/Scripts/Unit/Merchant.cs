@@ -71,7 +71,7 @@ public class Merchant : NPC
             UIManager.Instance.ChangeSupportText(new string[3]{
             "Purchase",
             string.Empty,
-            "Exit"});
+            "Back"});
             mSlotManager.StartBuyTrade();
         }
         else
@@ -80,7 +80,7 @@ public class Merchant : NPC
             UIManager.Instance.ChangeSupportText(new string[3]{
             "Sell/Buy",
             "Transfer",
-            "Exit"});
+            "Back"});
             mSlotManager.StartSellTrade();
         }
         yield return new WaitUntil(() => mComplete);

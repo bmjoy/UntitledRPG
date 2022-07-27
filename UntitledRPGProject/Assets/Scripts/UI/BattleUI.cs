@@ -61,7 +61,7 @@ public class BattleUI : MonoBehaviour
                         mMagicButton.color = Color.Lerp(mMagicButton.color, new Color(1, 1, 1), Time.deltaTime * 2.0f);
                         mDefendButton.color = Color.Lerp(mDefendButton.color, new Color(1, 1, 1), Time.deltaTime * 2.0f);
                         mHereIcon.transform.SetParent(mAttackButton.gameObject.transform);
-                        mHereIcon.transform.position = mAttackButton.transform.position + new Vector3(25,0,0);
+                        mHereIcon.transform.position = mAttackButton.transform.position + new Vector3(15,0,0);
                     }
                     break;
                 case 1:
@@ -70,7 +70,7 @@ public class BattleUI : MonoBehaviour
                         mMagicButton.color = Color.Lerp(mMagicButton.color, new Color(0, 1, 0), Time.deltaTime * 2.0f);
                         mDefendButton.color = Color.Lerp(mDefendButton.color, new Color(1, 1, 1), Time.deltaTime * 2.0f);
                         mHereIcon.transform.SetParent(mMagicButton.gameObject.transform);
-                        mHereIcon.transform.position = mMagicButton.transform.position + new Vector3(25, 0, 0);
+                        mHereIcon.transform.position = mMagicButton.transform.position + new Vector3(15, 0, 0);
                     }
                     break;
                 case 2:
@@ -79,7 +79,7 @@ public class BattleUI : MonoBehaviour
                         mMagicButton.color = Color.Lerp(mMagicButton.color, new Color(1, 1, 1), Time.deltaTime * 2.0f);
                         mDefendButton.color = Color.Lerp(mDefendButton.color, new Color(0, 1, 0), Time.deltaTime * 2.0f);
                         mHereIcon.transform.SetParent(mDefendButton.gameObject.transform);
-                        mHereIcon.transform.position = mDefendButton.transform.position + new Vector3(25, 0, 0);
+                        mHereIcon.transform.position = mDefendButton.transform.position + new Vector3(15, 0, 0);
                     }
                     break;
             }

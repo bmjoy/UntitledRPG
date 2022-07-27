@@ -8,7 +8,8 @@ public class ProjectileTrap : Trap
     private Transform mFirePoint;
     [SerializeField]
     private Transform mDirection;
-
+    [SerializeField]
+    private AudioClip mClip;
     protected override void Start()
     {
         base.Start();
@@ -46,6 +47,7 @@ public class ProjectileTrap : Trap
         projectile.Initialize(mDirection, mDamage);
         GameObject Fire = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Fire")
 , mFirePoint.position, Quaternion.identity);
+        AudioManager.PlaySfx(mClip);
         Destroy(Fire, 1.5f);
         Destroy(projectile.gameObject, 4.0f);
     }

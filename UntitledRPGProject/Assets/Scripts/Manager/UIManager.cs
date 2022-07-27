@@ -185,7 +185,7 @@ public class UIManager : MonoBehaviour
 
     public void DisplayOptionScreen(bool display)
     {
-        mOptionScreenUI.Active(display);
+        Instance.mOptionScreenUI.Active(display);
     }
 
     public void DisplayDialogueBox(bool display)

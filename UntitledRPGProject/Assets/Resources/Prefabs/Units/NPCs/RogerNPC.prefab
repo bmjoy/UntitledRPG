@@ -80,12 +80,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4878817242171812575}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6428c34d6c004244b5f54ef19eb6a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mUseStaticBillboard: 0
+  mUseStaticBillboard: 1
 --- !u!212 &4878817242171812564
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -166,11 +166,6 @@ MonoBehaviour:
   - Text: You're too poor mate
     Trigger: 0
   mInteraction: {fileID: 0}
-  m_NeedsList:
-  - Name: Money
-    Value: 75
-    Amount: 0
-    onComplete: 0
 --- !u!195 &5560659958319309138
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -80,12 +80,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281948740117649787}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6428c34d6c004244b5f54ef19eb6a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mUseStaticBillboard: 0
+  mUseStaticBillboard: 1
 --- !u!212 &281948740117649776
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -172,11 +172,6 @@ MonoBehaviour:
   - Text: too poor.
     Trigger: 0
   mInteraction: {fileID: 0}
-  m_NeedsList:
-  - Name: Money
-    Value: 50
-    Amount: 0
-    onComplete: 0
 --- !u!195 &9103481538736682006
 NavMeshAgent:
   m_ObjectHideFlags: 0

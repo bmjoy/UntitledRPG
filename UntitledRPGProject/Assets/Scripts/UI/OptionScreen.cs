@@ -9,6 +9,9 @@ public class OptionScreen : MonoBehaviour
     public Slider mMusic_S;
     public Slider mSFX_S;
 
+    public Button mContinue;
+    public Button mBackToMainMenu;
+    public Button mExit;
     void Start()
     {
         gameObject.SetActive(false);
@@ -20,6 +23,18 @@ public class OptionScreen : MonoBehaviour
         if(active)
             Initialize();
         gameObject.SetActive(active);
+        if(GameManager.mGameState == GameState.MainMenu)
+        {
+            mContinue.gameObject.SetActive(false);
+            mBackToMainMenu.gameObject.SetActive(false);
+            mExit.gameObject.SetActive(false);
+        }
+        else
+        {
+            mContinue.gameObject.SetActive(active);
+            mBackToMainMenu.gameObject.SetActive(active);
+            mExit.gameObject.SetActive(active);
+        }
     }
 
     void Initialize()

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Dungeon Info")]
 public class DungeonGeneratorInfo : ScriptableObject
 {
-    public readonly int Population = 1000;
+    public readonly int Population = 5000;
     [Tooltip("Length")]
     public int Column;
     [Tooltip("Length")]

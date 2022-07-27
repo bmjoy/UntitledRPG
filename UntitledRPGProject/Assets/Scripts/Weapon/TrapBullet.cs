@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class TrapBullet : Bullet
 {
-    private Vector3 mDirection;
+    private Vector3 mDirection; 
+    private float maxDistance = 35.0f;
+    private float minDistance = 2.0f;
+    private float distance = 0.0f;
     public override void Initialize(Transform target, float power)
     {
         mPower = (power > 0) ? power : 10.0f;
@@ -25,6 +28,7 @@ public class TrapBullet : Bullet
             AudioManager.PlaySfx(clip);
             Destroy(this.gameObject);
         }
+        distance = Vector3.Distance(transform.position, PlayerController.Instance.transform.position);
     }
 
     protected override void OnCollisionEnter(Collision collision)
@@ -33,29 +37,26 @@ public class TrapBullet : Bullet
             return;
         if (isDamaged)
             return;
+
         if (collision.collider.CompareTag("Player"))
         {
             isDamaged = true;
-            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
-, PlayerController.Instance.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
-            Destroy(damage, 1.5f);
-            foreach (GameObject unit in PlayerController.Instance.mHeroes)
+            for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
             {
-                if (!unit.GetComponent<Unit>().mConditions.isDied)
-                    unit.GetComponent<Unit>().TakeDamageByTrap(mPower);
+                var unit = PlayerController.Instance.mHeroes[i].GetComponent<Unit>();
+                if (!unit.mConditions.isDied)
+                    unit.TakeDamageByTrap(mPower);
             }
-            AudioManager.PlaySfx(clip);
-            Destroy(this.gameObject);
         }
-        if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")
-            || collision.collider.gameObject.layer == LayerMask.NameToLayer("NPC")
-            || collision.collider.gameObject.layer == LayerMask.NameToLayer("EnemyProwler"))
-        {
-            GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
+        Boom(distance);
+    }
+
+    private void Boom(float distance)
+    {
+        GameObject damage = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/Trap_Projectile_Explosion")
 , transform.position, Quaternion.identity);
-            Destroy(damage, 1.5f);
-            AudioManager.PlaySfx(clip);
-            Destroy(this.gameObject);
-        }
+        Destroy(damage, 1.5f);
+        AudioManager.PlaySfx(clip, Mathf.Clamp01((distance - maxDistance) / (minDistance - maxDistance)));
+        Destroy(gameObject);
     }
 }

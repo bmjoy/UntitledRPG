@@ -16,6 +16,10 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private float mFadeTime = 2.0f;
 
+    static float Master_vol;
+    static float Music_vol;
+    static float SFX_vol;
+
     private void Awake()
     {
         if (mInstance != null && mInstance != this)
@@ -26,6 +30,13 @@ public class AudioManager : MonoBehaviour
         musicSource.loop = true;
         musicSource.volume = 0.3f;
         mAudioStorage = GetComponent<AudioStorage>();
+    }
+
+    private void Start()
+    {
+        Instance.audioMixer.GetFloat("Master_Volume", out Master_vol);
+        Instance.audioMixer.GetFloat("Music_Volume", out Music_vol);
+        Instance.audioMixer.GetFloat("SFX_Volume", out SFX_vol);
     }
 
     public static void FadeOutMusic()
@@ -90,6 +101,52 @@ public class AudioManager : MonoBehaviour
         Instance.musicSource.volume = 1.0f;
     }
 
+    static bool masterMute = false;
+
+    public static void MuteVolume(string vol_Name)
+    {
+        masterMute = !masterMute;
+        if (masterMute)
+        {
+            switch(vol_Name)
+            {
+                case "Master":
+                    Instance.audioMixer.GetFloat("Master_Volume", out Master_vol);
+                    SetMasterVolume(-50.0f);
+                    break;
+                case "Music":
+                    Instance.audioMixer.GetFloat("Music_Volume", out Music_vol);
+                    SetMusicVolume(-50.0f);
+                    break;
+                case "SFX":
+                    Instance.audioMixer.GetFloat("SFX_Volume", out SFX_vol);
+                    SetSFXVolume(-50.0f);
+                    break;
+                default:
+                    Debug.LogWarning("<color=yellow>Warning!</color> The name of volume is not valid!");
+                    break;
+            }
+        }
+        else
+        {
+            switch (vol_Name)
+            {
+                case "Master":
+                    SetMasterVolume(Master_vol);
+                    break;
+                case "Music":
+                    SetMusicVolume(Music_vol);
+                    break;
+                case "SFX":
+                    SetSFXVolume(SFX_vol);
+                    break;
+                default:
+                    Debug.LogWarning("<color=yellow>Warning!</color> The name of volume is not valid!");
+                    break;
+            }
+        }
+
+    }
 
     public static void SetMasterVolume(float vol)
     {
