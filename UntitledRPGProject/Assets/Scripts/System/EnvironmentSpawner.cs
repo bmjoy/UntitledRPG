@@ -14,6 +14,7 @@ public class EnvironmentSpawner : Spawner
         mObject = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Environments/" + type.ToString()),transform.position, transform.rotation,group.transform);
         if (mObject.GetComponent<BoxCollider>()) mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
         else mObject.AddComponent<NavMeshObstacle>();
+        mObject.tag = "Neutral";
         mObject.GetComponent<Environment>().Initialize(ID);
         return mObject;
     }

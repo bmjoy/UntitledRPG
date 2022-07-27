@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mLoadingScreen: {fileID: 1371520203}
-  _sceneIndex: 2
+  _sceneIndex: 1
   mCanvasGroup: {fileID: 1371520209}
 --- !u!4 &127580046
 Transform:
@@ -861,7 +861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c0c409abdecdb438e0b914778b8fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 1
+  _sceneToLoad: 0
   mProgressBar: {fileID: 602070917}
 --- !u!225 &1371520209
 CanvasGroup:

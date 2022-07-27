@@ -140,7 +140,6 @@ public class InventoryUI : MonoBehaviour
         PrintStatus(num);
         PrintStatusBonus(num);
         ChangeHeroSprite(num);
-        InventorySetup();
     }
 
     private void ChangeHeroSprite(int num)
@@ -156,7 +155,6 @@ public class InventoryUI : MonoBehaviour
         mCurrentUnit.sprite = go.GetComponent<Image>().sprite;
         mCurrentUnitAnimator.runtimeAnimatorController = go.transform.GetComponent<Animator>().runtimeAnimatorController;
         Destroy(go);
-        InventoryUpdate();
     }
 
     private void PrintStatus(int num)
@@ -267,6 +265,7 @@ public class InventoryUI : MonoBehaviour
             return;
         for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
             mButtonGroup.transform.GetChild(i).GetComponent<Button>().image.sprite = PlayerController.Instance.mHeroes[i].GetComponent<Unit>().mSetting.BasicSprite;
+        InventoryUpdate();
         //mSelectedItemIndex = 0;
     }
 

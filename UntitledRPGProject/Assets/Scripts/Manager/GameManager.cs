@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour
                 {
                     AudioManager.Instance.mAudioStorage.ChangeMusic("Background");
                     mGameState = GameState.GamePlay;
+                    UIManager.Instance.mUICamera.fieldOfView = 40.0f;
                     UIManager.Instance.DisplayMiniMap(true);
                 }
                 break;
@@ -108,7 +109,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Pause()
+    public void Pause()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
             mGameState = (mGameState == GameState.GamePlay) ? GameState.GamePause : GameState.GamePlay;
@@ -118,6 +119,11 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.DisplayOptionScreen(false);
         Time.timeScale = (mGameState == GameState.GamePause) ? 0.0f : 1.0f;
 
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     public static void GameReset()
@@ -257,9 +263,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < Instance.NPCProwlers.Length; i++)
         {
             if(Instance.NPCProwlers[i] != null)
-            {
                 Instance.NPCProwlers[i].SetActive(active);
-            }
         }
     }
 }

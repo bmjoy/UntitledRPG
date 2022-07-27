@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class SceneLoader : MonoBehaviour
 {
     public GameObject mLoadingScreen;
-    public int _sceneIndex = 1;
+    public int _sceneIndex = 0;
     public CanvasGroup mCanvasGroup;
 
     private static SceneLoader mInstance;
@@ -23,16 +23,14 @@ public class SceneLoader : MonoBehaviour
 
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
-
         Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/GameManager"),Vector3.zero,Quaternion.identity);
         Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/LevelManager"), Vector3.zero, Quaternion.identity);
         Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/BattleManager"), Vector3.zero, Quaternion.identity);
         Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/UIManager"), Vector3.zero, Quaternion.identity);
         Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Managers/AudioManager"), Vector3.zero, Quaternion.identity);
         Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/GameCamera"), Vector3.zero, Quaternion.identity);
-
         LevelManager.Instance.mCurrentLevel = _sceneIndex;
+        StartGame();
     }
 
     public void StartGame()
@@ -60,6 +58,7 @@ public class SceneLoader : MonoBehaviour
             LevelManager.Instance.InitializeUICamera();
         }
         yield return StartCoroutine(FadeLoadingScreen(0, 3));
+        mLoadingScreen.GetComponent<LoadingScreen>().mProgressBar.value = 0.0f;
         mLoadingScreen.SetActive(false);
     }
 

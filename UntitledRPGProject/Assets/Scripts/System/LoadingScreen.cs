@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
 {
-    public int _sceneToLoad = 2;
+    public int _sceneToLoad = 0;
     public Slider mProgressBar;
     AsyncOperation mAsyncOperation;
 

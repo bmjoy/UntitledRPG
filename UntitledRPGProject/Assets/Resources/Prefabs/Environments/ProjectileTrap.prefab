@@ -203,10 +203,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mID: 0
   mName: ProjectileTrap
+  mSFX: {fileID: 0}
   mEveryTimetoActive: 5
   mDamage: 5
   mFirePoint: {fileID: 7693973512043103521}
   mDirection: {fileID: 3107424743295474039}
+  mClip: {fileID: 8300000, guid: f5c978ab5f436be48882cd620ac3dcc3, type: 3}
 --- !u!1 &6801476920291904674
 GameObject:
   m_ObjectHideFlags: 0

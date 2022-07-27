@@ -42,7 +42,7 @@ public class NPCSpawner : Spawner
                         mObject = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Environments/Rock"), transform.position, Quaternion.identity);
                         mObject.AddComponent<NavMeshObstacle>().size = mObject.GetComponent<BoxCollider>().size;
                         mObject.GetComponent<Environment>().Initialize(ID);
-                        mObject.transform.Rotate(new Vector3(0.0f, Random.Range(-360.0f, 360.0f), 0.0f));
+                        mObject.GetComponent<RectTransform>().eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
                     }
                 }
                 break;
@@ -56,16 +56,10 @@ public class NPCSpawner : Spawner
             mObject.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
             mObject.tag = "Neutral";
             mObject.layer = 9;
-
-            switch (mType)
-            {
-                case NPCUnit.WeaponMerchant:
-                case NPCUnit.ArmorMerchant:
-                    mObject.GetComponent<RectTransform>().eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
-                    break;
-                default:
-                    break;
-            }
+            if(mType == NPCUnit.Citizen)
+                mObject.GetComponent<RectTransform>().eulerAngles = new Vector3(0.0f, -120.0f, 0.0f);
+            else
+                mObject.GetComponent<RectTransform>().eulerAngles = new Vector3(0.0f, -90.0f, 0.0f);
         }
 
         return mObject;

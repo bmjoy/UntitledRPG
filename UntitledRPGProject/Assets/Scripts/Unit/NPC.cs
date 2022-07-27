@@ -149,7 +149,8 @@ public class NPC : MonoBehaviour, IInteractiveObject
 
     public void React(bool active)
     {
-        mInteraction.SetActive(active);
+        if(gameObject.activeSelf)
+            mInteraction.SetActive(active);
     }
 
     public Vector3 GetPosition()

@@ -133,12 +133,12 @@ public class Room : Environment
                 mMainIcon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/RecoverIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.ArmorMerchant:
-                spawner = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
+                spawner = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position - new Vector3(17.0f,0.0f,0.0f), Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.ArmorMerchant;
                 mMainIcon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/ArmorIcon"), transform.position, Quaternion.identity);
                 break;
             case RoomType.WeaponMerchant:
-                spawner = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position, Quaternion.identity).GetComponent<NPCSpawner>();
+                spawner = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position - new Vector3(17.0f, 0.0f, 0.0f), Quaternion.identity).GetComponent<NPCSpawner>();
                 spawner.GetComponent<NPCSpawner>().mType = NPCUnit.WeaponMerchant;
                 mMainIcon = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/UI/Icon/WeaponIcon"), transform.position, Quaternion.identity);
                 break;
@@ -227,7 +227,7 @@ public class Room : Environment
 
         if(Random.Range(0, 100) <= 30)
         {
-            NPCSpawner citizenSpawn = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position + new Vector3(Random.Range(-3.5f,3.5f),0.0f, Random.Range(-3.5f, 3.5f)), Quaternion.identity).GetComponent<NPCSpawner>();
+            NPCSpawner citizenSpawn = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Spawners/NPCSpawner"), mSpawnPoint.transform.position + new Vector3(Random.Range(-5.0f,5.0f),6.0f, Random.Range(-5.0f, 5.0f)), Quaternion.identity).GetComponent<NPCSpawner>();
             citizenSpawn.mType = NPCUnit.Citizen;
         }
 

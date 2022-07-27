@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3a3b30d1f70d34892ec47ed510dfd6, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  Column: 6
-  Row: 6
+  Column: 8
+  Row: 8
   Offset: {x: 70, y: 70}
   SecretRoomAmount: 4
   MerchantAmount: 2

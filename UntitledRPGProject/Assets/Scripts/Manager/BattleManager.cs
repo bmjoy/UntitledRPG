@@ -75,6 +75,7 @@ public class BattleManager : MonoBehaviour
         mCurrentField = GameObject.Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Field"));
         mCurrentField.transform.parent = transform;
         mCurrentField.SetActive(false);
+        status = GameStatus.None;
         GameManager.Instance.onPlayerBattleStart += Initialize;
     }
 
@@ -177,6 +178,8 @@ public class BattleManager : MonoBehaviour
             case GameStatus.WaitForOrder:
                 break;
             case GameStatus.Busy:
+                if (mCurrentUnit == null)
+                    return;
                 if(mCurrentUnit.mOrder == Order.TurnEnd)
                 {
                     status = GameStatus.Result;

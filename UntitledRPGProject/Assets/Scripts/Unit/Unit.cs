@@ -669,9 +669,10 @@ public class Unit : MonoBehaviour, IUnit
     }
     virtual public void TakeRecover(float val)
     {
-        mStatus.mHealth += val;
-        if (mStatus.mHealth >= mStatus.mMaxHealth + mBonusStatus.mHealth)
+        if (mStatus.mHealth + val >= mStatus.mMaxHealth + mBonusStatus.mHealth)
             mStatus.mHealth = mStatus.mMaxHealth + mBonusStatus.mHealth;
+        else
+            mStatus.mHealth += val;
         mHealthBar.mCurrentHealth = mStatus.mHealth + mBonusStatus.mHealth;
     }
 

@@ -11901,6 +11901,10 @@ PrefabInstance:
       value: stair_cross_blue
       objectReference: {fileID: 0}
     - target: {fileID: 2353543574712481623, guid: 98fffea1f4e62489a80e41a3eb3b32c2, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2353543574712481623, guid: 98fffea1f4e62489a80e41a3eb3b32c2, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
