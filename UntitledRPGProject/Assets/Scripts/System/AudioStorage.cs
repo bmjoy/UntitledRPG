@@ -17,7 +17,6 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mItemEquipSFX;
     public AudioClip mOpenInventorySFX;
     public AudioClip mExclamationSFX;
-    public AudioClip mMainMenuButtonSFX;
     public AudioClip mDefendSFX;
     public AudioClip mDodgeSFX;
     public AudioClip mDoubleAttackSFX;
@@ -26,6 +25,14 @@ public class AudioStorage : MonoBehaviour
     public AudioClip mSKillTreeObtainedSFX;
     public AudioClip mShieldHitSFX;
     public AudioClip mShieldExplosionSFX;
+
+    [Header("Button")]
+    public AudioClip mMainMenuHoverSFX;
+    public AudioClip mMainMenuClickSFX;    
+    public AudioClip mMainMenuExitSFX;    
+    public AudioClip mPauseButtonHoverSFX;
+    public AudioClip mPauseButtonClickSFX;
+    public AudioClip mPauseButtonExitSFX;
 
     public void ChangeMusic(string name)
     {

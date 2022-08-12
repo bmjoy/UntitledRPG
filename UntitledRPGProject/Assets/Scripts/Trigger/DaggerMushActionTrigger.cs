@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class DaggerMushActionTrigger : ActionTrigger
 {
+    public override void Initialize()
+    {
+        GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+    }
+
+    public override void Eliminate()
+    {
+        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+    }
+
     protected override IEnumerator Action()
     {
         yield return new WaitForSeconds(mTime /2.0f);
@@ -43,12 +53,6 @@ public class DaggerMushActionTrigger : ActionTrigger
             unit.mCurrentSpeed = 5.1f;
         else if (unit.mAiBuild.actionEvent == AIBuild.ActionEvent.BackWalk)
             unit.mCurrentSpeed = 1.0f;
-    }
-
-    void Start()
-    {
-        if(GetComponent<Unit>().mActionTrigger == null)
-            GetComponent<Unit>().mActionTrigger += StartActionTrigger;
     }
 
     private void OnDestroy()

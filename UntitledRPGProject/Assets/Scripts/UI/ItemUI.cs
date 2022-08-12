@@ -269,8 +269,8 @@ public class ItemUI : MonoBehaviour
                 unit.UnEquip(unit.mInventoryInfo.Weapon);
                 break;
         }
-
-        mSprite.sprite = UIManager.Instance.mInventoryUI.mEquipmentEmptyImage;
+        if(mSprite != null)
+            mSprite.sprite = UIManager.Instance.mInventoryUI.mEquipmentEmptyImage;
         mItem = null;
         UIManager.Instance.mInventoryUI.InventoryUpdate();
     }

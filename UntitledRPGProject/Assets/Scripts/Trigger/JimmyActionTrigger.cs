@@ -7,12 +7,19 @@ public class JimmyActionTrigger : ActionTrigger
 {
     [SerializeField]
     private float mCombo = 10.0f;
-    private void Start()
+
+    public override void Initialize()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
         GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartSkillActionTrigger;
-        Debug.Log("Jimmy Action Trigger activates");
     }
+
+    public override void Eliminate()
+    {
+        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+        GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartSkillActionTrigger;
+    }
+
     protected override void StartActionTrigger()
     {
         var unit = GetComponent<Unit>();

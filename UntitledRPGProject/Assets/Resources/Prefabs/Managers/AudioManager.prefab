@@ -115,7 +115,6 @@ MonoBehaviour:
   mItemEquipSFX: {fileID: 8300000, guid: 8c7037a9d262efd47ba8e9f748c4e061, type: 3}
   mOpenInventorySFX: {fileID: 8300000, guid: c07a3fa0d83d92244a03b14fd402e78c, type: 3}
   mExclamationSFX: {fileID: 8300000, guid: 86803015242b0314d9f2ed57cba0d711, type: 3}
-  mMainMenuButtonSFX: {fileID: 8300000, guid: 778b4bd40285df841b9cbc67f45c924e, type: 3}
   mDefendSFX: {fileID: 8300000, guid: 0553908956f1b5444ace312e90bb5dcb, type: 3}
   mDodgeSFX: {fileID: 8300000, guid: 1c283335784cd1740b1a38f17438cb30, type: 3}
   mDoubleAttackSFX: {fileID: 8300000, guid: b1bd55139b944e0488e3832687446e92, type: 3}
@@ -124,6 +123,12 @@ MonoBehaviour:
   mSKillTreeObtainedSFX: {fileID: 8300000, guid: 983ee29dbf5d7b946928a0ceede3f042, type: 3}
   mShieldHitSFX: {fileID: 8300000, guid: 27239a64abd077443ba232630a0baa18, type: 3}
   mShieldExplosionSFX: {fileID: 8300000, guid: 4e2a3a8315cc54541afc33dab8b1eef5, type: 3}
+  mMainMenuHoverSFX: {fileID: 8300000, guid: 3375d6a415242f94a8b4f3559cfb984a, type: 3}
+  mMainMenuClickSFX: {fileID: 8300000, guid: e2eb558baf0899a428b0a22ac22e6c05, type: 3}
+  mMainMenuExitSFX: {fileID: 8300000, guid: be8ce2f8567baa5439b5317de3d8627d, type: 3}
+  mPauseButtonHoverSFX: {fileID: 8300000, guid: 3375d6a415242f94a8b4f3559cfb984a, type: 3}
+  mPauseButtonClickSFX: {fileID: 8300000, guid: e2eb558baf0899a428b0a22ac22e6c05, type: 3}
+  mPauseButtonExitSFX: {fileID: 8300000, guid: 8d9376a4a5fb96246954c2d6caae8ebe, type: 3}
 --- !u!1 &4890134167232618478
 GameObject:
   m_ObjectHideFlags: 0

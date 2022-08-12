@@ -68,6 +68,14 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         UpdateGameState();
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Save();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Load();
+        }
     }
 
     public void AssignCharacter(string unit)
@@ -141,6 +149,17 @@ public class GameManager : MonoBehaviour
         new CharacterExist(NPCUnit.Victor, false),
         new CharacterExist(NPCUnit.Jimmy, true)
     };
+    }
+
+    public void Save()
+    {
+        DataSaveSystem.SaveData(0);
+    }
+
+    public void Load()
+    {
+        PlayerData data = DataSaveSystem.LoadData(0);
+        Debug.Log(data.mMoney);
     }
 
     private void GameOver()

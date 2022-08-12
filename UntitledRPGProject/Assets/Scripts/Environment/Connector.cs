@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Connector : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    public GameObject mGameObject;
+    private void OnTriggerEnter(Collider other)
     {
-        if(gameObject.activeSelf)
+        if (gameObject.activeSelf)
         {
-            if (collision.collider.GetComponent<Connector>())
+            if (other.GetComponent<Connector>())
             {
-                collision.gameObject.SetActive(false);
-                Destroy(collision.gameObject);
+                other.gameObject.SetActive(false);
+                Destroy(other.gameObject.GetComponent<Connector>().mGameObject);
             }
         }
     }

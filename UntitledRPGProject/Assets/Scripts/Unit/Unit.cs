@@ -39,7 +39,8 @@ public class Unit : MonoBehaviour, IUnit
 
     [HideInInspector]
     public BuffAndNerfEntity mBuffNerfController;
-    protected InventroySystem mInventroySystem;
+    [HideInInspector]
+    public InventroySystem mInventroySystem;
 
     protected TextMeshProUGUI mLevelText;
     protected MiniHealthBar mHealthBar;
@@ -107,8 +108,8 @@ public class Unit : MonoBehaviour, IUnit
             gameObject.GetComponent<InventroySystem>() : gameObject.AddComponent<InventroySystem>();
         mInventroySystem.Initialize();
         mSkillDataBase = GetComponent<Skill_DataBase>();
+        mSkillDataBase?.Initialize();
         GetComponent<BoxCollider>().enabled = true;
-
         MyAttackAnim.Clear();
         var animStates = mAnimator.runtimeAnimatorController.animationClips;
         for (int i = 0; i < animStates.Length; i++)
@@ -176,7 +177,6 @@ public class Unit : MonoBehaviour, IUnit
             mAiBuild.stateMachine = GetComponent<StateMachine>();
             mAiBuild.stateMachine.mAgent = this;
         }
-
     }
 
     protected virtual void Update()
@@ -723,6 +723,8 @@ public class Unit : MonoBehaviour, IUnit
 
         mBuffNerfController.Stop();
         mAiBuild.SetActionEvent(AIBuild.ActionEvent.None);
+        if (gameObject.activeSelf && GetComponent<ActionTrigger>() != null)
+            GetComponent<ActionTrigger>().Eliminate();
         gameObject.SetActive(false);
     }
 
@@ -755,7 +757,8 @@ public class Unit : MonoBehaviour, IUnit
             mAnimator.SetBool("Death", true);
         }
         mirror = null;
-        
+        if (gameObject.activeSelf && GetComponent<ActionTrigger>() != null)
+            GetComponent<ActionTrigger>().Initialize();
     }
 
     public void Revive(float val)

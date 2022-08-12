@@ -12,9 +12,13 @@ public class TGActionTrigger : BossActionTrigger
     private float mAttackTriggerPercentage = 50.0f;
     [SerializeField]
     private float mShakeTime = 1.0f;
-    void Start()
+    public override void Initialize()
     {
-        GetComponent<Boss>().mActionTrigger += StartActionTrigger;
+        GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+    }
+    public override void Eliminate()
+    {
+        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
     }
     protected override IEnumerator Action()
     {

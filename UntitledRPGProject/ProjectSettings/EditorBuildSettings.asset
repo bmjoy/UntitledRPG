@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: 0c6530115d2003341b4cbf2a92567a62
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Matt_TestDungeon.unity
     guid: e26ef13f0cc9d0c448ff2bc7ad49b174
   - enabled: 0
@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/HubRoom.unity
     guid: eccaa0fa020f4a84c9416be78c464d3e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level_1.unity
     guid: a1c6003e9f5711641ad8abe28a077491
   - enabled: 0

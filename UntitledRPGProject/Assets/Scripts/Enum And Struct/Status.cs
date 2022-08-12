@@ -1,3 +1,5 @@
+using System;
+[Serializable]
 public struct Status
 {
     public int mLevel;

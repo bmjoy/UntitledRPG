@@ -55,7 +55,7 @@ public class SummonAbility : Skill_Setting
                 parent.StartCoroutine(WaitforDecision());
             else
             {
-                mSelectedField.TargetedMagicHostile(false);
+                mSelectedField?.TargetedMagicHostile(false);
                 BattleManager.Instance.Defend();
             }
         }
@@ -65,7 +65,7 @@ public class SummonAbility : Skill_Setting
                 parent.StartCoroutine(WaitforDecision());
             else
             {
-                mSelectedField.TargetedMagicHostile(false);
+                mSelectedField?.TargetedMagicHostile(false);
                 BattleManager.Instance.Defend();
             }
         }
