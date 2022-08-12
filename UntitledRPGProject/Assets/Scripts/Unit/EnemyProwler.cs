@@ -15,17 +15,31 @@ public class EnemyProwler : Prowler
     public GameObject mExclamation;
     [HideInInspector]
     public GameObject mParticles;
-    [HideInInspector]
-    public List<GameObject> mEnemySpawnGroup;
+    public GameObject[] mEnemySpawnGroup;
     [HideInInspector]
     public bool isWin = false;
 
     private float maxDistance = 10.0f;
     private float minDistance = 2.0f;
-    public override void Setup(float rad, float ang, float speed, int _id, GameObject model)
+    public void Setup(float rad, float ang, float speed, int _id, GameObject model, EnemyUnit[] enemyUnits, int count, EnemySpawner enemySpawner = null)
     {
         base.Setup(rad, ang, speed, _id, model);
-        mEnemySpawnGroup = new List<GameObject>();
+        mEnemySpawnGroup = new GameObject[count];
+        for (int i = 0; i < enemyUnits.Length; ++i)
+        {
+            if (enemyUnits[i] == EnemyUnit.None)
+                continue;
+            GameObject obj = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Enemys/" + enemyUnits[i].ToString() + "_Unit"), transform.position, Quaternion.identity, transform);
+            mEnemySpawnGroup[i] = obj;
+            obj.SetActive(false);
+        }
+
+        _RunClip = mEnemySpawnGroup[0].GetComponent<Unit>().mSetting.Clips.FindAll(
+            delegate (SoundClip s)
+            {
+                return s.Type == SoundClip.SoundType.Run;
+            });
+        Initialize(enemySpawner);
     }
 
     public override void Initialize(Spawner spawner = null)
@@ -97,9 +111,9 @@ public class EnemyProwler : Prowler
     {
         if(id == this.id)
         {
-            for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
+            for (int i = 0; i < mEnemySpawnGroup.Count(); ++i)
                 Destroy(mEnemySpawnGroup[i], 1.0f);
-            mEnemySpawnGroup.Clear();
+            mEnemySpawnGroup = null;
         }
         onBattle = false;
         mModel.SetActive(true);
@@ -110,7 +124,7 @@ public class EnemyProwler : Prowler
 
     private IEnumerator WaitForSpawn()
     { 
-        for (int i = 0; i < mEnemySpawnGroup.Count; ++i)
+        for (int i = 0; i < mEnemySpawnGroup.Count(); ++i)
         {
             yield return new WaitForSeconds(0.1f);
             mEnemySpawnGroup[i].GetComponent<Unit>().EnableUnit(i);

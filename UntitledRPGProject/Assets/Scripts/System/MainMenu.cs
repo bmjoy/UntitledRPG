@@ -43,7 +43,6 @@ public class MainMenu : MonoBehaviour
         }
         );
         Tutorial.onClick.AddListener(() => SceneLoader.Instance._sceneIndex = 2);
-        Tutorial.onClick.AddListener(() => AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mMainMenuButtonSFX));
         Tutorial.onClick.AddListener(() => SceneLoader.Instance.StartGame());
         Tutorial.onClick.AddListener(() => mCanvas.sortingOrder = -1);
         Tutorial.onClick.AddListener(() => GameManager.mGameState = GameState.Initialize);
@@ -62,7 +61,6 @@ public class MainMenu : MonoBehaviour
         }
 );
         StartGame.onClick.AddListener(() => SceneLoader.Instance._sceneIndex = 3);
-        StartGame.onClick.AddListener(() => AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mMainMenuButtonSFX));
         StartGame.onClick.AddListener(() => SceneLoader.Instance.StartGame());
         StartGame.onClick.AddListener(() => mCanvas.sortingOrder = -1);
         StartGame.onClick.AddListener(() => GameManager.mGameState = GameState.Initialize);

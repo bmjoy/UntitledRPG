@@ -13,10 +13,15 @@ public class VinActionTrigger : ActionTrigger
     [SerializeField]
     private float mCriticalChance = 0.6f;
     private int maxCount = 0;
-    void Start()
+    public override void Initialize()
     {
-        GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartActionTrigger;
         GetComponent<Unit>().mActionTrigger += StartFinisherTrigger;
+        GetComponent<Skill_DataBase>().mSkill.mActionTrigger += StartActionTrigger;
+    }
+    public override void Eliminate()
+    {
+        GetComponent<Unit>().mActionTrigger -= StartFinisherTrigger;
+        GetComponent<Skill_DataBase>().mSkill.mActionTrigger -= StartActionTrigger;
     }
     protected override void StartActionTrigger()
     {

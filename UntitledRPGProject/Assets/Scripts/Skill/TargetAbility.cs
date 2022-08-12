@@ -175,10 +175,10 @@ public class TargetAbility : DamagableAbility
                 {
                     yield return new WaitForSeconds(mEffectTime);
                     mOwner.mirror?.Play((hasState) ? mAnimationName : "Attack");
-                    if (mActionTrigger != null)
+                    if(mOwner.GetComponent<ActionTrigger>())
                     {
-                        mActionTrigger.Invoke();
-                        yield return new WaitUntil(()=> mOwner.GetComponent<ActionTrigger>().isCompleted);
+                        mActionTrigger?.Invoke();
+                        yield return new WaitUntil(() => mOwner.GetComponent<ActionTrigger>().isCompleted);
                     }
                     else
                     {

@@ -11,6 +11,8 @@ public abstract class ActionTrigger : MonoBehaviour
     protected bool isFinish = false;
     [SerializeField]
     protected AudioClip[] mClips;
+    public abstract void Initialize();
+    public abstract void Eliminate();
     protected virtual void StartActionTrigger() { }
 
     protected virtual IEnumerator Action() { yield return null; }

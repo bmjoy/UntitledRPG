@@ -7,7 +7,7 @@ public class Boss_Skill_DataBase : Skill_DataBase
     public Skill_Setting[] mSkillDatas = new Skill_Setting[3];
     public int mCurrentIndex = 0;
     public int mUltimateSkillIndex = 2;
-    protected override void Start()
+    public override void Initialize()
     {
         if (mSkillDatas.Length == 0)
         {

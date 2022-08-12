@@ -16,7 +16,7 @@ public class Skill_DataBase : MonoBehaviour
     public string Description { get { return mSkill.mDescription; } }
     public SkillType Type { get { return mSkill.mSkillType; } }
 
-    protected virtual void Start()
+    public virtual void Initialize()
     {
         if (mSkillData == null)
             return;

@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class RogerActionTrigger : ActionTrigger
 {
-    private void Start()
+    public override void Initialize()
     {
         GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+    }
+
+    public override void Eliminate()
+    {
+        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
     }
 
     protected override void StartActionTrigger()

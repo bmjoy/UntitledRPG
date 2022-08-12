@@ -179,13 +179,22 @@ public class BKActionTrigger : BossActionTrigger
         StartCoroutine(AttackAction());
     }
 
-    void Start()
+    public override void Initialize()
     {
         var boss = GetComponent<Boss>();
         var boss_Skill = GetComponent<Boss_Skill_DataBase>();
         boss_Skill.mSkillDatas[2].mActionTrigger += StartActionTrigger;
         boss_Skill.mSkillDatas[1].mActionTrigger += StartUltimateTrigger;
         boss.mActionTrigger += StartAttackActionTrigger;
+    }
+
+    public override void Eliminate()
+    {
+        var boss = GetComponent<Boss>();
+        var boss_Skill = GetComponent<Boss_Skill_DataBase>();
+        boss_Skill.mSkillDatas[2].mActionTrigger -= StartActionTrigger;
+        boss_Skill.mSkillDatas[1].mActionTrigger -= StartUltimateTrigger;
+        boss.mActionTrigger -= StartAttackActionTrigger;
     }
 
     private void Update()

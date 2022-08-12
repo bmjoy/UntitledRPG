@@ -10,11 +10,16 @@ public class InteractSystem : MonoBehaviour
     private float mCoolTime = 0.5f;
     private float mCurrentCoolTime = 0.0f;
     private IInteractiveObject mClosestNPC = null;
-    public bool IsInteracting = false;
+    public static bool IsInteracting = false;
 
     public event Action mLeftAction;
     public event Action mRightAction;
     public event Action mExitAction;
+
+    private void Start()
+    {
+        IsInteracting = false;
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -27,7 +32,6 @@ public class InteractSystem : MonoBehaviour
         {
             if(mClosestNPC != null)
                 mClosestNPC.React(false);
-            IsInteracting = false;
             mClosestNPC = null;
             return;
         }
@@ -49,7 +53,6 @@ public class InteractSystem : MonoBehaviour
         colliders = Physics.OverlapSphere(transform.position, mRadius, LayerMask.GetMask("NPC"));
         if (colliders.Length == 0)
         {
-            IsInteracting = false;
             return;
         }
         for (int i = 0; i < colliders.Length; ++i)
@@ -63,7 +66,7 @@ public class InteractSystem : MonoBehaviour
             }
             else
             {
-                hit.transform.GetComponent<IInteractiveObject>().React(false);
+                hit?.transform.GetComponent<IInteractiveObject>().React(false);
             }
         }
     }
@@ -86,22 +89,16 @@ public class InteractSystem : MonoBehaviour
             PlayerController.Instance.mState = new IdleState();
             StartCoroutine(
                 mClosestNPC.Interact(() => { IsInteracting = false; mCurrentCoolTime += mCoolTime;
-                    mClosestNPC.React(false);
+                    mClosestNPC?.React(false);
                     mClosestNPC = null;
                 }));
         }
         if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
-        {
             mLeftAction?.Invoke();
-        }
         if (Input.GetKeyDown(UIManager.Instance.mNoKeyCode))
-        {
             mRightAction?.Invoke();
-        }
         if (Input.GetKeyDown(UIManager.Instance.mExitKeyCode))
-        {
             mExitAction?.Invoke();
-        }
     }
 
     public void ResetActions()
@@ -109,5 +106,15 @@ public class InteractSystem : MonoBehaviour
         mLeftAction = null;
         mRightAction = null;
         mExitAction = null;
+    }
+
+    public void Interacting(bool active)
+    {
+        IsInteracting = active;
+    }
+
+    public bool GetInteraction()
+    {
+        return IsInteracting;
     }
 }

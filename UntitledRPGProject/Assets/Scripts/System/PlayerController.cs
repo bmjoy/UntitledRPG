@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         {
             if (mInteractSystem == null)
                 return false;
-            return mInteractSystem.IsInteracting; 
+            return mInteractSystem.GetInteraction(); 
         } 
     }
     void Start()
@@ -231,7 +231,7 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
-        if(PlayerController.Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
+        if(Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             mAnimator.SetBool("Death", true);
         }

@@ -29,6 +29,7 @@ public class NPC : MonoBehaviour, IInteractiveObject
     protected GameObject mCanvas;
     protected Animator mAnimator;
     public GameObject mInteraction;
+    private Action mCallBack;
 
     protected virtual void Start()
     {
@@ -51,6 +52,8 @@ public class NPC : MonoBehaviour, IInteractiveObject
 
     public virtual IEnumerator Interact(Action Callback)
     {
+        mCallBack += Callback;
+        m_DialogueQueue.Clear();
         foreach (Dialogue dialogue in m_DialogueList)
             m_DialogueQueue.Enqueue(dialogue);
         UIManager.Instance.FadeInScreen();

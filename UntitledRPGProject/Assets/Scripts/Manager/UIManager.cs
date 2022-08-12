@@ -97,7 +97,7 @@ public class UIManager : MonoBehaviour
         mInventoryUI.Active(active);
         IsOpenScreen = active;
         if(PlayerController.Instance)
-            PlayerController.Instance.mInteractSystem.IsInteracting = active;
+            PlayerController.Instance.mInteractSystem.Interacting(active);
     }
     public void DisplaySkillTreeScreen(bool active)
     {
@@ -126,6 +126,13 @@ public class UIManager : MonoBehaviour
     {
         DisplayInventory(!switchOfInventory);
         DisplayMiniMap(switchOfInventory);
+        DisplaySupportKey(!switchOfInventory, !switchOfInventory);
+        ChangeSupportText(new string[]
+        {
+            "Use",
+            "Transfer",
+            string.Empty
+        });
         switchOfInventory = !switchOfInventory;
     }
 
@@ -226,7 +233,7 @@ public class UIManager : MonoBehaviour
 
         if(GameManager.Instance.mEnemyProwler)
         {
-            for (int i = 0; i < GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Count; ++i)
+            for (int i = 0; i < GameManager.Instance.mEnemyProwler.mEnemySpawnGroup.Count(); ++i)
             {
                 if (GameManager.Instance.mEnemyProwler.mEnemySpawnGroup[i].GetComponent<Unit>().GetType() == typeof(Boss))
                 {

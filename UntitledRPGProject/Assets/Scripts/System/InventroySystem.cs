@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class InventroySystem : MonoBehaviour
 {
     public class InventoryInfo
@@ -11,7 +11,6 @@ public class InventroySystem : MonoBehaviour
         public Armor Body;
         public Armor Arm;
         public Armor Leg;
-
         public InventoryInfo()
         {
             Weapon = null;

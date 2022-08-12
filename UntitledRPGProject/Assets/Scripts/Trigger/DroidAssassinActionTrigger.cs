@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class DroidAssassinActionTrigger : ActionTrigger
 {
+    public override void Initialize()
+    {
+        GetComponent<Unit>().mActionTrigger += StartActionTrigger;
+    }
+    public override void Eliminate()
+    {
+        GetComponent<Unit>().mActionTrigger -= StartActionTrigger;
+    }
     protected override IEnumerator Action()
     {
         var unit = GetComponent<Unit>();
@@ -62,11 +70,6 @@ public class DroidAssassinActionTrigger : ActionTrigger
         mTime = unit.mAnimator.GetCurrentAnimatorStateInfo(0).length + 0.75f;
         isCompleted = false;
         StartCoroutine(Action());
-    }
-
-    void Start()
-    {
-        GetComponent<Unit>().mActionTrigger += StartActionTrigger;
     }
 
     private void OnDestroy()

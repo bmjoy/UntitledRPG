@@ -6,6 +6,14 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    private enum InventroyCategory : uint
+    {
+        Players = 0,
+        Inventory,
+        Equipment
+    }
+
+    private InventroyCategory mCategory;
     private GameObject mBonusValuesGroup;
     private GameObject mTextAreaGroup;
     private GameObject mButtonGroup;
@@ -21,10 +29,9 @@ public class InventoryUI : MonoBehaviour
     public Sprite mEquipmentEmptyImage;
     public Sprite mCenterCharacterEmptyImage;
     private bool mInitialized = false;
-    //private bool mTransfer = false;
     public int mIndex = 0;
 
-    //private int mSelectedItemIndex = 0;
+    private int mSelectedItemIndex = 0;
 
     private void Start()
     {
@@ -40,39 +47,138 @@ public class InventoryUI : MonoBehaviour
         mMoneyGroup = transform.Find("Money").gameObject;
         mCurrentUnit = transform.Find("CurrentUnit").GetComponent<Image>();
         mItemsGroup = transform.Find("ItemScroll").transform.Find("Items").gameObject;
-        //mSelectedItemIndex = 0;
+        mSelectedItemIndex = 0;
         mPickIcon.SetActive(false);
         mInitialized = true;
     }
 
     private void Update()
     {
-        //if (items.Count > 0)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.LeftArrow) && mSelectedItemIndex > 0)
-        //    {
-        //        mSelectedItemIndex--;
-        //    }
-        //    if (Input.GetKeyDown(KeyCode.RightArrow) && mSelectedItemIndex < items.Count - 1)
-        //    {
-        //        mSelectedItemIndex++;
-        //    }
-        //    if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
-        //    {
-        //        if (items[mSelectedItemIndex].GetComponent<ItemUI>().mType == ItemUI.ItemUIType.Equip)
-        //        {
-        //            items[mSelectedItemIndex].GetComponent<ItemUI>().Activate();
-        //            items.Remove(items[mSelectedItemIndex]);
-        //        }
-        //        mPickIcon.transform.SetParent(items[mSelectedItemIndex].transform);
-        //        mPickIcon.transform.position = items[mSelectedItemIndex].transform.position + new Vector3(0, -1, 0);
-        //    }
-        //}
-        //else
-        //{
-        //    mPickIcon.transform.SetParent(transform);
-        //    mPickIcon.transform.position = transform.position;
-        //}
+        if (Input.GetKeyDown(UIManager.Instance.mNoKeyCode))
+        {
+            mCategory++;
+            if(mCategory > (InventroyCategory)2)
+                mCategory = InventroyCategory.Players;
+            mSelectedItemIndex = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && mSelectedItemIndex > 0)
+            mSelectedItemIndex--;
+        switch(mCategory)
+        {
+            case InventroyCategory.Inventory:
+                {
+                    if (items.Count > 0)
+                    {
+                        if (Input.GetKeyDown(KeyCode.RightArrow) && mSelectedItemIndex < items.Count - 1)
+                            mSelectedItemIndex++;
+                        if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
+                        {
+                            if (items[mSelectedItemIndex].GetComponent<ItemUI>().mType == ItemUI.ItemUIType.Equip)
+                            {
+                                items[mSelectedItemIndex].GetComponent<ItemUI>().Activate();
+                                mSelectedItemIndex = 0;
+                            }
+                        }
+                        if (items.Count > 0)
+                            mPickIcon.transform.position = items[mSelectedItemIndex].transform.position + new Vector3(0, -1, 0);
+                    }
+                    else
+                        mPickIcon.transform.position = transform.position;
+                }
+                break;
+            case InventroyCategory.Equipment:
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow) && mSelectedItemIndex < 5)
+                    {
+                        mSelectedItemIndex++;
+                    }
+                    if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
+                    {
+                        switch (mSelectedItemIndex)
+                        {
+                            case 0:
+                                {
+                                    // Head
+                                    mEquipmentImageGroup.transform.Find("Head").GetComponent<ItemUI>().Inactivate();
+                                }
+                                break;
+                            case 1:
+                                {
+                                    // Arm
+                                    mEquipmentImageGroup.transform.Find("Arm").GetComponent<ItemUI>().Inactivate();
+                                }
+                                break;
+                            case 2:
+                                {
+                                    // Body
+                                    mEquipmentImageGroup.transform.Find("Body").GetComponent<ItemUI>().Inactivate();
+                                }
+                                break;
+                            case 3:
+                                {
+                                    // Weapon
+                                    mEquipmentImageGroup.transform.Find("Weapon").GetComponent<ItemUI>().Inactivate();
+                                }
+                                break;
+                            case 4:
+                                {
+                                    // Leg
+                                    mEquipmentImageGroup.transform.Find("Leg").GetComponent<ItemUI>().Inactivate();
+                                }
+                                break;
+                        }
+                    }
+                    switch (mSelectedItemIndex)
+                    {
+                        case 0:
+                            {
+                                // Head
+                                mPickIcon.transform.position = mEquipmentImageGroup.transform.Find("Head").transform.position + new Vector3(0, -1, 0);
+                            }
+                            break;
+                        case 1:
+                            {
+                                // Arm
+                                mPickIcon.transform.position = mEquipmentImageGroup.transform.Find("Arm").transform.position + new Vector3(0, -1, 0);
+                            }
+                            break;
+                        case 2:
+                            {
+                                // Body
+                                mPickIcon.transform.position = mEquipmentImageGroup.transform.Find("Body").transform.position + new Vector3(0, -1, 0);
+                            }
+                            break;
+                        case 3:
+                            {
+                                // Weapon
+                                mPickIcon.transform.position = mEquipmentImageGroup.transform.Find("Weapon").transform.position + new Vector3(0, -1, 0);
+                            }
+                            break;
+                        case 4:
+                            {
+                                // Leg
+                                mPickIcon.transform.position = mEquipmentImageGroup.transform.Find("Leg").transform.position + new Vector3(0, -1, 0);
+                            }
+                            break;
+                    }
+                }
+                break;
+            case InventroyCategory.Players:
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow) && mSelectedItemIndex < 3)
+                        mSelectedItemIndex++;
+                    if (Input.GetKeyDown(UIManager.Instance.mYesKeyCode))
+                    {
+                        Display(mSelectedItemIndex);
+                        mCategory = InventroyCategory.Inventory;
+                        mSelectedItemIndex = 0;
+                    }
+                    mPickIcon.transform.position = mButtonGroup.transform.GetChild(mSelectedItemIndex).transform.position + new Vector3(0, -1, 0);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void LateUpdate()
@@ -124,8 +230,6 @@ public class InventoryUI : MonoBehaviour
     }
     private IEnumerator WaitToClose()
     {
-        //mPickIcon.transform.SetParent(transform);
-        //mPickIcon.transform.position = transform.position;
         GetComponent<Animator>().SetTrigger("Outro");
         yield return new WaitForSeconds(1.0f);
         Clear();
@@ -255,7 +359,6 @@ public class InventoryUI : MonoBehaviour
         _Initialized = false;
         InventorySetup();
         mMoneyGroup.transform.Find("Value").GetComponent<TextMeshProUGUI>().text = PlayerController.Instance.mGold.ToString();
-        //mSelectedItemIndex = 0;
     }
 
 
@@ -266,18 +369,24 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < PlayerController.Instance.mHeroes.Count; ++i)
             mButtonGroup.transform.GetChild(i).GetComponent<Button>().image.sprite = PlayerController.Instance.mHeroes[i].GetComponent<Unit>().mSetting.BasicSprite;
         InventoryUpdate();
-        //mSelectedItemIndex = 0;
+        mPickIcon.transform.SetParent(transform);
+        mPickIcon.transform.position = transform.position;
+        mSelectedItemIndex = 0;
+        mPickIcon.SetActive(true);
+        mCategory = InventroyCategory.Players;
     }
 
     private void OnDisable()
     {
         mIndex = 0;
-        //mSelectedItemIndex = 0;
+        mSelectedItemIndex = 0;
         if (mItemsGroup == null)
             return;
-        foreach (Transform obj in mItemsGroup.transform)
+        for (int i = 0; i < mItemsGroup.transform.childCount; ++i)
         {
-            Destroy(obj.gameObject);
+            var obj = mItemsGroup.transform.GetChild(i).transform.gameObject;
+            Destroy(obj);
         }
+        mCategory = InventroyCategory.Players;
     }
 }
