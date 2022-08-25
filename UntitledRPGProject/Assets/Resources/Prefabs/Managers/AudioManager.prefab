@@ -123,9 +123,9 @@ MonoBehaviour:
   mSKillTreeObtainedSFX: {fileID: 8300000, guid: 983ee29dbf5d7b946928a0ceede3f042, type: 3}
   mShieldHitSFX: {fileID: 8300000, guid: 27239a64abd077443ba232630a0baa18, type: 3}
   mShieldExplosionSFX: {fileID: 8300000, guid: 4e2a3a8315cc54541afc33dab8b1eef5, type: 3}
-  mMainMenuHoverSFX: {fileID: 8300000, guid: 3375d6a415242f94a8b4f3559cfb984a, type: 3}
-  mMainMenuClickSFX: {fileID: 8300000, guid: e2eb558baf0899a428b0a22ac22e6c05, type: 3}
-  mMainMenuExitSFX: {fileID: 8300000, guid: be8ce2f8567baa5439b5317de3d8627d, type: 3}
+  mMainMenuHoverSFX: {fileID: 8300000, guid: 778b4bd40285df841b9cbc67f45c924e, type: 3}
+  mMainMenuClickSFX: {fileID: 8300000, guid: ba42f48a9ff131c448d194647eeb174b, type: 3}
+  mMainMenuExitSFX: {fileID: 8300000, guid: 778b4bd40285df841b9cbc67f45c924e, type: 3}
   mPauseButtonHoverSFX: {fileID: 8300000, guid: 3375d6a415242f94a8b4f3559cfb984a, type: 3}
   mPauseButtonClickSFX: {fileID: 8300000, guid: e2eb558baf0899a428b0a22ac22e6c05, type: 3}
   mPauseButtonExitSFX: {fileID: 8300000, guid: 8d9376a4a5fb96246954c2d6caae8ebe, type: 3}
