@@ -20,17 +20,15 @@ public abstract class TimedNerf
     {
         if (isActive)
         {
+            if (Nerf.NerfTick)
+                AudioManager.PlaySfx(Nerf.NerfTick);
             if (mTurn <= 0)
             {
                 isActive = false;
                 End();
             }
             else
-            {
-                if (Nerf.NerfTick)
-                    AudioManager.PlaySfx(Nerf.NerfTick);
                 Apply();
-            }
             mTurn--;
         }
     }
@@ -39,10 +37,15 @@ public abstract class TimedNerf
     {
         if (Nerf.NerfStart)
             AudioManager.PlaySfx(Nerf.NerfStart);
+        Apply();
         if (!Nerf.IsTurnFinished || mTurn <= 0)
-            mTurn += Nerf.mTurn;
-        else if (!Nerf.IsTurnFinished)
+        {
             mTurn = Nerf.mTurn;
+        }
+        else if (!Nerf.IsTurnFinished)
+        {
+            mTurn = Nerf.mTurn;
+        }    
     }
 
     public void Inactivate()

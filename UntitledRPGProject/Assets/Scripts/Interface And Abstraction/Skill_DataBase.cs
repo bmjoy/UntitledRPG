@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Skill_DataBase : MonoBehaviour
 {
-    //public List<Skill_Setting> mSkills = new List<Skill_Setting>();
     [SerializeField]
     protected Skill_Setting mSkillData;
     [HideInInspector]

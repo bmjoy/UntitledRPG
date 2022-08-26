@@ -12,21 +12,24 @@ public class TimedTaunt : TimedNerf
         taunt = (Taunt)Nerf;
         if (taunt.mChanceRate >= Random.Range(0.0f, 1.0f))
         {
+
             if (ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Nerf.name) == null)
                 return;
-
+            var t = target.transform.Find(Nerf.name + "(Clone)");
             if (target.transform.Find(Nerf.name + "(Clone)") == null && target.mStatus.mHealth > 0)
             {
                 GameObject go = Object.Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.identity);
                 go.transform.parent = target.transform;
                 effectObject = go;
             }
+            else
+            {
+                Object.Destroy(t.gameObject);
+                GameObject go = Object.Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/" + Nerf.name), new Vector3(target.transform.position.x, target.transform.position.y + target.GetComponent<BoxCollider>().size.y * 0.5f, target.transform.position.z), Quaternion.identity);
+                go.transform.parent = target.transform;
+                effectObject = go;
+            }
             mTarget.mConditions.isDefend = false;
-        }
-        else
-        {
-            mTurn = -1;
-            End();
         }
     }
 
@@ -37,12 +40,16 @@ public class TimedTaunt : TimedNerf
         if (mTarget.mFlag == Flag.Player)
             mTarget.mAiBuild.type = AIBuild.AIType.Manual;
         if(effectObject)
-            GameObject.Destroy(effectObject);
+            Object.Destroy(effectObject);
+        var t = mTarget.transform.Find(Nerf.name + "(Clone)");
+        if(t)
+        {
+            Object.Destroy(t.gameObject);
+        }
     }
 
     protected override void Apply()
     {
-        taunt = (Taunt)Nerf;
         mTarget.mAiBuild.stateMachine.mPreferredTarget = mOwner;
         if (mTarget.mFlag == Flag.Player)
             mTarget.mAiBuild.type = AIBuild.AIType.Auto;

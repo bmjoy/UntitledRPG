@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class SkillTreeScreen : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class SkillTreeScreen : MonoBehaviour
         mBorader = transform.Find("Panel");
         mSelectIndex = 0;
         isInitialize = true;
+        SkillTreeManager.Instance.All_Skill_Nodes = FindObjectsOfType<Skill_Node>();
+        Array.Reverse(SkillTreeManager.Instance.All_Skill_Nodes);
+        for (int i = 0; i < SkillTreeManager.Instance.All_Skill_Nodes.Length; ++i)
+            SkillTreeManager.Instance.All_Skill_Nodes[i].Initialize();
     }
 
     void Update()
@@ -26,55 +31,44 @@ public class SkillTreeScreen : MonoBehaviour
         if(PlayerController.Instance)
             transform.Find("MyPanel").Find("Value").GetComponent<TextMeshProUGUI>().text =
             PlayerController.Instance.mSoul.ToString();
-        if (gameObject.activeSelf)
+        if (!gameObject.activeSelf)
+            return;
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                if (mSelectIndex > 0)
-                {
-                    mSelectIndex--;
-                }
-                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
-            }
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                if (mSelectIndex < SkillTreeManager._Instance.skill_Nodes.Count-1)
-                {
-                    mSelectIndex++;
-                }
-                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
-            }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                if (mSelectIndex > 0)
-                {
-                    mSelectIndex -= 3;
-                    if (mSelectIndex < 0)
-                    {
-                        mSelectIndex = 0;
-                    }
-                }
-                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                if (mSelectIndex < SkillTreeManager._Instance.skill_Nodes.Count - 1)
-                {
-                    mSelectIndex += 3;
-                    if(mSelectIndex > SkillTreeManager._Instance.skill_Nodes.Count -1)
-                    {
-                        mSelectIndex = SkillTreeManager._Instance.skill_Nodes.Count - 1;
-                    }
-                }
-                Display(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
-            }
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                SkillTreeManager._Instance.UnlockSkill(SkillTreeManager._Instance.skill_Nodes[mSelectIndex]);
-            }
-            mSelect.transform.SetParent(SkillTreeManager._Instance.skill_Nodes[mSelectIndex].transform);
-            mSelect.transform.position = SkillTreeManager._Instance.skill_Nodes[mSelectIndex].transform.position;
+            if (mSelectIndex > 0)
+                mSelectIndex--;
+            Display(SkillTreeManager.Instance.skill_Nodes[mSelectIndex]);
         }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (mSelectIndex < SkillTreeManager.Instance.skill_Nodes.Count - 1)
+                mSelectIndex++;
+            Display(SkillTreeManager.Instance.skill_Nodes[mSelectIndex]);
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (mSelectIndex > 0)
+            {
+                mSelectIndex -= 3;
+                if (mSelectIndex < 0)
+                    mSelectIndex = 0;
+            }
+            Display(SkillTreeManager.Instance.skill_Nodes[mSelectIndex]);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (mSelectIndex < SkillTreeManager.Instance.skill_Nodes.Count - 1)
+            {
+                mSelectIndex += 3;
+                if (mSelectIndex > SkillTreeManager.Instance.skill_Nodes.Count - 1)
+                    mSelectIndex = SkillTreeManager.Instance.skill_Nodes.Count - 1;
+            }
+            Display(SkillTreeManager.Instance.skill_Nodes[mSelectIndex]);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+            SkillTreeManager.Instance.UnlockSkill(SkillTreeManager.Instance.skill_Nodes[mSelectIndex]);
+        mSelect.transform.SetParent(SkillTreeManager.Instance.skill_Nodes[mSelectIndex].transform);
+        mSelect.transform.position = SkillTreeManager.Instance.skill_Nodes[mSelectIndex].transform.position;
     }
 
     public void Active(bool active)

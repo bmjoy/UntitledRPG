@@ -827,7 +827,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[0]
-      value: 3
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7811194697945126805, guid: ad83a29f46d94a74fa9efc9651b1eef7, type: 3}
       propertyPath: mEnemyList.Array.data[1]

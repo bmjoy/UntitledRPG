@@ -32,5 +32,5 @@ MonoBehaviour:
   - Type: 2
     Clip: {fileID: 8300000, guid: 311d21e8c849c0a49add03b385effe59, type: 3}
   - Type: 3
-    Clip: {fileID: 8300000, guid: de2c178442b9b9d4e961a0ca3d064a70, type: 3}
+    Clip: {fileID: 8300000, guid: b1bd55139b944e0488e3832687446e92, type: 3}
   Item: []

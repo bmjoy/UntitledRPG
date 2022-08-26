@@ -95,16 +95,4 @@ public class Field : MonoBehaviour
         Gizmos.color = ((Physics.CheckSphere(transform.position, 1.0f, LayerMask.GetMask("Ground")))) ? Color.green : Color.red;
         Gizmos.DrawCube(transform.position, new Vector3(1.0f, 1.0f, 1.0f));
     }
-
-    private void OnEnable()
-    {
-        if (transform.GetComponent<ParticleSystem>())
-            transform.GetComponent<ParticleSystem>().Stop();
-    }
-
-    private void OnDisable()
-    {
-        if (transform.GetComponent<ParticleSystem>())
-            transform.GetComponent<ParticleSystem>().Stop();
-    }
 }

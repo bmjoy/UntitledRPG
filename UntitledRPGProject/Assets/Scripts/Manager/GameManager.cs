@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 public class GameManager : MonoBehaviour
 {
@@ -105,7 +108,10 @@ public class GameManager : MonoBehaviour
             case GameState.GamePause:
                 {
                     if(UIManager.Instance && !UIManager.Instance.IsOpenScreen)
-                        Pause();
+                    {
+                        if (Input.GetKeyDown(KeyCode.Escape))
+                            Pause();
+                    }
                 }
                 break;
             case GameState.Victory: OnBattleEnd(); break;
@@ -119,12 +125,16 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
-            mGameState = (mGameState == GameState.GamePlay) ? GameState.GamePause : GameState.GamePlay;
-        if (mGameState == GameState.GamePause)
+        if(mGameState == GameState.GamePlay)
+        {
+            mGameState = GameState.GamePause;
             UIManager.Instance.DisplayOptionScreen(true);
+        }
         else
+        {
+            mGameState = GameState.GamePlay;
             UIManager.Instance.DisplayOptionScreen(false);
+        }
         Time.timeScale = (mGameState == GameState.GamePause) ? 0.0f : 1.0f;
 
     }
@@ -154,12 +164,151 @@ public class GameManager : MonoBehaviour
     public void Save()
     {
         DataSaveSystem.SaveData(0);
+        Debug.Log("Saved");
     }
 
     public void Load()
     {
+        if (PlayerController.Instance == null)
+            return;
+        PlayerController.Instance.ResetAbility();
+        PlayerController.Instance.ResetPlayerUnit();
+        GameObject temp = new GameObject("Temp");
+        Debug.Log(PlayerController.Instance.transform.childCount);
+        for (int i = 0; i < PlayerController.Instance.transform.childCount; i++)
+        {
+            if (PlayerController.Instance.transform.GetChild(i).tag == "PlayerUnit")
+            {
+                PlayerController.Instance.transform.GetChild(i).transform.SetParent(temp.transform);
+            }
+        }
+        PlayerController.Instance.mHeroes.Clear();
+        Destroy(temp);
+        characterExists.Clear();
+        characterExists = new List<CharacterExist>(5)
+    {
+        new CharacterExist(NPCUnit.Vin, false),
+        new CharacterExist(NPCUnit.Eleven, false),
+        new CharacterExist(NPCUnit.Roger, false),
+        new CharacterExist(NPCUnit.Victor, false),
+        new CharacterExist(NPCUnit.Jimmy, true)
+    };
+
         PlayerData data = DataSaveSystem.LoadData(0);
-        Debug.Log(data.mMoney);
+        PlayerController.Instance.mGold = data.mMoney;
+        PlayerController.Instance.mSoul = data.mSoul;
+
+        for (int i = 0; i < data.mUnlockedSkill_Nodes.Length; ++i)
+        {
+            string node = data.mUnlockedSkill_Nodes[i];
+            SkillTreeManager.Instance.UnlockSkill(node);
+        }
+
+        bool found = false;
+
+        for (int i = 0; i < data.mPossessedItems.Length; ++i)
+        {
+            string itemName = data.mPossessedItems[i];
+            GameObject item = null;
+            found = SearchItem(itemName, ref item);
+            if(item != null)
+            {
+                item.GetComponent<Item>().isSold = true;
+                PlayerController.Instance.mInventory.Add(item.GetComponent<Item>());
+            }
+            Debug.Log((found) ? $"{itemName} Found" : $"<color=yellow>Warning!</color> {itemName} doesn't exist!");
+        }
+
+        Hero[] CompanionNPC = GameObject.FindObjectsOfType<Hero>();
+        foreach(var it in data.mPlayerUnitStatus)
+        {
+            AssignCharacter(it.Key.ToString());
+            GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Units/Allys/" + it.Key.ToString()), PlayerController.Instance.transform.position, Quaternion.identity, PlayerController.Instance.transform);
+            go.GetComponent<Unit>().ResetUnit();
+            go.GetComponent<Unit>().mStatus = it.Value;
+            go.SetActive(false);
+            PlayerController.Instance.mHeroes.Add(go);
+            foreach(var itr in CompanionNPC)
+            {
+                if(itr.mName.Contains(it.Key.ToString()))
+                {
+                    GameObject model = ResourceManager.GetResource<GameObject>("Prefabs/Effects/CompanionEffect");
+                    GameObject effect = Instantiate(model, itr.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.Euler(model.transform.eulerAngles));
+                    Destroy(effect, 1.5f);
+                    Destroy(itr.gameObject);
+                }
+            }
+        }
+
+        foreach(var it in data.mPlayerUnitInventory)
+        {
+            string itemName = string.Empty;
+            Unit unit = PlayerController.Instance.mHeroes.Find(n => n.GetComponent<Unit>().mSetting.Name == it.Key.ToString()).GetComponent<Unit>();
+            InventroySystem system = unit.mInventroySystem;
+
+            // Head
+            itemName = it.Value.Head;
+            if(itemName != "Null")
+            {
+                Armor head = PlayerController.Instance.mInventory.Get(itemName) as Armor;
+                system.Equip(head);
+            }            
+            
+            // Body
+            itemName = it.Value.Body;
+            if(itemName != "Null")
+            {
+                Armor body = PlayerController.Instance.mInventory.Get(itemName) as Armor;
+                system.Equip(body);
+            }           
+            
+            // Arm
+            itemName = it.Value.Arm;
+            if(itemName != "Null")
+            {
+                Armor arm = PlayerController.Instance.mInventory.Get(itemName) as Armor;
+                system.Equip(arm);
+            }           
+            
+            // Leg
+            itemName = it.Value.Leg;
+            if(itemName != "Null")
+            {
+                Armor leg = PlayerController.Instance.mInventory.Get(itemName) as Armor;
+                system.Equip(leg);
+            }            
+            
+            // Weapon
+            itemName = it.Value.Weapon;
+            if(itemName != "Null")
+            {
+                Weapon weapon = PlayerController.Instance.mInventory.Get(itemName) as Weapon;
+                system.Equip(weapon);
+            }
+        }
+    }
+
+    private bool SearchItem(string itemName, ref GameObject it)
+    {
+        for (int x = 0; x < mArmorPool.Length; ++x)
+        {
+            var armor = mArmorPool[x];
+            if (armor.GetComponent<Armor>().Info.mName == itemName)
+            {
+                it = Instantiate(armor, PlayerController.Instance.transform.Find("Bag"));
+                return true;
+            }
+        }
+        for (int x = 0; x < mWeaponPool.Length; ++x)
+        {
+            var weapon = mWeaponPool[x];
+            if (weapon.GetComponent<Weapon>().Info.mName == itemName)
+            {
+                it = Instantiate(weapon, PlayerController.Instance.transform.Find("Bag"));
+                return true;
+            }
+        }
+        return false;
     }
 
     private void GameOver()

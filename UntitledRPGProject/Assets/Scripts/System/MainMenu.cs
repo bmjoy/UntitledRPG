@@ -36,7 +36,7 @@ public class MainMenu : MonoBehaviour
             if(PlayerController.Instance)
             {
                 PlayerController.Instance.ResetPlayerUnit();
-                SkillTreeManager._Instance.ResetSkills();
+                SkillTreeManager.Instance.ResetSkills();
                 PlayerController.Instance.mSoul = 0;
                 PlayerController.Instance.mGold = 0;
             }
@@ -54,7 +54,7 @@ public class MainMenu : MonoBehaviour
             if (PlayerController.Instance)
             {
                 PlayerController.Instance.ResetPlayerUnit();
-                SkillTreeManager._Instance.ResetSkills();
+                SkillTreeManager.Instance.ResetSkills();
                 PlayerController.Instance.mSoul = 0;
                 PlayerController.Instance.mGold = 0;
             }

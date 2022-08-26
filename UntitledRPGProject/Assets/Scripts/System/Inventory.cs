@@ -65,6 +65,8 @@ public class Inventory
     {
         foreach(var item in myInventory)
         {
+            if (item.Value.mOwner != null)
+                continue;
             if(item.Value.Name == name)
                 return item.Value;
         }

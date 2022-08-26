@@ -55,7 +55,7 @@ public class Player : Unit
             isFinish = false;
         }
 
-        var doubleAttack = SkillTreeManager._Instance.mTotalBounsAbilities.Find(s => s.Type == SkillTree_BounsAbility.SkillTreeAbilityType.DoubleAttack);
+        var doubleAttack = SkillTreeManager.Instance.mTotalBounsAbilities.Find(s => s.Type == SkillTree_BounsAbility.SkillTreeAbilityType.DoubleAttack);
 
         if (doubleAttack != null && Random.Range(1, 100) >= doubleAttack.Value)
         {
@@ -101,23 +101,35 @@ public class Player : Unit
             }
             else if (mType == AttackType.Instant)
             {
+                mAiBuild.SetActionEvent(AIBuild.ActionEvent.AttackWalk);
+                yield return new WaitUntil(() => mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
                 mirror?.Play("Attack");
                 mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
                 mAnimator.Play("Attack");
                 if (mAttackClips.Count() > 0)
                     AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
                 yield return new WaitForSeconds(mAttackTime);
-                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.identity);
+                GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(5.0f, 0.5f, 0.0f), Quaternion.identity);
                 mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
                 Destroy(go, 2.0f);
-                yield return new WaitUntil(() => go == null);
             }
-            yield return new WaitForSeconds(0.8f);
-            AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDoubleAttackSFX);
-            GameObject effectPrefab = ResourceManager.GetResource<GameObject>("Prefabs/Effects/DoubleAttackEffect");
-            GameObject d_effect = Instantiate(effectPrefab, transform.position + new Vector3(0.0f, GetComponent<BoxCollider>().size.y / 2.0f, 0.0f), Quaternion.Euler(effectPrefab.transform.eulerAngles));
-            Destroy(d_effect, 1.0f);
-            yield return StartCoroutine(base.BattleState(type));
+            if (mTarget.mConditions.isDied)
+            {
+                yield return new WaitForSeconds(1.0f);
+                mAiBuild.SetActionEvent(((mStatus.mHealth > 0.0f)) ? AIBuild.ActionEvent.BackWalk : AIBuild.ActionEvent.Busy);
+                yield return new WaitUntil(() => mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
+                TurnEnded();
+                yield break;
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.8f);
+                AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mDoubleAttackSFX);
+                GameObject effectPrefab = ResourceManager.GetResource<GameObject>("Prefabs/Effects/DoubleAttackEffect");
+                GameObject d_effect = Instantiate(effectPrefab, transform.position + new Vector3(0.0f, GetComponent<BoxCollider>().size.y / 2.0f, 0.0f), Quaternion.Euler(effectPrefab.transform.eulerAngles));
+                Destroy(d_effect, 1.0f);
+                yield return StartCoroutine(base.BattleState(type));
+            }
         }
         else
             yield return StartCoroutine(base.BattleState(type));

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b883ec0784c0c8248bac0e7a3e507f7f, type: 3}
+  m_Name: Lost Welder
+  m_EditorClassIdentifier: 
+  Name: Lost Welder
+  Level: 4
+  EXP: 150
+  MaxHealth: 125
+  MaxMana: 50
+  Magic_Resistance: 3
+  Attack: 25
+  Defend: 10
+  MagicPower: 15
+  Armor: 2
+  Agility: 0
+  Gold: 0
+  WeaponType: 0
+  BasicSprite: {fileID: 4512633070264445626, guid: 55ce57f00a12cfe4188b2eb4c0ad4aa7, type: 3}
+  Clips:
+  - Type: 0
+    Clip: {fileID: 8300000, guid: 4e2a3a8315cc54541afc33dab8b1eef5, type: 3}
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 8230bb02f36e2a44f8e3a29990c7de36, type: 3}
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 9cb8156193b499f4e86b318332104b9a, type: 3}
+  - Type: 1
+    Clip: {fileID: 8300000, guid: eec08500f8e731e4988815a75a3ee2de, type: 3}
+  Item: []

@@ -64,6 +64,7 @@ public class Cheat : MonoBehaviour
         if (Input.GetKeyDown(mMoneyCheatCode))
         {
             PlayerController.Instance.mGold += 10000;
+            PlayerController.Instance.mSoul += 100;
         }
     }
 }

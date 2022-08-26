@@ -46,15 +46,14 @@ public class PlayerData
             info.Leg = (unit.mInventroySystem.mInventoryInfo.Leg) ? unit.mInventroySystem.mInventoryInfo.Leg.Name : "Null";
             mPlayerUnitInventory.Add(unit.mSetting.Name, info);
         }
-        
+
         // Achieved Skill Tree
-        for (int i = 0; i < SkillTreeManager._Instance.skill_Nodes.Count; ++i)
+        mUnlockedSkill_Nodes = new string[SkillTreeManager.Instance.skill_Nodes.Count];
+        for (int i = 0; i < SkillTreeManager.Instance.All_Skill_Nodes.Length; ++i)
         {
-            var skill = SkillTreeManager._Instance.skill_Nodes[i];
+            var skill = SkillTreeManager.Instance.All_Skill_Nodes[i];
             if(skill.IsUnlocked())
-            {
                 mUnlockedSkill_Nodes[i] = skill._Name;
-            }
         }
     }
 }

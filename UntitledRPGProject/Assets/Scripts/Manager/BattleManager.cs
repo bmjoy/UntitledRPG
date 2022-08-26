@@ -417,7 +417,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void EndAction()
+    public void EndAction()
     {
         status = GameStatus.Busy;
         mCurrentUnit.mField.GetComponent<Field>().Stop();

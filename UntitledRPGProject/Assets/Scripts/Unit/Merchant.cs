@@ -18,7 +18,6 @@ public class Merchant : NPC
     {
         base.Start();
         mSlotManager = GetComponent<SlotManager>();
-        Destroy(mInteraction.GetComponent<Billboard>());
         m_DialogueAskAgainCase.Trigger = Dialogue.TriggerType.Event;
     }
 

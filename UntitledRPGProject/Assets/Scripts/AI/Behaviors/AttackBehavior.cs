@@ -18,6 +18,16 @@ public class AttackBehavior : State
     public override void Exit(Unit agent)
     {
         agent.mAiBuild.stateMachine.mPreferredTarget = null;
+        if (PlayerController.Instance.IsDied || BattleManager.Instance.mUnits.Count == 0)
+            return;
+
+        for (int i = 0; i < BattleManager.Instance.mUnits.Count; i++)
+        {
+            Unit unit = BattleManager.Instance.mUnits[i].GetComponent<Unit>();
+            unit.mField.TargetedMagicHostile(false);
+            unit.mField.TargetedFriendly(false);
+            unit.mField.TargetedHostile(false);
+        }
     }
 
     public override bool Find(Unit agent)
