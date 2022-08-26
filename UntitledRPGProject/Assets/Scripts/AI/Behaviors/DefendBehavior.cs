@@ -19,6 +19,8 @@ public class DefendBehavior : State
     {
         agent.mAiBuild.stateMachine.mPreferredTarget = null;
         agent.mTarget = null;
+        if (PlayerController.Instance.IsDied || BattleManager.Instance.mUnits.Count == 0)
+            return;
         for (int i = 0; i < BattleManager.Instance.mUnits.Count; i++)
         {
             Unit unit = BattleManager.Instance.mUnits[i].GetComponent<Unit>();

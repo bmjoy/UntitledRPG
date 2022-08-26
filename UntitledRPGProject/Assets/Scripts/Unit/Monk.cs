@@ -8,7 +8,6 @@ public class Monk : NPC
     protected override void Start()
     {
         base.Start();
-        Destroy(mInteraction.GetComponent<Billboard>());
         isTrading = false;
     }
 

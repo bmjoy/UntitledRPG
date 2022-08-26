@@ -45,6 +45,7 @@ public enum EnemyUnit
     Spirit_Boxer,
     Droid_Assassin,
     Cyber_Shielder,
+    Lost_Welder,
     Temple_Guardian,
     The_Bloody_King
 }

@@ -82,7 +82,7 @@ public class BuffAndNerfEntity : MonoBehaviour
     {
         if (mNerf.ContainsKey(nerf.Nerf))
         {
-            mNerf[nerf.Nerf].Activate();
+            //mNerf[nerf.Nerf].Activate();
         }
         else
         {

@@ -17,14 +17,14 @@ public class Skill_Node : MonoBehaviour
 
     private bool _isUnlocked = false;
 
-    private void Start()
+    public void Initialize()
     {
-        SkillTreeManager._Instance.skill_Nodes.Add(this);
+        SkillTreeManager.Instance.skill_Nodes.Add(this);
         _Sprite = GetComponent<Image>();
         _Button = GetComponent<Button>();
         _Button.onClick.RemoveAllListeners();
-        _Button.onClick.AddListener(()=> UIManager.Instance.mSkillTreeScreen.Display(this));
-        if(_LineSprite != null)
+        _Button.onClick.AddListener(() => UIManager.Instance.mSkillTreeScreen.Display(this));
+        if (_LineSprite != null)
             _LineSprite.fillAmount = 0;
     }
 
@@ -34,9 +34,7 @@ public class Skill_Node : MonoBehaviour
         {
             _Sprite.color = Color.Lerp(_Sprite.color, new Color(0.0f, 1.0f, 0.0f), Time.deltaTime);
             if(_LineSprite != null)
-            {
                 _LineSprite.fillAmount = Mathf.Lerp(_LineSprite.fillAmount, 1.0f, Time.deltaTime);
-            }
         }
     }
 
@@ -51,7 +49,19 @@ public class Skill_Node : MonoBehaviour
         PlayerController.Instance.mSoul -= _Cost;
         AudioManager.PlaySfx(AudioManager.Instance.mAudioStorage.mSKillTreeObtainedSFX);
         GameObject fireworks = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Effects/UpgradeEffect"), transform.position, Quaternion.identity, UIManager.Instance.mAdditionalCanvas.transform);
+        SkillTreeManager.Instance.mTotalBounsAbilities.Add(_BonusAbility);
         Destroy(fireworks, 3.0f);
+    }
+
+    public void Unlock_Free()
+    {
+        if (_isUnlocked)
+            return;
+        _isUnlocked = true;
+
+        if (_LineSprite != null)
+            _LineSprite.color = new Color(1.0f, 1.0f, 1.0f);
+        SkillTreeManager.Instance.mTotalBounsAbilities.Add(_BonusAbility);
     }
 
     public bool IsUnlocked()

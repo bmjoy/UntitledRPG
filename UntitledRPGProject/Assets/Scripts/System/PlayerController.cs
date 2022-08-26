@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
         if (mCamera == null)
             mCamera = CameraSwitcher.Instance.transform.Find("GameWorldCamera");
 
-        SkillTreeManager._Instance.OnGainAbility += UnlockAbility;
+        SkillTreeManager.Instance.OnGainAbility += UnlockAbility;
         mSummedSpeed = mSpeed;
         mPreservedSkillTreeBonus.mDamage =
             mPreservedSkillTreeBonus.mArmor =
@@ -111,6 +111,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Instance.mHeroes.Count == 0)
+            return;
         if (!IsDied && Instance.mHeroes.TrueForAll(t => t.GetComponent<Unit>().mConditions.isDied))
         {
             if(!IsDied)

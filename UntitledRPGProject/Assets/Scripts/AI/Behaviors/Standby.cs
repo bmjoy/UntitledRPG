@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 public class Standby : State
 {
@@ -27,7 +28,15 @@ public class Standby : State
         {
             if(IsSucceeded && !IsSearched)
             {
-                agent.StartCoroutine(WaitforSecond(agent));
+                if (agent.mBuffNerfController.GetNerf(typeof(Stun)))
+                {
+                    agent.mAiBuild.stateMachine.ChangeState("Waiting");
+                    agent.StartCoroutine(ProcessingAfterStunning(agent));
+                }
+                else
+                {
+                    agent.StartCoroutine(WaitforSecond(agent));
+                }
                 IsSearched = true;
             }
         }
@@ -38,6 +47,14 @@ public class Standby : State
         if (agent.GetType() == typeof(Boss)) return;
         agent.mAiBuild.stateMachine.mPreferredTarget = null;
         agent.mTarget?.mSelected.SetActive(false);
+    }
+
+    private IEnumerator ProcessingAfterStunning(Unit agent)
+    {
+        UIManager.Instance.ChangeOrderBarText($"<color=red>{agent.mSetting.Name} has been stunned!</color>");
+        yield return new WaitForSeconds(1.5f);
+        BattleManager.Instance.EndAction();
+        agent.TurnEnded();
     }
 
     public override bool Find(Unit agent)
@@ -91,15 +108,10 @@ public class Standby : State
                             unit.mField.TargetedMagicHostile(true);
                         }
                     }
-                    else
-                    {
-
-                    }
+                    else {}
                 }
                 else
-                {
                     agent.mField.TargetedMagicHostile(true);
-                }
                 if(ability.mSkillBuffTarget == SkillTarget.All)
                 {
                     if (agent.mFlag == Flag.Enemy)
@@ -118,32 +130,19 @@ public class Standby : State
                             unit.mField.TargetedFriendly(true);
                         }
                     }
-                    else
-                    {
-
-                    }
+                    else{}
                 }
                 else if (ability.mSkillBuffTarget == SkillTarget.Self)
-                {
                     agent.mField.TargetedFriendly(true);
-                }
-                else
-                {
-
-                }
-
+                else{}
             }
             else
             {
                 TargetAbility ability = (TargetAbility)agent.mSkillDataBase.mSkill;
                 if (ability.mProperty == SkillProperty.Friendly)
-                {
                     agent.mTarget.mField.TargetedFriendly(true);
-                }
                 else
-                {
                     agent.mTarget.mField.TargetedMagicHostile(true);
-                }
             }
         }
     }

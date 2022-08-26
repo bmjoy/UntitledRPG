@@ -471,16 +471,23 @@ public class Unit : MonoBehaviour, IUnit
         }
         else if (mType == AttackType.Instant)
         {
-            mAiBuild.SetActionEvent(AIBuild.ActionEvent.Busy);
+            mAiBuild.SetActionEvent(AIBuild.ActionEvent.AttackWalk);
+            yield return new WaitUntil(() => mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
             mirror?.Play("Attack");
             mAnimator.Play("Attack");
+            yield return new WaitForSeconds(mAttackTime);
             if (mAttackClips.Count() > 0)
                 AudioManager.PlaySfx(mAttackClips.ElementAt(Random.Range(0, mAttackClips.Count())).Clip, 0.6f);
-            yield return new WaitForSeconds(mAttackTime);
-            GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+            GameObject go = Instantiate(ResourceManager.GetResource<GameObject>("Prefabs/Bullets/" + mProjectileName), mTarget.transform.position + new Vector3(5.0f, 0.5f, 0.0f), Quaternion.identity);
             mTarget.TakeDamage(mStatus.mDamage + mBonusStatus.mDamage, type);
+            if (mActionTrigger != null)
+            {
+                mActionTrigger?.Invoke();
+            }
             Destroy(go, 1.0f);
-            yield return new WaitUntil(() => go == null);
+            yield return new WaitForSeconds(0.5f);
+            mAiBuild.SetActionEvent(((mStatus.mHealth > 0.0f)) ? AIBuild.ActionEvent.BackWalk : AIBuild.ActionEvent.Busy);
+            yield return new WaitUntil(() => mAiBuild.actionEvent == AIBuild.ActionEvent.Busy);
         }
         TurnEnded();
     }

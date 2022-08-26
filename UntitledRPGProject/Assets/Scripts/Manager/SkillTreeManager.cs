@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class SkillTreeManager : MonoBehaviour
 {
     private static SkillTreeManager mInstance;
-    public static SkillTreeManager _Instance { get { return mInstance; } }
+    public static SkillTreeManager Instance { get { return mInstance; } }
 
-    public List<Skill_Node> skill_Nodes;
+
+    public Skill_Node[] All_Skill_Nodes;
+
+    public List<Skill_Node> skill_Nodes; // Achieved Skills
     public List<SkillTree_BounsAbility> mTotalBounsAbilities;
     public event Action<SkillTree_BounsAbility> OnGainAbility;
 
@@ -30,17 +34,28 @@ public class SkillTreeManager : MonoBehaviour
         {
             skill_Node.Unlock();
             if(skill_Node.IsUnlocked())
-            {
-                mTotalBounsAbilities.Add(skill_Node._BonusAbility);
                 OnGainAbility?.Invoke(skill_Node._BonusAbility);
-            }
+        }
+    }
+
+    public void UnlockSkill(string name)
+    {
+        Skill_Node node = skill_Nodes.Find(n => n._Name == name);
+        if (node == null)
+            return;
+        if (!node.IsUnlocked())
+        {
+            node.Unlock_Free();
+            if (node.IsUnlocked())
+                OnGainAbility?.Invoke(node._BonusAbility);
         }
     }
 
     public void ResetSkills()
     {
-        foreach(var skill in skill_Nodes)
+        for (int i = 0; i < skill_Nodes.Count; ++i)
         {
+            var skill = skill_Nodes[i];
             skill.ResetNode();
         }
         mTotalBounsAbilities.Clear();
